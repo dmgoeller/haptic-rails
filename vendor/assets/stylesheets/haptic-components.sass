@@ -1,0 +1,293 @@
+// ---------------------------------------------------------------------------
+// Components
+// ---------------------------------------------------------------------------
+
+::-webkit-inner-spin-button
+  appearance: none
+
+button.haptic, .button.haptic
+  align-items: center
+  appearance: none
+  display: grid
+  grid-auto-flow: column
+  justify-content: center
+  overflow: hidden
+  text-overflow: ellipsis
+  transition-delay: .1s
+  transition-duration: .4s
+  white-space: nowrap
+
+  &:disabled
+    pointer-events: none
+
+  &:not(:disabled)
+    cursor: pointer
+
+haptic-text-field
+  position: relative
+  transition: outline-color .6s
+
+  button, input, label, select, textarea, .leading-icon, .trailing-icon
+    position: absolute
+
+  select, textarea
+    appearance: none
+
+  textarea
+    overflow: hidden
+    resize: none
+
+  label, .leading-icon, .trailing-icon
+    pointer-events: none
+
+  label
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
+
+  .leading-icon, .trailing-icon
+    align-items: center
+    display: flex
+    justify-content: center
+
+  &.animated
+    label
+      transition: .6s
+
+  &[required]
+    label::after
+      content: ' *'
+
+.haptic-text-field-container
+  align-items: stretch
+  display: grid
+  grid-auto-flow: row
+
+// ---------------------------------------------------------------------------
+// Borders
+// ---------------------------------------------------------------------------
+
+haptic-text-field, button.haptic, .button.haptic
+  border-radius: .25rem
+
+  &.outlined
+    border-style: solid
+    border-width: 1px
+
+  &:not(.outlined)
+    border-width: 0
+
+button.haptic, .button.haptic
+  outline: none
+
+  &.circular
+    border-radius: 50%
+
+haptic-text-field
+  input, select, textarea
+    border-width: 0
+    border-radius: .25rem
+    outline: none
+
+  &.focus-indicator
+    outline-style: solid
+    outline-width: 2px
+
+// ---------------------------------------------------------------------------
+// Measurements
+// ---------------------------------------------------------------------------
+
+button.haptic, .button.haptic
+  box-sizing: border-box
+  grid-gap: .25rem
+  line-height: 1
+
+  &.with-text
+    padding: .25rem .5rem
+
+  &:not(.with-text)
+    padding: .25rem
+
+haptic-text-field
+  box-sizing: border-box
+  min-height: 2rem
+  outline-width: 0
+
+  input, label, select, textarea
+    box-sizing: border-box
+    width: 100%
+
+  input, select, textarea
+    padding: .5rem 1rem
+
+  input, select
+    height: 100%
+    line-height: 1
+
+  textarea
+    line-height: 1.25
+    height: auto
+    min-height: 1rem
+
+  label
+    line-height: 1.25
+    padding: 0 1rem 0 1rem
+    top: .5rem
+
+  button, .leading-icon, .trailing-icon
+    height: 1.5rem
+    top: calc(50% - .75rem)
+    width: 1.5rem
+
+  .leading-icon
+    left: .5rem
+
+  button, .trailing-icon
+    right: .5rem
+
+  &[with-label]
+    min-height: 3.5rem
+
+    input, select
+      padding-top: 1.5rem
+      padding-bottom: 0
+
+    textarea
+      padding-top: 1.75rem
+      padding-bottom: .5rem
+
+    button, .leading-icon, .trailing-icon
+      top: 1rem
+
+  &[with-leading-icon]
+    input, label, select, textarea
+      padding-left: 2.25rem
+
+  &[with-trailing-icon]
+    input, label, select, textarea
+      padding-right: 2.25rem
+
+  &.animated[empty]:not([focus])
+    label
+      top: 1.125rem // ({height} - {line-height}) / 2
+
+.haptic-text-field-container
+  grid-gap: .25rem
+
+  .errors, .supporting-text
+    margin: 0 1rem
+
+// ---------------------------------------------------------------------------
+// Fonts
+// ---------------------------------------------------------------------------
+
+button.haptic, .button.haptic
+  font-size: 1rem
+  font-weight: bold
+  text-decoration: none
+
+haptic-text-field
+  input, select, textarea
+    font-family: sans-serif
+    font-size: 1rem
+
+  label
+    font-size: .875rem
+    font-weight: bold
+
+  &.animated[empty]:not([focus])
+    label
+      font-size: 1rem
+
+.haptic-text-field-container
+  .errors, .supporting-text
+    font-size: .875rem
+
+// ---------------------------------------------------------------------------
+// Colors
+// ---------------------------------------------------------------------------
+
+::placeholder
+  color: var(--haptic-placeholder-color)
+
+button.haptic, .button.haptic
+  background-color: transparent
+
+  &:hover:not(:disabled), &:focus, &:focus-visible
+    background-color: var(--haptic-button-hover-background-color)
+
+  &.filled
+    background-color: var(--haptic-accent-color)
+    color: var(--haptic-filled-button-color)
+
+    &:hover:not(:disabled), &:focus, &:focus-visible
+      background-color: var(--haptic-accent-color)
+
+  &.outlined
+    border-color: var(--haptic-accent-color)
+    color: var(--haptic-accent-color)
+
+  &:disabled
+    filter: grayscale(1)
+    opacity: 0.5
+
+haptic-text-field
+  input, select, textarea
+    background-color: transparent
+    color: var(--haptic-text-field-color)
+
+  input, textarea
+    caret-color: var(--haptic-text-color)
+
+  button, .leading-icon, .trailing-icon
+    color: var(--haptic-text-field-icon-color)
+
+  button:disabled
+    opacity: 0 !important
+
+  &[disabled]
+    opacity: 0.5
+
+    label
+      color: var(--haptic-text-field-color)
+
+  &:not([disabled])
+    &[with-errors]
+      label
+        color: var(--haptic-error-color)
+
+    &:not([with-errors])
+      label
+        color: var(--haptic-accent-color)
+
+      &.animated[empty]:not([focus])
+        label
+          color: var(--haptic-placeholder-color)
+
+  &.filled.translucent
+    background-color: var(--haptic-translucent-text-field-background-color)
+
+  &.filled:not(.translucent)
+    background-color: var(--haptic-opaque-text-field-background-color)
+
+  &.outlined
+    &[with-errors]
+      border-color: var(--haptic-error-color)
+
+    &:not([with-errors])
+      border-color: var(--haptic-outlined-text-field-border-color)
+
+  &.focus-indicator
+    outline-color: transparent
+
+    &[focus]
+      outline-color: var(--haptic-accent-color)
+
+.haptic-text-field-container
+  .errors
+    color: var(--haptic-error-color)
+
+  .supporting-text
+    color: var(--haptic-text-color)
+
+
