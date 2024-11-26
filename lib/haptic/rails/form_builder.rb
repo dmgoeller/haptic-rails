@@ -10,6 +10,17 @@ module Haptic
         @defaults
       end
 
+      def errors(method)
+        full_messages = object&.errors&.full_messages_for(method)
+        return if full_messages.blank?
+
+        <<-HTML.html_safe
+        <div class="haptic errors">
+          #{full_messages.join('. ')}.
+        </div>
+        HTML
+      end
+
       %i[number_field text_field].each do |name|
         define_method name do |method, options = {}|
           options = defaults.merge(options)
@@ -17,19 +28,19 @@ module Haptic
         end
       end
 
-      def select(method, choices = nil, options = {}, &block)
+      def select(method, choices = nil, options = {}, html_options = {}, &block)
         options = defaults.merge(options)
         haptic_text_field(
           method,
-          super(method, choices, field_options(options), &block),
+          super(method, choices, field_options(options), html_options, &block),
           options.merge(trailing_icon: 'arrow_drop_down').except(:clear_button)
         )
       end
 
-      def submit(value = nil, options = {})
-        value, options = nil, value if value.is_a?(Hash)
-        super(value, options.reverse_merge(class: 'haptic filled button with-text'))
-      end
+      # def submit(value = nil, options = {})
+      #  value, options = nil, value if value.is_a?(Hash)
+      #  super(value, options.reverse_merge(class: 'haptic filled button with-text'))
+      # end
 
       def text_area(method, options = {})
         options = defaults.merge(options)
@@ -67,22 +78,22 @@ module Haptic
       end
 
       def haptic_text_field(method, field, options = {})
-        errors = errors(method) if options[:errors] && object&.errors
-        supporting_text = options[:supporting_text] unless errors
-
         haptic_text_field =
           <<-HTML
           <haptic-text-field class="#{options[:style]}">
             #{field}
-            #{leading_icon(options[:leading_icon]) if options[:leading_icon]}
             #{label(method, label_options(options)) if options[:label]}
+            #{leading_icon(options[:leading_icon]) if options[:leading_icon]}
             #{trailing_icon(options[:trailing_icon]) if options[:trailing_icon]}
-            #{clear_button if options[:clear_button] && !options[:trailing_icon]}
+            #{clear_button if options[:clear_button]}
           </haptic-text-field>
           HTML
 
+        errors = errors(method) if options[:errors] && object&.errors
+        supporting_text = options[:supporting_text]
+
         if errors || supporting_text
-          <<-HTML.html_safe
+          <<-HTML
           <div class="haptic-text-field-container">
             #{haptic_text_field}
             #{errors}
@@ -108,24 +119,13 @@ module Haptic
 
       def clear_button
         <<-HTML.html_safe
-        <button class="haptic flat circular material-icon">close</button>
+        <button class="circular material-icon">close</button>
         HTML
       end
 
       def supporting_text(text)
         <<-HTML.html_safe
         <div class="haptic supporting-text">#{text}</div>
-        HTML
-      end
-
-      def errors(method)
-        full_messages = object&.errors&.full_messages_for(method)
-        return if full_messages.blank?
-
-        <<-HTML.html_safe
-        <div class="haptic errors">
-          #{full_messages.join('. ')}.
-        </div>
         HTML
       end
     end

@@ -27,9 +27,6 @@ haptic-text-field
   position: relative
   transition: outline-color .6s
 
-  button, input, label, select, textarea, .leading-icon, .trailing-icon
-    position: absolute
-
   select, textarea
     appearance: none
 
@@ -37,8 +34,12 @@ haptic-text-field
     overflow: hidden
     resize: none
 
+  button
+    position: absolute
+
   label, .leading-icon, .trailing-icon
     pointer-events: none
+    position: absolute
 
   label
     overflow: hidden
@@ -110,65 +111,73 @@ button.haptic, .button.haptic
 
 haptic-text-field
   box-sizing: border-box
-  min-height: 2rem
   outline-width: 0
 
-  input, label, select, textarea
-    box-sizing: border-box
-    width: 100%
-
   input, select, textarea
+    box-sizing: border-box
+    height: 100%
     line-height: 1.125
     padding: .5rem 1rem
-
-  input, select
-    height: 100%
-
-  textarea
-    height: auto
-    min-height: 1rem
-
-  label
-    line-height: 1.25
-    padding: 0 1rem 0 1rem
-    top: .5rem
+    width: 100%
 
   button, .leading-icon, .trailing-icon
     height: 1.5rem
-    top: calc(50% - .75rem)
     width: 1.5rem
-
-  .leading-icon
-    left: .5rem
-
-  button, .trailing-icon
-    right: .5rem
 
   &[with-label]
     min-height: 3.5rem
 
-    input, select
-      padding-top: 1.375rem
-      padding-bottom: 0
-
-    textarea
+    input, select, textarea
       padding-top: 1.75rem
-      padding-bottom: .5rem
 
     button, .leading-icon, .trailing-icon
       top: 1rem
+
+    label
+      box-sizing: border-box
+      left: 0
+      line-height: 1.25
+      padding: 0 1rem
+      top: .5rem
+      width: 100%
+
+    &.animated[empty]:not([focus])
+      label
+        top: 1.125rem // ({height} - {line-height}) / 2
+
+  &:not([with-label])
+    button, .leading-icon, .trailing-icon
+      top: calc(50% - .75rem)
 
   &[with-leading-icon]
     input, label, select, textarea
       padding-left: 2.25rem
 
-  &[with-trailing-icon]
-    input, label, select, textarea
-      padding-right: 2.25rem
+    .leading-icon
+      left: .5rem
 
-  &.animated[empty]:not([focus])
-    label
-      top: 1.125rem // ({height} - {line-height}) / 2
+  &[with-trailing-icon]
+    .trailing-icon
+      right: .5rem
+
+    &[with-clear-button]
+      input, label, select, textarea
+        padding-right: 4rem
+
+      button
+        right: 2.25rem
+
+    &:not([with-clear-button])
+      input, label, select, textarea
+        padding-right: 2.25rem
+
+  &:not([with-trailing-icon])
+    &[with-clear-button]
+      input, label, select, textarea
+        padding-right: 2.25rem
+
+      button
+        right: .5rem
 
 .haptic-text-field-container
   grid-gap: .25rem
