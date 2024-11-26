@@ -42,6 +42,8 @@ class HapticTextFieldElement extends HTMLElement {
     if ((node instanceof HTMLInputElement) ||
         (node instanceof HTMLTextAreaElement) ||
         (node instanceof HTMLSelectElement)) {
+      node.classList.add("haptic");
+
       node.addEventListener("focusin", (e) => {
         this.setAttribute("focus", "");
       });
@@ -66,6 +68,8 @@ class HapticTextFieldElement extends HTMLElement {
     // Clear button
     if (node instanceof HTMLButtonElement) {
       node.setAttribute("tabindex", -1);
+      node.classList.add("haptic");
+
       node.addEventListener("click", (e) => {
         if (this.inputElement) {
           this.inputElement.value = "";
@@ -80,6 +84,7 @@ class HapticTextFieldElement extends HTMLElement {
     } else
     // Label
     if (node instanceof HTMLLabelElement) {
+      node.classList.add("haptic");
       this.setAttribute("with-label", "");
     } else
     if (node instanceof HTMLElement) {
@@ -89,7 +94,8 @@ class HapticTextFieldElement extends HTMLElement {
       if (node.classList.contains("trailing-icon")) {
         this.setAttribute("with-trailing-icon", "");
       }
-      if (node.classList.contains("field_with_errors")) {
+      if (node.classList.contains("field_with_errors") ||
+          node.classList.contains("field-with-errors")) {
         this.setAttribute("with-errors", "");
       }
     }

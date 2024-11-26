@@ -67,7 +67,7 @@ module Haptic
       end
 
       def haptic_text_field(method, field, options = {})
-        errors = errors(method) if options[:errors] && object&.invalid?
+        errors = errors(method) if options[:errors] && object&.errors
         supporting_text = options[:supporting_text] unless errors
 
         haptic_text_field =
