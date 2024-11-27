@@ -1,0 +1,33 @@
+
+/**********************************************************************
+ * Fields
+ **********************************************************************/
+
+haptic-text-field, button.haptic, .button.haptic
+  border-radius: .25rem
+
+  &.outlined
+    border-style: solid
+    border-width: 1px
+
+  &:not(.outlined)
+    border-width: 0
+
+button.haptic, .button.haptic
+  outline: none
+
+  &.circular
+    border-radius: 50%
+
+haptic-text-field
+  input, select, textarea
+    border-width: 0
+    border-radius: .25rem
+    outline: none
+
+  &.focus-indicator
+    outline-style: solid
+    outline-width: 2px
+
+  .clear-button
+    border-radius: 50%

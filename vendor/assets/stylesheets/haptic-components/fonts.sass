@@ -1,0 +1,30 @@
+
+/**********************************************************************
+ * Buttons
+ **********************************************************************/
+
+button.haptic, .button.haptic
+  font-size: 1rem
+  font-weight: bold
+  text-decoration: none
+
+/**********************************************************************
+ * Fields
+ **********************************************************************/
+
+haptic-field-container
+  .errors, .supporting-text
+    font-size: .875rem
+
+haptic-text-field
+  input, select, textarea
+    font-family: var(--haptic-text-field-font-family)
+    font-size: 1rem
+
+  label
+    font-size: .875rem
+    font-weight: bold
+
+  &.animated-label[data-empty]:not([data-focus])
+    label
+      font-size: 1rem

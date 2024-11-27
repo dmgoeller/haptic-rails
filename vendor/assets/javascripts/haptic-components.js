@@ -12,7 +12,21 @@ customElements.define("haptic-field-container", HapticFieldContainerElement);
 // ...
 class HapticTextFieldElement extends HTMLElement {
   #inputElement = null;
-  #clearButton = null;
+
+  #resizeObserver = new ResizeObserver((entries) => {
+    let maxHeight = parseInt(getComputedStyle(this).minHeight || 0);
+
+    for (const entry of entries) {
+      const height = entry.contentRect.height +
+        parseInt(getComputedStyle(entry.target).paddingTop) +
+        parseInt(getComputedStyle(entry.target).paddingBottom);
+
+      maxHeight = Math.max(height, maxHeight);
+    }
+    if (this.offsetHeight != maxHeight) {
+      this.style.height = `${maxHeight}px`;
+    }
+  });
 
   constructor() {
     super();
@@ -40,58 +54,53 @@ class HapticTextFieldElement extends HTMLElement {
           (node instanceof HTMLTextAreaElement) ||
           (node instanceof HTMLSelectElement)) {
         node.addEventListener("focusin", (e) => {
-          this.setAttribute("focus", "");
+          this.setAttribute("data-focus", "");
         });
         node.addEventListener("focusout", (e) => {
-          this.removeAttribute("focus");
+          this.removeAttribute("data-focus");
         });
         node.addEventListener("input", (e) => {
           this.#refresh();
         });
         if (node.required) {
-          this.setAttribute("required", "");
+          this.setAttribute("data-required", "");
         }
         if (node.disabled) {
-          this.setAttribute("disabled", "");
+          this.setAttribute("data-disabled", "");
         }
         if (node instanceof HapticTextAreaElement) {
-          node.setAttribute("rows", 1);
+          if (!node.hasAttribute("rows")) {
+            node.setAttribute("rows", 1);
+          }
         }
+        this.#resizeObserver.observe(node);
         this.#inputElement = node;
-      } else
-      // Clear button
-      if (node instanceof HTMLButtonElement) {
-        node.setAttribute("tabindex", -1);
-
-        node.addEventListener("click", (e) => {
-          this.#clear();
-          e.target.disabled = true;
-          e.preventDefault();
-        });
-        this.#clearButton = node;
-        this.setAttribute("with-clear-button", "");
       } else
       // Label
       if (node instanceof HTMLLabelElement) {
-        this.setAttribute("with-label", "");
-      } else {
-        // Other
-        if (node.classList.contains("leading-icon")) {
-          this.setAttribute("with-leading-icon", "");
-        }
-        if (node.classList.contains("trailing-icon")) {
-          this.setAttribute("with-trailing-icon", "");
-        }
-        if (node.classList.contains("field_with_errors") ||
-            node.classList.contains("field-with-errors")) {
-          this.setAttribute("with-errors", "");
-        }
+        this.setAttribute("data-with-label", "");
+      } else
+      // Clear button
+      if (node.classList.contains("clear-button")) {
+        node.addEventListener("click", (e) => {
+          this.#clear();
+          e.preventDefault();
+        });
+        this.setAttribute("data-with-clear-button", "");
+      } else
+      // Leading icon
+      if (node.classList.contains("leading-icon")) {
+        this.setAttribute("data-with-leading-icon", "");
+      } else
+      // Trailing icon
+      if (node.classList.contains("trailing-icon")) {
+        this.setAttribute("data-with-trailing-icon", "");
       }
     }
   }
 
   #clear() {
-    if (this.#inputElement && !(this.#inputElement instanceof HTMLSelectElement)) {
+    if (this.#inputElement) {
       this.#inputElement.value = "";
       this.#refresh();
       this.#inputElement.focus();
@@ -99,19 +108,15 @@ class HapticTextFieldElement extends HTMLElement {
   }
 
   #refresh() {
-    if (this.#inputElement && !(this.#inputElement instanceof HTMLSelectElement)) {
+    if (this.#inputElement) {
       const isEmpty = this.#inputElement.value.length == 0;
-
       if (isEmpty) {
-        this.setAttribute("empty", "");
+        this.setAttribute("data-empty", "");
       } else {
-        this.removeAttribute("empty");
+        this.removeAttribute("data-empty");
       }
       if (this.#inputElement instanceof HapticTextAreaElement) {
         this.#inputElement.resize();
-      }
-      if (this.#clearButton) {
-        this.#clearButton.disabled = isEmpty || this.hasAttribute("disabled");
       }
     }
   }

@@ -1,0 +1,94 @@
+
+.haptic
+  .error
+    color: var(--haptic-error-color)
+
+/**********************************************************************
+ * Buttons
+ **********************************************************************/
+
+button.haptic, .button.haptic
+  background-color: transparent
+
+  &:hover:not(:disabled), &:focus, &:focus-visible
+    background-color: var(--haptic-button-hover-background-color)
+
+  &.filled
+    background-color: var(--haptic-accent-color)
+    color: var(--haptic-filled-button-color)
+
+    &:hover:not(:disabled), &:focus, &:focus-visible
+      background-color: var(--haptic-accent-color)
+
+  &.outlined
+    border-color: var(--haptic-accent-color)
+    color: var(--haptic-accent-color)
+
+  &:disabled
+    filter: grayscale(1)
+    opacity: 0.5
+
+/**********************************************************************
+ * Fields
+ **********************************************************************/
+
+::placeholder
+  color: var(--haptic-placeholder-color)
+
+haptic-field-container
+  .errors
+    color: var(--haptic-error-color)
+
+  .supporting-text
+    color: var(--haptic-text-color)
+
+haptic-text-field
+  &, input, select, textarea
+    background-color: transparent
+    color: var(--haptic-text-field-color)
+
+  input, textarea
+    caret-color: var(--haptic-text-color)
+
+  .clear-button, .leading-icon, .trailing-icon
+    color: var(--haptic-text-field-icon-color)
+
+  .clear-button:hover
+    background-color: var(--haptic-hover-background-color)
+
+  &[disabled]
+    opacity: 0.5
+
+    label
+      color: var(--haptic-text-field-color)
+
+  &:not([data-disabled])
+    &[data-with-errors]
+      label
+        color: var(--haptic-error-color)
+
+    &:not([data-with-errors])
+      label
+        color: var(--haptic-accent-color)
+
+      &.animated-label[data-empty]:not([data-focus]) label
+        color: var(--haptic-placeholder-color)
+
+  &.filled.translucent
+    background-color: var(--haptic-translucent-text-field-background-color)
+
+  &.filled:not(.translucent)
+    background-color: var(--haptic-opaque-text-field-background-color)
+
+  &.outlined
+    &[data-with-errors]
+      border-color: var(--haptic-error-color)
+
+    &:not([data-with-errors])
+      border-color: var(--haptic-outlined-text-field-border-color)
+
+  &.focus-indicator
+    outline-color: transparent
+
+    &[data-focus]
+      outline-color: var(--haptic-accent-color)

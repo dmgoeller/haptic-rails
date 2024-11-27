@@ -69,9 +69,11 @@ module Haptic
       end
 
       def haptic_text_field(method, field, options = {})
+        with_errors = object&.errors&.include?(method)
+
         haptic_text_field =
           <<-HTML
-          <haptic-text-field class="#{options[:style]}">
+          <haptic-text-field class="#{options[:style]}" #{'data-with-errors' if with_errors}>
             #{field}
             #{field_label(method, options[:label]) if options[:label]}
             #{leading_icon(options[:leading_icon]) if options[:leading_icon]}
@@ -80,7 +82,7 @@ module Haptic
           </haptic-text-field>
           HTML
 
-        errors = errors(method) if options[:errors] && object&.errors
+        errors = errors(method) if options[:errors] && with_errors
         supporting_text = options[:supporting_text]
 
         if errors || supporting_text
@@ -114,7 +116,7 @@ module Haptic
 
       def clear_button
         <<-HTML.html_safe
-        <button class="circular material-icon">close</button>
+        <div class="clear-button circular material-icon">close</div>
         HTML
       end
 
