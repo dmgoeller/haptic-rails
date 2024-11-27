@@ -116,7 +116,7 @@ module Haptic
 
       def clear_button
         <<-HTML.html_safe
-        <div class="clear-button circular material-icon">close</div>
+        <div class="clear-button material-icon">close</div>
         HTML
       end
 
