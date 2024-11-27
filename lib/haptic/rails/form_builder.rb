@@ -15,7 +15,7 @@ module Haptic
         return if full_messages.blank?
 
         <<-HTML.html_safe
-        <div class="haptic errors">
+        <div class="errors">
           #{full_messages.join('. ')}.
         </div>
         HTML
@@ -26,6 +26,10 @@ module Haptic
           options = defaults.merge(options)
           haptic_text_field(method, super(method, field_options(options)), options)
         end
+      end
+
+      def search_field(method, options = {})
+        text_field(method, options.reverse_merge(leading_icon: 'search', clear_button: true))
       end
 
       def select(method, choices = nil, options = {}, html_options = {}, &block)
@@ -64,25 +68,12 @@ module Haptic
         )
       end
 
-      def label_options(options)
-        options.except(
-          :clear_button,
-          :label,
-          :leading_icon,
-          :required,
-          :style,
-          :supporting_text,
-          :trailing_icon,
-          :value
-        )
-      end
-
       def haptic_text_field(method, field, options = {})
         haptic_text_field =
           <<-HTML
           <haptic-text-field class="#{options[:style]}">
             #{field}
-            #{label(method, label_options(options)) if options[:label]}
+            #{field_label(method, options[:label]) if options[:label]}
             #{leading_icon(options[:leading_icon]) if options[:leading_icon]}
             #{trailing_icon(options[:trailing_icon]) if options[:trailing_icon]}
             #{clear_button if options[:clear_button]}
@@ -94,15 +85,19 @@ module Haptic
 
         if errors || supporting_text
           <<-HTML
-          <div class="haptic-text-field-container">
+          <haptic-field-container>
             #{haptic_text_field}
             #{errors}
             #{supporting_text(supporting_text) if supporting_text}
-          </div>
+          </haptic-field-container>
           HTML
         else
           haptic_text_field
         end.html_safe
+      end
+
+      def field_label(method, label)
+        label == true ? label(method) : label(method, label)
       end
 
       def leading_icon(icon)
@@ -125,7 +120,7 @@ module Haptic
 
       def supporting_text(text)
         <<-HTML.html_safe
-        <div class="haptic supporting-text">#{text}</div>
+        <div class="supporting-text">#{text}</div>
         HTML
       end
     end
