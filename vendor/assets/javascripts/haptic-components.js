@@ -13,21 +13,6 @@ customElements.define("haptic-field-container", HapticFieldContainerElement);
 class HapticTextFieldElement extends HTMLElement {
   #inputElement = null;
 
-  #resizeObserver = new ResizeObserver((entries) => {
-    let maxHeight = parseInt(getComputedStyle(this).minHeight || 0);
-
-    for (const entry of entries) {
-      const height = entry.contentRect.height +
-        parseInt(getComputedStyle(entry.target).paddingTop) +
-        parseInt(getComputedStyle(entry.target).paddingBottom);
-
-      maxHeight = Math.max(height, maxHeight);
-    }
-    if (this.offsetHeight != maxHeight) {
-      this.style.height = `${maxHeight}px`;
-    }
-  });
-
   constructor() {
     super();
   }
@@ -73,7 +58,6 @@ class HapticTextFieldElement extends HTMLElement {
             node.setAttribute("rows", 1);
           }
         }
-        this.#resizeObserver.observe(node);
         this.#inputElement = node;
       } else
       // Label

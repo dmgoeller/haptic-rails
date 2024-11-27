@@ -25,26 +25,17 @@ haptic-field-container
 
 haptic-text-field
   box-sizing: border-box
-  min-height: 1.75rem
   outline-width: 0
 
   input, label, select, textarea
     box-sizing: border-box
     line-height: 1.125
-    position: absolute
-    width: 100%
-
-  input, select
-    height: 100%
 
   textarea
-    height: auto
     padding-bottom: .25rem
-    padding-top: .25rem
 
   label
     left: 0
-    position: absolute
     top: .5rem
     width: 100%
 
@@ -54,8 +45,6 @@ haptic-text-field
   .leading-icon, .trailing-icon
     height: 1.5rem
     padding: 0
-    position: absolute
-    top: calc(50% - .75rem)
     width: 1.5rem
 
   .leading-icon
@@ -67,15 +56,18 @@ haptic-text-field
   .clear-button
     height: 1.25rem
     padding: 0
-    position: absolute
-    top: calc(50% - .625rem)
     width: 1.25rem
+
+  .field_with_errors, .field-with-errors
+    width: 100%
+
+  // Set height and padding on the top side depending on whether a label is present
 
   &[data-with-label]
     min-height: 3.5rem
 
     input, select
-      padding-top: 1.75rem
+      padding-top: 1.5rem
 
     textarea
       padding-top: 1.875rem
@@ -86,6 +78,20 @@ haptic-text-field
     .clear-button
       top: 1.125rem
 
+  &:not([data-with-label])
+    min-height: 1.75rem
+
+    textarea
+      padding-top: .25rem
+
+    .leading-icon, .trailing-icon
+      top: calc(50% - .75rem)
+
+    .clear-button
+      top: calc(50% - .625rem)
+
+  // Set padding on the left side depending on whether a leading icon is present
+
   &[data-with-leading-icon]
     input, label, select, textarea
       padding-left: 2.25rem // 0.5 + {icon-width} + 0.25
@@ -94,24 +100,29 @@ haptic-text-field
     input, label, select, textarea
       padding-left: 1rem
 
-  &[data-with-trailing-icon][data-with-clear-button]
-    input, label, select, textarea
-      padding-right: 3.75rem  // 0.25 + {btn-width} + 0.25 + {icon-width} + 0.5
+  // Set padding on the right side depending on whether a trailing icon or clear
+  // button is present
 
-    .clear-button
-      right: 2.25rem
+  &[data-with-trailing-icon]
+    &[data-with-clear-button]
+      input, label, select, textarea
+        padding-right: 3.75rem  // 0.25 + {btn-width} + 0.25 + {icon-width} + 0.5
 
-  &[data-with-trailing-icon]:not([data-with-clear-button])
-    input, label, select, textarea
-      padding-right: 2.25rem
+      .clear-button
+        right: 2.25rem
 
-  &:not([data-with-trailing-icon])[data-with-clear-button]
-    input, label, select, textarea
-      padding-right: 2.125rem
+    &:not([data-with-clear-button])
+      input, label, select, textarea
+        padding-right: 2.25rem
 
-    .clear-button
-      right: .6125rem
+  &:not([data-with-trailing-icon])
+    & [data-with-clear-button]
+      input, label, select, textarea
+        padding-right: 2.125rem
 
-  &:not([data-with-trailing-icon]):not([data-with-clear-button])
-    input, label, select, textarea
-      padding-right: 1rem
+      .clear-button
+        right: .6125rem
+
+    &:not([data-with-clear-button])
+      input, label, select, textarea
+        padding-right: 1rem

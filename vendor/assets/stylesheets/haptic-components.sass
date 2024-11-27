@@ -38,12 +38,13 @@ haptic-field-container
   grid-auto-flow: row
 
 haptic-text-field
+  align-items: stretch
   display: flex
   position: relative
   transition: outline-color .4s linear
 
   input, select, textarea
-    position: absolute
+    flex: 1 0 auto
 
   select, textarea
     appearance: none
@@ -83,3 +84,8 @@ haptic-text-field
   &[data-empty] .clear-button
     opacity: 0
     pointer-events: none
+
+  .field_with_errors, .field-with-errors
+    align-items: stretch
+    display: flex
+    flex: 1 0 auto
