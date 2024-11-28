@@ -1,13 +1,40 @@
-class HapticFieldContainerElement extends HTMLElement {
+
+// ...
+class HapticInputElement extends HTMLInputElement {
   constructor() {
     super();
   }
 
   connectedCallback() {
-    this.classList.add("haptic");
+    this.classList.add('haptic');
   }
 }
-customElements.define("haptic-field-container", HapticFieldContainerElement);
+customElements.define("haptic-input", HapticInputElement, { extends: "input" });
+
+// ...
+class HapticTextAreaElement extends HTMLTextAreaElement {
+  #resizer = () => { this.resize() };
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.classList.add('haptic');
+    this.addEventListener("input", this.#resizer);
+    window.addEventListener("resize", this.#resizer);
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener("resize", this.#resizer);
+  }
+
+  resize() {
+    this.style.height = "auto";
+    this.style.height = `${this.scrollHeight}px`;
+  }
+}
+customElements.define("haptic-textarea", HapticTextAreaElement, { extends: "textarea" });
 
 // ...
 class HapticTextFieldElement extends HTMLElement {
@@ -32,12 +59,11 @@ class HapticTextFieldElement extends HTMLElement {
 
   #nodeAdded(node) {
     if (node instanceof HTMLElement) {
-      node.classList.add("haptic");
-
-      // Input element
       if ((node instanceof HTMLInputElement) ||
           (node instanceof HTMLTextAreaElement) ||
           (node instanceof HTMLSelectElement)) {
+        node.classList.add('haptic');
+
         node.addEventListener("focusin", (e) => {
           this.setAttribute("data-focus", "");
         });
@@ -60,11 +86,9 @@ class HapticTextFieldElement extends HTMLElement {
         }
         this.#inputElement = node;
       } else
-      // Label
       if (node instanceof HTMLLabelElement) {
         this.setAttribute("data-with-label", "");
       } else
-      // Clear button
       if (node.classList.contains("clear-button")) {
         node.addEventListener("click", (e) => {
           this.#clear();
@@ -72,11 +96,9 @@ class HapticTextFieldElement extends HTMLElement {
         });
         this.setAttribute("data-with-clear-button", "");
       } else
-      // Leading icon
       if (node.classList.contains("leading-icon")) {
         this.setAttribute("data-with-leading-icon", "");
       } else
-      // Trailing icon
       if (node.classList.contains("trailing-icon")) {
         this.setAttribute("data-with-trailing-icon", "");
       }
@@ -106,27 +128,3 @@ class HapticTextFieldElement extends HTMLElement {
   }
 }
 customElements.define("haptic-text-field", HapticTextFieldElement);
-
-// ...
-class HapticTextAreaElement extends HTMLTextAreaElement {
-  #resizer = () => { this.resize() };
-
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
-    this.addEventListener("input", this.#resizer);
-    window.addEventListener("resize", this.#resizer);
-  }
-
-  disconnectedCallback() {
-    window.removeEventListener("resize", this.#resizer);
-  }
-
-  resize() {
-    this.style.height = "auto";
-    this.style.height = `${this.scrollHeight}px`;
-  }
-}
-customElements.define("haptic-textarea", HapticTextAreaElement, { extends: 'textarea' });

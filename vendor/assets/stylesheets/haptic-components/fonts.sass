@@ -12,10 +12,6 @@ button.haptic, .button.haptic
  * Fields
  **********************************************************************/
 
-haptic-field-container
-  .errors, .supporting-text
-    font-size: .875rem
-
 haptic-text-field
   input, select, textarea
     font-family: var(--haptic-text-field-font-family)
@@ -25,6 +21,9 @@ haptic-text-field
     font-size: .875rem
     font-weight: bold
 
-  &.animated-label[data-empty]:not([data-focus])
+  &[data-animated][data-empty]:not([data-focus]) label
     label
       font-size: 1rem
+
+  .supporting-text
+    font-size: .875rem

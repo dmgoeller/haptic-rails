@@ -35,20 +35,32 @@ button.haptic, .button.haptic
 ::placeholder
   color: var(--haptic-placeholder-color)
 
-haptic-field-container
-  .errors
-    color: var(--haptic-error-color)
-
-  .supporting-text
-    color: var(--haptic-text-color)
-
-haptic-text-field
-  &, input, select, textarea
+input, select, textarea
+  &.haptic
     background-color: transparent
     color: var(--haptic-text-field-color)
 
-  input, textarea
+    &.filled
+      background-color: var(--haptic-text-field-background-color)
+
+    &.outlined
+      border-color: var(--haptic-outlined-text-field-border-color)
+
+    &.focus-indicator
+      outline-color: transparent
+
+      &:focus
+        outline-color: var(--haptic-accent-color)
+
+input, textarea
+  &.haptic
     caret-color: var(--haptic-text-color)
+
+haptic-text-field
+  &[data-with-errors]
+    input, select, textarea
+      &.haptic.outlined
+        border-color: var(--haptic-error-color)
 
   .clear-button, .leading-icon, .trailing-icon
     color: var(--haptic-text-field-icon-color)
@@ -56,7 +68,7 @@ haptic-text-field
   .clear-button:hover
     background-color: var(--haptic-hover-background-color)
 
-  &[disabled]
+  &[data-disabled]
     opacity: 0.5
 
     label
@@ -71,24 +83,6 @@ haptic-text-field
       label
         color: var(--haptic-accent-color)
 
-      &.animated-label[data-empty]:not([data-focus]) label
+      &[data-animated][data-empty]:not([data-focus]) label
         color: var(--haptic-placeholder-color)
 
-  &.filled.translucent
-    background-color: var(--haptic-translucent-text-field-background-color)
-
-  &.filled:not(.translucent)
-    background-color: var(--haptic-opaque-text-field-background-color)
-
-  &.outlined
-    &[data-with-errors]
-      border-color: var(--haptic-error-color)
-
-    &:not([data-with-errors])
-      border-color: var(--haptic-outlined-text-field-border-color)
-
-  &.focus-indicator
-    outline-color: transparent
-
-    &[data-focus]
-      outline-color: var(--haptic-accent-color)

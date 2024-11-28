@@ -1,9 +1,9 @@
 
 /**********************************************************************
- * Fields
+ * Buttons
  **********************************************************************/
 
-haptic-text-field, button.haptic, .button.haptic
+button.haptic, .button.haptic
   border-radius: .25rem
 
   &.outlined
@@ -19,15 +19,24 @@ button.haptic, .button.haptic
   &.circular
     border-radius: 50%
 
-haptic-text-field
-  input, select, textarea
+/**********************************************************************
+ * Fields
+ **********************************************************************/
+
+input, select, textarea
+  &.haptic
     border-width: 0
     border-radius: .25rem
     outline: none
 
-  &.focus-indicator
-    outline-style: solid
-    outline-width: 2px
+    &.outlined
+      border-width: 1px
+      border-style: solid
 
+    &.focus-indicator
+      outline-style: solid
+      outline-width: 2px
+
+haptic-text-field
   .clear-button
     border-radius: 50%

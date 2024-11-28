@@ -32,19 +32,23 @@ button.haptic, .button.haptic
 ::-webkit-inner-spin-button
   appearance: none
 
+input, select, textarea
+  transition: outline-color .4s linear
+
 haptic-field-container
   align-items: stretch
   display: grid
   grid-auto-flow: row
 
 haptic-text-field
-  align-items: stretch
-  display: flex
+  display: grid
+  grid-row-gap: .25rem
+  grid-template-areas: "field field field" ". supporting-text ."
+  grid-template-columns: 1rem 1fr 1rem
   position: relative
-  transition: outline-color .4s linear
 
   input, select, textarea
-    flex: 1 0 auto
+    grid-area: field
 
   select, textarea
     appearance: none
@@ -52,6 +56,9 @@ haptic-text-field
   textarea
     overflow: hidden
     resize: none
+
+  .supporting-text
+    grid-area: supporting-text
 
   label, .leading-icon, .trailing-icon
     pointer-events: none
@@ -84,8 +91,3 @@ haptic-text-field
   &[data-empty] .clear-button
     opacity: 0
     pointer-events: none
-
-  .field_with_errors, .field-with-errors
-    align-items: stretch
-    display: flex
-    flex: 1 0 auto
