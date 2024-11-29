@@ -44,7 +44,7 @@ input, select, textarea
       background-color: var(--haptic-text-field-background-color)
 
     &.outlined
-      border-color: var(--haptic-outlined-text-field-border-color)
+      border-color: var(--haptic-text-field-border-color)
 
     &.focus-indicator
       outline-color: transparent
@@ -68,11 +68,8 @@ haptic-text-field
   .clear-button:hover
     background-color: var(--haptic-hover-background-color)
 
-  &[data-disabled]
-    opacity: 0.5
-
-    label
-      color: var(--haptic-text-field-color)
+  &[data-disabled] label
+    color: var(--haptic-text-field-color)
 
   &:not([data-disabled])
     &[data-with-errors]

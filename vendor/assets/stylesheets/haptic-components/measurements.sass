@@ -17,12 +17,16 @@ button.haptic, .button.haptic
  * Fields
  **********************************************************************/
 
-input, select, textarea
-  &.haptic
-    box-sizing: border-box
-    line-height: 1.125
-    min-height: 1.75rem
-    padding: .25rem .5rem
+input.haptic, select.haptic, textarea.haptic
+  box-sizing: border-box
+  line-height: 1.125
+  padding: .25rem .5rem
+
+input.haptic, select.haptic
+  height: 1.75rem
+
+textarea.haptic
+  min-height: 1.75rem
 
 haptic-text-field
   box-sizing: border-box
@@ -33,7 +37,7 @@ haptic-text-field
     width: 100%
 
   &[data-animated][data-empty]:not([data-focus]) label
-    top: 1.1875rem // ({height (=3.5)} - {line-height (=1.125)}) / 2
+    top: 1.1875rem // ({container-height = 3.5} - {line-height = 1.125)}) / 2
 
   .leading-icon, .trailing-icon
     height: 1.5rem
@@ -41,78 +45,76 @@ haptic-text-field
     width: 1.5rem
 
   .leading-icon
-    left: .5rem
+    left: .25rem
 
   .trailing-icon
-    right: .5rem
+    right: .25rem
 
   .clear-button
     height: 1.25rem
     padding: 0
     width: 1.25rem
 
-  .field_with_errors, .field-with-errors
-    width: 100%
+  .supporting-text
+    margin: .25rem .75rem 0 .75rem
 
-  // Set height and padding on the top side depending on whether a label is present
+  // Set height and top padding depending on whether a label is present
 
   &[data-with-label]
-    input, select, textarea
-      min-height: 3.5rem
-
     input, select
+      height: 3.5rem
       padding-top: 1.5rem
 
     textarea
+      min-height: 3.5rem
       padding-top: 1.875rem
 
     .leading-icon, .trailing-icon
-      top: 1rem // ({field-height (=3.5)} - {icon-height (=1.5)}) / 2
+      top: 1rem // ({field-height = 3.5} - {icon-height = 1.5}) / 2
 
     .clear-button
-      top: 1.125rem // ({field-height (=3.5)} - {icon-height (=1.25)}) / 2
+      top: 1.125rem // ({field-height = 3.5} - {icon-height = 1.25}) / 2
 
   &:not([data-with-label])
     .leading-icon, .trailing-icon
-      top: .125rem // ({field-height (=1.75)} - {icon-height (=1.5)}) / 2
+      top: .125rem // ({field-height = 1.75} - {icon-height = 1.5}) / 2
 
     .clear-button
-      top: .25rem // ({field-height (=1.75)} - {btn-height (=1.25)}) / 2
+      top: .25rem // ({field-height = 1.75} - {btn-height = 1.25}) / 2
 
-  // Set padding on the left side depending on whether a leading icon is present
+  // Set left padding depending on whether a leading icon // is present
 
   &[data-with-leading-icon]
     input, label, select, textarea
-      padding-left: 2.25rem // 0.5 + {icon-width (=1.5)} + 0.25
+      padding-left: 2rem // 0.25 + {icon-width = 1.5} + 0.25
 
   &:not([data-with-leading-icon])
     input, label, select, textarea
-      padding-left: 1rem
+      padding-left: .75rem
 
-  // Set padding on the right side depending on whether a trailing icon or clear
-  // button is present
+  // Set right padding on depending on whether a trailing icon /
+  // clear button is present
 
   &[data-with-trailing-icon]
     &[data-with-clear-button]
       input, label, select, textarea
-        padding-right: 3.75rem  // 0.25 + {btn-width (=1.25)} +
-                                // 0.25 + {icon-width (=1.25)} +
-                                // 0.5
+        padding-right: 3.5rem  // 0.25 + {btn-width = 1.25} + 0.25 +
+                               // {icon-width = 1.5} + 0.25
       .clear-button
-        right: 2.25rem
+        right: 2.125rem // 0.125 + 0.25 + {icon-width = 1.5} + 0.25
 
     &:not([data-with-clear-button])
       input, label, select, textarea
-        padding-right: 2.25rem
+        padding-right: 2rem // 0.25 + {icon-width = 1.5} + 0.25
 
   &:not([data-with-trailing-icon])
     &[data-with-clear-button]
       input, label, select, textarea
-        padding-right: 2.125rem
+        padding-right: 1.875rem // 0.25 + {btn-width = 1.25} + 0.375
 
       .clear-button
-        right: .6125rem
+        right: .375rem // 0.125 + 0.25
 
     &:not([data-with-clear-button])
       input, label, select, textarea
-        padding-right: 1rem
+        padding-right: .75rem

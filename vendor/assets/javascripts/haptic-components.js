@@ -40,6 +40,18 @@ customElements.define("haptic-textarea", HapticTextAreaElement, { extends: "text
 class HapticTextFieldElement extends HTMLElement {
   #inputElement = null;
 
+  #mutationObserver = new MutationObserver((mutationList) => {
+    for (let mutationRecord of mutationList) {
+      if (mutationRecord.attributeName == "disabled") {
+        if (mutationRecord.target.disabled) {
+          this.setAttribute("data-disabled", "");
+        } else {
+          this.removeAttribute("data-disabled");
+        }
+      }
+    }
+  });
+
   constructor() {
     super();
   }
@@ -47,7 +59,7 @@ class HapticTextFieldElement extends HTMLElement {
   connectedCallback() {
     this.classList.add("haptic");
 
-    new MutationObserver((mutationList, observer) => {
+    new MutationObserver((mutationList) => {
       for (let mutationRecord of mutationList) {
         for (let node of mutationRecord.addedNodes) {
           this.#nodeAdded(node);
@@ -63,14 +75,13 @@ class HapticTextFieldElement extends HTMLElement {
           (node instanceof HTMLTextAreaElement) ||
           (node instanceof HTMLSelectElement)) {
         node.classList.add('haptic');
-
-        node.addEventListener("focusin", (e) => {
+        node.addEventListener("focusin", () => {
           this.setAttribute("data-focus", "");
         });
-        node.addEventListener("focusout", (e) => {
+        node.addEventListener("focusout", () => {
           this.removeAttribute("data-focus");
         });
-        node.addEventListener("input", (e) => {
+        node.addEventListener("input", () => {
           this.#refresh();
         });
         if (node.required) {
@@ -84,13 +95,14 @@ class HapticTextFieldElement extends HTMLElement {
             node.setAttribute("rows", 1);
           }
         }
+        this.#mutationObserver.observe(node, { attributes: true });
         this.#inputElement = node;
       } else
       if (node instanceof HTMLLabelElement) {
         this.setAttribute("data-with-label", "");
       } else
       if (node.classList.contains("clear-button")) {
-        node.addEventListener("click", (e) => {
+        node.addEventListener("click", e => {
           this.#clear();
           e.preventDefault();
         });
