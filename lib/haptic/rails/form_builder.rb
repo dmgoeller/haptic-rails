@@ -4,7 +4,7 @@ module Haptic
   module Rails
     # Builds forms with haptic components.
     class FormBuilder < ActionView::Helpers::FormBuilder
-      TEXT_FIELD_OPTIONS = %i[
+      HAPTIC_TEXT_FIELD_OPTIONS = %i[
         animated
         clear_button
         errors
@@ -15,13 +15,12 @@ module Haptic
       ].freeze
 
       %i[number_field text_area text_field].each do |name|
+        element_name = "haptic-#{name == :text_area ? 'textarea' : 'input'}"
+
         define_method name do |method, options = {}|
           options = defaults.merge(options)
-          field = super(
-            method,
-            field_options(options, is: "haptic-#{name == :text_area ? 'textarea' : 'input'}")
-          )
-          return field unless TEXT_FIELD_OPTIONS.any? { |key| options.key? key }
+          field = super(method, field_options(options, is: element_name))
+          return field unless HAPTIC_TEXT_FIELD_OPTIONS.any? { |key| options.key? key }
 
           haptic_text_field(method, field, options)
         end
@@ -68,7 +67,7 @@ module Haptic
       private
 
       def field_options(options, is: nil)
-        options.merge(is: is).except(*TEXT_FIELD_OPTIONS)
+        options.merge(is: is).except(*HAPTIC_TEXT_FIELD_OPTIONS)
       end
 
       def haptic_text_field(method, field, options = {})
@@ -84,7 +83,7 @@ module Haptic
           #{leading_icon(options[:leading_icon]) if options[:leading_icon]}
           #{trailing_icon(options[:trailing_icon]) if options[:trailing_icon]}
           #{clear_button if options[:clear_button]}
-          #{errors(method, class: 'supporting-text') if options[:errors]}
+          #{errors(method, class: 'supporting-text') if options[:supporting_text]}
           #{supporting_text(options[:supporting_text]) if options[:supporting_text]}
         </haptic-text-field>
         HTML

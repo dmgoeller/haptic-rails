@@ -32,6 +32,8 @@ button.haptic, .button.haptic
   color: var(--haptic-placeholder-color)
 
 input, select, textarea
+  outline-color: transparent
+
   &.haptic
     background-color: transparent
     color: var(--haptic-text-field-color)
@@ -42,11 +44,8 @@ input, select, textarea
     &.outlined
       border-color: var(--haptic-text-field-border-color)
 
-    &.focus-indicator
-      outline-color: transparent
-
-      &:focus
-        outline-color: var(--haptic-accent-color)
+    &.focus-indicator:focus
+      outline-color: var(--haptic-accent-color)
 
 input, textarea
   &.haptic
