@@ -20,6 +20,8 @@ button.haptic, .button.haptic
   white-space: nowrap
 
   &:disabled
+    filter: grayscale(1)
+    opacity: 0.5
     pointer-events: none
 
   &:not(:disabled)
@@ -47,7 +49,7 @@ haptic-text-field
   display: flex
   flex-direction: column
   position: relative
-  transition: opacity .4s linear
+  transition: .4s linear // opacity, filter
 
   label, .leading-icon, .trailing-icon
     pointer-events: none
@@ -81,6 +83,7 @@ haptic-text-field
     pointer-events: none
 
   &[data-disabled]
+    filter: grayscale(1)
     opacity: 0.5
 
     .clear-button

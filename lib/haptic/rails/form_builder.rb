@@ -7,6 +7,7 @@ module Haptic
       TEXT_FIELD_OPTIONS = %i[
         animated
         clear_button
+        errors
         label
         leading_icon
         supporting_text
@@ -83,7 +84,7 @@ module Haptic
           #{leading_icon(options[:leading_icon]) if options[:leading_icon]}
           #{trailing_icon(options[:trailing_icon]) if options[:trailing_icon]}
           #{clear_button if options[:clear_button]}
-          #{errors(method, class: 'supporting-text') if options[:supporting_text]}
+          #{errors(method, class: 'supporting-text') if options[:errors]}
           #{supporting_text(options[:supporting_text]) if options[:supporting_text]}
         </haptic-text-field>
         HTML

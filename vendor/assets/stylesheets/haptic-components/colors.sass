@@ -24,10 +24,6 @@ button.haptic, .button.haptic
     border-color: var(--haptic-accent-color)
     color: var(--haptic-accent-color)
 
-  &:disabled
-    filter: grayscale(1)
-    opacity: 0.5
-
 /**********************************************************************
  * Fields
  **********************************************************************/
@@ -68,18 +64,16 @@ haptic-text-field
   .clear-button:hover
     background-color: var(--haptic-hover-background-color)
 
-  &[data-disabled] label
-    color: var(--haptic-text-field-color)
+  &[data-with-errors]
+    label
+      color: var(--haptic-error-color)
 
-  &:not([data-disabled])
-    &[data-with-errors]
-      label
-        color: var(--haptic-error-color)
+    &[data-animated][data-empty]:not([data-focus]) label
+      color: var(--haptic-placeholder-color)
 
-    &:not([data-with-errors])
-      label
-        color: var(--haptic-accent-color)
+  &:not([data-with-errors])
+    label
+      color: var(--haptic-accent-color)
 
-      &[data-animated][data-empty]:not([data-focus]) label
-        color: var(--haptic-placeholder-color)
-
+    &[data-animated][data-empty]:not([data-focus]) label
+      color: var(--haptic-placeholder-color)
