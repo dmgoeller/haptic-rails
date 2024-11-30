@@ -1,4 +1,3 @@
-
 .haptic
   .error
     color: var(--haptic-error-color)
@@ -7,22 +6,30 @@
  * Buttons
  **********************************************************************/
 
-button.haptic, .button.haptic
-  background-color: transparent
+button, .button
+  &.haptic
+    background-color: transparent
+
+    &.filled
+      background-color: var(--haptic-filled-button-background-color)
+      color: var(--haptic-filled-button-color)
+
+    &.outlined, &.text
+      color: var(--haptic-accent-color)
+
+    &.outlined
+      border-color: var(--haptic-button-border-color)
 
   &:hover:not(:disabled), &:focus, &:focus-visible
-    background-color: var(--haptic-button-hover-background-color)
+    &.filled
+      filter: brightness(1.1875)
 
-  &.filled
-    background-color: var(--haptic-accent-color)
-    color: var(--haptic-filled-button-color)
+    &:not(.filled)
+      background-color: var(--haptic-button-hover-background-color)
 
-    &:hover:not(:disabled), &:focus, &:focus-visible
-      background-color: var(--haptic-accent-color)
-
-  &.outlined
-    border-color: var(--haptic-accent-color)
-    color: var(--haptic-accent-color)
+  &:focus, &:focus-visible
+    &.outlined
+      border-color: var(--haptic-accent-color)
 
 /**********************************************************************
  * Fields
@@ -31,12 +38,11 @@ button.haptic, .button.haptic
 ::placeholder
   color: var(--haptic-placeholder-color)
 
-input, select, textarea
-  outline-color: transparent
-
+input[type="text"], input[type="number"], select, textarea
   &.haptic
     background-color: transparent
     color: var(--haptic-text-field-color)
+    outline-color: transparent
 
     &.filled
       background-color: var(--haptic-text-field-background-color)
@@ -47,13 +53,13 @@ input, select, textarea
     &.focus-indicator:focus
       outline-color: var(--haptic-accent-color)
 
-input, textarea
+input[type="text"], input[type="number"], textarea
   &.haptic
     caret-color: var(--haptic-text-color)
 
 haptic-text-field
   &[data-with-errors]
-    input, select, textarea
+    input[type="text"], input[type="number"], select, textarea
       &.haptic.outlined
         border-color: var(--haptic-error-color)
 
@@ -61,7 +67,7 @@ haptic-text-field
     color: var(--haptic-text-field-icon-color)
 
   .clear-button:hover
-    background-color: var(--haptic-hover-background-color)
+    background-color: var(--haptic-button-hover-background-color)
 
   &[data-with-errors]
     label

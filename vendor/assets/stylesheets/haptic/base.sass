@@ -1,31 +1,30 @@
-@import 'haptic-components/borders'
-@import 'haptic-components/colors'
-@import 'haptic-components/fonts'
-@import 'haptic-components/measurements'
 
 /**********************************************************************
  * Buttons
  **********************************************************************/
 
-button.haptic, .button.haptic
-  align-items: center
-  appearance: none
-  display: grid
-  grid-auto-flow: column
-  justify-content: center
-  overflow: hidden
-  text-overflow: ellipsis
-  transition-duration: .4s
-  transition-delay: .1s
-  white-space: nowrap
-
-  &:disabled
-    filter: grayscale(1)
-    opacity: 0.5
-    pointer-events: none
-
-  &:not(:disabled)
+button, .button
+  &.haptic
+    align-items: center
+    appearance: none
     cursor: pointer
+    display: grid
+    grid-auto-flow: column
+    justify-content: center
+    overflow: hidden
+    text-overflow: ellipsis
+    transition-duration: .4s
+    transition-delay: .1s
+    transition-property: background, border-color, filter
+    white-space: nowrap
+
+    &:disabled
+      filter: grayscale(1)
+      opacity: 0.5
+      pointer-events: none
+
+    &:focus, &:focus-visible
+      transition-delay: 0
 
 /**********************************************************************
  * Fields
@@ -34,22 +33,26 @@ button.haptic, .button.haptic
 ::-webkit-inner-spin-button
   appearance: none
 
-input.haptic, select.haptic, textarea.haptic
-  transition: outline-color .4s linear
+input, select, textarea
+  &.haptic
+    transition: outline-color .4s linear
 
-select.haptic, textarea.haptic
-  appearance: none
+select, textarea
+  &.haptic
+    appearance: none
 
 textarea.haptic
   overflow: hidden
   resize: none
 
 haptic-text-field
-  align-items: stretch
-  display: flex
-  flex-direction: column
   position: relative
   transition: .4s linear // opacity, filter
+
+  &, .field_with_errors
+    align-items: stretch
+    display: flex
+    flex-direction: column
 
   label, .leading-icon, .trailing-icon
     pointer-events: none

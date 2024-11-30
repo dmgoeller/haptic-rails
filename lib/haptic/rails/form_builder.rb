@@ -50,7 +50,7 @@ module Haptic
       def select(method, choices = nil, options = {}, html_options = {}, &block)
         options = defaults.except(:class).merge(options)
         html_options = html_options.merge(
-          class: [defaults[:class], html_options[:class], 'haptic'].compact.join(' ')
+          class: [html_options[:class], defaults[:class], 'haptic'].compact.join(' ')
         )
         haptic_text_field(
           method,
@@ -59,10 +59,10 @@ module Haptic
         )
       end
 
-      # def submit(value = nil, options = {})
-      #  value, options = nil, value if value.is_a?(Hash)
-      #  super(value, options.reverse_merge(class: 'haptic filled button with-text'))
-      # end
+      def submit(value = nil, options = {})
+        value, options = nil, value if value.is_a?(Hash)
+        super(value, options.merge(is: 'haptic-input'))
+      end
 
       private
 
@@ -71,15 +71,10 @@ module Haptic
       end
 
       def haptic_text_field(method, field, options = {})
-        attributes = [
-          ('data-animated' if options[:animated]),
-          ('data-with-errors' if object&.errors&.include?(method))
-        ].compact.join(' ')
-
         <<-HTML.html_safe
-        <haptic-text-field #{attributes}>
+        <haptic-text-field #{haptic_text_field_attributes(method, options)}>
           #{field}
-          #{field_label(method, options[:label]) if options[:label]}
+          #{haptic_text_field_label(method, options[:label]) if options[:label]}
           #{leading_icon(options[:leading_icon]) if options[:leading_icon]}
           #{trailing_icon(options[:trailing_icon]) if options[:trailing_icon]}
           #{clear_button if options[:clear_button]}
@@ -89,7 +84,14 @@ module Haptic
         HTML
       end
 
-      def field_label(method, label)
+      def haptic_text_field_attributes(method, options = {})
+        [
+          ('data-animated' if options[:animated]),
+          ('data-with-errors' if object&.errors&.include?(method))
+        ].compact.join(' ')
+      end
+
+      def haptic_text_field_label(method, label)
         label == true ? label(method) : label(method, label)
       end
 

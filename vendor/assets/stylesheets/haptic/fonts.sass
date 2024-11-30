@@ -3,17 +3,18 @@
  * Buttons
  **********************************************************************/
 
-button.haptic, .button.haptic
-  font-size: 1rem
-  font-weight: bold
-  text-decoration: none
+button, .button
+  &.haptic
+    font-size: 1rem
+    font-weight: bold
+    text-decoration: none
 
 /**********************************************************************
  * Fields
  **********************************************************************/
 
 haptic-text-field
-  input, select, textarea
+  input[type="text"], input[type="number"], select, textarea
     font-family: var(--haptic-text-field-font-family)
     font-size: 1rem
 
