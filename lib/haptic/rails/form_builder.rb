@@ -78,7 +78,7 @@ module Haptic
         attributes = [
           ('data-focus-indicator' if options[:focus_indicator]),
           ('data-with-erros' if errors)
-        ].compact.join
+        ].compact.join(' ')
 
         haptic_text_field =
           <<-HTML
