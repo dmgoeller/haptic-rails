@@ -7,6 +7,7 @@ module Haptic
       HAPTIC_TEXT_FIELD_OPTIONS = %i[
         animated
         clear_button
+        focus_indicator
         errors
         label
         leading_icon
@@ -71,28 +72,44 @@ module Haptic
       end
 
       def haptic_text_field(method, field, options = {})
-        <<-HTML.html_safe
-        <haptic-text-field #{haptic_text_field_attributes(method, options)}>
-          #{field}
-          #{haptic_text_field_label(method, options[:label]) if options[:label]}
-          #{leading_icon(options[:leading_icon]) if options[:leading_icon]}
-          #{trailing_icon(options[:trailing_icon]) if options[:trailing_icon]}
-          #{clear_button if options[:clear_button]}
-          #{errors(method, class: 'supporting-text') if options[:errors]}
-          #{supporting_text(options[:supporting_text]) if options[:supporting_text]}
-        </haptic-text-field>
-        HTML
+        # Don't call :valid? or :invalid? here to prevent errors on new records
+        errors = object&.errors&.include?(method)
+
+        attributes = [
+          ('data-focus-indicator' if options[:focus_indicator]),
+          ('data-with-erros' if errors)
+        ].compact.join
+
+        haptic_text_field =
+          <<-HTML
+          <haptic-text-field #{attributes}>
+              #{field}
+              #{haptic_text_field_label(method, options) if options[:label]}
+              #{leading_icon(options[:leading_icon]) if options[:leading_icon]}
+              #{trailing_icon(options[:trailing_icon]) if options[:trailing_icon]}
+              #{clear_button if options[:clear_button]}
+          </haptic-text-field>
+          HTML
+
+        if (options[:errors] && errors) || options[:supporting_text]
+          <<-HTML
+          <haptic-text-field-container>
+            #{haptic_text_field}
+            #{errors(method, class: 'supporting-text') if options[:errors]}
+            #{supporting_text(options[:supporting_text]) if options[:supporting_text]}
+          </haptic-text-field-container>
+          HTML
+        else
+          haptic_text_field
+        end.html_safe
       end
 
-      def haptic_text_field_attributes(method, options = {})
-        [
-          ('data-animated' if options[:animated]),
-          ('data-with-errors' if object&.errors&.include?(method))
-        ].compact.join(' ')
-      end
+      def haptic_text_field_label(method, options = {})
+        args = [:label, method]
+        args << options[:label] unless options[:label] == true
+        args << { data: { animated: '' } } if options[:animated]
 
-      def haptic_text_field_label(method, label)
-        label == true ? label(method) : label(method, label)
+        send(*args)
       end
 
       def leading_icon(icon)

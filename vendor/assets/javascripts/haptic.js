@@ -151,3 +151,15 @@ class HapticTextFieldElement extends HTMLElement {
   }
 }
 customElements.define('haptic-text-field', HapticTextFieldElement);
+
+// ...
+class HapticTextFieldContainerElement extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.classList.add('haptic');
+  }
+}
+customElements.define('haptic-text-field-container', HapticTextFieldContainerElement);

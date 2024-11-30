@@ -50,9 +50,6 @@ input[type="text"], input[type="number"], select, textarea
     &.outlined
       border-color: var(--haptic-text-field-border-color)
 
-    &.focus-indicator:focus
-      outline-color: var(--haptic-accent-color)
-
 input[type="text"], input[type="number"], textarea
   &.haptic
     caret-color: var(--haptic-text-color)
@@ -73,12 +70,18 @@ haptic-text-field
     label
       color: var(--haptic-error-color)
 
-    &[data-animated][data-empty]:not([data-focus]) label
-      color: var(--haptic-placeholder-color)
+    &[data-empty]:not([data-focus]) label[data-animated]
+      color: var(--haptic-text-color)
+
+    &[data-focus-indicator]::after
+      background-color: var(--haptic-error-color)
 
   &:not([data-with-errors])
     label
       color: var(--haptic-accent-color)
 
-    &[data-animated][data-empty]:not([data-focus]) label
-      color: var(--haptic-placeholder-color)
+    &[data-empty]:not([data-focus]) label[data-animated]
+      color: var(--haptic-text-color)
+
+    &[data-focus-indicator]::after
+      background-color: var(--haptic-accent-color)

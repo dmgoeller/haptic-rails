@@ -28,10 +28,10 @@ input[type="text"], input[type="number"], select, textarea
       border-width: 1px
       border-style: solid
 
-    &.focus-indicator
-      outline-offset: -1px
-      outline-width: 2px
-
 haptic-text-field
   .clear-button
     border-radius: 50%
+
+  &[data-focus-indicator]::after
+    border-bottom-left-radius: .25rem 3px
+    border-bottom-right-radius: .25rem 3px

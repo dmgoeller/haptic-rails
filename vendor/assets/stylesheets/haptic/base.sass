@@ -34,10 +34,6 @@ button, .button
 ::-webkit-inner-spin-button
   appearance: none
 
-input, select, textarea
-  &.haptic
-    transition: outline-color .4s linear
-
 select, textarea
   &.haptic
     appearance: none
@@ -93,5 +89,19 @@ haptic-text-field
     .clear-button
       pointer-events: none
 
+  &[data-focus-indicator]::after
+    content: '\200b'
+    opacity: 0
+    pointer-events: none
+    position: absolute
+    transition: opacity .4s linear
+
+  &[data-focus-indicator][data-focus]::after
+    opacity: 1
+
+haptic-text-field-container
+  align-items: stretch
+  display: grid
+  grid-auto-flow: row
 
 
