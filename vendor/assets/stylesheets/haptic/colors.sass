@@ -8,8 +8,6 @@
 
 button, .button
   &.haptic
-    background-color: transparent
-
     &.filled
       background-color: var(--haptic-filled-button-background-color)
       color: var(--haptic-filled-button-color)
@@ -18,16 +16,17 @@ button, .button
         filter: brightness(1.1875)
 
     &:not(.filled)
+      background-color: transparent
       color: var(--haptic-accent-color)
+
+      &:hover:not(:disabled), &:focus, &:focus-visible
+        background-color: var(--haptic-button-hover-background-color)
 
       &.outlined
         border-color: var(--haptic-button-border-color)
 
         &:focus, &:focus-visible
           border-color: var(--haptic-accent-color)
-
-      &:hover:not(:disabled), &:focus, &:focus-visible
-        background-color: var(--haptic-button-hover-background-color)
 
 .haptic.toolbutton
   background-color: transparent

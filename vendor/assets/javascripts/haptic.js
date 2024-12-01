@@ -1,5 +1,17 @@
 
 // ...
+class HapticElement extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.classList.add('haptic');
+  }
+}
+customElements.define('haptic-text-field-container', HapticElement);
+
+// ...
 class HapticInputElement extends HTMLInputElement {
   constructor() {
     super();
@@ -105,6 +117,7 @@ class HapticTextFieldElement extends HTMLElement {
           if (!node.hasAttribute('rows')) {
             node.setAttribute('rows', 1);
           }
+          this.setAttribute('data-auto-growing', '');
         }
         this.#mutationObserver.observe(node, { attributes: true });
         this.#inputElement = node;
@@ -151,15 +164,3 @@ class HapticTextFieldElement extends HTMLElement {
   }
 }
 customElements.define('haptic-text-field', HapticTextFieldElement);
-
-// ...
-class HapticTextFieldContainerElement extends HTMLElement {
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
-    this.classList.add('haptic');
-  }
-}
-customElements.define('haptic-text-field-container', HapticTextFieldContainerElement);
