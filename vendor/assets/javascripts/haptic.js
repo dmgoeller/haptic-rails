@@ -125,7 +125,7 @@ class HapticTextFieldElement extends HTMLElement {
       if (node instanceof HTMLLabelElement) {
         this.setAttribute('data-with-label', '');
       } else
-      if (node.classList.contains('clear-button')) {
+      if (node.classList.contains('toolbutton')) {
         node.addEventListener('click', e => {
           this.#clear();
           e.preventDefault();

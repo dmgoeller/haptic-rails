@@ -10,6 +10,11 @@ button, .button
     min-height: 1.75rem
     padding: .25rem .5rem
 
+    .icon
+      height: 1.25rem
+      padding: 0
+      width: 1.25rem
+
 .haptic.toolbutton
   height: 1.25rem
   padding: 0
@@ -44,11 +49,8 @@ haptic-text-field
     top: calc(50% - .75rem)
     width: 1.5rem
 
-  .clear-button
-    height: 1.25rem
-    padding: 0
+  .toolbutton
     top: calc(50% - 0.625rem)
-    width: 1.25rem
 
   &[data-focus-indicator]::after
     bottom: 0
@@ -75,7 +77,7 @@ haptic-text-field
       .leading-icon, .trailing-icon
         top: 1rem      // ({min field-height = 3.5} - {icon-height = 1.5}) / 2
 
-      .clear-button
+      .toolbutton
         top: 1.125rem  // ({min field-height = 3.5} - {icon-height = 1.25}) / 2
 
     &[data-with-leading-icon]
@@ -91,7 +93,7 @@ haptic-text-field
         input[type="text"], input[type="number"], label, select, textarea
           padding-right: 4.5rem    // 0.625 + {btn-width = 1.25} + 0.625 +
                                    // {icon-width = 1.5} + 0.5
-        .clear-button
+        .toolbutton
           right: 2.625rem          // 0.625 + {icon-width = 1.5} + 0.5
 
       &:not([data-with-clear-button])
@@ -103,7 +105,7 @@ haptic-text-field
         input[type="text"], input[type="number"], label, select, textarea
           padding-right: 2.5rem    // 0.625 + {btn-width = 1.25} + 0.625
 
-        .clear-button
+        .toolbutton
           right: .625rem           // 0.125 + 0.5
 
       &:not([data-with-clear-button])
@@ -121,7 +123,7 @@ haptic-text-field
       .leading-icon, .trailing-icon
         top: .125rem   // ({min field-height = 1.75} - {icon-height = 1.5}) / 2
 
-      .clear-button
+      .toolbutton
         top: .25rem    // ({field-height = 1.75} - {btn-height = 1.25}) / 2
 
     &[data-with-leading-icon]
@@ -137,7 +139,7 @@ haptic-text-field
         input[type="text"], input[type="number"], label, select, textarea
           padding-right: 3.5rem    // 0.25 + {btn-width = 1.25} + 0.25 +
                                    // {icon-width = 1.5} + 0.25
-        .clear-button
+        .toolbutton
           right: 2.125rem          // 0.125 + 0.25 + {icon-width = 1.5} + 0.25
 
       &:not([data-with-clear-button])
@@ -149,7 +151,7 @@ haptic-text-field
         input[type="text"], input[type="number"], label, select, textarea
           padding-right: 1.875rem  // 0.25 + {btn-width = 1.25} + 0.375
 
-        .clear-button
+        .toolbutton
           right: .375rem           // 0.125 + 0.25
 
       &:not([data-with-clear-button])

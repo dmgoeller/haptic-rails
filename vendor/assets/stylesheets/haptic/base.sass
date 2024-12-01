@@ -77,10 +77,10 @@ haptic-text-field
     justify-content: center
     position: absolute
 
-  .clear-button
+  .toolbutton
     position: absolute
 
-  &[data-empty] .clear-button
+  &[data-empty] .toolbutton
     opacity: 0
     pointer-events: none
 
@@ -88,7 +88,7 @@ haptic-text-field
     filter: grayscale(1)
     opacity: 0.5
 
-    .clear-button
+    .toolbutton
       pointer-events: none
 
   &[data-focus-indicator]::after
