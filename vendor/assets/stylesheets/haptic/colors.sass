@@ -14,22 +14,27 @@ button, .button
       background-color: var(--haptic-filled-button-background-color)
       color: var(--haptic-filled-button-color)
 
-    &.outlined, &.text
-      color: var(--haptic-accent-color)
-
-    &.outlined
-      border-color: var(--haptic-button-border-color)
-
-  &:hover:not(:disabled), &:focus, &:focus-visible
-    &.filled
-      filter: brightness(1.1875)
+      &:hover:not(:disabled), &:focus, &:focus-visible
+        filter: brightness(1.1875)
 
     &:not(.filled)
-      background-color: var(--haptic-button-hover-background-color)
+      color: var(--haptic-accent-color)
 
-  &:focus, &:focus-visible
-    &.outlined
-      border-color: var(--haptic-accent-color)
+      &.outlined
+        border-color: var(--haptic-button-border-color)
+
+        &:focus, &:focus-visible
+          border-color: var(--haptic-accent-color)
+
+      &:hover:not(:disabled), &:focus, &:focus-visible
+        background-color: var(--haptic-button-hover-background-color)
+
+.haptic.toolbutton
+  background-color: transparent
+  color: var(--haptic-toolbutton-color)
+
+  &:hover
+    background-color: var(--haptic-toolbutton-hover-background-color)
 
 /**********************************************************************
  * Fields
@@ -55,18 +60,14 @@ input[type="text"], input[type="number"], textarea
     caret-color: var(--haptic-accent-color)
 
 haptic-text-field
+  .leading-icon, .trailing-icon
+    color: var(--haptic-text-field-icon-color)
+
   &[data-with-errors]
     input[type="text"], input[type="number"], select, textarea
       &.haptic.outlined
         border-color: var(--haptic-error-color)
 
-  .clear-button, .leading-icon, .trailing-icon
-    color: var(--haptic-text-field-icon-color)
-
-  .clear-button:hover
-    background-color: var(--haptic-button-hover-background-color)
-
-  &[data-with-errors]
     label
       color: var(--haptic-error-color)
 

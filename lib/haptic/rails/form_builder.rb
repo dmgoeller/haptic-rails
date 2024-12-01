@@ -8,7 +8,8 @@ module Haptic
         animated
         clear_button
         focus_indicator
-        errors
+        error_icon
+        error_messages
         label
         leading_icon
         supporting_text
@@ -37,10 +38,10 @@ module Haptic
         full_messages = object&.errors&.full_messages_for(method)
         return if full_messages.blank?
 
-        <<-HTML.html_safe
-        <div class="#{['error', options[:class]].join(' ')}">
-          #{full_messages.join('. ').delete_suffix('.')}.
-        </div>
+        <<~HTML.html_safe
+          <div class="#{['error', options[:class]].join(' ')}">
+            #{full_messages.join('. ').delete_suffix('.')}.
+          </div>
         HTML
       end
 
@@ -80,24 +81,27 @@ module Haptic
           ('data-with-errors' if errors)
         ].compact.join(' ')
 
+        trailing_icon = trailing_icon(options[:trailing_icon]) if options[:trailing_icon]
+        trailing_icon ||= trailing_icon('error', class: 'error') if options[:error_icon] && errors
+
         haptic_text_field =
-          <<-HTML
-          <haptic-text-field #{attributes}>
+          <<~HTML
+            <haptic-text-field #{attributes}>
               #{field}
+              #{tool_button('close', class: 'clear-button') if options[:clear_button]}
               #{haptic_text_field_label(method, options) if options[:label]}
-              #{leading_icon(options[:leading_icon]) if options[:leading_icon]}
-              #{trailing_icon(options[:trailing_icon]) if options[:trailing_icon]}
-              #{clear_button if options[:clear_button]}
-          </haptic-text-field>
+              #{icon(options[:leading_icon], class: 'leading-icon') if options[:leading_icon]}
+              #{trailing_icon}
+            </haptic-text-field>
           HTML
 
-        if (options[:errors] && errors) || options[:supporting_text]
-          <<-HTML
-          <haptic-text-field-container>
-            #{haptic_text_field}
-            #{errors(method, class: 'supporting-text') if options[:errors]}
-            #{supporting_text(options[:supporting_text]) if options[:supporting_text]}
-          </haptic-text-field-container>
+        if (options[:error_messages] && errors) || options[:supporting_text]
+          <<~HTML
+            <haptic-text-field-container>
+              #{haptic_text_field}
+              #{errors(method, class: 'supporting-text') if options[:error_messages] && errors}
+              #{supporting_text(options[:supporting_text]) if options[:supporting_text]}
+            </haptic-text-field-container>
           HTML
         else
           haptic_text_field
@@ -112,27 +116,27 @@ module Haptic
         send(*args)
       end
 
-      def leading_icon(icon)
-        <<-HTML.html_safe
-        <div class="leading-icon material-icon">#{icon}</div>
-        HTML
-      end
-
-      def trailing_icon(icon)
-        <<-HTML.html_safe
-        <div class="trailing-icon material-icon">#{icon}</div>
-        HTML
-      end
-
-      def clear_button
-        <<-HTML.html_safe
-        <div class="clear-button material-icon">close</div>
-        HTML
-      end
-
       def supporting_text(text)
-        <<-HTML.html_safe
-        <div class="supporting-text">#{text}</div>
+        <<~HTML.html_safe
+          <div class="supporting-text">#{text}</div>
+        HTML
+      end
+
+      def trailing_icon(icon, options = {})
+        icon(icon, options.merge(class: ['trailing-icon', options[:class]].compact.join(' ')))
+      end
+
+      # ---
+
+      def icon(icon, options = {})
+        <<~HTML.html_safe
+          <div class="material-icon #{options[:class]}">#{icon}</div>
+        HTML
+      end
+
+      def tool_button(icon, options = {})
+        <<~HTML.html_safe
+          <div class="haptic toolbutton material-icon #{options[:class]}">#{icon}</div>
         HTML
       end
     end

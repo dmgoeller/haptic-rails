@@ -3,19 +3,22 @@
  * Buttons
  **********************************************************************/
 
-button, .button
+button, .button, .toolbutton
   &.haptic
     align-items: center
-    appearance: none
     cursor: pointer
-    display: grid
-    grid-auto-flow: column
     justify-content: center
-    overflow: hidden
-    text-overflow: ellipsis
     transition-delay: .1s
     transition-duration: .4s
     transition-function: linear
+
+button, .button
+  &.haptic
+    appearance: none
+    display: grid
+    grid-auto-flow: column
+    overflow: hidden
+    text-overflow: ellipsis
     transition-property: background, border-color, filter
     white-space: nowrap
 
@@ -26,6 +29,10 @@ button, .button
 
     &:focus, &:focus-visible
       transition-delay: 0
+
+.haptic.toolbutton
+  display: flex
+  transition-property: background, opacity
 
 /**********************************************************************
  * Fields
@@ -71,12 +78,7 @@ haptic-text-field
     position: absolute
 
   .clear-button
-    align-items: center
-    cursor: pointer
-    display: flex
-    justify-content: center
     position: absolute
-    transition: .4s linear
 
   &[data-empty] .clear-button
     opacity: 0
