@@ -22,16 +22,16 @@ haptic-text-field
     font-size: .875rem
     font-weight: bold
 
-  &[data-empty]:not([data-focus]) label[data-animated]
-    font-size: 1rem
+  &[animated][empty]:not([focus])
+    label
+      font-size: 1rem
 
   .leading-icon, .trailing-icon
     font-size: 1.125rem
 
-  &[data-with-label]
+  &[with-label]
     .leading-icon, .trailing-icon
       font-size: 1.5rem
 
-haptic-text-field-container
   .supporting-text
     font-size: .875rem

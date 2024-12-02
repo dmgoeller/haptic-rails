@@ -28,6 +28,11 @@ module Haptic
         end
       end
 
+      def check_box(method, options = {}, checked_value = '1', unchecked_value = '0')
+        options = options.reverse_merge(class: [options[:class], defaults[:class], 'haptic'].join(' '))
+        super(method, options, checked_value, unchecked_value)
+      end
+
       def defaults(defaults = {})
         @defaults = {} if @defaults.nil?
         @defaults.merge!(defaults) if defaults.any?
@@ -77,35 +82,27 @@ module Haptic
         errors = object&.errors&.include?(method)
 
         attributes = [
-          ('data-focus-indicator' if options[:focus_indicator]),
-          ('data-with-errors' if errors)
+          ('animated' if options[:animated]),
+          ('focus-indicator' if options[:focus_indicator]),
+          ('with-errors' if errors)
         ].compact.join(' ')
 
         trailing_icon = trailing_icon(options[:trailing_icon]) if options[:trailing_icon]
         trailing_icon ||= trailing_icon('error', class: 'error') if options[:error_icon] && errors
 
-        haptic_text_field =
-          <<~HTML
-            <haptic-text-field #{attributes}>
+        <<~HTML.html_safe
+          <haptic-text-field #{attributes}>
+            <div class="container">
               #{field}
               #{tool_button('close', class: 'clear-button') if options[:clear_button]}
               #{haptic_text_field_label(method, options) if options[:label]}
               #{icon(options[:leading_icon], class: 'leading-icon') if options[:leading_icon]}
               #{trailing_icon}
-            </haptic-text-field>
-          HTML
-
-        if (options[:error_messages] && errors) || options[:supporting_text]
-          <<~HTML
-            <haptic-text-field-container>
-              #{haptic_text_field}
-              #{errors(method, class: 'supporting-text') if options[:error_messages] && errors}
-              #{supporting_text(options[:supporting_text]) if options[:supporting_text]}
-            </haptic-text-field-container>
-          HTML
-        else
-          haptic_text_field
-        end.html_safe
+            </div>
+            #{errors(method, class: 'supporting-text') if options[:error_messages] && errors}
+            #{supporting_text(options[:supporting_text]) if options[:supporting_text]}
+          </haptic-text-field>
+        HTML
       end
 
       def haptic_text_field_label(method, options = {})

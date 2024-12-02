@@ -31,7 +31,19 @@ input[type="text"], input[type="number"], select, textarea
       border-width: 1px
       border-style: solid
 
-haptic-text-field
-  &[data-focus-indicator]::after
+haptic-text-field[focus-indicator]
+  .container::after
     border-bottom-left-radius: .25rem 3px
     border-bottom-right-radius: .25rem 3px
+
+/**********************************************************************
+ * Checkboxes
+ **********************************************************************/
+
+input[type="checkbox"].haptic
+  &, &:after
+    border-radius: 2px
+
+  &.outlined
+    border-width: 1px
+    border-style: solid

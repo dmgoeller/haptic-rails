@@ -50,13 +50,27 @@ textarea.haptic
   resize: none
 
 haptic-text-field
-  position: relative
   transition: .4s linear // opacity, filter
 
-  &, .field_with_errors
+  &, .container, .field_with_errors
     align-items: stretch
     display: flex
     flex-direction: column
+
+  .container
+    position: relative
+
+  &[focus-indicator]
+    .container::after
+      content: '\200b'
+      opacity: 0
+      pointer-events: none
+      position: absolute
+      transition: opacity .4s linear
+
+  &[focus-indicator][focus]
+    .container::after
+      opacity: 1
 
   label, .leading-icon, .trailing-icon
     pointer-events: none
@@ -68,8 +82,9 @@ haptic-text-field
     transition: .4s linear
     white-space: nowrap
 
-  &[data-required] label::after
-    content: ' *'
+  &[required]
+    label::after
+      content: ' *'
 
   .leading-icon, .trailing-icon
     align-items: center
@@ -80,30 +95,39 @@ haptic-text-field
   .toolbutton
     position: absolute
 
-  &[data-empty] .toolbutton
-    opacity: 0
-    pointer-events: none
+  &[empty]
+    .toolbutton
+      opacity: 0
+      pointer-events: none
 
-  &[data-disabled]
+  &[disabled]
     filter: grayscale(1)
     opacity: 0.5
 
     .toolbutton
       pointer-events: none
 
-  &[data-focus-indicator]::after
+/**********************************************************************
+ * Checkboxes
+ **********************************************************************/
+
+input[type="checkbox"].haptic
+  appearance: none
+  cursor: pointer
+  position: relative
+
+  &::after
+    -webkit-mask-image: url('checkbox-checked.svg')
     content: '\200b'
+    mask-image: url('checkbox-checked.svg')
     opacity: 0
     pointer-events: none
     position: absolute
-    transition: opacity .4s linear
+    transition: opacity .2s linear
 
-  &[data-focus-indicator][data-focus]::after
+  &:checked::after
     opacity: 1
 
-haptic-text-field-container
-  align-items: stretch
-  display: grid
-  grid-auto-flow: row
-
-
+  &:disabled
+    opacity: 0.5
+    pointer-events: none

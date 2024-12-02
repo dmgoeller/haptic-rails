@@ -62,7 +62,7 @@ haptic-text-field
   .leading-icon, .trailing-icon
     color: var(--haptic-text-field-icon-color)
 
-  &[data-with-errors]
+  &[with-errors]
     input[type="text"], input[type="number"], select, textarea
       &.haptic.outlined
         border-color: var(--haptic-error-color)
@@ -70,18 +70,36 @@ haptic-text-field
     label
       color: var(--haptic-error-color)
 
-    &[data-empty]:not([data-focus]) label[data-animated]
-      color: var(--haptic-text-color)
+    &[animated][empty]:not([focus])
+      label
+        color: var(--haptic-text-color)
 
-    &[data-focus-indicator]::after
-      background-color: var(--haptic-error-color)
+    &[focus-indicator]
+      .container::after
+        background-color: var(--haptic-error-color)
 
-  &:not([data-with-errors])
+  &:not([with-errors])
     label
       color: var(--haptic-accent-color)
 
-    &[data-empty]:not([data-focus]) label[data-animated]
-      color: var(--haptic-text-color)
+    &[animated][empty]:not([focus])
+      label
+        color: var(--haptic-text-color)
 
-    &[data-focus-indicator]::after
-      background-color: var(--haptic-accent-color)
+    &[focus-indicator]
+      .container::after
+        background-color: var(--haptic-accent-color)
+
+/**********************************************************************
+ * Checkboxes
+ **********************************************************************/
+
+input[type="checkbox"].haptic
+  &.filled
+    background-color: var(--haptic-text-field-background-color)
+
+  &.outlined
+    border-color: var(--haptic-text-field-border-color)
+
+  &::after
+    background-color: var(--haptic-text-color)
