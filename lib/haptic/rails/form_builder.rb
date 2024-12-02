@@ -81,23 +81,18 @@ module Haptic
         # Don't call :valid? or :invalid? here to prevent errors on new records
         errors = object&.errors&.include?(method)
 
-        attributes = [
-          ('animated' if options[:animated]),
-          ('focus-indicator' if options[:focus_indicator]),
-          ('with-errors' if errors)
-        ].compact.join(' ')
-
-        trailing_icon = trailing_icon(options[:trailing_icon]) if options[:trailing_icon]
-        trailing_icon ||= trailing_icon('error', class: 'error') if options[:error_icon] && errors
-
         <<~HTML.html_safe
-          <haptic-text-field #{attributes}>
+          <haptic-text-field
+            #{'animated' if options[:animated]}
+            #{'focus-indicator' if options[:focus_indicator]}
+            #{'with-errors' if errors}>
             <div class="container">
               #{field}
               #{tool_button('close', class: 'clear-button') if options[:clear_button]}
               #{haptic_text_field_label(method, options) if options[:label]}
               #{icon(options[:leading_icon], class: 'leading-icon') if options[:leading_icon]}
-              #{trailing_icon}
+              #{icon(options[:trailing_icon], class: 'trailing-icon') if options[:trailing_icon]}
+              #{icon('error', class: 'error-icon') if options[:error_icon] && errors}
             </div>
             #{errors(method, class: 'supporting-text') if options[:error_messages] && errors}
             #{supporting_text(options[:supporting_text]) if options[:supporting_text]}
@@ -106,21 +101,14 @@ module Haptic
       end
 
       def haptic_text_field_label(method, options = {})
-        args = [:label, method]
-        args << options[:label] unless options[:label] == true
-        args << { data: { animated: '' } } if options[:animated]
-
-        send(*args)
+        label = options[:label]
+        label == true ? label(method) : label(method, label)
       end
 
       def supporting_text(text)
         <<~HTML.html_safe
           <div class="supporting-text">#{text}</div>
         HTML
-      end
-
-      def trailing_icon(icon, options = {})
-        icon(icon, options.merge(class: ['trailing-icon', options[:class]].compact.join(' ')))
       end
 
       # ---

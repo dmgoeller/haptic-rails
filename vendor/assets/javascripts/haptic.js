@@ -67,6 +67,13 @@ class HapticTextFieldElement extends HTMLElement {
     super();
   }
 
+  clear() {
+    if (this.#inputElement) {
+      this.#inputElement.value = '';
+      this.#refresh();
+    }
+  }
+
   connectedCallback() {
     this.classList.add('haptic');
 
@@ -75,9 +82,19 @@ class HapticTextFieldElement extends HTMLElement {
         for (let node of mutationRecord.addedNodes) {
           this.#nodeAdded(node);
         }
+        for (let node of mutationRecord.removedNodes) {
+          this.#nodeRemoved(node);
+        }
       }
       this.#refresh();
     }).observe(this, { childList: true, subtree: true });
+  }
+
+  resetErrors() {
+    this.querySelectorAll('.error-icon, .error').forEach(element => {
+      element.remove();
+    });
+    this.removeAttribute('with-errors');
   }
 
   #nodeAdded(node) {
@@ -115,10 +132,14 @@ class HapticTextFieldElement extends HTMLElement {
       } else
       if (node.classList.contains('toolbutton')) {
         node.addEventListener('click', e => {
-          this.#clear();
+          this.clear();
+          this.#inputElement?.focus();
           e.preventDefault();
         });
         this.setAttribute('with-clear-button', '');
+      } else
+      if (node.classList.contains('error-icon')) {
+        this.setAttribute('with-error-icon', '');
       } else
       if (node.classList.contains('leading-icon')) {
         this.setAttribute('with-leading-icon', '');
@@ -129,11 +150,31 @@ class HapticTextFieldElement extends HTMLElement {
     }
   }
 
-  #clear() {
-    if (this.#inputElement) {
-      this.#inputElement.value = '';
-      this.#refresh();
-      this.#inputElement.focus();
+  #nodeRemoved(node) {
+    if (node instanceof HTMLElement) {
+      if ((node instanceof HTMLInputElement) ||
+          (node instanceof HTMLTextAreaElement) ||
+          (node instanceof HTMLSelectElement)) {
+        this.removeAttribute('disabled');
+        this.removeAttribute('required');
+        this.removeAttribute('auto-growing');
+        this.#inputElement = null;
+      } else
+      if (node instanceof HTMLLabelElement) {
+        this.removeAttribute('with-label');
+      } else
+      if (node.classList.contains('toolbutton')) {
+        this.removeAttribute('with-clear-button');
+      } else
+      if (node.classList.contains('error-icon')) {
+        this.removeAttribute('with-error-icon');
+      } else
+      if (node.classList.contains('leading-icon')) {
+        this.removeAttribute('with-leading-icon');
+      } else
+      if (node.classList.contains('trailing-icon')) {
+        this.removeAttribute('with-trailing-icon');
+      }
     }
   }
 

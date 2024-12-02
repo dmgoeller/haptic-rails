@@ -34,25 +34,6 @@ input[type="text"], input[type="number"], select, textarea
 haptic-text-field
   box-sizing: border-box
 
-  label
-    box-sizing: border-box
-    left: 0
-    top: .375rem
-    width: 100%
-
-  &[animated][empty]:not([focus])
-    label
-      top: 1.1875rem // ({container-height = 3.5} - {line-height = 1.125)}) / 2
-
-  .leading-icon, .trailing-icon
-    height: 1.5rem
-    padding: 0
-    top: calc(50% - .75rem)
-    width: 1.5rem
-
-  .toolbutton
-    top: calc(50% - 0.625rem)
-
   .supporting-text
     margin: .25rem .5rem 0 .5rem
 
@@ -64,104 +45,194 @@ haptic-text-field
       width: 100%
 
   &[with-label]
-    input[type="text"], input[type="number"], select
+    input, select
       height: 3.5rem
-      padding-top: 1.625rem
+      padding-top: 1.625rem !important
 
     textarea
       min-height: 3.5rem
-      padding-top: 1.875rem
+      padding-top: 1.875rem !important
 
-    .leading-icon
-      left: .5rem
+    label
+      box-sizing: border-box
+      left: 0
+      top: .375rem
+      width: 100%
 
-    .trailing-icon
-      right: .5rem
+    &[animated][empty]:not([focus])
+      label
+        top: 1.1875rem // ({container-height = 3.5} - {line-height = 1.125)}) / 2
+
+    .error-icon, .leading-icon, .trailing-icon
+      height: 1.5rem
+      width: 1.5rem
 
     &[auto-growing]
-      .leading-icon, .trailing-icon
-        top: 1rem      // ({min field-height = 3.5} - {icon-height = 1.5}) / 2
+      .error-icon, .leading-icon, .trailing-icon
+        top: 1rem // ({min field-height = 3.5} - {icon-height = 1.5}) / 2
 
       .toolbutton
-        top: 1.125rem  // ({min field-height = 3.5} - {icon-height = 1.25}) / 2
+        top: 1.125rem // ({min field-height = 3.5} - {icon-height = 1.25}) / 2
+
+    &:not([auto-growing])
+      .error-icon, .leading-icon, .trailing-icon
+        top: calc(50% - .75rem)
+
+      .toolbutton
+        top: calc(50% - .625rem)
 
     &[with-leading-icon]
-      input[type="text"], input[type="number"], label, select, textarea
-        padding-left: 2.5rem       // 0.5 + {icon-width = 1.5} + 0.5
+      .leading-icon
+        left: .5rem
+
+      input, label, select, textarea
+        padding-left: 2.5rem // 0.5 + {icon-width = 1.5} + 0.5
 
     &:not([with-leading-icon])
-      input[type="text"], input[type="number"], label, select, textarea
+      input, label, select, textarea
         padding-left: .5rem
 
     &[with-trailing-icon]
-      &[with-clear-button]
-        input[type="text"], input[type="number"], label, select, textarea
-          padding-right: 4.5rem    // 0.625 + {btn-width = 1.25} + 0.625 +
-                                   // {icon-width = 1.5} + 0.5
-        .toolbutton
-          right: 2.625rem          // 0.625 + {icon-width = 1.5} + 0.5
+      .trailing-icon
+        right: .5rem
 
-      &:not([with-clear-button])
-        input[type="text"], input[type="number"], label, select, textarea
-          padding-right: 2.5rem    // 0.5 + {icon-width = 1.5} + 0.5
+      &[with-error-icon]
+        .error-icon
+          right: 2.5rem // 0.5 + {icon-width = 1.5} + 0.5
+
+        &[with-clear-button]
+          input, label, select, textarea
+            padding-right: 6.5rem // 0.625 + {btn-width = 1.25} + 0.625 +
+                                  // 2 * ({icon-width = 1.5} + 0.5)
+          .toolbutton
+            right: 4.625rem // 0.625 + 2 * ({icon-width = 1.5} + 0.5)
+
+        &:not([with-clear-button])
+          input, label, select, textarea
+            padding-right: 4.5rem // 0.5 + 2 * ({icon-width = 1.5} + 0.5)
+
+      &:not([with-error-icon])
+        &[with-clear-button]
+          input, label, select, textarea
+            padding-right: 4.5rem // 0.625 + {btn-width = 1.25} + 0.625 +
+                                  // {icon-width = 1.5} + 0.5
+          .toolbutton
+            right: 2.625rem // 0.625 + {icon-width = 1.5} + 0.5
+
+        &:not([with-clear-button])
+          input, label, select, textarea
+            padding-right: 2.5rem // 0.5 + {icon-width = 1.5} + 0.5
 
     &:not([with-trailing-icon])
-      &[with-clear-button]
-        input[type="text"], input[type="number"], label, select, textarea
-          padding-right: 2.5rem    // 0.625 + {btn-width = 1.25} + 0.625
+      &[with-error-icon]
+        .error-icon
+          right: .5rem
 
-        .toolbutton
-          right: .625rem           // 0.125 + 0.5
+        &[with-clear-button]
+          input, label, select, textarea
+            padding-right: 4.5rem // 0.625 + {btn-width = 1.25} + 0.625 +
+                                  // {icon-width = 1.5} + 0.5
+          .toolbutton
+            right: 2.625rem // 0.625 + {icon-width = 1.5} + 0.5
 
-      &:not([with-clear-button])
-        input[type="text"], input[type="number"], label, select, textarea
-          padding-right: .5rem
+        &:not([with-clear-button])
+          input, label, select, textarea
+            padding-right: 2.5rem // 0.5 + {icon-width = 1.5} + 0.5
+
+      &:not([with-error-icon])
+        &[with-clear-button]
+          input, label, select, textarea
+            padding-right: 2.5rem // 0.625 + {btn-width = 1.25} + 0.625
+
+          .toolbutton
+            right: .625rem // 0.125 + 0.5
+
+        &:not([with-clear-button])
+          input, label, select, textarea
+            padding-right: .5rem
 
   &:not([with-label])
-    .leading-icon
-      left: .25rem
-
-    .trailing-icon
-      right: .25rem
+    .error-icon, .leading-icon, .trailing-icon, .toolbutton
+      height: 1.125rem
+      width: 1.125rem
 
     &[auto-growing]
-      .leading-icon, .trailing-icon
-        top: .125rem   // ({min field-height = 1.75} - {icon-height = 1.5}) / 2
+      .error-icon, .leading-icon, .trailing-icon, .toolbutton
+        top: .3125rem // ({min field-height = 1.75} - {icon-height = 1.125}) / 2
 
-      .toolbutton
-        top: .25rem    // ({field-height = 1.75} - {btn-height = 1.25}) / 2
+    &:not([auto-growing])
+      .error-icon, .leading-icon, .trailing-icon, .toolbutton
+        top: calc(50% - .5625rem)
 
     &[with-leading-icon]
-      input[type="text"], input[type="number"], label, select, textarea
-        padding-left: 2rem         // 0.25 + {icon-width = 1.5} + 0.25
+      .leading-icon
+        left: .25rem
+
+      input, label, select, textarea
+        padding-left: 1.625rem // 0.25 + {icon-width = 1.125} + 0.25
 
     &:not([with-leading-icon])
-      input[type="text"], input[type="number"], label, select, textarea
+      input, label, select, textarea
         padding-left: .5rem
 
     &[with-trailing-icon]
-      &[with-clear-button]
-        input[type="text"], input[type="number"], label, select, textarea
-          padding-right: 3.5rem    // 0.25 + {btn-width = 1.25} + 0.25 +
-                                   // {icon-width = 1.5} + 0.25
-        .toolbutton
-          right: 2.125rem          // 0.125 + 0.25 + {icon-width = 1.5} + 0.25
+      .trailing-icon
+        right: .25rem
 
-      &:not([with-clear-button])
-        input[type="text"], input[type="number"], label, select, textarea
-          padding-right: 2rem      // 0.25 + {icon-width = 1.5} + 0.25
+      &[with-error-icon]
+        .error-icon
+          right: 1.625rem // 0.25 + {icon-width = 1.125} + 0.25
+
+        &[with-clear-button]
+          input, label, select, textarea
+            padding-right: 4.375rem // 0.25 + 3 * ({icon-width = 1.125} + 0.25)
+
+          .toolbutton
+            right: 3rem // 0.25 + 2 * ({icon-width = 1.125} + 0.25)
+
+        &:not([with-clear-button])
+          input, label, select, textarea
+            padding-right: 3rem // 0.25 + 2 * ({icon-width = 1.125} + 0.25)
+
+      &:not([with-error-icon])
+        &[with-clear-button]
+          input, label, select, textarea
+            padding-right: 3rem // 0.25 + 2 * ({icon-width = 1.125} + 0.25)
+
+          .toolbutton
+            right: 1.625rem // 0.25 + {icon-width = 1.125} + 0.25
+
+        &:not([with-clear-button])
+          input, label, select, textarea
+            padding-right: 1.625rem // 0.25 + {icon-width = 1.125} + 0.25
 
     &:not([with-trailing-icon])
-      &[with-clear-button]
-        input[type="text"], input[type="number"], label, select, textarea
-          padding-right: 1.875rem  // 0.25 + {btn-width = 1.25} + 0.375
+      &[with-error-icon]
+        .error-icon
+          right: .25rem
 
-        .toolbutton
-          right: .375rem           // 0.125 + 0.25
+        &[with-clear-button]
+          input, label, select, textarea
+            padding-right: 3rem // 0.25 + 2 * ({icon-width = 1.125} + 0.25)
 
-      &:not([with-clear-button])
-        input[type="text"], input[type="number"], label, select, textarea
-          padding-right: .5rem
+          .toolbutton
+            right: 1.625rem // 0.25 + {icon-width = 1.125} + 0.25
+
+        &:not([with-clear-button])
+          input, label, select, textarea
+            padding-right: 1.625rem // 0.25 + {icon-width = 1.125} + 0.25
+
+      &:not([with-error-icon])
+        &[with-clear-button]
+          input, label, select, textarea
+            padding-right: 1.625rem // 0.25 + {icon-width = 1.125} + 0.25
+
+          .toolbutton
+            right: .25rem
+
+        &:not([with-clear-button])
+          input, label, select, textarea
+            padding-right: .5rem
 
 /**********************************************************************
  * Checkboxes
