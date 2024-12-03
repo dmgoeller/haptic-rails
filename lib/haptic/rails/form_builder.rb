@@ -29,8 +29,10 @@ module Haptic
       end
 
       def check_box(method, options = {}, checked_value = '1', unchecked_value = '0')
-        options = options.reverse_merge(class: [defaults[:class], 'haptic'].join(' '))
-        super(method, options, checked_value, unchecked_value)
+        return super if options[:class]&.include?('switch') # TODO
+
+        options = defaults.merge(options)
+        super(method, field_options(options, is: 'haptic-input'), checked_value, unchecked_value)
       end
 
       def defaults(defaults = {})
@@ -120,13 +122,13 @@ module Haptic
 
       def icon(icon, options = {})
         <<~HTML.html_safe
-          <div class="material-icon #{options[:class]}">#{icon}</div>
+          <div class="haptic haptic-icon #{options[:class]}">#{icon}</div>
         HTML
       end
 
       def tool_button(icon, options = {})
         <<~HTML.html_safe
-          <div class="haptic toolbutton material-icon #{options[:class]}">#{icon}</div>
+          <div class="haptic toolbutton haptic-icon #{options[:class]}">#{icon}</div>
         HTML
       end
     end

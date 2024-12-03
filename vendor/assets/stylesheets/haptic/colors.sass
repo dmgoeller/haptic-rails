@@ -99,6 +99,13 @@ haptic-text-field
 
 input[type="checkbox"], input[type="radio"]
   &.haptic
+    background-color: transparent
+    outline-color: transparent
+
+    &:focus-visible
+      background-color: var(--haptic-button-hover-background-color)
+      outline-color: var(--haptic-button-hover-background-color)
+
     &.filled::before
       background-color: var(--haptic-field-background-color)
 
