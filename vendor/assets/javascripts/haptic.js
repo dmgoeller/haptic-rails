@@ -42,7 +42,11 @@ customElements.define('haptic-textarea', HapticTextAreaElement, { extends: 'text
 
 // ...
 class HapticTextFieldElement extends HTMLElement {
+  static ICON_NAMES = ['error', 'leading', 'trailing'];
+
   #inputElement = null;
+  #clearButton = null;
+  #label = null;
 
   #mutationObserver = new MutationObserver((mutationList) => {
     for (let mutationRecord of mutationList) {
@@ -67,13 +71,6 @@ class HapticTextFieldElement extends HTMLElement {
     super();
   }
 
-  clear() {
-    if (this.#inputElement) {
-      this.#inputElement.value = '';
-      this.#refresh();
-    }
-  }
-
   connectedCallback() {
     this.classList.add('haptic');
 
@@ -90,6 +87,13 @@ class HapticTextFieldElement extends HTMLElement {
     }).observe(this, { childList: true, subtree: true });
   }
 
+  clear() {
+    if (this.#inputElement) {
+      this.#inputElement.value = '';
+      this.#refresh();
+    }
+  }
+
   resetErrors() {
     this.querySelectorAll('.error-icon, .error').forEach(element => {
       element.remove();
@@ -102,79 +106,85 @@ class HapticTextFieldElement extends HTMLElement {
       if ((node instanceof HTMLInputElement) ||
           (node instanceof HTMLTextAreaElement) ||
           (node instanceof HTMLSelectElement)) {
-        node.classList.add('haptic');
-        node.addEventListener('focusin', () => {
-          this.setAttribute('focus', '');
-        });
-        node.addEventListener('focusout', () => {
-          this.removeAttribute('focus');
-        });
-        node.addEventListener('input', () => {
-          this.#refresh();
-        });
-        if (node.required) {
-          this.setAttribute('required', '');
-        }
-        if (node.disabled) {
-          this.setAttribute('disabled', '');
-        }
-        if (node instanceof HapticTextAreaElement) {
-          if (!node.hasAttribute('rows')) {
-            node.setAttribute('rows', 1);
+        if (!this.#inputElement) {
+          node.classList.add('haptic');
+          node.addEventListener('focusin', () => {
+            this.setAttribute('focus', '');
+          });
+          node.addEventListener('focusout', () => {
+            this.removeAttribute('focus');
+          });
+          node.addEventListener('input', () => {
+            this.#refresh();
+          });
+          if (node.required) {
+            this.setAttribute('required', '');
           }
-          this.setAttribute('auto-growing', '');
+          if (node.disabled) {
+            this.setAttribute('disabled', '');
+          }
+          if (node instanceof HapticTextAreaElement) {
+            if (!node.hasAttribute('rows')) {
+              node.setAttribute('rows', 1);
+            }
+            this.setAttribute('auto-growing', '');
+          }
+          this.#mutationObserver.observe(node, { attributes: true });
+          this.#inputElement = node;
         }
-        this.#mutationObserver.observe(node, { attributes: true });
-        this.#inputElement = node;
       } else
       if (node instanceof HTMLLabelElement) {
-        this.setAttribute('with-label', '');
+        if (!this.#label) {
+          this.setAttribute('with-label', '');
+          this.#label = node;
+        }
       } else
       if (node.classList.contains('toolbutton')) {
-        node.addEventListener('click', e => {
-          this.clear();
-          this.#inputElement?.focus();
-          e.preventDefault();
-        });
-        this.setAttribute('with-clear-button', '');
-      } else
-      if (node.classList.contains('error-icon')) {
-        this.setAttribute('with-error-icon', '');
-      } else
-      if (node.classList.contains('leading-icon')) {
-        this.setAttribute('with-leading-icon', '');
-      } else
-      if (node.classList.contains('trailing-icon')) {
-        this.setAttribute('with-trailing-icon', '');
+        if (!this.#clearButton) {
+          node.addEventListener('click', e => {
+            this.clear();
+            this.#inputElement?.focus();
+            e.preventDefault();
+          });
+          this.setAttribute('with-clear-button', '');
+          this.#clearButton = node;
+        }
+      } else {
+        for (let iconName of HapticTextFieldElement.ICON_NAMES) {
+          if (node.classList.contains(`${iconName}-icon`)) {
+            this.setAttribute(`with-${iconName}-icon`, '');
+          }
+        }
       }
     }
   }
 
   #nodeRemoved(node) {
-    if (node instanceof HTMLElement) {
-      if ((node instanceof HTMLInputElement) ||
-          (node instanceof HTMLTextAreaElement) ||
-          (node instanceof HTMLSelectElement)) {
+    switch (node) {
+      case this.#inputElement:
         this.removeAttribute('disabled');
         this.removeAttribute('required');
         this.removeAttribute('auto-growing');
+        this.setAttribute('empty', '');
+        this.#mutationObserver.disconnect();
         this.#inputElement = null;
-      } else
-      if (node instanceof HTMLLabelElement) {
-        this.removeAttribute('with-label');
-      } else
-      if (node.classList.contains('toolbutton')) {
+        break;
+      case this.#clearButton:
         this.removeAttribute('with-clear-button');
-      } else
-      if (node.classList.contains('error-icon')) {
-        this.removeAttribute('with-error-icon');
-      } else
-      if (node.classList.contains('leading-icon')) {
-        this.removeAttribute('with-leading-icon');
-      } else
-      if (node.classList.contains('trailing-icon')) {
-        this.removeAttribute('with-trailing-icon');
-      }
+        this.#clearButton = null;
+        break;
+      case this.#label:
+        this.removeAttribute('with-label');
+        this.#label = null;
+        break;
+      default:
+        for (let iconName of HapticTextFieldElement.ICON_NAMES) {
+          if (node.classList.contains(`${iconName}-icon`)) {
+            if (!this.querySelector(`${iconName}-icon`)) {
+              this.removeAttribute(`with-${iconName}-icon`);
+            }
+          }
+        }
     }
   }
 

@@ -108,26 +108,26 @@ haptic-text-field
       pointer-events: none
 
 /**********************************************************************
- * Checkboxes
+ * Checkboxes and radio buttons
  **********************************************************************/
 
-input[type="checkbox"].haptic
-  appearance: none
-  cursor: pointer
-  position: relative
+input[type="checkbox"], input[type="radio"]
+  &.haptic
+    appearance: none
+    cursor: pointer
+    position: relative
+    transition: opacity .4s linear
 
-  &::after
-    -webkit-mask-image: url('checkbox-checked.svg')
-    content: '\200b'
-    mask-image: url('checkbox-checked.svg')
-    opacity: 0
-    pointer-events: none
-    position: absolute
-    transition: opacity .2s linear
+    &::before, &::after
+      content: '\200b'
+      pointer-events: none
+      position: absolute
+      transition: background-color .1s linear
 
-  &:checked::after
-    opacity: 1
+    &:disabled
+      opacity: 0.5
+      pointer-events: none
 
-  &:disabled
-    opacity: 0.5
-    pointer-events: none
+input[type="checkbox"].haptic::after
+  -webkit-mask-image: url('checkbox-checked.svg')
+  mask-image: url('checkbox-checked.svg')

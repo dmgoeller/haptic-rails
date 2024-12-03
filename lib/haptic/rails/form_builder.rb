@@ -29,7 +29,7 @@ module Haptic
       end
 
       def check_box(method, options = {}, checked_value = '1', unchecked_value = '0')
-        options = options.reverse_merge(class: [options[:class], defaults[:class], 'haptic'].join(' '))
+        options = options.reverse_merge(class: [defaults[:class], 'haptic'].join(' '))
         super(method, options, checked_value, unchecked_value)
       end
 
@@ -48,6 +48,11 @@ module Haptic
             #{full_messages.join('. ').delete_suffix('.')}.
           </div>
         HTML
+      end
+
+      def radio_button(method, tag_value, options = {})
+        options = defaults.merge(options)
+        super(method, tag_value, field_options(options, is: 'haptic-input'))
       end
 
       def search_field(method, options = {})

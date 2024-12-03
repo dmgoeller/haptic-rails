@@ -45,14 +45,14 @@ button, .button
 input[type="text"], input[type="number"], select, textarea
   &.haptic
     background-color: transparent
-    color: var(--haptic-text-field-color)
+    color: var(--haptic-field-color)
     outline-color: transparent
 
     &.filled
-      background-color: var(--haptic-text-field-background-color)
+      background-color: var(--haptic-field-background-color)
 
     &.outlined
-      border-color: var(--haptic-text-field-border-color)
+      border-color: var(--haptic-field-border-color)
 
 input[type="text"], input[type="number"], textarea
   &.haptic
@@ -63,7 +63,7 @@ haptic-text-field
     color: var(--haptic-error-color)
 
   .leading-icon, .trailing-icon
-    color: var(--haptic-text-field-icon-color)
+    color: var(--haptic-field-icon-color)
 
   &[with-errors]
     input[type="text"], input[type="number"], select, textarea
@@ -94,15 +94,22 @@ haptic-text-field
         background-color: var(--haptic-accent-color)
 
 /**********************************************************************
- * Checkboxes
+ * Checkboxes and radio buttons
  **********************************************************************/
 
-input[type="checkbox"].haptic
-  &.filled
-    background-color: var(--haptic-text-field-background-color)
+input[type="checkbox"], input[type="radio"]
+  &.haptic
+    &.filled::before
+      background-color: var(--haptic-field-background-color)
 
-  &.outlined
-    border-color: var(--haptic-text-field-border-color)
+    &.outlined::before
+      border-color: var(--haptic-field-border-color)
 
-  &::after
-    background-color: var(--haptic-text-color)
+    &::after
+      background-color: transparent
+
+    &:checked::after
+      background-color: var(--haptic-field-color)
+
+input[type="checkbox"].haptic.filled:checked::before
+  background-color: transparent
