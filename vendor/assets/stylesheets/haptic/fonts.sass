@@ -13,11 +13,12 @@ button, .button
  * Fields
  **********************************************************************/
 
-haptic-text-field
-  input[type="text"], input[type="number"], select, textarea
-    font-family: var(--haptic-text-field-font-family)
+input, select, textarea
+  &.haptic
+    font-family: var(--haptic-field-font-family)
     font-size: 1rem
 
+haptic-text-field
   label
     font-size: .875rem
     font-weight: bold
