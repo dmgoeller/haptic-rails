@@ -16,6 +16,10 @@ module Haptic
         trailing_icon
       ].freeze
 
+      def initialize(object_name, object, template, options)
+        super(object_name, object, TemplateWrapper.new(template, self), options)
+      end
+
       %i[number_field text_area text_field].each do |name|
         element_name = "haptic-#{name == :text_area ? 'textarea' : 'input'}"
 
@@ -26,13 +30,6 @@ module Haptic
 
           haptic_text_field(method, field, options)
         end
-      end
-
-      def check_box(method, options = {}, checked_value = '1', unchecked_value = '0')
-        return super if options[:class]&.include?('switch') # TODO
-
-        options = defaults.merge(options)
-        super(method, field_options(options, is: 'haptic-input'), checked_value, unchecked_value)
       end
 
       def defaults(defaults = {})
@@ -50,15 +47,6 @@ module Haptic
             #{full_messages.join('. ').delete_suffix('.')}.
           </div>
         HTML
-      end
-
-      def label(method, text = nil, options = {}, &block)
-        super(method, text, options.merge(is: 'haptic-label'), &block)
-      end
-
-      def radio_button(method, tag_value, options = {})
-        options = defaults.merge(options)
-        super(method, tag_value, field_options(options, is: 'haptic-input'))
       end
 
       def search_field(method, options = {})
