@@ -41,12 +41,13 @@ haptic-text-field[focus-indicator]
  **********************************************************************/
 
 input[type="checkbox"], input[type="radio"]
-  border-radius: 50%
-  outline-style: solid
+  &.haptic
+    border-radius: 50%
+    outline-style: solid
 
-  &.haptic.outlined::before
-    border-width: 1px
-    border-style: solid
+    &.outlined::before
+      border-width: 1px
+      border-style: solid
 
 input[type="checkbox"].haptic
   &::before, &::after
