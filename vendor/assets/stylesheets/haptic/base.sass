@@ -41,6 +41,14 @@ button, .button
 ::-webkit-inner-spin-button
   appearance: none
 
+input, select, textarea
+  &.haptic
+    transition: opacity .4s linear
+
+  &:not([data-embedded]):disabled
+    opacity: 0.5
+    pointer-events: none
+
 select, textarea
   &.haptic
     appearance: none
@@ -118,16 +126,25 @@ input[type="checkbox"], input[type="radio"]
     position: relative
     transition: .4s linear // background-color, opacity, outline-color
 
+
     &::before, &::after
       content: '\200b'
       pointer-events: none
       position: absolute
       transition: background-color .1s linear
 
-    &:disabled
-      opacity: 0.5
-      pointer-events: none
-
 input[type="checkbox"].haptic::after
   -webkit-mask-image: url('checkbox-checked.svg')
   mask-image: url('checkbox-checked.svg')
+
+/**********************************************************************
+ * Labels
+ **********************************************************************/
+
+label.haptic
+  transition: opacity .4s linear
+
+  &:not([data-embedded])[data-control-disabled]
+    opacity: 0.5
+    pointer-events: none
+

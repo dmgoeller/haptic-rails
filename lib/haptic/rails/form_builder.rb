@@ -52,6 +52,10 @@ module Haptic
         HTML
       end
 
+      def label(method, text = nil, options = {}, &block)
+        super(method, text, options.merge(is: 'haptic-label'), &block)
+      end
+
       def radio_button(method, tag_value, options = {})
         options = defaults.merge(options)
         super(method, tag_value, field_options(options, is: 'haptic-input'))
