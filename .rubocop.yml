@@ -8,7 +8,7 @@ Layout/EmptyLinesAroundModuleBody:
   Enabled: false
 
 Layout/LineLength:
-  Max: 120
+  Max: 160
 
 Lint/NestedMethodDefinition:
   Enabled: false

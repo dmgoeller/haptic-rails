@@ -141,10 +141,10 @@ input[type="checkbox"].haptic::after
  * Labels
  **********************************************************************/
 
-label.haptic
+label.haptic:not([data-embedded])
   transition: opacity .4s linear
 
-  &:not([data-embedded])[data-control-disabled]
+  &[data-control-disabled]
     opacity: 0.5
     pointer-events: none
 
