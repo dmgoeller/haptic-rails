@@ -14,9 +14,15 @@ module Haptic
         super(object_name, method, tag_options(options, is: 'haptic-input'), checked_value, unchecked_value)
       end
 
-      def collection_radio_buttons(object, method, collection, value_method, text_method, options = {}, html_options = {}, &block)
+      def collection_check_boxes(object_name, method, collection, value_method, text_method, options = {}, html_options = {}, &block)
+        ActionView::Helpers::Tags::CollectionCheckBoxes.new(
+          object_name, method, self, collection, value_method, text_method, options, html_options
+        ).render(&block)
+      end
+
+      def collection_radio_buttons(object_name, method, collection, value_method, text_method, options = {}, html_options = {}, &block)
         ActionView::Helpers::Tags::CollectionRadioButtons.new(
-          object, method, self, collection, value_method, text_method, options, html_options
+          object_name, method, self, collection, value_method, text_method, options, html_options
         ).render(&block)
       end
 
