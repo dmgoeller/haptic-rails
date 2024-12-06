@@ -40,6 +40,18 @@ class HapticLabelElement extends HTMLLabelElement {
 customElements.define('haptic-label', HapticLabelElement, { extends: 'label' });
 
 // ...
+class HapticSelectElement extends HTMLSelectElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.classList.add('haptic');
+  }
+}
+customElements.define('haptic-select', HapticSelectElement, { extends: 'select' });
+
+// ...
 class HapticTextAreaElement extends HTMLTextAreaElement {
   #resizer = () => { this.resize() };
 

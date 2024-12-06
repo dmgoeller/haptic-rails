@@ -88,6 +88,10 @@ haptic-text-field
     position: absolute
     text-overflow: ellipsis
     transition: .4s linear
+    transition-
+    transition-duration: .4s
+    transition-property: color, font-size, top
+    transition-timing-function: linear
     white-space: nowrap
 
   &[required]
@@ -125,7 +129,6 @@ input[type="checkbox"], input[type="radio"]
     cursor: pointer
     position: relative
     transition: .4s linear // background-color, opacity, outline-color
-
 
     &::before, &::after
       content: '\200b'
