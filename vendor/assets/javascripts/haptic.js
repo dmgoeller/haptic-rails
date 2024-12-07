@@ -1,5 +1,17 @@
 
 // ...
+class HapticButtonElement extends HTMLButtonElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.classList.add('haptic');
+  }
+}
+customElements.define('haptic-button', HapticButtonElement, { extends: 'button' });
+
+// ...
 class HapticInputElement extends HTMLInputElement {
   static observedAttributes = ['disabled'];
 

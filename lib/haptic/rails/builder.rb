@@ -56,12 +56,8 @@ module Haptic
 
       private
 
-      def css_class(*classes)
-        classes.filter_map { |c| c&.split(' ') }.flatten.uniq.join(' ')
-      end
-
       def tag_options(options, is: nil)
-        options.merge(is: is, class: css_class(options[:class], defaults[:class]))
+        options.merge(is: is, class: haptic_css_class(options[:class], @defaults[:class]))
       end
     end
   end

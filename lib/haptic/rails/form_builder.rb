@@ -55,12 +55,8 @@ module Haptic
         @template.content_tag(
           :div,
           full_messages.join('. ').delete_suffix('.'),
-          class: "#{options[:class]} error".strip
+          class: @template.haptic_css_class(options[:class], error)
         )
-      end
-
-      def search_field(method, options = {})
-        text_field(method, options.reverse_merge(leading_icon: 'search', clear_button: true))
       end
 
       def select(method, choices = nil, options = {}, html_options = {}, &block)
@@ -72,10 +68,6 @@ module Haptic
       end
 
       private
-
-      def configuration
-        @configuration ||= Configuration.new
-      end
 
       def field_options(options)
         options.except(*HAPTIC_TEXT_FIELD_OPTIONS)
@@ -95,16 +87,16 @@ module Haptic
                 label == true ? label(method) : label(method, label)
               end +
               if options[:clear_button]
-                icon('close', class: 'toolbutton clear-button')
+                @template.haptic_icon('close', class: 'toolbutton clear-button')
               end +
               if options[:error_icon] && errors
-                icon('error', class: 'error-icon')
+                @template.haptic_icon('error', class: 'error-icon')
               end +
               if (leading_icon = options[:leading_icon])
-                icon(leading_icon, class: 'leading-icon')
+                @template.haptic_icon(leading_icon, class: 'leading-icon')
               end +
               if (trailing_icon = options[:trailing_icon])
-                icon(trailing_icon, class: 'trailing-icon')
+                @template.haptic_icon(trailing_icon, class: 'trailing-icon')
               end
           end +
             if options[:error_messages] && errors
@@ -114,10 +106,6 @@ module Haptic
               @template.content_tag('div', supporting_text, class: 'supporting-text')
             end
         end
-      end
-
-      def icon(name, options = {})
-        configuration.icon_builder&.call(name, builder: @template, class: options[:class])
       end
     end
   end
