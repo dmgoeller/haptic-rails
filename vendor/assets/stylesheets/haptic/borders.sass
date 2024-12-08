@@ -3,33 +3,32 @@
  * Buttons
  **********************************************************************/
 
-button, .button
-  &.haptic
-    border-radius: .25rem // .875rem
-    border-style: solid
-    border-width: 0
-    outline: none
+.haptic-button
+  border-radius: .25rem // .875rem
+  border-style: solid
+  border-width: 0
+  outline: none
 
-    &.outlined
-      border-width: 1px
+  &.outlined
+    border-width: 1px
 
-.haptic.toolbutton
+.haptic-toolbutton
   border-radius: 50%
+  outline: none
 
 /**********************************************************************
  * Fields
  **********************************************************************/
 
-input[type="text"], input[type="number"], select, textarea
-  &.haptic
-    border-radius: .25rem
-    outline-style: solid
-    border-width: 0
-    outline-width: 0
+.haptic-field
+  border-radius: .25rem
+  outline-style: solid
+  border-width: 0
+  outline-width: 0
 
-    &.outlined
-      border-width: 1px
-      border-style: solid
+  &.outlined
+    border-width: 1px
+    border-style: solid
 
 haptic-text-field[focus-indicator]
   .container::after
@@ -40,19 +39,29 @@ haptic-text-field[focus-indicator]
  * Checkboxes and radio buttons
  **********************************************************************/
 
-input[type="checkbox"], input[type="radio"]
-  &.haptic
-    border-radius: 50%
-    outline-style: solid
+.haptic-checkbox, .haptic-radio
+  border-radius: 50%
+  outline-style: solid
 
-    &.outlined::before
-      border-width: 1px
-      border-style: solid
+  &.outlined::before
+    border-style: solid
+    border-width: 1px
 
-input[type="checkbox"].haptic
+.haptic-checkbox
   &::before, &::after
     border-radius: 2px
 
-input[type="radio"].haptic
+.haptic-radio
   &::before, &::after
     border-radius: 50%
+
+/**********************************************************************
+ * Switches
+ **********************************************************************/
+
+.haptic-switch
+  border-radius: 14px
+
+  &::after
+    border-radius: 50%
+    outline-style: solid

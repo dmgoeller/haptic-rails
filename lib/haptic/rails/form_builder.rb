@@ -55,7 +55,7 @@ module Haptic
         @template.content_tag(
           :div,
           full_messages.join('. ').delete_suffix('.'),
-          class: @template.haptic_css_class(options[:class], error)
+          class: @template.haptic_css_class(options[:class], 'error')
         )
       end
 
@@ -87,7 +87,7 @@ module Haptic
                 label == true ? label(method) : label(method, label)
               end +
               if options[:clear_button]
-                @template.haptic_icon('close', class: 'toolbutton clear-button')
+                @template.haptic_icon('close', class: 'haptic-toolbutton clear-button')
               end +
               if options[:error_icon] && errors
                 @template.haptic_icon('error', class: 'error-icon')

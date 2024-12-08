@@ -1,39 +1,74 @@
 .haptic
   .error
-    color: var(--haptic-error-color)
+    color: var(--haptic-red-color)
 
 /**********************************************************************
  * Buttons
  **********************************************************************/
 
-button, .button
-  &.haptic
-    &.filled
-      background-color: var(--haptic-filled-button-background-color)
-      color: var(--haptic-filled-button-color)
+.haptic-button
+  &.filled
+    background-color: var(--haptic-filled-button-background-color)
+    color: var(--haptic-filled-button-color)
 
-      &:hover:not(:disabled), &:focus, &:focus-visible
-        filter: brightness(1.1875)
+    &.green
+      background-color: var(--haptic-filled-button-green-background-color)
 
-    &:not(.filled)
-      background-color: transparent
-      color: var(--haptic-accent-color)
+    &.red
+      background-color: var(--haptic-filled-button-red-background-color)
 
-      &:hover:not(:disabled), &:focus, &:focus-visible
-        background-color: var(--haptic-button-hover-background-color)
+    &.secondary
+      background-color: var(--haptic-filled-button-secondary-background-color)
 
-      &.outlined
-        border-color: var(--haptic-button-border-color)
+    &:hover:not(:disabled), &:focus, &:focus-visible
+      filter: brightness(1.1875)
 
-        &:focus, &:focus-visible
-          border-color: var(--haptic-accent-color)
+  &:not(.filled)
+    background-color: transparent
+    color: var(--haptic-accent-color)
 
-.haptic.toolbutton
+    &.green
+      color: var(--haptic-green-color)
+
+    &.red
+      color: var(--haptic-red-color)
+
+    &.secondary
+      color: var(--haptic-secondary-color)
+
+    &:hover:not(:disabled), &:focus, &:focus-visible
+      background-color: var(--haptic-hover-accent-background-color)
+
+      &.green
+        background-color: var(--haptic-hover-green-background-color)
+
+      &.red
+        background-color: var(--haptic-hover-red-background-color)
+
+      &.secondary
+        background-color: var(--haptic-hover-secondary-background-color)
+
+  &.outlined
+    border-color: var(--haptic-outlined-button-border-color)
+
+    &:focus, &:focus-visible
+      border-color: var(--haptic-accent-color)
+
+      &.green
+        border-color: var(--haptic-green-color)
+
+      &.red
+        border-color: var(--haptic-red-color)
+
+      &.secondary
+        border-color: var(--haptic-secondary-color)
+
+.haptic-toolbutton
   background-color: transparent
   color: var(--haptic-toolbutton-color)
 
   &:hover
-    background-color: var(--haptic-toolbutton-hover-background-color)
+    background-color: var(--haptic-hover-background-color)
 
 /**********************************************************************
  * Fields
@@ -42,36 +77,31 @@ button, .button
 ::placeholder
   color: var(--haptic-placeholder-color)
 
-input[type="text"], input[type="number"], select, textarea
-  &.haptic
-    background-color: transparent
-    color: var(--haptic-field-color)
-    outline-color: transparent
+.haptic-field
+  background-color: transparent
+  caret-color: var(--haptic-accent-color)
+  color: var(--haptic-field-color)
+  outline-color: transparent
 
-    &.filled
-      background-color: var(--haptic-field-background-color)
+  &.filled
+    background-color: var(--haptic-field-background-color)
 
-    &.outlined
-      border-color: var(--haptic-field-border-color)
-
-input[type="text"], input[type="number"], textarea
-  &.haptic
-    caret-color: var(--haptic-accent-color)
+  &.outlined
+    border-color: var(--haptic-field-border-color)
 
 haptic-text-field
   .error-icon
-    color: var(--haptic-error-color)
+    color: var(--haptic-red-color)
 
   .leading-icon, .trailing-icon
     color: var(--haptic-field-icon-color)
 
   &[with-errors]
-    input[type="text"], input[type="number"], select, textarea
-      &.haptic.outlined
-        border-color: var(--haptic-error-color)
+    .haptic-field.outlined
+      border-color: var(--haptic-red-color)
 
     label
-      color: var(--haptic-error-color)
+      color: var(--haptic-red-color)
 
     &[animated][empty]:not([focus])
       label
@@ -79,7 +109,7 @@ haptic-text-field
 
     &[focus-indicator]
       .container::after
-        background-color: var(--haptic-error-color)
+        background-color: var(--haptic-red-color)
 
   &:not([with-errors])
     label
@@ -97,26 +127,57 @@ haptic-text-field
  * Checkboxes and radio buttons
  **********************************************************************/
 
-input[type="checkbox"], input[type="radio"]
-  &.haptic
+.haptic-checkbox, .haptic-radio
+  background-color: transparent
+  outline-color: transparent
+
+  &:focus-visible
+    background-color: var(--haptic-hover-accent-background-color)
+    outline-color: var(--haptic-hover-accent-background-color)
+
+  &.filled::before
+    background-color: var(--haptic-field-background-color)
+
+  &.outlined::before
+    border-color: var(--haptic-field-border-color)
+
+  &::after
     background-color: transparent
+
+  &:checked::after
+    background-color: var(--haptic-field-color)
+
+.haptic-checkbox.filled:checked::before
+  background-color: transparent
+
+/**********************************************************************
+ * Switches
+ **********************************************************************/
+
+.haptic-switch
+  background-color: var(--haptic-switch-track-off-background-color)
+
+  &::after
+    background-color: var(--haptic-switch-handle-off-background-color)
     outline-color: transparent
 
-    &:focus-visible
-      background-color: var(--haptic-button-hover-background-color)
-      outline-color: var(--haptic-button-hover-background-color)
-
-    &.filled::before
-      background-color: var(--haptic-field-background-color)
-
-    &.outlined::before
-      border-color: var(--haptic-field-border-color)
+  &:checked
+    background-color: var(--haptic-switch-track-on-background-color)
 
     &::after
-      background-color: transparent
+      background-color: var(--haptic-switch-handle-on-background-color)
 
-    &:checked::after
-      background-color: var(--haptic-field-color)
+  &:focus-visible::after
+    outline-color: var(--haptic-hover-accent-background-color)
 
-input[type="checkbox"].haptic.filled:checked::before
-  background-color: transparent
+  &.red-green
+    background-color: var(--haptic-filled-red-button-background-color)
+
+    &:checked
+      background-color: var(--haptic-filled-green-button-background-color)
+
+    &::after, &:checked::after
+      background-color: var(--haptic-filled-button-color)
+
+
+

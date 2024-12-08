@@ -3,24 +3,28 @@
  * Buttons
  **********************************************************************/
 
-button, .button, .toolbutton
-  &.haptic
-    align-items: center
-    cursor: pointer
-    justify-content: center
-    transition-delay: .1s
-    transition-duration: .4s
-    transition-timing-function: linear
+.haptic-button, .haptic-toolbutton
+  align-items: center
+  cursor: pointer
+  justify-content: center
+  transition-delay: .1s
+  transition-duration: .4s
+  transition-timing-function: linear
 
-button, .button
-  &.haptic
+.haptic-button
+  display: grid
+  grid-auto-flow: column
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.haptic-toolbutton
+  display: flex
+  transition-property: background, opacity
+
+button, input[type="submit"]
+  &.haptic-button
     appearance: none
-    display: grid
-    grid-auto-flow: column
-    overflow: hidden
-    text-overflow: ellipsis
-    //transition-property: background, border-color, filter
-    white-space: nowrap
 
     &:disabled
       filter: grayscale(1)
@@ -30,10 +34,6 @@ button, .button
     &:focus, &:focus-visible
       transition-delay: 0
 
-.haptic.toolbutton
-  display: flex
-  transition-property: background, opacity
-
 /**********************************************************************
  * Fields
  **********************************************************************/
@@ -42,18 +42,18 @@ button, .button
   appearance: none
 
 input, select, textarea
-  &.haptic
+  &.haptic-field
     transition: opacity .4s linear
 
-  &:not([data-embedded]):disabled
-    opacity: 0.5
-    pointer-events: none
+    &:not([data-embedded]):disabled
+      opacity: 0.5
+      pointer-events: none
 
-select, textarea
-  &.haptic
-    appearance: none
+select.haptic-field
+  appearance: none
 
-textarea.haptic
+textarea.haptic-field
+  appearance: none
   overflow: hidden
   resize: none
 
@@ -80,10 +80,10 @@ haptic-text-field
     .container::after
       opacity: 1
 
-  label, .error-icon, .leading-icon, .trailing-icon
+  .haptic-label, .error-icon, .leading-icon, .trailing-icon
     pointer-events: none
 
-  label
+  .haptic-label
     overflow: hidden
     position: absolute
     text-overflow: ellipsis
@@ -95,20 +95,17 @@ haptic-text-field
     white-space: nowrap
 
   &[required]
-    label::after
+    .haptic-label::after
       content: ' *'
 
-  .error-icon, .leading-icon, .trailing-icon
+  .clear-button, .error-icon, .leading-icon, .trailing-icon
     align-items: center
     display: flex
     justify-content: center
     position: absolute
 
-  .toolbutton
-    position: absolute
-
   &[empty]
-    .toolbutton
+    .clear-button
       opacity: 0
       pointer-events: none
 
@@ -116,38 +113,70 @@ haptic-text-field
     filter: grayscale(1)
     opacity: 0.5
 
-    .toolbutton
+    .clear-button
       pointer-events: none
 
 /**********************************************************************
  * Checkboxes and radio buttons
  **********************************************************************/
 
-input[type="checkbox"], input[type="radio"]
-  &.haptic
-    appearance: none
-    cursor: pointer
-    position: relative
-    transition: .4s linear // background-color, opacity, outline-color
+.haptic-checkbox, .haptic-radio
+  cursor: pointer
+  position: relative
+  transition: .4s linear
 
-    &::before, &::after
-      content: '\200b'
-      pointer-events: none
-      position: absolute
-      transition: background-color .1s linear
+  &::before, &::after
+    content: '\200b'
+    pointer-events: none
+    position: absolute
 
-input[type="checkbox"].haptic::after
+.haptic-checkbox, .haptic-radio
+  &::before, &::after
+    transition: background-color .1s linear
+
+.haptic-checkbox::after
   -webkit-mask-image: url('checkbox-checked.svg')
   mask-image: url('checkbox-checked.svg')
+
+input[type="checkbox"].haptic-checkbox,
+input[type="radio"].haptic-radio
+  appearance: none
+
+  &:disabled
+    opacity: 0.5
+    pointer-events: none
+
+/**********************************************************************
+ * Switches
+ **********************************************************************/
+
+.haptic-switch
+  cursor: pointer
+  position: relative
+  transition: opacity .4s linear, filter .4s linear, background-color .2s linear
+
+  &::after
+    content: '\200b'
+    pointer-events: none
+    position: absolute
+    transition: .2s linear
+
+input[type="checkbox"].haptic-switch
+  appearance: none
+
+  &:disabled
+    filter: grayscale(1)
+    opacity: 0.5
+    pointer-events: none
 
 /**********************************************************************
  * Labels
  **********************************************************************/
 
-label.haptic:not([data-embedded])
+.haptic-label:not([data-embedded])
   transition: opacity .4s linear
 
-  &[data-control-disabled]
+  &[data-disabled]
     opacity: 0.5
     pointer-events: none
 

@@ -4,13 +4,7 @@ module Haptic
   module Rails
     class Configuration
       DEFAULT_ICON_BUILDER = lambda do |name, options = {}|
-        builder = options[:builder]
-
-        builder.content_tag(
-          :div,
-          name,
-          class: builder.haptic_css_class(options[:class], 'haptic-icon')
-        )
+        options[:builder].content_tag(:div, name, options.except(:builder))
       end
 
       attr_writer :icon_builder
@@ -25,6 +19,10 @@ module Haptic
       # The singleton \Haptic \Rails configuration.
       def configuration
         @configuration ||= Configuration.new
+      end
+
+      def configure(&block)
+        configuration.instance_eval(&block)
       end
     end
   end

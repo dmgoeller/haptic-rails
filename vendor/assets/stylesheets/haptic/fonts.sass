@@ -3,31 +3,29 @@
  * Buttons
  **********************************************************************/
 
-button, .button
-  &.haptic
-    font-size: 1rem
-    font-weight: bold
-    text-decoration: none
+.haptic-button
+  font-size: 1rem
+  font-weight: bold
+  text-decoration: none
 
 /**********************************************************************
  * Fields
  **********************************************************************/
 
-input, select, textarea
-  &.haptic
-    font-family: var(--haptic-field-font-family)
-    font-size: 1rem
+.haptic-field
+  font-family: var(--haptic-field-font-family)
+  font-size: 1rem
 
 haptic-text-field
-  label
+  .haptic-label
     font-size: .875rem
     font-weight: bold
 
   &[animated][empty]:not([focus])
-    label
+    .haptic-label
       font-size: 1rem
 
-  .error-icon, .leading-icon, .trailing-icon
+  .clear-button, .error-icon, .leading-icon, .trailing-icon
     font-size: 1.125rem
 
   &[with-label]

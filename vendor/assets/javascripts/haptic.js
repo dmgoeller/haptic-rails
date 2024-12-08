@@ -6,7 +6,7 @@ class HapticButtonElement extends HTMLButtonElement {
   }
 
   connectedCallback() {
-    this.classList.add('haptic');
+    this.classList.add('haptic-button', 'haptic');
   }
 }
 customElements.define('haptic-button', HapticButtonElement, { extends: 'button' });
@@ -20,19 +20,30 @@ class HapticInputElement extends HTMLInputElement {
   }
 
   connectedCallback() {
-    this.classList.add('haptic');
-
-    if (this.type == 'submit') {
-      this.classList.add('button');
+    switch (this.type) {
+      case 'checkbox':
+        if (!this.classList.contains('haptic-switch')) {
+          this.classList.add('haptic-checkbox');
+        }
+        break;
+      case 'radio':
+        this.classList.add('haptic-radio');
+        break;
+      case 'submit':
+        this.classList.add('haptic-button');
+        break;
+      default:
+        this.classList.add('haptic-field');
     }
+    this.classList.add('haptic');
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     for (let label of this.labels) {
       if (this.disabled) {
-        label.setAttribute('data-control-disabled', '');
+        label.setAttribute('data-disabled', '');
       } else {
-        label.removeAttribute('data-control-disabled');
+        label.removeAttribute('data-disabled');
       }
     }
   }
@@ -46,7 +57,7 @@ class HapticLabelElement extends HTMLLabelElement {
   }
 
   connectedCallback() {
-    this.classList.add('haptic');
+    this.classList.add('haptic-label', 'haptic');
   }
 }
 customElements.define('haptic-label', HapticLabelElement, { extends: 'label' });
@@ -58,7 +69,7 @@ class HapticSelectElement extends HTMLSelectElement {
   }
 
   connectedCallback() {
-    this.classList.add('haptic');
+    this.classList.add('haptic-field', 'haptic');
   }
 }
 customElements.define('haptic-select', HapticSelectElement, { extends: 'select' });
@@ -72,7 +83,7 @@ class HapticTextAreaElement extends HTMLTextAreaElement {
   }
 
   connectedCallback() {
-    this.classList.add('haptic');
+    this.classList.add('haptic-field', 'haptic');
     this.addEventListener('input', this.#resizer);
     window.addEventListener('resize', this.#resizer);
   }
@@ -190,7 +201,7 @@ class HapticTextFieldElement extends HTMLElement {
           this.#label = node;
         }
       } else
-      if (node.classList.contains('toolbutton')) {
+      if (node.classList.contains('clear-button')) {
         if (!this.#clearButton) {
           node.addEventListener('click', e => {
             this.clear();
