@@ -71,6 +71,9 @@ Style/MultilineIfModifier:
 Style/NestedTernaryOperator:
   Enabled: false
 
+Style/OptionalBooleanParameter:
+  Enabled: false
+
 Style/ParallelAssignment:
   Enabled: false
 

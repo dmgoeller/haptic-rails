@@ -55,7 +55,7 @@ module Haptic
       private
 
       def tag_options(options, is: nil)
-        options.merge(is: is, class: haptic_css_class(options[:class], @defaults[:class]))
+        options.merge(is: is, class: [options[:class], @defaults[:class]].flatten)
       end
     end
   end

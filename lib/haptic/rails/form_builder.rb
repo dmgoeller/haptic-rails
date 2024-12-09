@@ -55,7 +55,7 @@ module Haptic
         @template.content_tag(
           :div,
           full_messages.join('. ').delete_suffix('.'),
-          class: @template.haptic_css_class(options[:class], 'error')
+          class: [options[:class], 'error'].flatten
         )
       end
 

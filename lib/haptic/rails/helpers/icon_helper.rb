@@ -1,17 +1,13 @@
 # frozen_string_literal: true
 
-require_relative 'css_helper'
-
 module Haptic
   module Rails
     module Helpers
       module IconHelper
-        include CSSHelper
-
         def haptic_icon(name, options = {})
           options = options.merge(
             builder: self,
-            class: haptic_css_class(options[:class], 'haptic-icon')
+            class: [options[:class], 'haptic-icon'].flatten
           )
           Haptic::Rails.configuration.icon_builder&.call(name, options)
         end
