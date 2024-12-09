@@ -15,8 +15,6 @@ module Haptic
       end
 
       def check_box(object_name, method, options = {}, checked_value = '1', unchecked_value = '0')
-        return super if options[:class]&.include?('switch') # TODO
-
         super(object_name, method, tag_options(options, is: 'haptic-input'), checked_value, unchecked_value)
       end
 
