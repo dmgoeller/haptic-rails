@@ -3,31 +3,30 @@
  * Buttons
  **********************************************************************/
 
-.haptic-button
+.haptic-button, .haptic-toolbutton
   box-sizing: border-box
-  grid-gap: .25rem
   line-height: 1.125rem
-  padding: .125rem
 
-  &.filled, &.outlined, &.text
-    min-height: 1.75rem
-    padding: .25rem .5rem
+.haptic-button
+  grid-gap: .25rem
+  min-height: 1.75rem
+  padding: .25rem .5rem
 
-  &.filled, &.outlined
-    &:not([data-with-icon])
-      padding-left: .75rem
+  &.filled
+    padding: .25rem .75rem
 
-    &:not([data-with-trailing-icon])
-      padding-right: .75rem
+  &.outlined
+    padding: calc(.25rem - 1px) calc(.75rem - 1px)
 
-  .haptic-icon
+  .icon
     height: 1.125rem
+    margin-left: -.25rem
     width: 1.125rem
 
-  .separator
-    height: 100%
-    margin: 0 .25rem
-    width: 1px
+.haptic-toolbutton
+  min-height: 1.125rem
+  min-width: 1.125rem
+  padding: .125rem
 
 /**********************************************************************
  * Fields

@@ -3,30 +3,36 @@
  * Buttons
  **********************************************************************/
 
-.haptic-button
+.haptic-button, .haptic-toolbutton
   align-items: center
   cursor: pointer
-  display: grid
-  grid-auto-flow: column
   justify-content: center
-  overflow: hidden
-  text-overflow: ellipsis
   transition-delay: .1s
   transition-duration: .4s
   transition-timing-function: linear
+
+.haptic-button
+  display: grid
+  grid-auto-flow: column
+  overflow: hidden
+  text-overflow: ellipsis
   white-space: nowrap
 
-button, input[type="submit"]
-  &.haptic-button
-    appearance: none
+.haptic-toolbutton
+  display: flex
 
-    &:disabled
-      filter: grayscale(1)
-      opacity: 0.5
-      pointer-events: none
+button.haptic-button,
+button.haptic-toolbutton,
+input[type="submit"].haptic-button
+  appearance: none
 
-    &:focus, &:focus-visible
-      transition-delay: 0
+  &:disabled
+    filter: grayscale(1)
+    opacity: 0.5
+    pointer-events: none
+
+  &:focus, &:focus-visible
+    transition-delay: 0
 
 /**********************************************************************
  * Fields

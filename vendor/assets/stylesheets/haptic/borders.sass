@@ -3,17 +3,19 @@
  * Buttons
  **********************************************************************/
 
-.haptic-button
-  border-radius: .25rem // .875rem
-  border-style: solid
+.haptic-button, .haptic-toolbutton
   border-width: 0
   outline: none
 
-  &.circular
-    border-radius: 50%
+.haptic-button
+  border-radius: .25rem // .875rem
+  border-style: solid
 
   &.outlined
     border-width: 1px
+
+.haptic-toolbutton
+  border-radius: 50%
 
 /**********************************************************************
  * Fields

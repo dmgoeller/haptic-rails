@@ -12,45 +12,32 @@
     color: var(--haptic-filled-button-color)
 
     &.green
-      background-color: var(--haptic-filled-button-green-background-color)
+      background-color: var(--haptic-filled-green-button-background-color)
 
     &.red
-      background-color: var(--haptic-filled-button-red-background-color)
-
-    &.secondary
-      background-color: var(--haptic-filled-button-secondary-background-color)
+      background-color: var(--haptic-filled-red-button-background-color)
 
   &:not(.filled)
     background-color: transparent
-    color: inherit
+    color: var(--haptic-unfilled-button-color)
 
-    &.outlined, &.text
-      background-color: transparent
-      color: var(--haptic-accent-color)
+    &.green
+      color: var(--haptic-unfilled-green-button-color)
 
-      &.green
-        color: var(--haptic-green-color)
-
-      &.red
-        color: var(--haptic-red-color)
-
-      &.secondary
-        color: var(--haptic-secondary-color)
+    &.red
+      color: var(--haptic-unfilled-red-button-color)
 
     &.outlined
       border-color: var(--haptic-outlined-button-border-color)
 
       &:focus, &:focus-visible
-        border-color: var(--haptic-accent-color)
+        border-color: var(--haptic-unfilled-button-color)
 
         &.green
-          border-color: var(--haptic-green-color)
+          border-color: var(--haptic-unfilled-green-button-color)
 
         &.red
-          border-color: var(--haptic-red-color)
-
-        &.secondary
-          border-color: var(--haptic-secondary-color)
+          border-color: var(--haptic-unfilled-red-button-color)
 
   &:hover:not(:disabled), &:focus, &:focus-visible
     &.filled
@@ -60,16 +47,24 @@
       background-color: var(--haptic-hover-background-color)
 
       &.outlined, &.text
-        background-color: var(--haptic-hover-accent-background-color)
+        background-color: var(--haptic-unfilled-button-hover-background-color)
 
         &.green
-          background-color: var(--haptic-hover-green-background-color)
+          background-color: var(--haptic-unfilled-green-button-hover-background-color)
 
         &.red
-          background-color: var(--haptic-hover-red-background-color)
+          background-color: var(--haptic-unfilled-red-button-hover-background-color)
 
-        &.secondary
-          background-color: var(--haptic-hover-secondary-background-color)
+/**********************************************************************
+ * Toolbuttons
+ **********************************************************************/
+
+.haptic-toolbutton
+  background-color: transparent
+  color: inherit
+
+  &:hover:not(:disabled), &:focus, &:focus-visible
+    background-color: var(--haptic-toolbutton-hover-background-color)
 
 /**********************************************************************
  * Fields

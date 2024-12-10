@@ -1,6 +1,58 @@
+
+@import 'haptic-variables.sass'
+
+$haptic-light-accent-color: #7BA1D0 !default
+$haptic-accent-color: #2670D0 !default
+$haptic-light-blue: #90CAF9 !default
+$haptic-blue: #1976D2 !default // Blue 700
+$haptic-dark-blue: #1565C0 !default // Blue 800
+$haptic-light-green: #A5D6A7 !default // Green 200
+$haptic-green: #388E3C !default // Green 700
+$haptic-dark-green: #2E7D32 // Green 800
+$haptic-light-red: #EF9A9A // Red 200
+$haptic-red: #D32F2F !default // Red 700
+$haptic-dark-red: #C62828 !default // Red 800
+$haptic-dark-outline: #00000060 !default
+$haptic-light-outline: #FFFFFF60 !default
+
+/**********************************************************************
+ * Buttons
+ **********************************************************************/
+
+.haptic-button
+  --haptic-filled-button-color: white
+  --haptic-filled-button-background-color: #{$haptic-accent-color}
+  --haptic-filled-green-button-background-color: #{$haptic-green}
+  --haptic-filled-red-button-background-color: #{$haptic-red}
+  --haptic-outlined-button-border-color: #{$haptic-dark-outline}
+  --haptic-unfilled-button-color: #{$haptic-accent-color}
+  --haptic-unfilled-button-hover-background-color: #{$haptic-accent-color}20
+  --haptic-unfilled-green-button-color: #{$haptic-dark-green}
+  --haptic-unfilled-green-button-hover-background-color: #{$haptic-dark-green}20
+  --haptic-unfilled-red-button-color: #{$haptic-dark-red}
+  --haptic-unfilled-red-button-hover-background-color: #{$haptic-dark-red}20
+
+.haptic-toolbutton
+  --haptic-toolbutton-hover-background-color: #00000010
+
+@media(prefers-color-scheme: dark)
+  .haptic-button
+    --haptic-outlined-button-border-color: #{$haptic-light-outline}
+    --haptic-unfilled-button-color: #{$haptic-light-accent-color}
+    --haptic-unfilled-button-hover-background-color: #{$haptic-light-accent-color}20
+    --haptic-unfilled-green-button-color: #{$haptic-light-green}
+    --haptic-unfilled-green-button-hover-background-color: #{$haptic-light-green}20
+    --haptic-unfilled-red-button-color: #{$haptic-light-red}
+    --haptic-unfilled-red-button-hover-background-color: #{$haptic-light-red}20
+
+  .haptic-toolbutton
+    --haptic-toolbutton-hover-background-color: #FFFFFF10
+
+/**********************************************************************/
+
 .haptic
   // Base colors
-  --haptic-accent-color: #2670D0
+  --haptic-accent-color: $haptic-accent-color
   --haptic-green-color: #2E7D32 // Green 800
   --haptic-placeholder-color: #00000060
   --haptic-red-color: #C62828 // Red 800
@@ -13,14 +65,6 @@
   --haptic-hover-green-background-color: #2E7D3220
   --haptic-hover-red-background-color: #C6282820
   --haptic-hover-secondary-background-color: #CA792120
-
-  // Buttons
-  --haptic-filled-button-color: white
-  --haptic-filled-button-background-color: #2670D0
-  --haptic-filled-button-green-background-color: #388E3C // Green 700
-  --haptic-filled-button-red-background-color: #D32F2F // Red 700
-  --haptic-filled-button-secondary-background-color: #CA7921
-  --haptic-outlined-button-border-color: #00000060
 
   // Fields
   --haptic-field-background-color: #0000002C
@@ -51,9 +95,6 @@
     --haptic-hover-green-background-color: #A5D6A720
     --haptic-hover-red-background-color: #EF9A9A20
     --haptic-hover-secondary-background-color: #D0AA7B20
-
-    // Buttons
-    --haptic-outlined-button-border-color: #FFFFFF60
 
     // Fields
     --haptic-field-background-color: #FFFFFF20

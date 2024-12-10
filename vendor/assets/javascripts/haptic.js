@@ -6,7 +6,9 @@ class HapticButtonElement extends HTMLButtonElement {
   }
 
   connectedCallback() {
-    this.classList.add('haptic-button', 'haptic');
+    if (!this.classList.contains('haptic-toolbutton')) {
+      this.classList.add('haptic-button');
+    }
   }
 }
 customElements.define('haptic-button', HapticButtonElement, { extends: 'button' });

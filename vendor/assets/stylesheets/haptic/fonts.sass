@@ -4,12 +4,17 @@
  **********************************************************************/
 
 .haptic-button
-  font-size: 1rem
-  font-weight: bold
   text-decoration: none
 
-  .haptic-icon
-    font-size: 1.125rem
+  &.filled, &.outlined, &.text
+    font-size: 1rem
+    font-weight: bold
+
+    .icon
+      font-size: 1.125rem
+
+.haptic-toolbutton
+  font-size: 1.125rem
 
 /**********************************************************************
  * Fields
