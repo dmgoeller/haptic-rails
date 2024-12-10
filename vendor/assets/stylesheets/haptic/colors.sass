@@ -44,16 +44,13 @@
       filter: brightness(1.1875)
 
     &:not(.filled)
-      background-color: var(--haptic-hover-background-color)
+      background-color: var(--haptic-unfilled-button-hover-background-color)
 
-      &.outlined, &.text
-        background-color: var(--haptic-unfilled-button-hover-background-color)
+      &.green
+        background-color: var(--haptic-unfilled-green-button-hover-background-color)
 
-        &.green
-          background-color: var(--haptic-unfilled-green-button-hover-background-color)
-
-        &.red
-          background-color: var(--haptic-unfilled-red-button-hover-background-color)
+      &.red
+        background-color: var(--haptic-unfilled-red-button-hover-background-color)
 
 /**********************************************************************
  * Toolbuttons
