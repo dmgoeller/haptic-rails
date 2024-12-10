@@ -87,7 +87,7 @@ module Haptic
                 label == true ? label(method) : label(method, label)
               end +
               if options[:clear_button]
-                @template.haptic_icon('close', class: 'haptic-toolbutton clear-button')
+                @template.haptic_icon('close', class: 'clear-button')
               end +
               if options[:error_icon] && errors
                 @template.haptic_icon('error', class: 'error-icon')

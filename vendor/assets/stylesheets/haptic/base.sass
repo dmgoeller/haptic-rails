@@ -3,37 +3,30 @@
  * Buttons
  **********************************************************************/
 
-.haptic-button, .haptic-toolbutton
+.haptic-button
   align-items: center
   cursor: pointer
+  display: grid
+  grid-auto-flow: column
   justify-content: center
+  overflow: hidden
+  text-overflow: ellipsis
   transition-delay: .1s
   transition-duration: .4s
   transition-timing-function: linear
-
-.haptic-button
-  display: grid
-  grid-auto-flow: column
-  overflow: hidden
-  text-overflow: ellipsis
   white-space: nowrap
 
-.haptic-toolbutton
-  display: flex
-  transition-property: background, opacity
+button, input[type="submit"]
+  &.haptic-button
+    appearance: none
 
-button.haptic-button,
-button.haptic-toolbutton,
-input[type="submit"].haptic-button
-  appearance: none
+    &:disabled
+      filter: grayscale(1)
+      opacity: 0.5
+      pointer-events: none
 
-  &:disabled
-    filter: grayscale(1)
-    opacity: 0.5
-    pointer-events: none
-
-  &:focus, &:focus-visible
-    transition-delay: 0
+    &:focus, &:focus-visible
+      transition-delay: 0
 
 /**********************************************************************
  * Fields
@@ -81,14 +74,11 @@ haptic-text-field
     .container::after
       opacity: 1
 
-  .haptic-label, .error-icon, .leading-icon, .trailing-icon
-    pointer-events: none
-
   .haptic-label
     overflow: hidden
+    pointer-events: none
     position: absolute
     text-overflow: ellipsis
-    transition: .4s linear
     transition-duration: .4s
     transition-property: color, font-size, top
     transition-timing-function: linear
@@ -103,6 +93,13 @@ haptic-text-field
     display: flex
     justify-content: center
     position: absolute
+
+  .error-icon, .leading-icon, .trailing-icon
+    pointer-events: none
+
+  .clear-button
+    cursor: pointer
+    transition: .4s linear
 
   &[empty]
     .clear-button

@@ -9,13 +9,11 @@
   border-width: 0
   outline: none
 
+  &.circular
+    border-radius: 50%
+
   &.outlined
     border-width: 1px
-
-.haptic-toolbutton
-  border: none
-  border-radius: 50%
-  outline: none
 
 /**********************************************************************
  * Fields
@@ -35,6 +33,9 @@ haptic-text-field[focus-indicator]
   .container::after
     border-bottom-left-radius: .25rem 3px
     border-bottom-right-radius: .25rem 3px
+
+  .clear-button
+    border-radius: 50%
 
 /**********************************************************************
  * Checkboxes and radio buttons

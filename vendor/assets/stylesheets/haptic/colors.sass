@@ -20,55 +20,55 @@
     &.secondary
       background-color: var(--haptic-filled-button-secondary-background-color)
 
-    &:hover:not(:disabled), &:focus, &:focus-visible
-      filter: brightness(1.1875)
-
   &:not(.filled)
     background-color: transparent
-    color: var(--haptic-accent-color)
 
-    &.green
-      color: var(--haptic-green-color)
-
-    &.red
-      color: var(--haptic-red-color)
-
-    &.secondary
-      color: var(--haptic-secondary-color)
-
-    &:hover:not(:disabled), &:focus, &:focus-visible
-      background-color: var(--haptic-hover-accent-background-color)
+    &.outlined, &.text
+      background-color: transparent
+      color: var(--haptic-accent-color)
 
       &.green
-        background-color: var(--haptic-hover-green-background-color)
+        color: var(--haptic-green-color)
 
       &.red
-        background-color: var(--haptic-hover-red-background-color)
+        color: var(--haptic-red-color)
 
       &.secondary
-        background-color: var(--haptic-hover-secondary-background-color)
+        color: var(--haptic-secondary-color)
 
-  &.outlined
-    border-color: var(--haptic-outlined-button-border-color)
+    &.outlined
+      border-color: var(--haptic-outlined-button-border-color)
 
-    &:focus, &:focus-visible
-      border-color: var(--haptic-accent-color)
+      &:focus, &:focus-visible
+        border-color: var(--haptic-accent-color)
 
-      &.green
-        border-color: var(--haptic-green-color)
+        &.green
+          border-color: var(--haptic-green-color)
 
-      &.red
-        border-color: var(--haptic-red-color)
+        &.red
+          border-color: var(--haptic-red-color)
 
-      &.secondary
-        border-color: var(--haptic-secondary-color)
+        &.secondary
+          border-color: var(--haptic-secondary-color)
 
-.haptic-toolbutton
-  background-color: transparent
-  color: var(--haptic-toolbutton-color)
+  &:hover:not(:disabled), &:focus, &:focus-visible
+    &.filled
+      filter: brightness(1.1875)
 
-  &:hover
-    background-color: var(--haptic-hover-background-color)
+    &:not(.filled)
+      background-color: var(--haptic-hover-background-color)
+
+      &.outlined, &.text
+        background-color: var(--haptic-hover-accent-background-color)
+
+        &.green
+          background-color: var(--haptic-hover-green-background-color)
+
+        &.red
+          background-color: var(--haptic-hover-red-background-color)
+
+        &.secondary
+          background-color: var(--haptic-hover-secondary-background-color)
 
 /**********************************************************************
  * Fields
@@ -93,8 +93,14 @@ haptic-text-field
   .error-icon
     color: var(--haptic-red-color)
 
-  .leading-icon, .trailing-icon
+  .clear-button, .leading-icon, .trailing-icon
     color: var(--haptic-field-icon-color)
+
+  .clear-button
+    background-color: transparent
+
+    &:hover
+      background-color: var(--haptic-hover-background-color)
 
   &[with-errors]
     .haptic-field.outlined
