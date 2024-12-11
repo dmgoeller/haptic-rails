@@ -1,12 +1,22 @@
-.haptic
-  .error
-    color: var(--haptic-red-color)
+@import 'haptic/variables'
 
 /**********************************************************************
  * Buttons
  **********************************************************************/
 
 .haptic-button
+  --haptic-filled-button-color: white
+  --haptic-filled-button-background-color: #{$haptic-accent-color}
+  --haptic-filled-green-button-background-color: #{$haptic-green}
+  --haptic-filled-red-button-background-color: #{$haptic-red}
+  --haptic-outlined-button-border-color: #{$haptic-dark-outline}
+  --haptic-unfilled-button-color: #{$haptic-accent-color}
+  --haptic-unfilled-button-hover-background-color: #{$haptic-accent-color}20
+  --haptic-unfilled-green-button-color: #{$haptic-dark-green}
+  --haptic-unfilled-green-button-hover-background-color: #{$haptic-dark-green}20
+  --haptic-unfilled-red-button-color: #{$haptic-dark-red}
+  --haptic-unfilled-red-button-hover-background-color: #{$haptic-dark-red}20
+
   &.filled
     background-color: var(--haptic-filled-button-background-color)
     color: var(--haptic-filled-button-color)
@@ -52,93 +62,135 @@
       &.red
         background-color: var(--haptic-unfilled-red-button-hover-background-color)
 
-/**********************************************************************
- * Toolbuttons
- **********************************************************************/
-
 .haptic-toolbutton
+  --haptic-toolbutton-hover-background-color: #00000010
+
   background-color: transparent
   color: inherit
 
   &:hover:not(:disabled), &:focus, &:focus-visible
     background-color: var(--haptic-toolbutton-hover-background-color)
 
+@media(prefers-color-scheme: dark)
+  .haptic-button
+    --haptic-outlined-button-border-color: #{$haptic-light-outline}
+    --haptic-unfilled-button-color: #{$haptic-light-accent-color}
+    --haptic-unfilled-button-hover-background-color: #{$haptic-light-accent-color}20
+    --haptic-unfilled-green-button-color: #{$haptic-light-green}
+    --haptic-unfilled-green-button-hover-background-color: #{$haptic-light-green}20
+    --haptic-unfilled-red-button-color: #{$haptic-light-red}
+    --haptic-unfilled-red-button-hover-background-color: #{$haptic-light-red}20
+
+  .haptic-toolbutton
+    --haptic-toolbutton-hover-background-color: #FFFFFF10
+
 /**********************************************************************
  * Fields
  **********************************************************************/
 
-::placeholder
-  color: var(--haptic-placeholder-color)
-
 .haptic-field
+  --haptic-field-caret-color: #{$haptic-accent-color}
+  --haptic-field-color: #303030
+  --haptic-field-placeholder-color: #00000060
+  --haptic-filled-field-background-color: #0000002C
+  --haptic-outlined-field-border-color: #{$haptic-dark-outline}
+
   background-color: transparent
-  caret-color: var(--haptic-accent-color)
+  caret-color: var(--haptic-field-caret-color)
   color: var(--haptic-field-color)
   outline-color: transparent
 
   &.filled
-    background-color: var(--haptic-field-background-color)
+    background-color: var(--haptic-filled-field-background-color)
 
   &.outlined
-    border-color: var(--haptic-field-border-color)
+    border-color: var(--haptic-outlined-field-border-color)
+
+  &::placeholder
+    color: var(--haptic-field-placeholder-color)
 
 haptic-text-field
-  .error-icon
-    color: var(--haptic-red-color)
+  --haptic-text-field-clear-button-background-color-hover: #00000010
+  --haptic-text-field-error-color: #{$haptic-dark-red}
+  --haptic-text-field-focus-indicator-color: #{$haptic-dark-accent-color}
+  --haptic-text-field-icon-color: #606060
+  --haptic-text-field-label-color: #{$haptic-light-accent-color}
+  --haptic-text-field-label-color-animated: #606060
+
+  .error, .error-icon
+    color: var(--haptic-text-field-error-color)
 
   .clear-button, .leading-icon, .trailing-icon
-    color: var(--haptic-field-icon-color)
+    color: var(--haptic-text-field-icon-color)
 
   .clear-button
     background-color: transparent
 
     &:hover
-      background-color: var(--haptic-hover-background-color)
+      background-color: var(--haptic-text-field-clear-button-background-color-hover)
 
   &[with-errors]
     .haptic-field.outlined
-      border-color: var(--haptic-red-color)
+      border-color: var(--haptic-text-field-error-color)
 
     label
-      color: var(--haptic-red-color)
-
-    &[animated][empty]:not([focus])
-      label
-        color: var(--haptic-text-color)
+      color: var(--haptic-text-field-error-color)
 
     &[focus-indicator]
       .container::after
-        background-color: var(--haptic-red-color)
+        background-color: var(--haptic-text-field-error-color)
 
   &:not([with-errors])
     label
-      color: var(--haptic-accent-color)
+      color: var(--haptic-text-field-label-color)
 
     &[animated][empty]:not([focus])
       label
-        color: var(--haptic-text-color)
+        color: var(--haptic-text-field-label-color-animated)
 
     &[focus-indicator]
       .container::after
-        background-color: var(--haptic-accent-color)
+        background-color: var(--haptic-text-field-focus-indicator-color)
+
+@media(prefers-color-scheme: dark)
+  .haptic-field
+    --haptic-field-caret-color: #{$haptic-light-accent-color}
+    --haptic-field-color: #E0E0E0
+    --haptic-field-placeholder-color: #FFFFFF60
+    --haptic-filled-field-background-color: #FFFFFF20
+    --haptic-outlined-field-border-color: #{$haptic-light-outline}
+
+  haptic-text-field
+    --haptic-text-field-clear-button-background-color-hover: #FFFFFF10
+    --haptic-text-field-error-color: #{$haptic-light-red}
+    --haptic-text-field-focus-indicator-color: #{$haptic-light-accent-color}
+    --haptic-text-field-icon-color: #C0C0C0
+    --haptic-text-field-label-color: #{$haptic-light-accent-color}
+    --haptic-text-field-label-color-animated: #C0C0C0
 
 /**********************************************************************
  * Checkboxes and radio buttons
  **********************************************************************/
 
 .haptic-checkbox, .haptic-radio
+  --haptic-field-color: #303030
+  --haptic-field-cared-color: #{$haptic-accent-color}
+  --haptic-filled-field-background-color: #0000002C
+  --haptic-outlined-field-border-color: #{$haptic-dark-outline}
+  --haptic-checkbox-or-radio-background-color-hover: #{$haptic-accent-color}40
+
   background-color: transparent
   outline-color: transparent
 
   &:focus-visible
-    background-color: var(--haptic-hover-accent-background-color)
-    outline-color: var(--haptic-hover-accent-background-color)
+    background-color: var(--haptic-checkbox-or-radio-background-color-hover)
+    outline-color: var(--haptic-checkbox-or-radio-background-color-hover)
 
   &.filled::before
-    background-color: var(--haptic-field-background-color)
+    background-color: var(--haptic-filled-field-background-color)
 
   &.outlined::before
-    border-color: var(--haptic-field-border-color)
+    border-color: var(--haptic-outlined-field-border-color)
 
   &::after
     background-color: transparent
@@ -149,11 +201,27 @@ haptic-text-field
 .haptic-checkbox.filled:checked::before
   background-color: transparent
 
+@media(prefers-color-scheme: dark)
+  .haptic-checkbox, .haptic-radio
+    --haptic-field-color: #E0E0E0
+    --haptic-filled-field-background-color: #FFFFFF20
+    --haptic-outlined-field-border-color: #{$haptic-light-outline}
+    --haptic-checkbox-or-radio-background-color-hover:  #{$haptic-light-accent-color}60
+
 /**********************************************************************
  * Switches
  **********************************************************************/
 
 .haptic-switch
+  --haptic-switch-handle-background-color-off: white
+  --haptic-switch-handle-background-color-on: white
+  --haptic-switch-handle-outline-color-focus: #{$haptic-accent-color}40
+  --haptic-switch-track-background-color-off: #00000060
+  --haptic-switch-track-background-color-on: #{$haptic-accent-color}
+  --haptic-red-green-switch-handle-background-color: white
+  --haptic-red-green-switch-track-background-color-off: #{$haptic-dark-red}
+  --haptic-red-green-switch-track-background-color-on: #{$haptic-dark-green}
+
   background-color: var(--haptic-switch-track-background-color-off)
 
   &::after
@@ -167,7 +235,7 @@ haptic-text-field
       background-color: var(--haptic-switch-handle-background-color-on)
 
   &:focus-visible::after
-    outline-color: var(--haptic-hover-accent-background-color)
+    outline-color: var(--haptic-switch-handle-outline-color-focus)
 
   &.red-green
     background-color: var(--haptic-red-green-switch-track-background-color-off)
@@ -178,5 +246,12 @@ haptic-text-field
     &::after, &:checked::after
       background-color: var(--haptic-red-green-switch-handle-background-color)
 
+@media(prefers-color-scheme: dark)
+  .haptic-switch
+    --haptic-switch-handle-background-color-off: #E0E0E0
+    --haptic-switch-handle-outline-color-focus: #{$haptic-light-accent-color}60
+    --haptic-switch-track-background-color-off: #FFFFFF40
+    --haptic-red-green-switch-track-background-color-off: #{$haptic-red}
+    --haptic-red-green-switch-track-background-color-on: #{$haptic-green}
 
 

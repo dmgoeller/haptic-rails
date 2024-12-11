@@ -37,7 +37,6 @@ class HapticInputElement extends HTMLInputElement {
       default:
         this.classList.add('haptic-field');
     }
-    this.classList.add('haptic');
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -59,7 +58,7 @@ class HapticLabelElement extends HTMLLabelElement {
   }
 
   connectedCallback() {
-    this.classList.add('haptic-label', 'haptic');
+    this.classList.add('haptic-label');
   }
 }
 customElements.define('haptic-label', HapticLabelElement, { extends: 'label' });
@@ -71,7 +70,7 @@ class HapticSelectElement extends HTMLSelectElement {
   }
 
   connectedCallback() {
-    this.classList.add('haptic-field', 'haptic');
+    this.classList.add('haptic-field');
   }
 }
 customElements.define('haptic-select', HapticSelectElement, { extends: 'select' });
@@ -85,7 +84,7 @@ class HapticTextAreaElement extends HTMLTextAreaElement {
   }
 
   connectedCallback() {
-    this.classList.add('haptic-field', 'haptic');
+    this.classList.add('haptic-field');
     this.addEventListener('input', this.#resizer);
     window.addEventListener('resize', this.#resizer);
   }
@@ -133,8 +132,6 @@ class HapticTextFieldElement extends HTMLElement {
   }
 
   connectedCallback() {
-    this.classList.add('haptic');
-
     new MutationObserver((mutationList) => {
       for (let mutationRecord of mutationList) {
         for (let node of mutationRecord.addedNodes) {

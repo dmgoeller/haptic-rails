@@ -14,6 +14,10 @@ module Haptic
         end
       end
 
+      def button(value = nil, options = {}, &block)
+        super(value, options.merge(is: 'haptic-button'), &block)
+      end
+
       def check_box(object_name, method, options = {}, checked_value = '1', unchecked_value = '0')
         super(object_name, method, tag_options(options, is: 'haptic-input'), checked_value, unchecked_value)
       end
