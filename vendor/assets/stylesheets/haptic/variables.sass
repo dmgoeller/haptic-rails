@@ -12,10 +12,6 @@ $haptic-dark-red: #C62828 !default // Red 800
 $haptic-dark-outline: #00000060 !default
 $haptic-light-outline: #FFFFFF60 !default
 
-/**********************************************************************
- * Buttons
- **********************************************************************/
-
 .haptic-button
   --haptic-filled-button-color: white
   --haptic-filled-button-background-color: #{$haptic-accent-color}
@@ -29,6 +25,15 @@ $haptic-light-outline: #FFFFFF60 !default
   --haptic-unfilled-red-button-color: #{$haptic-dark-red}
   --haptic-unfilled-red-button-hover-background-color: #{$haptic-dark-red}20
 
+.haptic-switch
+  --haptic-switch-handle-background-color-off: white
+  --haptic-switch-handle-background-color-on: white
+  --haptic-switch-track-background-color-off: #00000060
+  --haptic-switch-track-background-color-on: #{$haptic-accent-color}
+  --haptic-red-green-switch-handle-background-color: white
+  --haptic-red-green-switch-track-background-color-off: #{$haptic-dark-red}
+  --haptic-red-green-switch-track-background-color-on: #{$haptic-dark-green}
+
 .haptic-toolbutton
   --haptic-toolbutton-hover-background-color: #00000010
 
@@ -41,6 +46,10 @@ $haptic-light-outline: #FFFFFF60 !default
     --haptic-unfilled-green-button-hover-background-color: #{$haptic-light-green}20
     --haptic-unfilled-red-button-color: #{$haptic-light-red}
     --haptic-unfilled-red-button-hover-background-color: #{$haptic-light-red}20
+
+  .haptic-switch
+    --haptic-switch-handle-background-color-off: #E0E0E0
+    --haptic-switch-track-background-color-off: #FFFFFF40
 
   .haptic-toolbutton
     --haptic-toolbutton-hover-background-color: #FFFFFF10

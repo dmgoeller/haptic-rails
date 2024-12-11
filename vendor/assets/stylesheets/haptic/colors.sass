@@ -154,29 +154,29 @@ haptic-text-field
  **********************************************************************/
 
 .haptic-switch
-  background-color: var(--haptic-switch-off-track-background-color)
+  background-color: var(--haptic-switch-track-background-color-off)
 
   &::after
-    background-color: var(--haptic-switch-off-handle-background-color)
+    background-color: var(--haptic-switch-handle-background-color-off)
     outline-color: transparent
 
   &:checked
-    background-color: var(--haptic-switch-on-track-background-color)
+    background-color: var(--haptic-switch-track-background-color-on)
 
     &::after
-      background-color: var(--haptic-switch-on-handle-background-color)
+      background-color: var(--haptic-switch-handle-background-color-on)
 
   &:focus-visible::after
     outline-color: var(--haptic-hover-accent-background-color)
 
   &.red-green
-    background-color: var(--haptic-filled-button-red-background-color)
+    background-color: var(--haptic-red-green-switch-track-background-color-off)
 
     &:checked
-      background-color: var(--haptic-filled-button-green-background-color)
+      background-color: var(--haptic-red-green-switch-track-background-color-on)
 
     &::after, &:checked::after
-      background-color: var(--haptic-filled-button-color)
+      background-color: var(--haptic-red-green-switch-handle-background-color)
 
 
 
