@@ -20,10 +20,6 @@ module Haptic
       def configuration
         @configuration ||= Configuration.new
       end
-
-      def configure(&block)
-        configuration.instance_eval(&block)
-      end
     end
   end
 end

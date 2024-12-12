@@ -123,7 +123,7 @@ haptic-text-field
  * Checkboxes and radio buttons
  **********************************************************************/
 
-.haptic-checkbox, .haptic-radio
+.haptic-checkbox, .haptic-radio-button
   cursor: pointer
   position: relative
   transition: .4s linear
@@ -132,9 +132,6 @@ haptic-text-field
     content: '\200b'
     pointer-events: none
     position: absolute
-
-.haptic-checkbox, .haptic-radio
-  &::before, &::after
     transition: background-color .1s linear
 
 .haptic-checkbox::after
@@ -142,7 +139,7 @@ haptic-text-field
   mask-image: url('checkbox-checked.svg')
 
 input[type="checkbox"].haptic-checkbox,
-input[type="radio"].haptic-radio
+input[type="radio"].haptic-radio-button
   appearance: none
 
   &:disabled

@@ -14,13 +14,13 @@ module Haptic
           icon = options.delete(:icon)
 
           content_tag('button', options) do
-            concat haptic_icon(icon, class: 'icon') if icon
+            concat haptic_icon_tag(icon, class: 'icon') if icon
             concat content if content
             yield if block_given?
           end
         end
 
-        def haptic_checkbox_tag(name, value = '1', checked = false, options = {})
+        def haptic_check_box_tag(name, value = '1', checked = false, options = {})
           check_box_tag(name, value, checked, options.merge(is: 'haptic-input'))
         end
 

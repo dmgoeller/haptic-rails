@@ -4,7 +4,7 @@ module Haptic
   module Rails
     module Helpers
       module IconHelper
-        def haptic_icon(name, options = {})
+        def haptic_icon_tag(name, options = {})
           options = options.merge(
             builder: self,
             class: [options[:class], 'haptic-icon'].flatten

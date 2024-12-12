@@ -29,7 +29,7 @@ class HapticInputElement extends HTMLInputElement {
         }
         break;
       case 'radio':
-        this.classList.add('haptic-radio');
+        this.classList.add('haptic-radio-button');
         break;
       case 'submit':
         this.classList.add('haptic-button');
