@@ -31,13 +31,13 @@
     border-width: 1px
     border-style: solid
 
-haptic-text-field[focus-indicator]
-  .container::after
-    border-bottom-left-radius: .25rem 3px
-    border-bottom-right-radius: .25rem 3px
-
+haptic-text-field
   .clear-button
     border-radius: 50%
+
+  &[focus-indicator] .container::after
+    border-bottom-left-radius: .25rem 3px
+    border-bottom-right-radius: .25rem 3px
 
 /**********************************************************************
  * Checkboxes and radio buttons
