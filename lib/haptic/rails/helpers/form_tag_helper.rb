@@ -25,8 +25,11 @@ module Haptic
         end
 
         def haptic_label_tag(name = nil, content_or_options = nil, options = nil, &block)
-          content_or_options = content_options.merge(is: 'haptic-label') if content_or_options.is_a?(Hash)
-          options = options.merge(is: 'haptic-label') if options.is_a?(Hash)
+          if content_or_options.is_a?(Hash)
+            content_or_options = content_options.merge(is: 'haptic-label')
+          else
+            options = (options || {}).merge(is: 'haptic-label')
+          end
           label_tag(name, content_or_options, options, &block)
         end
 
