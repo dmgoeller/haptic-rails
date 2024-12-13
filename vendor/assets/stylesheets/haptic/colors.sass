@@ -5,19 +5,15 @@
  **********************************************************************/
 
 .haptic-button
-  --haptic-filled-button-color: white
-  --haptic-filled-button-background-color: #{$haptic-accent-color}
-  --haptic-filled-green-button-background-color: #{$haptic-green}
-  --haptic-filled-red-button-background-color: #{$haptic-red}
-  --haptic-outlined-button-border-color: #{$haptic-dark-outline}
-  --haptic-unfilled-button-color: #{$haptic-accent-color}
-  --haptic-unfilled-button-hover-background-color: #{$haptic-accent-color}20
-  --haptic-unfilled-green-button-color: #{$haptic-dark-green}
-  --haptic-unfilled-green-button-hover-background-color: #{$haptic-dark-green}20
-  --haptic-unfilled-red-button-color: #{$haptic-dark-red}
-  --haptic-unfilled-red-button-hover-background-color: #{$haptic-dark-red}20
+  background-color: transparent
+  color: inherit
 
   &.filled
+    --haptic-filled-button-color: white
+    --haptic-filled-button-background-color: #{$haptic-accent-color}
+    --haptic-filled-green-button-background-color: #{$haptic-green}
+    --haptic-filled-red-button-background-color: #{$haptic-red}
+
     background-color: var(--haptic-filled-button-background-color)
     color: var(--haptic-filled-button-color)
 
@@ -28,61 +24,68 @@
       background-color: var(--haptic-filled-red-button-background-color)
 
   &:not(.filled)
-    background-color: transparent
-    color: var(--haptic-unfilled-button-color)
+    --haptic-unfilled-button-background-color-hover: #00000010
 
-    &.green
-      color: var(--haptic-unfilled-green-button-color)
+    &.outlined, &.text
+      --haptic-text-button-color: #{$haptic-accent-color}
+      --haptic-text-button-background-color-hover: #{$haptic-accent-color}20
+      --haptic-green-text-button-color: #{$haptic-dark-green}
+      --haptic-green-text-button-background-color-hover: #{$haptic-dark-green}20
+      --haptic-red-text-button-color: #{$haptic-dark-red}
+      --haptic-red-text-button-background-color-hover: #{$haptic-dark-red}20
 
-    &.red
-      color: var(--haptic-unfilled-red-button-color)
+      color: var(--haptic-text-button-color)
+
+      &.green
+        color: var(--haptic-green-text-button-color)
+
+      &.red
+        color: var(--haptic-red-text-button-color)
 
     &.outlined
+      --haptic-outlined-button-border-color: #{$haptic-dark-outline}
+
       border-color: var(--haptic-outlined-button-border-color)
 
       &:focus, &:focus-visible
-        border-color: var(--haptic-unfilled-button-color)
+        border-color: var(--haptic-text-button-color)
 
         &.green
-          border-color: var(--haptic-unfilled-green-button-color)
+          border-color: var(--haptic-green-text-button-color)
 
         &.red
-          border-color: var(--haptic-unfilled-red-button-color)
+          border-color: var(--haptic-red-text-button-color)
 
   &:hover:not(:disabled), &:focus, &:focus-visible
     &.filled
       filter: brightness(1.1875)
 
     &:not(.filled)
-      background-color: var(--haptic-unfilled-button-hover-background-color)
+      background-color: var(--haptic-unfilled-button-background-color-hover)
 
-      &.green
-        background-color: var(--haptic-unfilled-green-button-hover-background-color)
+      &.outlined, &.text
+        background-color: var(--haptic-text-button-background-color-hover)
 
-      &.red
-        background-color: var(--haptic-unfilled-red-button-hover-background-color)
+        &.green
+          background-color: var(--haptic-green-text-button-background-color-hover)
 
-.haptic-toolbutton
-  --haptic-toolbutton-hover-background-color: #00000010
-
-  background-color: transparent
-  color: inherit
-
-  &:hover:not(:disabled), &:focus, &:focus-visible
-    background-color: var(--haptic-toolbutton-hover-background-color)
+        &.red
+          background-color: var(--haptic-red-text-button-background-color-hover)
 
 @media(prefers-color-scheme: dark)
-  .haptic-button
-    --haptic-outlined-button-border-color: #{$haptic-light-outline}
-    --haptic-unfilled-button-color: #{$haptic-light-accent-color}
-    --haptic-unfilled-button-hover-background-color: #{$haptic-light-accent-color}20
-    --haptic-unfilled-green-button-color: #{$haptic-light-green}
-    --haptic-unfilled-green-button-hover-background-color: #{$haptic-light-green}20
-    --haptic-unfilled-red-button-color: #{$haptic-light-red}
-    --haptic-unfilled-red-button-hover-background-color: #{$haptic-light-red}20
+  .haptic-button:not(.filled)
+    --haptic-unfilled-button-background-color-hover: #FFFFFF10
 
-  .haptic-toolbutton
-    --haptic-toolbutton-hover-background-color: #FFFFFF10
+    &.outlined, &.text
+      --haptic-text-button-color: #{$haptic-light-accent-color}
+      --haptic-text-button-background-color-hover: #{$haptic-light-accent-color}20
+      --haptic-green-text-button-color: #{$haptic-light-green}
+      --haptic-green-text-button-background-color-hover: #{$haptic-light-green}20
+      --haptic-red-text-button-color: #{$haptic-light-red}
+      --haptic-red-text-button-background-color-hover: #{$haptic-light-red}20
+
+    &.outlined
+      --haptic-outlined-button-border-color: #{$haptic-light-outline}
 
 /**********************************************************************
  * Fields
