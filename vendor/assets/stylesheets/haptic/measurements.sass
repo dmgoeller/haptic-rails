@@ -27,6 +27,34 @@
     padding: calc(.25rem - 1px) calc(.75rem - 1px)
 
 /**********************************************************************
+ * Segmented buttons
+ **********************************************************************/
+
+haptic-segmented-button
+  box-sizing: border-box
+  min-height: 1.75rem
+
+  input
+    height: 100%
+    margin: 0
+    outline: none
+    width: 100%
+
+    &::after
+      height: 1rem
+      left: .5rem
+      top: calc(50% - .5rem)
+      width: 1rem
+
+  label
+    box-sizing: border-box
+    height: 1.125rem
+    line-height: 1.125
+    padding: 0 2rem
+    top: calc(50% - .5625rem)
+    width: 100%
+
+/**********************************************************************
  * Fields
  **********************************************************************/
 
@@ -59,14 +87,14 @@ haptic-text-field
       padding-bottom: .5rem
       padding-top: 1.8125rem
 
-    .haptic-label
+    label
       box-sizing: border-box
       left: 0
       top: .375rem
       width: 100%
 
     &[animated][empty]:not([focus])
-      .haptic-label
+      label
         top: 1.1875rem // ({container-height = 3.5} - {line-height = 1.125)}) / 2
 
     .error-icon, .leading-icon, .trailing-icon
@@ -98,11 +126,11 @@ haptic-text-field
       .leading-icon
         left: .5rem
 
-      .haptic-field, .haptic-label
+      label, .haptic-field
         padding-left: 2.5rem
 
     &:not([with-leading-icon])
-      .haptic-field, .haptic-label
+      label, .haptic-field
         padding-left: .5rem
 
     &[with-trailing-icon]
@@ -124,11 +152,11 @@ haptic-text-field
           .clear-button
             right: 4.625rem // 4.5 + 0.125
 
-          .haptic-field, .haptic-label
+          .haptic-field, label
             padding-right: 6.25rem
 
         &:not([with-clear-button])
-          .haptic-field, .haptic-label
+          label, .haptic-field
             padding-right: 4.5rem
 
       &:not([with-error-icon])
@@ -136,11 +164,11 @@ haptic-text-field
           .clear-button
             right: 2.625rem // 2.5 + 0.125
 
-          .haptic-field, .haptic-label
+          label, .haptic-field
             padding-right: 4.25rem
 
         &:not([with-clear-button])
-          .haptic-field, .haptic-label
+          label, .haptic-field
             padding-right: 2.5rem
 
     &:not([with-trailing-icon])
@@ -152,11 +180,11 @@ haptic-text-field
           .clear-button
             right: 2.625rem // 2.5 + 0.125
 
-          .haptic-field, .haptic-label
+          label, .haptic-field
             padding-right: 4.25rem
 
         &:not([with-clear-button])
-          .haptic-field, .haptic-label
+          label, .haptic-field
             padding-right: 2.5rem
 
       &:not([with-error-icon])
@@ -164,7 +192,7 @@ haptic-text-field
           .clear-button
             right: .625rem // 0.5 + 0.125
 
-          .haptic-field, .haptic-label
+          label, .haptic-field
             padding-right: 2.25rem
 
         &:not([with-clear-button])
@@ -195,11 +223,11 @@ haptic-text-field
       .leading-icon
         left: .25rem
 
-      .haptic-field, .haptic-label
+      label, .haptic-field
         padding-left: 1.625rem
 
     &:not([with-leading-icon])
-      .haptic-field, .haptic-label
+      label, .haptic-field
         padding-left: .5rem
 
     &[with-trailing-icon]
@@ -221,11 +249,11 @@ haptic-text-field
           .clear-button
             right: 3rem
 
-          .haptic-field, .haptic-label
+          label, .haptic-field
             padding-right: 4.375rem
 
         &:not([with-clear-button])
-          .haptic-field, .haptic-label
+          label, .haptic-field
             padding-right: 3rem
 
       &:not([with-error-icon])
@@ -233,7 +261,7 @@ haptic-text-field
           .clear-button
             right: 1.625rem
 
-          .haptic-field, .haptic-label
+          label, .haptic-field
             padding-right: 3rem
 
         &:not([with-clear-button])
@@ -249,11 +277,11 @@ haptic-text-field
           .clear-button
             right: 1.625rem
 
-          .haptic-field, .haptic-label
+          label, .haptic-field
             padding-right: 3rem
 
         &:not([with-clear-button])
-          .haptic-field, .haptic-label
+          label, .haptic-field
             padding-right: 1.625rem
 
       &:not([with-error-icon])
@@ -261,11 +289,11 @@ haptic-text-field
           .clear-button
             right: .25rem
 
-          .haptic-field, .haptic-label
+          label, .haptic-field
             padding-right: 1.625rem
 
         &:not([with-clear-button])
-          .haptic-field, .haptic-label
+          label, .haptic-field
             padding-right: .5rem
 
 /**********************************************************************

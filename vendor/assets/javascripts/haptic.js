@@ -62,6 +62,40 @@ class HapticLabelElement extends HTMLLabelElement {
 customElements.define('haptic-label', HapticLabelElement, { extends: 'label' });
 
 // ...
+class HapticSegmentedButtonElement extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  refresh() {
+    this.querySelectorAll('input').forEach(input => {
+      input.labels?.forEach(label => {
+        if (input.checked) {
+          label.setAttribute('data-checked', '');
+        } else {
+          label.removeAttribute('data-checked');
+        }
+      });
+    });
+  }
+}
+customElements.define('haptic-segmented-button', HapticSegmentedButtonElement);
+
+// ...
+class HapticSegmentInputElement extends HapticInputElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.addEventListener('change', () => {
+      this.closest('haptic-segmented-button')?.refresh();
+    });
+  }
+}
+customElements.define('haptic-segment-input', HapticSegmentInputElement, { extends: 'input' });
+
+// ...
 class HapticSelectElement extends HTMLSelectElement {
   constructor() {
     super();
@@ -193,7 +227,6 @@ class HapticTextFieldElement extends HTMLElement {
       } else
       if (node instanceof HTMLLabelElement) {
         if (!this.#label) {
-          node.setAttribute('data-embedded', '');
           this.setAttribute('with-label', '');
           this.#label = node;
         }
@@ -234,7 +267,6 @@ class HapticTextFieldElement extends HTMLElement {
         this.#clearButton = null;
         break;
       case this.#label:
-        node.removeAttribute('data-embedded');
         this.removeAttribute('with-label');
         this.#label = null;
         break;

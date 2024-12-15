@@ -16,6 +16,13 @@
       font-weight: normal
 
 /**********************************************************************
+ * Segmented buttons
+ **********************************************************************/
+
+haptic-segmented-button label
+  font-weight: bold
+
+/**********************************************************************
  * Fields
  **********************************************************************/
 
@@ -24,12 +31,12 @@
   font-size: 1rem
 
 haptic-text-field
-  .haptic-label
+  label
     font-size: .875rem
     font-weight: bold
 
   &[animated][empty]:not([focus])
-    .haptic-label
+    label
       font-size: 1rem
 
   .clear-button, .error-icon, .leading-icon, .trailing-icon

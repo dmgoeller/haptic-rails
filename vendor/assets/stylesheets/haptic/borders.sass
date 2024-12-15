@@ -20,6 +20,25 @@
     border-width: 1px
 
 /**********************************************************************
+ * Segmented buttons
+ **********************************************************************/
+
+haptic-segmented-button
+  .container
+    input
+      border-style: solid
+      border-width: 1px 0 1px 1px
+
+    &:first-of-type input
+      border-bottom-left-radius: .25rem
+      border-top-left-radius: .25rem
+
+    &:last-of-type input
+      border-bottom-right-radius: .25rem
+      border-top-right-radius: .25rem
+      border-right-width: 1px
+
+/**********************************************************************
  * Fields
  **********************************************************************/
 

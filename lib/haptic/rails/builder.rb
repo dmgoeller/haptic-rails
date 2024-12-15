@@ -16,9 +16,9 @@ module Haptic
 
       def button_tag(content_or_options = nil, options = nil, &block)
         if content_or_options.is_a?(Hash)
-          content_or_options = content_or_options.merge(is: 'haptic-button')
+          content_or_options = content_or_options.merge(is: 'haptic-button') unless content_or_options.key?(:is)
         else
-          options = (options || {}).merge(is: 'haptic-button')
+          options = (options || {}).merge(is: 'haptic-button') unless options.key?(:is)
         end
         super(content_or_options, options, &block)
       end
@@ -41,9 +41,9 @@ module Haptic
 
       def label(object_name, method, content_or_options = nil, options = nil, &block)
         if content_or_options.is_a?(Hash)
-          content_or_options = content_or_options.merge(is: 'haptic-label')
+          content_or_options = content_or_options.merge(is: 'haptic-label') unless content_or_options.key?(:is)
         else
-          options = (options || {}).merge(is: 'haptic-label')
+          options = (options || {}).merge(is: 'haptic-label') unless options.key?(:is)
         end
         ActionView::Helpers::Tags::Label.new(object_name, method, self, content_or_options, options).render(&block)
       end
@@ -67,7 +67,9 @@ module Haptic
       private
 
       def tag_options(options, is: nil)
-        options.merge(is: is, class: [options[:class], @defaults[:class]].flatten)
+        options.merge(class: [options[:class], @defaults[:class]].flatten).tap do |tag_options|
+          tag_options[:is] = is unless options.key?(:is)
+        end
       end
     end
   end

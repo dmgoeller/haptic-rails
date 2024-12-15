@@ -9,8 +9,8 @@
   color: inherit
 
   &.filled
-    --haptic-filled-button-color: white
     --haptic-filled-button-background-color: #{$haptic-accent-color}
+    --haptic-filled-button-color: white
     --haptic-filled-green-button-background-color: #{$haptic-dark-green}
     --haptic-filled-red-button-background-color: #{$haptic-red}
 
@@ -27,12 +27,12 @@
     --haptic-unfilled-button-background-color-hover: #00000010
 
     &.outlined, &.text
-      --haptic-text-button-color: #{$haptic-accent-color}
       --haptic-text-button-background-color-hover: #{$haptic-accent-color}20
-      --haptic-green-text-button-color: #{$haptic-dark-green}
+      --haptic-text-button-color: #{$haptic-accent-color}
       --haptic-green-text-button-background-color-hover: #{$haptic-dark-green}20
-      --haptic-red-text-button-color: #{$haptic-dark-red}
+      --haptic-green-text-button-color: #{$haptic-dark-green}
       --haptic-red-text-button-background-color-hover: #{$haptic-dark-red}20
+      --haptic-red-text-button-color: #{$haptic-dark-red}
 
       color: var(--haptic-text-button-color)
 
@@ -77,15 +77,55 @@
     --haptic-unfilled-button-background-color-hover: #FFFFFF10
 
     &.outlined, &.text
-      --haptic-text-button-color: #{$haptic-light-accent-color}
       --haptic-text-button-background-color-hover: #{$haptic-light-accent-color}20
-      --haptic-green-text-button-color: #{$haptic-light-green}
+      --haptic-text-button-color: #{$haptic-light-accent-color}
       --haptic-green-text-button-background-color-hover: #{$haptic-light-green}20
-      --haptic-red-text-button-color: #{$haptic-light-red}
+      --haptic-green-text-button-color: #{$haptic-light-green}
       --haptic-red-text-button-background-color-hover: #{$haptic-light-red}20
+      --haptic-red-text-button-color: #{$haptic-light-red}
 
     &.outlined
       --haptic-outlined-button-border-color: #{$haptic-light-outline}
+
+/**********************************************************************
+ * Segmented buttons
+ **********************************************************************/
+
+haptic-segmented-button
+  --haptic-segmented-button-background-color-checked: #{$haptic-dark-accent-color}40
+  --haptic-segmented-button-background-color-focus: #{$haptic-dark-accent-color}60
+  --haptic-segmented-button-background-color-hover: #{$haptic-dark-accent-color}20
+  --haptic-segmented-button-border-color: #{$haptic-dark-outline}
+  --haptic-segmented-button-color-checked: #{$haptic-dark-accent-color}
+
+  input
+    border-color: var(--haptic-segmented-button-border-color)
+
+    &::after
+      background-color: transparent
+
+    &:checked
+      background-color: var(--haptic-segmented-button-background-color-checked)
+
+      &::after
+        background-color: var(--haptic-segmented-button-color-checked)
+
+    &:hover:not(:checked)
+      background-color: var(--haptic-segmented-button-background-color-hover)
+
+    &:focus-visible
+      background-color: var(--haptic-segmented-button-background-color-focus)
+
+  label[data-checked]
+    color: var(--haptic-segmented-button-color-checked)
+
+@media(prefers-color-scheme: dark)
+  haptic-segmented-button
+    --haptic-segmented-button-background-color-checked: #{$haptic-light-accent-color}40
+    --haptic-segmented-button-background-color-focus: #{$haptic-light-accent-color}60
+    --haptic-segmented-button-background-color-hover: #{$haptic-light-accent-color}20
+    --haptic-segmented-button-border-color: #{$haptic-light-outline}
+    --haptic-segmented-button-color-checked: #{lighten($haptic-light-accent-color, 12.5%)}
 
 /**********************************************************************
  * Fields

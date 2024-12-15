@@ -59,6 +59,16 @@ module Haptic
         )
       end
 
+      def segmented_button(method, collection, value_method, text_method, options = {})
+        @template.content_tag('haptic-segmented-button', field_options(options)) do
+          collection_radio_buttons(method, collection, value_method, text_method) do |builder|
+            @template.content_tag('div', class: 'container') do
+              builder.radio_button(is: 'haptic-segment-input') + builder.label(is: nil)
+            end
+          end
+        end
+      end
+
       def select(method, choices = nil, options = {}, html_options = {}, &block)
         text_field_options = defaults.merge(trailing_icon: 'arrow_drop_down')
         text_field_options.merge!(options)
@@ -84,7 +94,7 @@ module Haptic
           @template.content_tag('div', class: 'container') do
             field +
               if (label = options[:label])
-                label == true ? label(method) : label(method, label)
+                label == true ? label(method, is: nil) : label(method, label, is: nil)
               end +
               if options[:clear_button]
                 @template.haptic_icon_tag('close', class: 'clear-button')
