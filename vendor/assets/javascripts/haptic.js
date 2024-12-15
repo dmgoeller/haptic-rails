@@ -62,40 +62,6 @@ class HapticLabelElement extends HTMLLabelElement {
 customElements.define('haptic-label', HapticLabelElement, { extends: 'label' });
 
 // ...
-class HapticSegmentedButtonElement extends HTMLElement {
-  constructor() {
-    super();
-  }
-
-  refresh() {
-    this.querySelectorAll('input').forEach(input => {
-      input.labels?.forEach(label => {
-        if (input.checked) {
-          label.setAttribute('data-checked', '');
-        } else {
-          label.removeAttribute('data-checked');
-        }
-      });
-    });
-  }
-}
-customElements.define('haptic-segmented-button', HapticSegmentedButtonElement);
-
-// ...
-class HapticSegmentInputElement extends HapticInputElement {
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
-    this.addEventListener('change', () => {
-      this.closest('haptic-segmented-button')?.refresh();
-    });
-  }
-}
-customElements.define('haptic-segment-input', HapticSegmentInputElement, { extends: 'input' });
-
-// ...
 class HapticSelectElement extends HTMLSelectElement {
   constructor() {
     super();

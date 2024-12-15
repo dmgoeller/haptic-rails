@@ -91,7 +91,7 @@
  * Segmented buttons
  **********************************************************************/
 
-haptic-segmented-button
+.haptic-segmented-button
   --haptic-segmented-button-background-color-checked: #{$haptic-dark-accent-color}40
   --haptic-segmented-button-background-color-focus: #{$haptic-dark-accent-color}60
   --haptic-segmented-button-background-color-hover: #{$haptic-dark-accent-color}20
@@ -110,17 +110,17 @@ haptic-segmented-button
       &::after
         background-color: var(--haptic-segmented-button-color-checked)
 
+    &:checked ~ label
+      color: var(--haptic-segmented-button-color-checked)
+
     &:hover:not(:checked)
       background-color: var(--haptic-segmented-button-background-color-hover)
 
     &:focus-visible
       background-color: var(--haptic-segmented-button-background-color-focus)
 
-  label[data-checked]
-    color: var(--haptic-segmented-button-color-checked)
-
 @media(prefers-color-scheme: dark)
-  haptic-segmented-button
+  .haptic-segmented-button
     --haptic-segmented-button-background-color-checked: #{$haptic-light-accent-color}40
     --haptic-segmented-button-background-color-focus: #{$haptic-light-accent-color}60
     --haptic-segmented-button-background-color-hover: #{$haptic-light-accent-color}20

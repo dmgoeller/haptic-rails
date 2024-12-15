@@ -35,7 +35,7 @@ button, input[type="submit"]
  * Segmented buttons
  **********************************************************************/
 
-haptic-segmented-button
+.haptic-segmented-button
   display: grid
   grid-auto-flow: column
 
@@ -73,8 +73,9 @@ haptic-segmented-button
     transition: .4s linear
     white-space: nowrap
 
-    &[data-disabled]
-      opacity: .5
+  input:disabled ~ label
+    filter: grayscale(1)
+    opacity: .5
 
 /**********************************************************************
  * Fields
