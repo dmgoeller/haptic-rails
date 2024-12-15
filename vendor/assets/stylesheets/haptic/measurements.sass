@@ -5,10 +5,12 @@
 
 .haptic-button
   box-sizing: border-box
-  line-height: 1.125rem
-  min-height: 1.125rem
-  min-width: 1.125rem
-  padding: .125rem
+
+  &.icon
+    height: 1.125rem
+    line-height: 1.125rem
+    padding: .125rem
+    width: 1.125rem
 
   &.filled, &.outlined, &.text
     grid-gap: .25rem
@@ -27,10 +29,10 @@
     padding: calc(.25rem - 1px) calc(.75rem - 1px)
 
 /**********************************************************************
- * Segmented buttons
+ * Chips and segmented buttons
  **********************************************************************/
 
-.haptic-segmented-button
+.haptic-button-segment, .haptic-chip
   box-sizing: border-box
   min-height: 1.75rem
 

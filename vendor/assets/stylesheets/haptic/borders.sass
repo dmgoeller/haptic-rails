@@ -3,27 +3,25 @@
  * Buttons
  **********************************************************************/
 
-.haptic-button, .haptic-toolbutton
+.haptic-button
+  border-style: solid
   border-width: 0
   outline: none
 
-.haptic-button
-  border-style: solid
-
-  &.filled, &.outlined, &.text, &.rounded
-    border-radius: .25rem // .875rem
-
-  &.circular
+  &.icon
     border-radius: 50%
+
+  &.filled, &.outlined, &.text
+    border-radius: .25rem // .875rem
 
   &.outlined
     border-width: 1px
 
 /**********************************************************************
- * Segmented buttons
+ * Chips and segmented buttons
  **********************************************************************/
 
-.haptic-segmented-button .container
+.haptic-button-segment
   input
     border-style: solid
     border-width: 1px 0 1px 1px
@@ -36,6 +34,11 @@
     border-bottom-right-radius: .25rem
     border-top-right-radius: .25rem
     border-right-width: 1px
+
+.haptic-chip input
+  border-radius: .25rem
+  border-style: solid
+  border-width: 1px
 
 /**********************************************************************
  * Fields

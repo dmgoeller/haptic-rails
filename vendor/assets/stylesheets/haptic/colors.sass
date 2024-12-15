@@ -88,44 +88,44 @@
       --haptic-outlined-button-border-color: #{$haptic-light-outline}
 
 /**********************************************************************
- * Segmented buttons
+ * Chips and segmented buttons
  **********************************************************************/
 
-.haptic-segmented-button
-  --haptic-segmented-button-background-color-checked: #{$haptic-dark-accent-color}40
-  --haptic-segmented-button-background-color-focus: #{$haptic-dark-accent-color}60
-  --haptic-segmented-button-background-color-hover: #{$haptic-dark-accent-color}20
-  --haptic-segmented-button-border-color: #{$haptic-dark-outline}
-  --haptic-segmented-button-color-checked: #{$haptic-dark-accent-color}
+.haptic-button-segment, .haptic-chip
+  --haptic-chip-background-color-checked: #{$haptic-dark-accent-color}40
+  --haptic-chip-background-color-focus: #{$haptic-dark-accent-color}60
+  --haptic-chip-background-color-hover: #{$haptic-dark-accent-color}20
+  --haptic-chip-border-color: #{$haptic-dark-outline}
+  --haptic-chip-color-checked: #{$haptic-dark-accent-color}
 
   input
-    border-color: var(--haptic-segmented-button-border-color)
+    border-color: var(--haptic-chip-border-color)
 
     &::after
       background-color: transparent
 
     &:checked
-      background-color: var(--haptic-segmented-button-background-color-checked)
+      background-color: var(--haptic-chip-background-color-checked)
 
       &::after
-        background-color: var(--haptic-segmented-button-color-checked)
+        background-color: var(--haptic-chip-color-checked)
 
     &:checked ~ label
-      color: var(--haptic-segmented-button-color-checked)
+      color: var(--haptic-chip-color-checked)
 
     &:hover:not(:checked)
-      background-color: var(--haptic-segmented-button-background-color-hover)
+      background-color: var(--haptic-chip-background-color-hover)
 
     &:focus-visible
-      background-color: var(--haptic-segmented-button-background-color-focus)
+      background-color: var(--haptic-chip-background-color-focus)
 
 @media(prefers-color-scheme: dark)
   .haptic-segmented-button
-    --haptic-segmented-button-background-color-checked: #{$haptic-light-accent-color}40
-    --haptic-segmented-button-background-color-focus: #{$haptic-light-accent-color}60
-    --haptic-segmented-button-background-color-hover: #{$haptic-light-accent-color}20
-    --haptic-segmented-button-border-color: #{$haptic-light-outline}
-    --haptic-segmented-button-color-checked: #{lighten($haptic-light-accent-color, 12.5%)}
+    --haptic-chip-color-checked: #{$haptic-light-accent-color}40
+    --haptic-chip-background-color-focus: #{$haptic-light-accent-color}60
+    --haptic-chip-background-color-hover: #{$haptic-light-accent-color}20
+    --haptic-chip-border-color: #{$haptic-light-outline}
+    --haptic-chip-color-checked: #{lighten($haptic-light-accent-color, 12.5%)}
 
 /**********************************************************************
  * Fields
