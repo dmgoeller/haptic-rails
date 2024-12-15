@@ -60,8 +60,8 @@ module Haptic
       end
 
       def segmented_button(method, collection, value_method, text_method, options = {})
-        @template.content_tag('haptic-segmented-button', field_options(options)) do
-          collection_radio_buttons(method, collection, value_method, text_method) do |builder|
+        @template.content_tag('haptic-segmented-button') do
+          collection_radio_buttons(method, collection, value_method, text_method, options) do |builder|
             @template.content_tag('div', class: 'container') do
               builder.radio_button(is: 'haptic-segment-input') + builder.label(is: nil)
             end
