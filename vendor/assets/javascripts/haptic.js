@@ -40,9 +40,9 @@ class HapticInputElement extends HTMLInputElement {
   attributeChangedCallback(name, oldValue, newValue) {
     for (let label of this.labels) {
       if (this.disabled) {
-        label.setAttribute('data-disabled', '');
+        label.classList.add('grayed');
       } else {
-        label.removeAttribute('data-disabled');
+        label.classList.remove('grayed');
       }
     }
   }

@@ -49,9 +49,10 @@ button, input[type="submit"]
 
   input
     appearance: none
+    background-clip: padding-box
     cursor: pointer
     position: absolute
-    transition: .4s linear
+    transition: all .4s linear, background .1s linear
 
     &::after
       -webkit-mask-image: url('checkmark.svg')
@@ -59,7 +60,11 @@ button, input[type="submit"]
       mask-image: url('checkmark.svg')
       pointer-events: none
       position: absolute
-      transition: .4s linear
+      transition: .1s linear
+
+    &:hover:not(:checked)
+      &, &::after
+        transition: .4s linear
 
     &:disabled
       @include grayed
@@ -218,5 +223,5 @@ input[type="checkbox"].haptic-switch
 .haptic-label
   transition: opacity .4s linear, filter .4s linear
 
-  &[data-disabled]
+  &.grayed
     @include grayed
