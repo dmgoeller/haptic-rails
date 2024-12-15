@@ -1,4 +1,3 @@
-
 @mixin container
   align-items: stretch
   display: flex
@@ -8,6 +7,11 @@
   filter: grayscale(1)
   opacity: 0.5
   pointer-events: none
+
+@mixin overflow-ellipsis
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
 
 /**********************************************************************
  * Buttons
@@ -23,11 +27,9 @@
   transition-timing-function: linear
 
   &.filled, &.outlined, &.text
+    @include overflow-ellipsis
     display: grid
     grid-auto-flow: column
-    overflow: hidden
-    text-overflow: ellipsis
-    white-space: nowrap
 
 button, input[type="submit"]
   &.haptic-button
@@ -70,13 +72,11 @@ button, input[type="submit"]
       @include grayed
 
   label
-    overflow: hidden
+    @include overflow-ellipsis
     pointer-events: none
     position: absolute
     text-align: center
-    text-overflow: ellipsis
     transition: .4s linear
-    white-space: nowrap
 
   input:disabled ~ label
     @include grayed
@@ -132,14 +132,12 @@ haptic-text-field
       opacity: 1
 
   label
-    overflow: hidden
+    @include overflow-ellipsis
     pointer-events: none
     position: absolute
-    text-overflow: ellipsis
     transition-duration: .4s
     transition-property: color, font-size, top
     transition-timing-function: linear
-    white-space: nowrap
 
   &[required]
     label::after
@@ -163,7 +161,7 @@ haptic-text-field
       opacity: 0
       pointer-events: none
 
-  &[disabled]
+  &[disabled], fieldset:disabled &
     @include grayed
 
     .clear-button
@@ -202,7 +200,7 @@ input[type="radio"].haptic-radio-button
 .haptic-switch
   cursor: pointer
   position: relative
-  transition: opacity .4s linear, filter .4s linear, background-color .2s linear
+  transition: all .4s linear, background-color .2s linear
 
   &::after
     content: '\200b'
@@ -223,5 +221,5 @@ input[type="checkbox"].haptic-switch
 .haptic-label
   transition: opacity .4s linear, filter .4s linear
 
-  &.grayed
+  &.grayed, fieldset:disabled &
     @include grayed
