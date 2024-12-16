@@ -1,14 +1,14 @@
-@mixin container
+@mixin haptic-container
   align-items: stretch
   display: flex
   flex-direction: column
 
-@mixin grayed
+@mixin haptic-grayed
   filter: grayscale(1)
   opacity: 0.5
   pointer-events: none
 
-@mixin overflow-ellipsis
+@mixin haptic-overflow-ellipsis
   overflow: hidden
   text-overflow: ellipsis
   white-space: nowrap
@@ -27,7 +27,7 @@
   transition-timing-function: linear
 
   &.filled, &.outlined, &.text
-    @include overflow-ellipsis
+    @include haptic-overflow-ellipsis
     display: grid
     grid-auto-flow: column
 
@@ -36,7 +36,7 @@ button, input[type="submit"]
     appearance: none
 
     &:disabled
-      @include grayed
+      @include haptic-grayed
 
     &:focus, &:focus-visible
       transition-delay: 0
@@ -46,7 +46,7 @@ button, input[type="submit"]
  **********************************************************************/
 
 .haptic-button-segment, .haptic-chip
-  @include container
+  @include haptic-container
   position: relative
 
   input
@@ -69,17 +69,17 @@ button, input[type="submit"]
         transition: .4s linear
 
     &:disabled
-      @include grayed
+      @include haptic-grayed
 
   label
-    @include overflow-ellipsis
+    @include haptic-overflow-ellipsis
     pointer-events: none
     position: absolute
     text-align: center
     transition: .4s linear
 
   input:disabled ~ label
-    @include grayed
+    @include haptic-grayed
 
 .haptic-segmented-button
   display: grid
@@ -94,7 +94,7 @@ input, select, textarea
     transition: opacity .4s linear, filter .4s
 
     &:not([data-embedded]):disabled
-      @include grayed
+      @include haptic-grayed
 
 input[type="number"].haptic-field
   &::-webkit-inner-spin-button
@@ -109,15 +109,15 @@ textarea.haptic-field
   resize: none
 
 haptic-text-field
-  @include container
+  @include haptic-container
   transition: .4s linear // opacity, filter
 
   .container
-    @include container
+    @include haptic-container
     position: relative
 
   .field_with_errors
-    @include container
+    @include haptic-container
 
   &[focus-indicator]
     .container::after
@@ -132,7 +132,7 @@ haptic-text-field
       opacity: 1
 
   label
-    @include overflow-ellipsis
+    @include haptic-overflow-ellipsis
     pointer-events: none
     position: absolute
     transition-duration: .4s
@@ -162,7 +162,7 @@ haptic-text-field
       pointer-events: none
 
   &[disabled], fieldset:disabled &
-    @include grayed
+    @include haptic-grayed
 
     .clear-button
       pointer-events: none
@@ -191,7 +191,7 @@ input[type="radio"].haptic-radio-button
   appearance: none
 
   &:disabled
-    @include grayed
+    @include haptic-grayed
 
 /**********************************************************************
  * Switches
@@ -212,7 +212,7 @@ input[type="checkbox"].haptic-switch
   appearance: none
 
   &:disabled
-    @include grayed
+    @include haptic-grayed
 
 /**********************************************************************
  * Labels
@@ -222,4 +222,4 @@ input[type="checkbox"].haptic-switch
   transition: opacity .4s linear, filter .4s linear
 
   &.grayed, fieldset:disabled &
-    @include grayed
+    @include haptic-grayed
