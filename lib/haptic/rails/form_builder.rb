@@ -148,7 +148,7 @@ module Haptic
         object_name = object_name.model_name.singular if object_name.respond_to?(:model_name)
 
         sanitized_object_name = object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, '_').delete_suffix('_')
-        sanitized_method_name = method_name.to_s.delete_suffix('?')
+        sanitized_method_name = method.to_s.delete_suffix('?')
 
         [
           sanitized_object_name.presence,
