@@ -12,6 +12,7 @@ module Haptic
         error_messages
         label
         leading_icon
+        reset_errors_on_change
         supporting_text
         trailing_icon
       ].freeze
@@ -99,10 +100,20 @@ module Haptic
         # Don't call :valid? or :invalid? here to prevent errors on new records
         errors = object&.errors&.include?(method)
 
-        @template.content_tag('haptic-text-field',
-                              'animated': ('' if options[:animated]),
-                              'focus-indicator': ('' if options[:focus_indicator]),
-                              'with-errors': ('' if errors)) do
+        text_field_options = {}
+        text_field_options['for'] = field_name(method)
+        text_field_options['with-errors'] if errors
+        text_field_options['animated'] = '' if options[:animated]
+        text_field_options['focus-indicator'] = '' if options[:focus_indicator]
+
+        if options[:reset_errors_on_change]
+          text_field_options['reset-errors-on-change'] =
+            Array(options[:reset_errors_on_change]).map do |name|
+              field_name(name == true ? method : name)
+            end.join(' ')
+        end
+
+        @template.content_tag('haptic-text-field', text_field_options) do
           @template.content_tag('div', class: 'container') do
             field +
               if (label = options[:label])

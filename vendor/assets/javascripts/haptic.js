@@ -137,6 +137,15 @@ class HapticTextFieldElement extends HTMLElement {
     }).observe(this, { childList: true, subtree: true });
   }
 
+  handleEvent(event) {
+    switch (event.type) {
+      case 'change':
+        this.getAttribute('reset-errors-on-change').split(' ')?.forEach(name => {
+          document.querySelector(`haptic-text-field[for="${name}"]`)?.resetErrors();
+        });
+    }
+  }
+
   clear() {
     if (this.#control) {
       this.#control.value = '';
@@ -158,7 +167,7 @@ class HapticTextFieldElement extends HTMLElement {
           (node instanceof HTMLSelectElement)) {
         if (!this.#control) {
           node.setAttribute('data-embedded', '');
-          node.classList.add('haptic');
+          node.addEventListener('change', this);
 
           node.addEventListener('focusin', () => {
             this.setAttribute('focus', '');
@@ -214,6 +223,7 @@ class HapticTextFieldElement extends HTMLElement {
   #nodeRemoved(node) {
     switch (node) {
       case this.#control:
+        node.removeEventListener('change', this);
         node.removeAttribute('data-embedded');
         this.removeAttribute('disabled');
         this.removeAttribute('required');
