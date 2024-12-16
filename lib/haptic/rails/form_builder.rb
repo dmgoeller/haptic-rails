@@ -101,7 +101,7 @@ module Haptic
         errors = object&.errors&.include?(method)
 
         text_field_options = {}
-        text_field_options['for'] = field_name(method)
+        text_field_options['for'] = field_id(method)
         text_field_options['with-errors'] if errors
         text_field_options['animated'] = '' if options[:animated]
         text_field_options['focus-indicator'] = '' if options[:focus_indicator]
@@ -109,7 +109,7 @@ module Haptic
         if options[:reset_errors_on_change]
           text_field_options['reset-errors-on-change'] =
             Array(options[:reset_errors_on_change]).map do |name|
-              field_name(name == true ? method : name)
+              field_id(name == true ? method : name)
             end.join(' ')
         end
 

@@ -140,8 +140,8 @@ class HapticTextFieldElement extends HTMLElement {
   handleEvent(event) {
     switch (event.type) {
       case 'change':
-        this.getAttribute('reset-errors-on-change').split(' ')?.forEach(name => {
-          document.querySelector(`haptic-text-field[for="${name}"]`)?.resetErrors();
+        this.getAttribute('reset-errors-on-change')?.split(' ')?.forEach(id => {
+          document.querySelector(`haptic-text-field[for="${id}"]`)?.resetErrors();
         });
     }
   }
