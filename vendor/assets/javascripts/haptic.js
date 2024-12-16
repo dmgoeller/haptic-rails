@@ -1,5 +1,4 @@
 
-// ...
 class HapticButtonElement extends HTMLButtonElement {
   constructor() {
     super();
@@ -11,7 +10,6 @@ class HapticButtonElement extends HTMLButtonElement {
 }
 customElements.define('haptic-button', HapticButtonElement, { extends: 'button' });
 
-// ...
 class HapticInputElement extends HTMLInputElement {
   static observedAttributes = ['disabled'];
 
@@ -49,7 +47,6 @@ class HapticInputElement extends HTMLInputElement {
 }
 customElements.define('haptic-input', HapticInputElement, { extends: 'input' });
 
-// ...
 class HapticLabelElement extends HTMLLabelElement {
   constructor() {
     super();
@@ -61,7 +58,6 @@ class HapticLabelElement extends HTMLLabelElement {
 }
 customElements.define('haptic-label', HapticLabelElement, { extends: 'label' });
 
-// ...
 class HapticSelectElement extends HTMLSelectElement {
   constructor() {
     super();
@@ -73,7 +69,6 @@ class HapticSelectElement extends HTMLSelectElement {
 }
 customElements.define('haptic-select', HapticSelectElement, { extends: 'select' });
 
-// ...
 class HapticTextAreaElement extends HTMLTextAreaElement {
   #resizer = () => { this.resize() };
 
@@ -98,7 +93,6 @@ class HapticTextAreaElement extends HTMLTextAreaElement {
 }
 customElements.define('haptic-textarea', HapticTextAreaElement, { extends: 'textarea' });
 
-// ...
 class HapticTextFieldElement extends HTMLElement {
   static ICON_NAMES = ['error', 'leading', 'trailing'];
 
