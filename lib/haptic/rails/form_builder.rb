@@ -101,7 +101,7 @@ module Haptic
         errors = object&.errors&.include?(method)
 
         text_field_options = {}
-        text_field_options['for'] = field_id(method)
+        text_field_options['for'] = _field_id(method)
         text_field_options['with-errors'] if errors
         text_field_options['animated'] = '' if options[:animated]
         text_field_options['focus-indicator'] = '' if options[:focus_indicator]
@@ -109,7 +109,7 @@ module Haptic
         if options[:reset_errors_on_change]
           text_field_options['reset-errors-on-change'] =
             Array(options[:reset_errors_on_change]).map do |name|
-              field_id(name == true ? method : name)
+              _field_id(name == true ? method : name)
             end.join(' ')
         end
 
@@ -139,6 +139,21 @@ module Haptic
               @template.content_tag('div', supporting_text, class: 'supporting-text')
             end
         end
+      end
+
+      def _field_id(method)
+        return field_id(method) if respond_to?(:field_id)
+
+        object_name = @object_name
+        object_name = object_name.model_name.singular if object_name.respond_to?(:model_name)
+
+        sanitized_object_name = object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, '_').delete_suffix('_')
+        sanitized_method_name = method_name.to_s.delete_suffix('?')
+
+        [
+          sanitized_object_name.presence,
+          sanitized_method_name
+        ].tap(&:compact!).join('_')
       end
     end
   end
