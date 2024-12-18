@@ -108,6 +108,9 @@ textarea.haptic-field
   overflow: hidden
   resize: none
 
+div.haptic-field
+  cursor: pointer
+
 haptic-text-field
   @include haptic-container
   transition: .4s linear // opacity, filter
@@ -118,6 +121,10 @@ haptic-text-field
 
   .field_with_errors
     @include haptic-container
+
+  .overflow-ellipsis
+    @include haptic-overflow-ellipsis
+    position: absolute
 
   &[focus-indicator]
     .container::after

@@ -70,6 +70,11 @@
 haptic-text-field
   box-sizing: border-box
 
+  .overflow-ellipsis
+    box-sizing: border-box
+    left: 0
+    width: 100%
+
   .supporting-text
     margin: .25rem .5rem 0 .5rem
 
@@ -129,11 +134,11 @@ haptic-text-field
       .leading-icon
         left: .5rem
 
-      label, .haptic-field
+      label, .haptic-field, .overflow-ellipsis
         padding-left: 2.5rem
 
     &:not([with-leading-icon])
-      label, .haptic-field
+      label, .haptic-field, .overflow-ellipsis
         padding-left: .5rem
 
     &[with-trailing-icon]
@@ -155,11 +160,11 @@ haptic-text-field
           .clear-button
             right: 4.625rem // 4.5 + 0.125
 
-          .haptic-field, label
+          label, .haptic-field, .overflow-ellipsis
             padding-right: 6.25rem
 
         &:not([with-clear-button])
-          label, .haptic-field
+          label, .haptic-field, .overflow-ellipsis
             padding-right: 4.5rem
 
       &:not([with-error-icon])
@@ -167,11 +172,11 @@ haptic-text-field
           .clear-button
             right: 2.625rem // 2.5 + 0.125
 
-          label, .haptic-field
+          label, .haptic-field, .overflow-ellipsis
             padding-right: 4.25rem
 
         &:not([with-clear-button])
-          label, .haptic-field
+          label, .haptic-field, .overflow-ellipsis
             padding-right: 2.5rem
 
     &:not([with-trailing-icon])
@@ -183,11 +188,11 @@ haptic-text-field
           .clear-button
             right: 2.625rem // 2.5 + 0.125
 
-          label, .haptic-field
+          label, .haptic-field, .overflow-ellipsis
             padding-right: 4.25rem
 
         &:not([with-clear-button])
-          label, .haptic-field
+          label, .haptic-field, .overflow-ellipsis
             padding-right: 2.5rem
 
       &:not([with-error-icon])
@@ -195,11 +200,11 @@ haptic-text-field
           .clear-button
             right: .625rem // 0.5 + 0.125
 
-          label, .haptic-field
+          label, .haptic-field, .overflow-ellipsis
             padding-right: 2.25rem
 
         &:not([with-clear-button])
-          label, .haptic-field
+          label, .haptic-field, .overflow-ellipsis
             padding-right: .5rem
 
   &:not([with-label])
@@ -226,11 +231,11 @@ haptic-text-field
       .leading-icon
         left: .25rem
 
-      label, .haptic-field
+      label, .haptic-field, .overflow-ellipsis
         padding-left: 1.625rem
 
     &:not([with-leading-icon])
-      label, .haptic-field
+      label, .haptic-field, .overflow-ellipsis
         padding-left: .5rem
 
     &[with-trailing-icon]
@@ -252,11 +257,11 @@ haptic-text-field
           .clear-button
             right: 3rem
 
-          label, .haptic-field
+          label, .haptic-field, .overflow-ellipsis
             padding-right: 4.375rem
 
         &:not([with-clear-button])
-          label, .haptic-field
+          label, .haptic-field, .overflow-ellipsis
             padding-right: 3rem
 
       &:not([with-error-icon])
@@ -264,11 +269,11 @@ haptic-text-field
           .clear-button
             right: 1.625rem
 
-          label, .haptic-field
+          label, .haptic-field, .overflow-ellipsis
             padding-right: 3rem
 
         &:not([with-clear-button])
-          label, .haptic-field
+          label, .haptic-field, .overflow-ellipsis
             padding-right: 1.625rem
 
     &:not([with-trailing-icon])
@@ -280,11 +285,11 @@ haptic-text-field
           .clear-button
             right: 1.625rem
 
-          label, .haptic-field
+          label, .haptic-field, .overflow-ellipsis
             padding-right: 3rem
 
         &:not([with-clear-button])
-          label, .haptic-field
+          label, .haptic-field, .overflow-ellipsis
             padding-right: 1.625rem
 
       &:not([with-error-icon])
@@ -292,11 +297,11 @@ haptic-text-field
           .clear-button
             right: .25rem
 
-          label, .haptic-field
+          label, .haptic-field, .overflow-ellipsis
             padding-right: 1.625rem
 
         &:not([with-clear-button])
-          label, .haptic-field
+          label, .haptic-field, .overflow-ellipsis
             padding-right: .5rem
 
 /**********************************************************************
