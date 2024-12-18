@@ -102,7 +102,7 @@ module Haptic
 
         text_field_options = {}
         text_field_options['for'] = _field_id(method)
-        text_field_options['with-errors'] if errors
+        text_field_options['with-errors'] = '' if errors
         text_field_options['animated'] = '' if options[:animated]
         text_field_options['focus-indicator'] = '' if options[:focus_indicator]
 
