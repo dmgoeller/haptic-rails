@@ -42,7 +42,7 @@ module Haptic
             content_tag('container') do
               capture(&block) +
                 if (label = options[:label])
-                  label_tag(label)
+                  content_tag('label', label)
                 end +
                 if (trailing_icon = options[:trailing_icon])
                   haptic_icon_tag(trailing_icon, class: 'trailing-icon')
