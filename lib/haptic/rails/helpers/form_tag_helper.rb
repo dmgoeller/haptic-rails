@@ -36,6 +36,20 @@ module Haptic
         def haptic_radio_button_tag(name, value, checked = false, options = {})
           radio_button_tag(name, value, checked, options.merge(is: 'haptic-input'))
         end
+
+        def haptic_text_field_tag(options = {}, &block)
+          content_tag('haptic-text-field') do
+            content_tag('container') do
+              capture(&block) +
+                if (label = options[:label])
+                  label_tag(label)
+                end +
+                if (trailing_icon = options[:trailing_icon])
+                  haptic_icon_tag(trailing_icon, class: 'trailing_icon')
+                end
+            end
+          end
+        end
       end
     end
   end
