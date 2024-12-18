@@ -10,6 +10,82 @@ class HapticButtonElement extends HTMLButtonElement {
 }
 customElements.define('haptic-button', HapticButtonElement, { extends: 'button' });
 
+class HapticFormElement extends HTMLFormElement {
+  #requiredFields;
+  #submitButtons;
+
+  constructor() {
+    super();
+    this.#requiredFields = new Set();
+    this.#submitButtons = new Set();
+  }
+
+  connectedCallback() {
+    new MutationObserver(mutationList => {
+      for (let mutationRecord of mutationList) {
+        for (let node of mutationRecord.addedNodes) {
+          this.#nodeAdded(node);
+        }
+        for (let node of mutationRecord.removedNodes) {
+          this.#nodeRemoved(node);
+         }
+      }
+    }).observe(this, { childList: true, subtree: true });
+  }
+
+  handleEvent(event) {
+    this.#refresh();
+  }
+
+  #nodeAdded(node) {
+    if (node instanceof HTMLInputElement ||
+        node instanceof HTMLTextAreaElement ||
+        node instanceof HTMLSelectElement) {
+      switch (node.type) {
+        case 'submit':
+          this.#submitButtons.add(node);
+          this.#refresh();
+        case 'hidden':
+          break;
+        default:
+          if (node.hasAttribute('required')) {
+            node.addEventListener('change', this);
+            node.addEventListener('input', this);
+            this.#requiredFields.add(node);
+            this.#refresh();
+          }
+      }
+    }
+  }
+
+  #nodeRemoved(node) {
+    if (this.#requiredFields.has(node)) {
+      node.removeEventListener('change', this);
+      node.removeEventListener('input', this);
+      this.#requiredFields.delete(node);
+    } else
+    if (this.#submitButtons.has(node)) {
+      this.#submitButtons.delete(node);
+    }
+  }
+
+  #refresh() {
+    if (this.#submitButtons.size > 0) {
+      let submittable = true;
+      for (let field of this.#requiredFields) {
+        if (!field.value) {
+          submittable = false;
+          break;
+        }
+      }
+      for (let control of this.#submitButtons) {
+        control.disabled = !submittable;
+      }
+    }
+  }
+}
+customElements.define('haptic-form', HapticFormElement, { extends: 'form' });
+
 class HapticInputElement extends HTMLInputElement {
   static observedAttributes = ['disabled'];
 
