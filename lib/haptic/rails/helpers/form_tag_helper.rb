@@ -38,7 +38,10 @@ module Haptic
         end
 
         def haptic_text_field_tag(options = {}, &block)
-          content_tag('haptic-text-field') do
+          text_field_options = {}
+          text_field_options['with-errors'] = '' if options[:errors]
+
+          content_tag('haptic-text-field', text_field_options) do
             content_tag('container') do
               capture(&block) +
                 if (label = options[:label])
