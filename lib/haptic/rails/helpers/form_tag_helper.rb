@@ -45,7 +45,7 @@ module Haptic
                   label_tag(label)
                 end +
                 if (trailing_icon = options[:trailing_icon])
-                  haptic_icon_tag(trailing_icon, class: 'trailing_icon')
+                  haptic_icon_tag(trailing_icon, class: 'trailing-icon')
                 end
             end
           end
