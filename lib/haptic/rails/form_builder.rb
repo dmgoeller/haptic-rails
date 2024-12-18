@@ -106,10 +106,10 @@ module Haptic
         text_field_options['animated'] = '' if options[:animated]
         text_field_options['focus-indicator'] = '' if options[:focus_indicator]
 
-        if options[:reset_errors_on_change]
+        if options.key?(:reset_errors_on_change)
           text_field_options['reset-errors-on-change'] =
             Array(options[:reset_errors_on_change]).map do |name|
-              _field_id(name == true ? method : name)
+              name == true ? 'itself' : _field_id(name)
             end.join(' ')
         end
 
@@ -146,14 +146,9 @@ module Haptic
 
         object_name = @object_name
         object_name = object_name.model_name.singular if object_name.respond_to?(:model_name)
+        object_name = object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, '_').delete_suffix('_')
 
-        sanitized_object_name = object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, '_').delete_suffix('_')
-        sanitized_method_name = method.to_s.delete_suffix('?')
-
-        [
-          sanitized_object_name.presence,
-          sanitized_method_name
-        ].tap(&:compact!).join('_')
+        [object_name, method.to_s.delete_suffix('?')].tap(&:compact!).join('_')
       end
     end
   end
