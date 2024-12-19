@@ -37,13 +37,18 @@ module Haptic
           radio_button_tag(name, value, checked, options.merge(is: 'haptic-input'))
         end
 
-        def haptic_text_field_tag(options = {}, &block)
+        def haptic_text_field_tag(content = nil, options = {}, &block)
+          content, options = nil, content if content.is_a?(Hash)
+          content ||= capture(&block) if block
+
           text_field_options = {}
           text_field_options['with-errors'] = '' if options[:errors]
+          text_field_options['animated'] = '' if options[:animated]
+          text_field_options['focus-indicator'] = '' if options[:focus_indicator]
 
           content_tag('haptic-text-field', text_field_options) do
-            content_tag('container') do
-              capture(&block) +
+            content_tag('div', class: 'container') do
+              content.to_s.html_safe +
                 if (label = options[:label])
                   content_tag('label', label)
                 end +
