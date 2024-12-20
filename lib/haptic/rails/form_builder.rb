@@ -8,11 +8,11 @@ module Haptic
         animated
         clear_button
         focus_indicator
-        error_icon
-        error_messages
         label
         leading_icon
         reset_errors_on_change
+        show_error_icon
+        show_error_message
         supporting_text
         trailing_icon
       ].freeze
@@ -66,14 +66,8 @@ module Haptic
       end
 
       def errors(method, options = {})
-        full_messages = object&.errors&.full_messages_for(method)
-        return if full_messages.blank?
-
-        @template.content_tag(
-          :div,
-          full_messages.join('. ').delete_suffix('.'),
-          class: [options[:class], 'error'].flatten
-        )
+        error_message = error_message_for(method)
+        @template.haptic_error_tag(error_message, options) if error_message
       end
 
       def segmented_button(method, collection, value_method, text_method, options = {})
@@ -92,53 +86,37 @@ module Haptic
 
       private
 
+      def error_message_for(method)
+        # Don't call :valid? or :invalid? here to prevent errors on new records
+        full_messages = object&.errors&.full_messages_for(method)
+        return if full_messages.blank?
+
+        "#{full_messages.map { |m| m.delete_suffix('.') }.join('. ')}."
+      end
+
       def field_options(options)
         options.except(*HAPTIC_TEXT_FIELD_OPTIONS)
       end
 
       def haptic_text_field(method, field, options = {})
-        # Don't call :valid? or :invalid? here to prevent errors on new records
-        errors = object&.errors&.include?(method)
+        options = options.slice(*HAPTIC_TEXT_FIELD_OPTIONS)
+        options[:for] = _field_id(method)
+        options[:error_message] = error_message_for(method)
 
-        text_field_options = {}
-        text_field_options['for'] = _field_id(method)
-        text_field_options['with-errors'] = '' if errors
-        text_field_options['animated'] = '' if options[:animated]
-        text_field_options['focus-indicator'] = '' if options[:focus_indicator]
-
-        if options.key?(:reset_errors_on_change)
-          text_field_options['reset-errors-on-change'] =
-            Array(options[:reset_errors_on_change]).map do |name|
-              name == true ? 'itself' : _field_id(name)
-            end.join(' ')
+        if (reset_errors_on_change = options[:reset_errors_on_change])
+          options[:reset_errors_on_change] = Array(reset_errors_on_change).map do |name|
+            name == true ? 'itself' : _field_id(name)
+          end.join(' ').presence
         end
 
-        @template.content_tag('haptic-text-field', text_field_options) do
-          @template.content_tag('div', class: 'container') do
-            field +
-              if (label = options[:label])
-                label == true ? label(method, is: nil) : label(method, label, is: nil)
-              end +
-              if options[:clear_button]
-                @template.haptic_icon_tag('close', class: 'clear-button')
-              end +
-              if options[:error_icon] && errors
-                @template.haptic_icon_tag('error', class: 'error-icon')
-              end +
-              if (leading_icon = options[:leading_icon])
-                @template.haptic_icon_tag(leading_icon, class: 'leading-icon')
-              end +
-              if (trailing_icon = options[:trailing_icon])
-                @template.haptic_icon_tag(trailing_icon, class: 'trailing-icon')
-              end
-          end +
-            if options[:error_messages] && errors
-              errors(method, class: 'supporting-text')
-            end +
-            if (supporting_text = options[:supporting_text])
-              @template.content_tag('div', supporting_text, class: 'supporting-text')
-            end
-        end
+        label =
+          if (label_option = options.delete(:label))
+            args = [:label, method]
+            args << label_option unless label_option == true
+            send(*args, is: nil)
+          end
+
+        @template.haptic_text_field_tag(field, label, options)
       end
 
       def _field_id(method)
