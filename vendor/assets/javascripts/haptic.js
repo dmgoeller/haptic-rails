@@ -130,10 +130,16 @@ class HapticInputElement extends HTMLInputElement {
     switch (this.type) {
       case 'checkbox':
       case 'radio':
-        this.checked = this.#initialValue;
+        if (this.checked != this.#initialValue) {
+          this.checked = this.#initialValue;
+          this.dispatchEvent(new Event('change'));
+        }
         break;
       default:
-        this.value = this.#initialValue;
+        if (this.value != this.#initialValue) {
+          this.value = this.#initialValue;
+          this.dispatchEvent(new Event('change'));
+        }
     }
   }
 }
@@ -161,6 +167,7 @@ class HapticListItemElement extends HTMLLIElement {
       const checkbox = this.querySelector('input[type="checkbox"]')
       if (checkbox) {
         checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event('change'));
       }
     });
   }
