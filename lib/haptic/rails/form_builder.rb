@@ -76,6 +76,20 @@ module Haptic
         )
       end
 
+      def list(method, collection, value_method, text_method, options = {}, &block)
+        @template.content_tag('ul', class: 'haptic-list') do
+          list_items(method, collection, value_method, text_method, options, &block)
+        end
+      end
+
+      def list_items(method, collection, value_method, text_method, options = {}, &block)
+        collection_check_boxes(method, collection, value_method, text_method, options) do |b|
+          @template.content_tag('li', is: 'haptic-list-item') do
+            block.call(b)
+          end
+        end
+      end
+
       def segmented_button(method, collection, value_method, text_method, options = {})
         @template.content_tag('div', class: 'haptic-segmented-button') do
           button_segments(method, collection, value_method, text_method, options)
