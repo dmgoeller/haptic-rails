@@ -10,7 +10,7 @@ module Haptic
         focus_indicator
         label
         leading_icon
-        reset_errors_on_change
+        reset_error_on_change
         show_error_icon
         show_error_message
         supporting_text
@@ -65,9 +65,15 @@ module Haptic
         @defaults
       end
 
-      def errors(method, options = {})
+      def error_messages(method, options = {})
         error_message = error_message_for(method)
-        @template.haptic_error_tag(error_message, options) if error_message
+        return if error_message.blank?
+
+        @template.content_tag(
+          'div',
+          error_message,
+          options.merge(class: [options[:class], 'error'])
+        )
       end
 
       def segmented_button(method, collection, value_method, text_method, options = {})
@@ -103,8 +109,8 @@ module Haptic
         options[:for] = _field_id(method)
         options[:error_message] = error_message_for(method)
 
-        if (reset_errors_on_change = options[:reset_errors_on_change])
-          options[:reset_errors_on_change] = Array(reset_errors_on_change).map do |name|
+        if (reset_error_on_change = options[:reset_error_on_change])
+          options[:reset_error_on_change] = Array(reset_error_on_change).map do |name|
             name == true ? 'itself' : _field_id(name)
           end.join(' ').presence
         end

@@ -171,8 +171,12 @@ haptic-text-field
   --haptic-text-field-label-color: #{$haptic-dark-accent-color}
   --haptic-text-field-label-color-animated: #606060
 
-  .error, .error-icon
-    color: var(--haptic-text-field-error-color)
+  label
+    color: var(--haptic-text-field-label-color)
+
+  &[animated][empty]:not([focus])
+    label
+      color: var(--haptic-text-field-label-color-animated)
 
   .clear-button, .leading-icon, .trailing-icon
     color: var(--haptic-text-field-icon-color)
@@ -183,28 +187,23 @@ haptic-text-field
     &:hover
       background-color: var(--haptic-text-field-clear-button-background-color-hover)
 
-  &[with-errors]
+  .error-icon
+    color: var(--haptic-text-field-error-color)
+
+  &[focus-indicator]
+    .container::after
+      background-color: var(--haptic-text-field-focus-indicator-color)
+
+  &[error]
     .haptic-field.outlined
       border-color: var(--haptic-text-field-error-color)
 
-    label
+    label, .error-message
       color: var(--haptic-text-field-error-color)
 
     &[focus-indicator]
       .container::after
         background-color: var(--haptic-text-field-error-color)
-
-  &:not([with-errors])
-    label
-      color: var(--haptic-text-field-label-color)
-
-    &[animated][empty]:not([focus])
-      label
-        color: var(--haptic-text-field-label-color-animated)
-
-    &[focus-indicator]
-      .container::after
-        background-color: var(--haptic-text-field-focus-indicator-color)
 
 @media(prefers-color-scheme: dark)
   .haptic-field
@@ -262,6 +261,18 @@ haptic-text-field
     --haptic-outlined-checkbox-or-radio-button-border-color: #{$haptic-light-outline}
 
 /**********************************************************************
+ * Lists
+ **********************************************************************/
+
+.haptic-list-item
+  --haptic-list-item-background-hover: #00000010
+  &:hover
+    background-color: var(--haptic-list-item-background-hover)
+
+@media(prefers-color-scheme: dark)
+  --haptic-list-item-background-hover: #FFFFFF10
+
+/**********************************************************************
  * Switches
  **********************************************************************/
 
@@ -306,5 +317,3 @@ haptic-text-field
     --haptic-switch-track-background-color-off: #FFFFFF40
     --haptic-red-green-switch-track-background-color-off: #{$haptic-red}
     --haptic-red-green-switch-track-background-color-on: #{$haptic-green}
-
-

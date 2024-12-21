@@ -110,7 +110,7 @@ textarea.haptic-field
 
 haptic-text-field
   @include haptic-container
-  transition: .4s linear // opacity, filter
+  transition: .4s linear
 
   .container
     @include haptic-container
@@ -129,11 +129,14 @@ haptic-text-field
       opacity: 0
       pointer-events: none
       position: absolute
-      transition: opacity .4s linear
+      transition: .4s linear
 
   &[focus-indicator][focus]
     .container::after
       opacity: 1
+
+  .haptic-field
+    transition: border-color .4s linear
 
   label
     @include haptic-overflow-ellipsis
@@ -165,6 +168,17 @@ haptic-text-field
       opacity: 0
       pointer-events: none
 
+  .error-icon
+    opacity: 0
+    transition: opacity .4s linear
+
+  .error-message
+    transition: color .4s linear
+
+  &[error]
+    .error-icon
+      opacity: 1
+
   &[disabled], fieldset:disabled &
     @include haptic-grayed
 
@@ -195,6 +209,31 @@ input[type="radio"].haptic-radio-button
   appearance: none
 
   &:disabled
+    @include haptic-grayed
+
+/**********************************************************************
+ * Lists
+ **********************************************************************/
+
+.haptic-list
+  display: flex
+  flex-direction: column
+  list-style-type: none
+
+.haptic-list-item
+  align-items: center
+  display: grid
+  grid-template-columns: auto 1fr
+  transition: background-color .1s linear
+  user-select: none
+
+li[is="haptic-list-item"]
+  cursor: pointer
+
+  input, label
+    pointer-events: none
+
+  input:disabled ~ label
     @include haptic-grayed
 
 /**********************************************************************

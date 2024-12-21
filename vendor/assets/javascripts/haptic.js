@@ -89,6 +89,8 @@ customElements.define('haptic-form', HapticFormElement, { extends: 'form' });
 class HapticInputElement extends HTMLInputElement {
   static observedAttributes = ['disabled'];
 
+  #initialValue;
+
   constructor() {
     super();
   }
@@ -99,15 +101,18 @@ class HapticInputElement extends HTMLInputElement {
         if (!this.classList.contains('haptic-switch')) {
           this.classList.add('haptic-checkbox');
         }
+        this.#initialValue = this.checked;
         break;
       case 'radio':
         this.classList.add('haptic-radio-button');
+        this.#initialValue = this.checked;
         break;
       case 'submit':
         this.classList.add('haptic-button');
         break;
       default:
         this.classList.add('haptic-field');
+        this.#initialValue = this.value;
     }
   }
 
@@ -118,6 +123,17 @@ class HapticInputElement extends HTMLInputElement {
       } else {
         label.classList.remove('grayed');
       }
+    }
+  }
+
+  reset() {
+    switch (this.type) {
+      case 'checkbox':
+      case 'radio':
+        this.checked = this.#initialValue;
+        break;
+      default:
+        this.value = this.#initialValue;
     }
   }
 }
@@ -133,6 +149,23 @@ class HapticLabelElement extends HTMLLabelElement {
   }
 }
 customElements.define('haptic-label', HapticLabelElement, { extends: 'label' });
+
+class HapticListItemElement extends HTMLLIElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.classList.add('haptic-list-item');
+    this.addEventListener('click', () => {
+      const checkbox = this.querySelector('input[type="checkbox"]')
+      if (checkbox) {
+        checkbox.checked = !checkbox.checked;
+      }
+    });
+  }
+}
+customElements.define('haptic-list-item', HapticListItemElement, { extends: 'li' });
 
 class HapticSelectElement extends HTMLSelectElement {
   constructor() {
@@ -177,7 +210,7 @@ class HapticTextFieldElement extends HTMLElement {
   #label = null;
   #listens = null;
   #mutationObserver = null;
-  #resetErrorsOnChange = null;
+  #resetErrorOnChange = null;
 
   constructor() {
     super();
@@ -204,12 +237,12 @@ class HapticTextFieldElement extends HTMLElement {
   }
 
   connectedCallback() {
-    if (this.hasAttribute('reset-errors-on-change')) {
-      const value = this.getAttribute('reset-errors-on-change');
-      if (value == '' || value == 'reset-errors-on-change') {
-        this.#resetErrorsOnChange = ['itself'];
+    if (this.hasAttribute('reset-error-on-change')) {
+      const value = this.getAttribute('reset-error-on-change');
+      if (value == '' || value == 'reset-error-on-change') {
+        this.#resetErrorOnChange = ['itself'];
       } else {
-        this.#resetErrorsOnChange = value.split(/\s+/);
+        this.#resetErrorOnChange = value.split(/\s+/);
       }
     }
     new MutationObserver(mutationList => {
@@ -230,13 +263,13 @@ class HapticTextFieldElement extends HTMLElement {
       case this.#control:
         switch (event.type) {
           case 'change':
-            this.#resetErrorsOnChange?.forEach(fieldId => {
+            this.#resetErrorOnChange?.forEach(fieldId => {
               if (fieldId == 'itself') {
-                this.resetErrors();
+                this.resetError();
               } else {
                 this.#control?.form?.querySelector(
                   `haptic-text-field[for="${fieldId}"]`
-                )?.resetErrors();
+                )?.resetError();
               }
             })
           case 'input':
@@ -265,11 +298,17 @@ class HapticTextFieldElement extends HTMLElement {
     }
   }
 
-  resetErrors() {
-    this.querySelectorAll('.error-icon, .error').forEach(element => {
-      element.remove()
-    });
-    this.removeAttribute('with-errors');
+  resetError() {
+    if (this.hasAttribute('error')) {
+      if (this.hasAttribute('with-error-icon')) {
+        setTimeout(() => {
+          this.querySelectorAll('.error-icon').forEach(
+            element => { element.remove() }
+          );
+        }, 400);
+      }
+      this.removeAttribute('error');
+    }
   }
 
   #nodeAdded(node) {
