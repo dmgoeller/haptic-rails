@@ -266,8 +266,13 @@ haptic-text-field
 
 .haptic-list-item
   --haptic-list-item-background-hover: #00000010
+
   &:hover
     background-color: var(--haptic-list-item-background-hover)
+
+  .haptic-checkbox:focus-visible
+    background-color: unset
+    outline-color: unset
 
 @media(prefers-color-scheme: dark)
   --haptic-list-item-background-hover: #FFFFFF10
