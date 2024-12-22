@@ -69,8 +69,12 @@ haptic-text-field
  **********************************************************************/
 
 .haptic-checkbox, .haptic-radio-button
-  border-radius: 50%
-  outline-style: solid
+  &.embedded
+    outline: none
+
+  &:not(.embedded)
+    border-radius: 50%
+    outline-style: solid
 
   &.outlined::before
     border-style: solid
@@ -85,13 +89,6 @@ haptic-text-field
     border-radius: 50%
 
 /**********************************************************************
- * Lists
- **********************************************************************/
-
-.haptic-list-item
-  border-radius: .25rem
-
-/**********************************************************************
  * Switches
  **********************************************************************/
 
@@ -101,3 +98,19 @@ haptic-text-field
   &::after
     border-radius: 50%
     outline-style: solid
+
+/**********************************************************************
+ * Lists
+ **********************************************************************/
+
+.haptic-list-item
+  &, & .haptic-checkbox
+    border-radius: .25rem
+
+  .haptic-list.separated &
+    &, & .haptic-checkbox
+      border-radius: 0
+
+    &:not(:first-of-type)
+      border-top-style: solid
+      border-top-width: 1px

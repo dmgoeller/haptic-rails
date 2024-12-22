@@ -44,18 +44,18 @@ module Haptic
         end
       end
 
-      def button_segments(method, collection, value_method, text_method, options = {})
+      def button_segments(method, collection, value_method, text_method, options = {}, &block)
         collection_radio_buttons(method, collection, value_method, text_method, options) do |b|
           @template.content_tag('div', class: 'haptic-button-segment') do
-            b.radio_button(is: nil) + b.label(is: nil)
+            block ? block.call(b) : b.radio_button(is: nil) + b.label(is: nil)
           end
         end
       end
 
-      def chips(method, collection, value_method, text_method, options = {})
+      def chips(method, collection, value_method, text_method, options = {}, &block)
         collection_check_boxes(method, collection, value_method, text_method, options) do |b|
           @template.content_tag('div', class: 'haptic-chip') do
-            b.check_box(is: nil) + b.label(is: nil)
+            block ? block.call(b) : b.check_box(is: nil) + b.label(is: nil)
           end
         end
       end
@@ -85,7 +85,7 @@ module Haptic
       def list_items(method, collection, value_method, text_method, options = {}, &block)
         collection_check_boxes(method, collection, value_method, text_method, options) do |b|
           @template.content_tag('li', is: 'haptic-list-item') do
-            block.call(b)
+            block ? block.call(b) : b.check_box + b.label
           end
         end
       end

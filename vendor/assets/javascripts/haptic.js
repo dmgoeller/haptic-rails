@@ -117,11 +117,13 @@ class HapticInputElement extends HTMLInputElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    for (let label of this.labels) {
-      if (this.disabled) {
-        label.classList.add('grayed');
-      } else {
-        label.classList.remove('grayed');
+    if (!this.classList.contains('embedded')) {
+      for (let label of this.labels) {
+        if (this.disabled) {
+          label.classList.add('grayed');
+        } else {
+          label.classList.remove('grayed');
+        }
       }
     }
   }
@@ -157,19 +159,47 @@ class HapticLabelElement extends HTMLLabelElement {
 customElements.define('haptic-label', HapticLabelElement, { extends: 'label' });
 
 class HapticListItemElement extends HTMLLIElement {
+  #checkbox = null;
+  #mutationObserver = null;
+
   constructor() {
     super();
+    this.#mutationObserver = new MutationObserver((mutationList) => {
+      for (let mutationRecord of mutationList) {
+        if (mutationRecord.attributeName == 'disabled') {
+          if (mutationRecord.target.disabled) {
+            this.setAttribute('disabled', '');
+          } else {
+            this.removeAttribute('disabled');
+          }
+        }
+      }
+    });
   }
 
   connectedCallback() {
     this.classList.add('haptic-list-item');
-    this.addEventListener('click', () => {
-      const checkbox = this.querySelector('input[type="checkbox"]')
-      if (checkbox) {
-        checkbox.checked = !checkbox.checked;
-        checkbox.dispatchEvent(new Event('change'));
+
+    new MutationObserver(mutationList => {
+      for (let mutationRecord of mutationList) {
+        for (let node of mutationRecord.addedNodes) {
+          if (node instanceof HTMLInputElement &&
+              node.type == 'checkbox' &&
+              !this.#checkbox) {
+            node.classList.add('embedded');
+            this.#mutationObserver.observe(node, { attributes: true });
+            this.#checkbox = node;
+          }
+        }
+        for (let node of mutationRecord.removedNodes) {
+          if (node === this.#checkbox) {
+            node.classList.remove('embedded');
+            this.#mutationObserver.disconnect();
+            this.#checkbox = null;
+          }
+        }
       }
-    });
+    }).observe(this, { childList: true, subtree: true });
   }
 }
 customElements.define('haptic-list-item', HapticListItemElement, { extends: 'li' });
@@ -324,7 +354,7 @@ class HapticTextFieldElement extends HTMLElement {
           node instanceof HTMLTextAreaElement ||
           node instanceof HTMLSelectElement) {
         if (!this.#control) {
-          node.setAttribute('data-embedded', '');
+          node.classList.add('embedded');
 
           if (node.required) {
             this.setAttribute('required', '');
@@ -380,7 +410,7 @@ class HapticTextFieldElement extends HTMLElement {
   #nodeRemoved(node) {
     switch (node) {
       case this.#control:
-        node.removeAttribute('data-embedded');
+        node.classList.remove('embedded');
         this.removeAttribute('disabled');
         this.removeAttribute('required');
         this.removeAttribute('auto-growing');

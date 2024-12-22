@@ -93,7 +93,7 @@ input, select, textarea
   &.haptic-field
     transition: opacity .4s linear, filter .4s
 
-    &:not([data-embedded]):disabled
+    &:not(.embedded):disabled
       @include haptic-grayed
 
 input[type="number"].haptic-field
@@ -190,7 +190,6 @@ haptic-text-field
  **********************************************************************/
 
 .haptic-checkbox, .haptic-radio-button
-  cursor: pointer
   position: relative
   transition: .4s linear
 
@@ -200,13 +199,36 @@ haptic-text-field
     position: absolute
     transition: background-color .1s linear
 
-.haptic-checkbox::after
-  -webkit-mask-image: url('checkbox-checked.svg')
-  mask-image: url('checkbox-checked.svg')
+.haptic-checkbox
+  &::after
+    -webkit-mask-image: url('checkbox-checked.svg')
+    mask-image: url('checkbox-checked.svg')
 
 input[type="checkbox"].haptic-checkbox,
 input[type="radio"].haptic-radio-button
   appearance: none
+  cursor: pointer
+
+  &:not(.embedded):disabled
+    @include haptic-grayed
+
+/**********************************************************************
+ * Switches
+ **********************************************************************/
+
+.haptic-switch
+  position: relative
+  transition: all .4s linear, background-color .2s linear
+
+  &::after
+    content: '\200b'
+    pointer-events: none
+    position: absolute
+    transition: .2s linear
+
+input[type="checkbox"].haptic-switch
+  appearance: none
+  cursor: pointer
 
   &:disabled
     @include haptic-grayed
@@ -222,39 +244,16 @@ input[type="radio"].haptic-radio-button
 
 .haptic-list-item
   align-items: center
-  display: grid
-  grid-template-columns: auto 1fr
-  transition: background-color .1s linear
+  display: flex
+  position: relative
   user-select: none
 
-li.haptic-list-item
-  cursor: pointer
-
-  input, label
-    pointer-events: none
-
-  input:disabled ~ label
-    @include haptic-grayed
-
-/**********************************************************************
- * Switches
- **********************************************************************/
-
-.haptic-switch
-  cursor: pointer
-  position: relative
-  transition: all .4s linear, background-color .2s linear
-
-  &::after
-    content: '\200b'
-    pointer-events: none
+  .haptic-checkbox
     position: absolute
-    transition: .2s linear
+    transition: background-color .1s, filter .4s, opacity .4s
+    transition-timing-function: linear
 
-input[type="checkbox"].haptic-switch
-  appearance: none
-
-  &:disabled
+  &[disabled]
     @include haptic-grayed
 
 /**********************************************************************
