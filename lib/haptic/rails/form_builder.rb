@@ -18,8 +18,8 @@ module Haptic
       ].freeze
 
       def initialize(object_name, object, template, options)
-        @defaults = {}
-        super(object_name, object, Builder.new(template, @defaults), options)
+        @field_options = FieldOptions.new
+        super(object_name, object, Builder.new(template, @field_options), options)
       end
 
       ##
@@ -34,10 +34,10 @@ module Haptic
       # :method: text_field
       # :call-seq: text_field(method, options = {})
 
-      %i[number_field text_area text_field].each do |name|
+      %i[file_field number_field text_area text_field].each do |name|
         define_method name do |method, options = {}|
-          options = defaults.merge(options)
-          field = super(method, field_options(options))
+          options = @field_options.merge(options)
+          field = super(method, options.except(*HAPTIC_TEXT_FIELD_OPTIONS))
           return field unless HAPTIC_TEXT_FIELD_OPTIONS.any? { |key| options.key? key }
 
           haptic_text_field(method, field, options)
@@ -61,18 +61,13 @@ module Haptic
       end
 
       def date_field(method, options = {})
-        options = defaults.merge(options)
+        options = @field_options.merge(options)
 
         haptic_text_field(
           method,
-          super(method, field_options(options)),
+          super(method, options.except(*HAPTIC_TEXT_FIELD_OPTIONS)),
           options.reverse_merge(trailing_icon: 'calendar').except(:animated)
         )
-      end
-
-      def defaults(defaults = {})
-        @defaults.merge!(defaults) if defaults.any?
-        @defaults
       end
 
       def error_messages(method, options = {})
@@ -107,11 +102,20 @@ module Haptic
       end
 
       def select(method, choices = nil, options = {}, html_options = {}, &block)
-        text_field_options = defaults.merge(trailing_icon: 'arrow_drop_down')
+        text_field_options = @field_options.merge(trailing_icon: 'arrow_drop_down')
         text_field_options.merge!(options)
         text_field_options.delete(:clear_button)
 
         haptic_text_field(method, super, text_field_options)
+      end
+
+      def with_field_options(options = {})
+        @field_options.push(options)
+        begin
+          yield if block_given?
+        ensure
+          @field_options.pop
+        end
       end
 
       private
@@ -122,10 +126,6 @@ module Haptic
         return if full_messages.blank?
 
         "#{full_messages.map { |m| m.delete_suffix('.') }.join('. ')}."
-      end
-
-      def field_options(options)
-        options.except(*HAPTIC_TEXT_FIELD_OPTIONS)
       end
 
       def haptic_text_field(method, field, options = {})
