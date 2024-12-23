@@ -96,10 +96,6 @@ input, select, textarea
     &:not(.embedded):disabled
       @include haptic-grayed
 
-input[type="number"].haptic-field
-  &::-webkit-inner-spin-button
-    appearance: none
-
 select.haptic-field
   appearance: none
 
@@ -111,6 +107,21 @@ textarea.haptic-field
 haptic-text-field
   @include haptic-container
   transition: .4s linear
+
+  ::-webkit-inner-spin-button
+    appearance: none
+
+  ::file-selector-button
+    // TODO
+
+  &[with-trailing-icon]
+    ::-webkit-calendar-picker-indicator
+      opacity: 0
+      position: absolute
+
+  &:not([with-trailing-icon])
+    ::-webkit-calendar-picker-indicator
+      display: none
 
   .container
     @include haptic-container
@@ -135,9 +146,6 @@ haptic-text-field
     .container::after
       opacity: 1
 
-  .haptic-field
-    transition: border-color .4s linear
-
   label
     @include haptic-overflow-ellipsis
     pointer-events: none
@@ -149,6 +157,9 @@ haptic-text-field
   &[required]
     label::after
       content: ' *'
+
+  .haptic-field
+    transition: border-color .4s linear
 
   .clear-button, .error-icon, .leading-icon, .trailing-icon
     align-items: center

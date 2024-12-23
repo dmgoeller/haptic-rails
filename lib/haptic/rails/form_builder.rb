@@ -60,6 +60,16 @@ module Haptic
         end
       end
 
+      def date_field(method, options = {})
+        options = defaults.merge(options)
+
+        haptic_text_field(
+          method,
+          super(method, field_options(options)),
+          options.reverse_merge(trailing_icon: 'calendar').except(:animated)
+        )
+      end
+
       def defaults(defaults = {})
         @defaults.merge!(defaults) if defaults.any?
         @defaults

@@ -107,7 +107,8 @@ haptic-text-field
       label
         top: 1.1875rem // ({container-height = 3.5} - {line-height = 1.125)}) / 2
 
-    .error-icon, .leading-icon, .trailing-icon
+    .error-icon, .leading-icon, .trailing-icon,
+    ::-webkit-calendar-picker-indicator
       height: 1.5rem
       width: 1.5rem
 
@@ -118,11 +119,13 @@ haptic-text-field
       width: 1.25rem
 
     &[auto-growing]
-      .clear-button, .error-icon, .leading-icon, .trailing-icon
+      .clear-button, .error-icon, .leading-icon, .trailing-icon,
+      ::-webkit-calendar-picker-indicator
         top: 1rem // ({min field-height = 3.5} - {icon-height = 1.5}) / 2
 
     &:not([auto-growing])
-      .clear-button, .error-icon, .leading-icon, .trailing-icon
+      .clear-button, .error-icon, .leading-icon, .trailing-icon,
+      ::-webkit-calendar-picker-indicator
         top: calc(50% - .75rem)
 
     &[with-leading-icon]
@@ -151,7 +154,7 @@ haptic-text-field
       // ---------+      +-------+      +-------+      +-------+      |
       // ---------+--------------+--------------+--------------+------+
       //        6.25            4.5            2.5            0.5
-      .trailing-icon
+      .trailing-icon, ::-webkit-calendar-picker-indicator
         right: .5rem
 
       &[with-error-icon]
@@ -212,16 +215,19 @@ haptic-text-field
   &:not([with-label])
     min-height: 1.75rem
 
-    .clear-button, .error-icon, .leading-icon, .trailing-icon
+    .clear-button, .error-icon, .leading-icon, .trailing-icon,
+    ::-webkit-calendar-picker-indicator
       height: 1.125rem
       width: 1.125rem
 
     &[auto-growing]
-      .clear-button, .error-icon, .leading-icon, .trailing-icon
+      .clear-button, .error-icon, .leading-icon, .trailing-icon,
+      ::-webkit-calendar-picker-indicator
         top: .3125rem // ({min field-height = 1.75} - {icon-height = 1.125}) / 2
 
     &:not([auto-growing])
-      .clear-button, .error-icon, .leading-icon, .trailing-icon
+      .clear-button, .error-icon, .leading-icon, .trailing-icon,
+      ::-webkit-calendar-picker-indicator
         top: calc(50% - .5625rem)
 
     &[with-leading-icon]
@@ -250,7 +256,7 @@ haptic-text-field
       // ---------+      +-------+      +-------+      +-------+      |
       // ---------+--------------+--------------+--------------+------+
       //        4.375            3            1.625          0.25
-      .trailing-icon
+      .trailing-icon, ::-webkit-calendar-picker-indicator
         right: .25rem
 
       &[with-error-icon]

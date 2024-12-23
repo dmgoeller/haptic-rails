@@ -89,10 +89,22 @@ customElements.define('haptic-form', HapticFormElement, { extends: 'form' });
 class HapticInputElement extends HTMLInputElement {
   static observedAttributes = ['disabled'];
 
-  #initialValue;
+  #initialValue = null;
 
   constructor() {
     super();
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (!this.classList.contains('embedded')) {
+      for (let label of this.labels) {
+        if (this.disabled) {
+          label.classList.add('grayed');
+        } else {
+          label.classList.remove('grayed');
+        }
+      }
+    }
   }
 
   connectedCallback() {
@@ -113,18 +125,6 @@ class HapticInputElement extends HTMLInputElement {
       default:
         this.classList.add('haptic-field');
         this.#initialValue = this.value;
-    }
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (!this.classList.contains('embedded')) {
-      for (let label of this.labels) {
-        if (this.disabled) {
-          label.classList.add('grayed');
-        } else {
-          label.classList.remove('grayed');
-        }
-      }
     }
   }
 
@@ -441,8 +441,7 @@ class HapticTextFieldElement extends HTMLElement {
 
   #refresh() {
     if (this.#control) {
-      const isEmpty = this.#control.value.length == 0;
-      if (isEmpty) {
+      if (this.#control.value.length == 0) {
         this.setAttribute('empty', '');
       } else {
         this.removeAttribute('empty');

@@ -8,7 +8,7 @@ module Haptic
         @defaults = defaults
       end
 
-      %i[number_field text_field].each do |name|
+      %i[date_field file_field number_field text_field].each do |name|
         define_method name do |object_name, method, options = {}|
           super(object_name, method, tag_options(options, is: 'haptic-input'))
         end
