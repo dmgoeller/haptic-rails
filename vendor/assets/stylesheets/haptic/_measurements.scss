@@ -1,0 +1,440 @@
+
+/**********************************************************************
+ * Buttons
+ **********************************************************************/
+
+.haptic-button {
+  box-sizing: border-box;
+  border-width: 0;
+
+  &.icon {
+    $content-size: haptic-measure(1.5rem, 2.5rem);
+    box-sizing: content-box;
+    height: $content-size;
+    line-height: haptic-measure(1.125rem, 1.5rem);
+    padding: haptic-measure(.375rem, .5rem);
+    width: $content-size;
+  }
+
+  & {
+    $padding-top-bottom: haptic-measure(.25rem, .5rem);
+    $padding-left-right: haptic-measure(.75rem, 1.5rem);
+
+    &.filled, &.outlined, &.text {
+      grid-gap: haptic-measure(.25rem, .5rem);
+      min-height: haptic-measure(1.75rem, 2.5rem);
+
+      .icon {
+        height: 1.125rem;
+        line-height: 1.125rem;
+        width: 1.125rem;
+      }
+    }
+    &.filled, &.outlined {
+      .icon {
+        margin-left: haptic-measure(-.25rem, -.5rem);
+      }
+    }
+    &.filled {
+      padding: #{$padding-top-bottom} #{$padding-left-right};
+    }
+    &.outlined {
+      padding:
+        calc(#{$padding-top-bottom} - 1px)
+        calc(#{$padding-left-right} - 1px);
+    }
+    &.text {
+      $padding-left-right: haptic-measure(.5rem, .75rem);
+      padding: #{$padding-top-bottom} #{$padding-left-right};
+
+      .icon {
+        margin-left: haptic-measure(-.125rem, 0);
+      }
+    }
+  }
+}
+
+/**********************************************************************
+ * Chips and segmented buttons
+ **********************************************************************/
+
+.haptic-button-segment, .haptic-chip {
+  box-sizing: border-box;
+  min-height: haptic-measure(1.75rem, 2.5rem);
+  min-width: haptic-measure(5rem, 5.5rem);
+
+  input {
+    height: 100%;
+    margin: 0;
+    outline: none;
+    width: 100%;
+
+    &::after {
+      height: 1rem;
+      left: haptic-measure(.5rem, .75rem);
+      top: calc(50% - .5rem);
+      width: 1rem;
+    }
+  }
+
+  label {
+    box-sizing: border-box;
+    height: 1.125rem;
+    line-height: 1.125;
+    padding: haptic-measure(0 2rem, 0 2.25rem);
+    top: calc(50% - .5625rem);
+    width: 100%;
+  }
+}
+
+/**********************************************************************
+ * Fields
+ **********************************************************************/
+
+@mixin haptic-text-field-spacing($default-container-height,
+                                 $padding-left-right-without-icons,
+                                 $padding-left-right-with-icons,
+                                 $spacing-between-icons,
+                                 $spacing-between-icons-and-text,
+                                 $clear-button-size,
+                                 $icon-size) {
+
+   min-height: $default-container-height;
+
+   .clear-button {
+      height: $clear-button-size;
+      margin: ($icon-size - $clear-button-size) / 2;
+      top: ($default-container-height - $icon-size) / 2;
+      width: $clear-button-size;
+   }
+
+  .error-icon, .leading-icon, .trailing-icon,
+  ::-webkit-calendar-picker-indicator {
+    height: $icon-size;
+    top: ($default-container-height - $icon-size) / 2;
+    width: $icon-size;
+  }
+
+  &[with-leading-icon] {
+    .leading-icon {
+      left: $padding-left-right-with-icons;
+    }
+    label, .haptic-field, .overflow-ellipsis {
+      padding-left:
+        $padding-left-right-with-icons +
+        $icon-size +
+        $spacing-between-icons-and-text;
+    }
+  }
+
+  &:not([with-leading-icon]) {
+    label, .haptic-field, .overflow-ellipsis {
+      padding-left: $padding-left-right-without-icons;
+    }
+  }
+
+  &[with-trailing-icon] {
+    .trailing-icon, ::-webkit-calendar-picker-indicator {
+      right: $padding-left-right-with-icons;
+    }
+    &[with-error-icon] {
+      .error-icon {
+        right:
+          $padding-left-right-with-icons +
+          $icon-size +
+          $spacing-between-icons;
+      }
+      &[with-clear-button] {
+        .clear-button {
+          right:
+            $padding-left-right-with-icons +
+            ($icon-size + $spacing-between-icons) * 2;
+        }
+        label, .haptic-field, .overflow-ellipsis {
+          padding-right:
+            $padding-left-right-with-icons +
+            $icon-size * 3 +
+            $spacing-between-icons * 2 +
+            $spacing-between-icons-and-text;
+        }
+      }
+      &:not([with-clear-button]) {
+        label, .haptic-field, .overflow-ellipsis {
+          padding-right:
+            $padding-left-right-with-icons +
+            $icon-size * 2 +
+            $spacing-between-icons +
+            $spacing-between-icons-and-text;
+        }
+      }
+    }
+    &:not([with-error-icon]) {
+      &[with-clear-button] {
+        .clear-button {
+          right:
+            $padding-left-right-with-icons +
+            $icon-size +
+            $spacing-between-icons;
+        }
+        label, .haptic-field, .overflow-ellipsis {
+          padding-right:
+            $padding-left-right-with-icons +
+            $icon-size * 2 +
+            $spacing-between-icons +
+            $spacing-between-icons-and-text;
+        }
+      }
+      &:not([with-clear-button]) {
+        label, .haptic-field, .overflow-ellipsis {
+          padding-right:
+            $padding-left-right-with-icons +
+            $icon-size +
+            $spacing-between-icons-and-text;
+        }
+      }
+    }
+  }
+
+  &:not([with-trailing-icon]) {
+    &[with-error-icon] {
+      .error-icon {
+        right: $padding-left-right-with-icons;
+      }
+      &[with-clear-button] {
+        .clear-button {
+          right:
+            $padding-left-right-with-icons +
+            $icon-size +
+            $spacing-between-icons;
+        }
+        label, .haptic-field, .overflow-ellipsis {
+          padding-right:
+            $padding-left-right-with-icons +
+            $icon-size * 2 +
+            $spacing-between-icons +
+            $spacing-between-icons-and-text;
+        }
+      }
+      &:not([with-clear-button]) {
+        label, .haptic-field, .overflow-ellipsis {
+          padding-right:
+            $padding-left-right-with-icons +
+            $icon-size +
+            $spacing-between-icons-and-text;
+        }
+      }
+    }
+    &:not([with-error-icon]) {
+      &[with-clear-button] {
+        .clear-button {
+          right: $padding-left-right-with-icons;
+        }
+        label, .haptic-field, .overflow-ellipsis {
+          padding-right:
+            $padding-left-right-with-icons +
+            $icon-size +
+            $spacing-between-icons-and-text;
+        }
+      }
+      &:not([with-clear-button]) {
+        label, .haptic-field, .overflow-ellipsis {
+          padding-right: $padding-left-right-without-icons;
+        }
+      }
+    }
+  }
+}
+
+.haptic-field {
+  box-sizing: border-box;
+  line-height: 1.125;
+  min-height: haptic-measure(1.75rem, 2.5rem);
+  padding: haptic-measure(.25rem .5rem, .5rem 1rem);
+}
+
+haptic-text-field {
+  box-sizing: border-box;
+
+  .overflow-ellipsis {
+    box-sizing: border-box;
+    left: 0;
+    width: 100%;
+  }
+
+  .error-message, .supporting-text {
+    margin:
+      haptic-measure(
+        .25rem .5rem 0 .5rem,
+        .25rem 1rem 0 1rem
+      );
+  }
+
+  &[focus-indicator] {
+    .container::after {
+      bottom: 0;
+      height: 3px;
+      left: 0;
+      width: 100%;
+    }
+  }
+
+  &[with-label] {
+    $default-container-height: 3.5rem;
+    $padding-top-bottom: .5rem;
+
+    @include haptic-text-field-spacing(
+      $default-container-height: $default-container-height,
+      $padding-left-right-without-icons: haptic-measure(.5rem, 1rem),
+      $padding-left-right-with-icons: haptic-measure(.5rem, .75rem),
+      $spacing-between-icons: haptic-measure(.5rem, .75rem),
+      $spacing-between-icons-and-text: haptic-measure(.5rem, 1rem),
+      $clear-button-size: 1.5rem,
+      $icon-size: 1.5rem
+    );
+
+    input.haptic-field, select.haptic-field {
+      height: $default-container-height;
+      padding-top: $padding-top-bottom + 1.25rem;
+    }
+
+    textarea.haptic-field, div.haptic-field {
+      min-height: $default-container-height;
+      padding-top: $padding-top-bottom + 1.375rem;
+    }
+
+    label {
+      box-sizing: border-box;
+      left: 0;
+      top: $padding-top-bottom;
+      width: 100%;
+    }
+
+    &[animated][empty]:not([focus]) {
+      label {
+        top: #{($default-container-height - 1.125rem) / 2};
+      }
+    }
+  }
+
+  &:not([with-label]) {
+    @include haptic-text-field-spacing(
+      $default-container-height: haptic-measure(1.75rem, 2.5rem),
+      $padding-left-right-without-icons: haptic-measure(.5rem, 1rem),
+      $padding-left-right-with-icons: haptic-measure(.25rem, .75rem),
+      $spacing-between-icons: haptic-measure(.25rem, .75rem),
+      $spacing-between-icons-and-text: haptic-measure(.25rem, 1rem),
+      $clear-button-size: haptic-measure(1.25rem, 1.5rem),
+      $icon-size: haptic-measure(1.125rem, 1.5rem)
+    );
+  }
+}
+
+/**********************************************************************
+ * Checkboxes and radio buttons
+ **********************************************************************/
+
+input[type="checkbox"].haptic-checkbox,
+input[type="radio"].haptic-radio-button {
+  margin: 0;
+
+  &:not(.embedded) {
+    outline-offset: 0;
+    outline-width: haptic-measure(.375rem, .5rem);
+  }
+}
+
+input[type="checkbox"].haptic-checkbox {
+  $size: haptic-measure(1rem, 1.125rem);
+
+  &, &::before, &::after {
+    box-sizing: border-box;
+    height: $size;
+    width: $size;
+  }
+}
+
+input[type="radio"].haptic-radio-button {
+  $size: haptic-measure(1rem, 1.25rem);
+
+  &, &::before {
+    box-sizing: border-box;
+    height: $size;
+    width: $size;
+  }
+
+  &::after {
+    height: #{$size / 2};
+    left: #{$size / 4};
+    top: #{$size / 4};
+    width: #{$size / 2};
+  }
+}
+
+/**********************************************************************
+ * Switches
+ **********************************************************************/
+
+input[type="checkbox"].haptic-switch {
+  $track-height: haptic-measure(16px, 24px); // 32px
+  $track-width: haptic-measure(28px, 40px); // 52px
+  $handle-size: $track-height - 4px;
+  box-sizing: border-box;
+  height: $track-height;
+  margin: 0;
+  outline: none;
+  width: $track-width;
+
+  &::before {
+    height: $track-height;
+    margin: 0;
+    width: $track-width;
+  }
+
+  &::after {
+    height: $handle-size;
+    left: 2px;
+    top: 2px;
+    outline-offset: 0;
+    outline-width: haptic-measure(.375rem, .5rem);
+    width: $handle-size;
+  }
+
+  &:checked::after {
+    left: #{$track-width - $handle-size - 2px};
+  }
+}
+
+/**********************************************************************
+ * Lists
+ **********************************************************************/
+
+.haptic-list {
+  margin: 0;
+  padding: 0;
+}
+
+.haptic-list-item {
+  $padding-top-bottom: haptic-measure(.25rem, .5rem);
+  $padding-left-right: haptic-measure(.5rem, 1rem);
+  $spacing: haptic-measure(.75rem, 1rem);
+  $min-content-height: 1.25rem;
+  $icon-size: haptic-measure(1rem, 1.125rem);
+  box-sizing: content-box;
+  min-height: $min-content-height;
+  padding-bottom: $padding-top-bottom;
+  padding-left: #{$padding-left-right + $icon-size + $spacing};
+  padding-right: $padding-left-right;
+  padding-top: $padding-top-bottom;
+
+  input[type="checkbox"].haptic-checkbox {
+    height: 100%;
+    left: 0;
+    top: 0;
+    width: 100%;
+
+    &::before, &::after {
+      left: $padding-left-right;
+      top: #{$padding-top-bottom + ($min-content-height - $icon-size) / 2};
+    }
+  }
+}

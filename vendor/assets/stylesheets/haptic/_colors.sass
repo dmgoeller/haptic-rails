@@ -268,14 +268,18 @@ haptic-text-field
   --haptic-switch-handle-outline-color-focus: #00000020
   --haptic-switch-track-color: #00000060
   --haptic-switch-track-color-checked: #{$haptic-accent-color}
-  background-color: var(--haptic-switch-track-color)
+  background-color: transparent
+
+  &::before
+    background-color: var(--haptic-switch-track-color)
 
   &::after
     background-color: var(--haptic-switch-handle-color)
     outline-color: transparent
 
   &:checked
-    background-color: var(--haptic-switch-track-color-checked)
+    &::before
+      background-color: var(--haptic-switch-track-color-checked)
 
     &::after
       background-color: var(--haptic-switch-handle-color-checked)
@@ -307,7 +311,7 @@ haptic-text-field
   --haptic-list-item-background-color-hover: #00000010
   --haptic-list-item-border-color: #{$haptic-dark-outline}
 
-  .haptic-list.separated &:not(:first-of-type)
+  .haptic-list.divided &:not(:first-of-type)
     border-color: var(--haptic-list-item-border-color)
 
   .haptic-checkbox

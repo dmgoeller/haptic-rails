@@ -1,3 +1,4 @@
+@import 'density'
 
 /**********************************************************************
  * Buttons
@@ -65,10 +66,11 @@ haptic-text-field
     border-bottom-right-radius: .25rem 3px
 
 /**********************************************************************
- * Checkboxes and radio buttons
+ * Checkboxes, radio buttons
  **********************************************************************/
 
-.haptic-checkbox, .haptic-radio-button
+input[type="checkbox"].haptic-checkbox,
+input[type="radio"].haptic-radio-button
   &.embedded
     outline: none
 
@@ -80,11 +82,11 @@ haptic-text-field
     border-style: solid
     border-width: 1px
 
-.haptic-checkbox
-  &::before, &::after
+input[type="checkbox"].haptic-checkbox
+  &, &::before, &::after
     border-radius: 2px
 
-.haptic-radio-button
+input[type="radio"].haptic-radio-button
   &::before, &::after
     border-radius: 50%
 
@@ -92,8 +94,12 @@ haptic-text-field
  * Switches
  **********************************************************************/
 
-.haptic-switch
-  border-radius: 14px
+input[type="checkbox"].haptic-switch
+  $track-height: haptic-measure(16px, 24px) // 32
+  outline: none
+
+  &, &::before
+    border-radius: #{$track-height / 2}
 
   &::after
     border-radius: 50%
@@ -104,11 +110,11 @@ haptic-text-field
  **********************************************************************/
 
 .haptic-list-item
-  &, & .haptic-checkbox
+  &, input[type="checkbox"].haptic-checkbox
     border-radius: .25rem
 
-  .haptic-list.separated &
-    &, & .haptic-checkbox
+  .haptic-list.divided &
+    &, input[type="checkbox"].haptic-checkbox
       border-radius: 0
 
     &:not(:first-of-type)

@@ -205,17 +205,28 @@ class HapticListItemElement extends HTMLLIElement {
 customElements.define('haptic-list-item', HapticListItemElement, { extends: 'li' });
 
 class HapticSelectElement extends HTMLSelectElement {
+  #initialValue = null;
+
   constructor() {
     super();
   }
 
   connectedCallback() {
     this.classList.add('haptic-field');
+    this.#initialValue = this.value;
+  }
+
+  reset() {
+    if (this.value != this.#initialValue) {
+      this.value = this.#initialValue;
+      this.dispatchEvent(new Event('change'));
+    }
   }
 }
 customElements.define('haptic-select', HapticSelectElement, { extends: 'select' });
 
 class HapticTextAreaElement extends HTMLTextAreaElement {
+  #initialValue = null;
   #resizer = () => { this.resize() };
 
   constructor() {
@@ -224,12 +235,20 @@ class HapticTextAreaElement extends HTMLTextAreaElement {
 
   connectedCallback() {
     this.classList.add('haptic-field');
+    this.#initialValue = this.value;
     this.addEventListener('input', this.#resizer);
     window.addEventListener('resize', this.#resizer);
   }
 
   disconnectedCallback() {
     window.removeEventListener('resize', this.#resizer);
+  }
+
+  reset() {
+    if (this.value != this.#initialValue) {
+      this.value = this.#initialValue;
+      this.dispatchEvent(new Event('change'));
+    }
   }
 
   resize() {

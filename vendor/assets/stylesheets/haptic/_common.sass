@@ -22,9 +22,6 @@
   cursor: pointer
   display: flex
   justify-content: center
-  transition-delay: .1s
-  transition-duration: .4s
-  transition-timing-function: linear
 
   &.filled, &.outlined, &.text
     @include haptic-overflow-ellipsis
@@ -37,9 +34,6 @@ button, input[type="submit"]
 
     &:disabled
       @include haptic-grayed
-
-    &:focus, &:focus-visible
-      transition-delay: 0
 
 /**********************************************************************
  * Chips and segmented buttons
@@ -54,7 +48,6 @@ button, input[type="submit"]
     background-clip: padding-box
     cursor: pointer
     position: absolute
-    transition: all .4s linear, background .1s linear
 
     &::after
       -webkit-mask-image: url('checkmark.svg')
@@ -62,11 +55,6 @@ button, input[type="submit"]
       mask-image: url('checkmark.svg')
       pointer-events: none
       position: absolute
-      transition: .1s linear
-
-    &:hover:not(:checked)
-      &, &::after
-        transition: .4s linear
 
     &:disabled
       @include haptic-grayed
@@ -76,7 +64,6 @@ button, input[type="submit"]
     pointer-events: none
     position: absolute
     text-align: center
-    transition: .4s linear
 
   input:disabled ~ label
     @include haptic-grayed
@@ -90,11 +77,8 @@ button, input[type="submit"]
  **********************************************************************/
 
 input, select, textarea
-  &.haptic-field
-    transition: opacity .4s linear, filter .4s
-
-    &:not(.embedded):disabled
-      @include haptic-grayed
+  &.haptic-field:not(.embedded):disabled
+    @include haptic-grayed
 
 select.haptic-field
   appearance: none
@@ -106,7 +90,6 @@ textarea.haptic-field
 
 haptic-text-field
   @include haptic-container
-  transition: .4s linear
 
   ::-webkit-inner-spin-button
     appearance: none
@@ -140,7 +123,6 @@ haptic-text-field
       opacity: 0
       pointer-events: none
       position: absolute
-      transition: .4s linear
 
   &[focus-indicator][focus]
     .container::after
@@ -150,16 +132,10 @@ haptic-text-field
     @include haptic-overflow-ellipsis
     pointer-events: none
     position: absolute
-    transition-duration: .4s
-    transition-property: color, font-size, top
-    transition-timing-function: linear
 
   &[required]
     label::after
       content: ' *'
-
-  .haptic-field
-    transition: border-color .4s linear
 
   .clear-button, .error-icon, .leading-icon, .trailing-icon
     align-items: center
@@ -172,7 +148,6 @@ haptic-text-field
 
   .clear-button
     cursor: pointer
-    transition: .4s linear
 
   &[empty]
     .clear-button
@@ -181,10 +156,6 @@ haptic-text-field
 
   .error-icon
     opacity: 0
-    transition: opacity .4s linear
-
-  .error-message
-    transition: color .4s linear
 
   &[error]
     .error-icon
@@ -197,52 +168,31 @@ haptic-text-field
       pointer-events: none
 
 /**********************************************************************
- * Checkboxes and radio buttons
+ * Checkboxes, radio buttons and switches
  **********************************************************************/
 
-.haptic-checkbox, .haptic-radio-button
+input[type="checkbox"].haptic-checkbox,
+input[type="checkbox"].haptic-switch,
+input[type="radio"].haptic-radio-button
+  appearance: none
+  cursor: pointer
   position: relative
-  transition: .4s linear
 
   &::before, &::after
     content: '\200b'
     pointer-events: none
     position: absolute
-    transition: background-color .1s linear
-
-.haptic-checkbox
-  &::after
-    -webkit-mask-image: url('checkbox-checked.svg')
-    mask-image: url('checkbox-checked.svg')
-
-input[type="checkbox"].haptic-checkbox,
-input[type="radio"].haptic-radio-button
-  appearance: none
-  cursor: pointer
 
   &:not(.embedded):disabled
     @include haptic-grayed
 
-/**********************************************************************
- * Switches
- **********************************************************************/
-
-.haptic-switch
-  position: relative
-  transition: all .4s linear, background-color .2s linear
-
-  &::after
-    content: '\200b'
-    pointer-events: none
-    position: absolute
-    transition: .2s linear
-
-input[type="checkbox"].haptic-switch
-  appearance: none
-  cursor: pointer
-
-  &:disabled
-    @include haptic-grayed
+input[type="checkbox"].haptic-checkbox::after
+  -webkit-mask-image: url('checkbox-checked.svg')
+  -webkit-mask-position: center
+  -webkit-mask-repeat: no-repeat
+  mask-image: url('checkbox-checked.svg')
+  mask-position: center
+  mask-repeat: no-repeat
 
 /**********************************************************************
  * Lists
@@ -259,10 +209,8 @@ input[type="checkbox"].haptic-switch
   position: relative
   user-select: none
 
-  .haptic-checkbox
+  input[type="checkbox"].haptic-checkbox
     position: absolute
-    transition: background-color .1s, filter .4s, opacity .4s
-    transition-timing-function: linear
 
   &[disabled]
     @include haptic-grayed
@@ -272,7 +220,5 @@ input[type="checkbox"].haptic-switch
  **********************************************************************/
 
 .haptic-label
-  transition: opacity .4s linear, filter .4s linear
-
   &.grayed, fieldset:disabled &
     @include haptic-grayed

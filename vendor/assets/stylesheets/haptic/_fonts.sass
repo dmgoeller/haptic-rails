@@ -1,5 +1,7 @@
 $haptic-font-family: sans-serif !default
 
+@import 'density'
+
 /**********************************************************************
  * Buttons
  **********************************************************************/
@@ -8,7 +10,7 @@ $haptic-font-family: sans-serif !default
   text-decoration: none
 
   &.icon
-    font-size: 1.125rem
+    font-size: haptic-measure(1.125rem, 1.5rem)
 
   &.filled, &.outlined, &.text
     font-size: 1rem
@@ -17,6 +19,14 @@ $haptic-font-family: sans-serif !default
     .icon
       font-size: 1.125rem
       font-weight: normal
+
+/**********************************************************************
+ * Chips and segmented buttons
+ **********************************************************************/
+
+.haptic-button-segment, .haptic-chip
+  label
+    font-size: 1rem
 
 /**********************************************************************
  * Fields
@@ -35,8 +45,11 @@ haptic-text-field
     label
       font-size: 1rem
 
-  .clear-button, .error-icon, .leading-icon, .trailing-icon
+  .clear-button
     font-size: 1.125rem
+
+  .error-icon, .leading-icon, .trailing-icon
+    font-size: haptic-measure(1.125rem, 1.5rem)
 
   &[with-label]
     .error-icon, .leading-icon, .trailing-icon
