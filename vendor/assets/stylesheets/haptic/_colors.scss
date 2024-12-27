@@ -1,0 +1,413 @@
+$haptic-light-primary-color:           #7BA1D0   !default;
+$haptic-primary-color:                 #2670D0   !default;
+$haptic-dark-primary-color:            #2670D0   !default;
+$haptic-light-secondary-color:         #E7C586   !default;
+$haptic-secondary-color:               #C26C1D   !default;
+$haptic-dark-secondary-color:          #B6581A   !default;
+$haptic-light-green:                   #A5D6A7   !default;  // Green 200
+$haptic-green:                         #388E3C   !default;  // Green 700
+$haptic-dark-green:                    #2E7D32   !default;  // Green 800
+$haptic-light-red:                     #EF9A9A   !default;  // Red 200
+$haptic-red:                           #D32F2F   !default;  // Red 700
+$haptic-dark-red:                      #C62828   !default;  // Red 800
+$haptic-light-text-color:              #C0C0C0   !default;
+$haptic-text-color:                    #606060   !default;
+$haptic-light-intense-text-color:      #E0E0E0   !default;
+$haptic-intense-text-color:            #303030   !default;
+$haptic-light-border-color:            #FFFFFF60 !default;
+$haptic-border-color:                  #00000060 !default;
+
+/**********************************************************************
+ * Buttons
+ **********************************************************************/
+
+.haptic-button {
+  background-color: transparent;
+  color: inherit;
+
+  &.filled {
+    --haptic-button-background-color: color($haptic-primary-color);
+    --haptic-button-foreground-color: white;
+    background-color: var(--haptic-button-background-color);
+    color: var(--haptic-button-foreground-color);
+
+    &.secondary {
+      --haptic-button-background-color: #{$haptic-secondary-color};
+    }
+    &.green {
+      --haptic-button-background-color: #{$haptic-dark-green};
+    }
+    &.red {
+      --haptic-button-background-color: #{$haptic-dark-red};
+    }
+  }
+
+  &:not(.filled) {
+    --haptic-button-background-color-hover: #00000010;
+
+    &.outlined, &.text {
+      --haptic-button-background-color-hover: #{$haptic-primary-color}20;
+      --haptic-button-foreground-color: #{$haptic-primary-color};
+      color: var(--haptic-button-foreground-color);
+
+      &.secondary {
+        --haptic-button-background-color-hover: #{$haptic-secondary-color}20;
+        --haptic-button-foreground-color: #{$haptic-secondary-color};
+      }
+      &.green {
+        --haptic-button-background-color-hover: #{$haptic-dark-green}20;
+        --haptic-button-foreground-color: #{$haptic-dark-green};
+      }
+      &.red {
+        --haptic-button-background-color-hover: #{$haptic-dark-red}20;
+        --haptic-button-foreground-color: #{$haptic-dark-red};
+      }
+    }
+    &.outlined {
+      --haptic-button-border-color: #{$haptic-border-color};
+      border-color: var(--haptic-button-border-color);
+
+      &:focus, &:focus-visible {
+        border-color: var(--haptic-button-foreground-color);
+      }
+    }
+  }
+
+  &:hover:not(:disabled), &:focus, &:focus-visible {
+    &.filled {
+      filter: brightness(1.1875);
+    }
+
+    &:not(.filled) {
+      background-color: var(--haptic-button-background-color-hover);
+    }
+  }
+}
+
+/**********************************************************************
+ * Chips and segmented buttons
+ **********************************************************************/
+
+.haptic-button-segment, .haptic-chip {
+  --haptic-chip-background-color-checked: #{$haptic-primary-color}40;
+  --haptic-chip-background-color-focus: #{$haptic-primary-color}60;
+  --haptic-chip-background-color-hover: #{$haptic-primary-color}20;
+  --haptic-chip-border-color: #{$haptic-border-color};
+  --haptic-chip-foreground-color-checked: #{$haptic-dark-primary-color};
+
+  input {
+    background-clip: padding-box;
+    border-color: var(--haptic-chip-border-color);
+
+    &::after {
+      background-color: transparent;
+    }
+    &:checked {
+      background-color: var(--haptic-chip-background-color-checked);
+
+      &::after {
+        background-color: var(--haptic-chip-foreground-color-checked);
+      }
+    }
+    &:checked ~ label {
+      color: var(--haptic-chip-foreground-color-checked);
+    }
+    &:hover:not(:checked) {
+      background-color: var(--haptic-chip-background-color-hover);
+    }
+    &:focus-visible {
+      background-color: var(--haptic-chip-background-color-focus);
+    }
+  }
+}
+
+/**********************************************************************
+ * Fields
+ **********************************************************************/
+
+.haptic-field {
+  --haptic-field-caret-color: #{$haptic-primary-color};
+  --haptic-field-foreground-color: #{$haptic-intense-text-color};
+  --haptic-field-placeholder-color: #00000060;
+  background-color: transparent;
+  caret-color: var(--haptic-field-caret-color);
+  color: var(--haptic-field-foreground-color);
+  outline-color: transparent;
+
+  &.filled {
+    --haptic-field-background-color: #0000002C;
+    background-color: var(--haptic-field-background-color);
+  }
+
+  &.outlined {
+    --haptic-field-border-color: #{$haptic-border-color};
+    border-color: var(--haptic-field-border-color);
+  }
+
+  &::placeholder {
+    color: var(--haptic-field-placeholder-color);
+  }
+}
+
+haptic-text-field {
+  --haptic-text-field-error-color: #{$haptic-dark-red};
+  --haptic-text-field-focus-indicator-color: #{$haptic-dark-primary-color};
+
+  label {
+    --haptic-text-field-label-color: #{$haptic-dark-primary-color};
+    --haptic-text-field-label-color-animated: #{$haptic-text-color};
+    color: var(--haptic-text-field-label-color);
+  }
+
+  &[animated][empty]:not([focus]) {
+    label {
+      color: var(--haptic-text-field-label-color-animated);
+    }
+  }
+
+  .clear-button, .leading-icon, .trailing-icon {
+    --haptic-text-field-icon-color: #{$haptic-text-color};
+    color: var(--haptic-text-field-icon-color);
+  }
+
+  .clear-button {
+    --haptic-text-field-clear-button-background-color-hover: #00000010;
+    background-color: transparent;
+
+    &:hover {
+      background-color: var(--haptic-text-field-clear-button-background-color-hover);
+    }
+  }
+
+  .error-icon {
+    color: var(--haptic-text-field-error-color);
+  }
+
+  &[focus-indicator] .container::after {
+    background-color: var(--haptic-text-field-focus-indicator-color);
+  }
+
+  &[invalid] {
+    .haptic-field.outlined {
+      border-color: var(--haptic-text-field-error-color);
+    }
+
+    label, .error-message {
+      color: var(--haptic-text-field-error-color);
+    }
+
+    &[focus-indicator] .container::after {
+      background-color: var(--haptic-text-field-error-color)
+    }
+  }
+}
+
+/**********************************************************************
+ * Checkboxes and radio buttons
+ **********************************************************************/
+
+.haptic-checkbox, .haptic-radio-button {
+  --haptic-box-background-color-focus: #00000020;
+  --haptic-box-foreground-color-checked: #{$haptic-intense-text-color};
+
+  &, &::after {
+    background-color: transparent;
+  }
+
+  &:checked::after {
+    background-color: var(--haptic-box-foreground-color-checked);
+  }
+
+  &:not(.embedded) {
+    outline-color: transparent;
+
+    &:focus-visible {
+      background-color: var(--haptic-box-background-color-focus);
+      outline-color: var(--haptic-box-background-color-focus);
+    }
+  }
+
+  &.filled {
+    --haptic-box-background-color: #0000002C;
+
+    &::before {
+      background-color: var(--haptic-box-background-color);
+    }
+  }
+
+  &.outlined {
+    --haptic-box-border-color: #{$haptic-border-color};
+
+    &::before {
+      border-color: var(--haptic-box-border-color);
+    }
+  }
+}
+
+.haptic-checkbox.filled:checked::before {
+  background-color: transparent;
+}
+
+/**********************************************************************
+ * Switches
+ **********************************************************************/
+
+.haptic-switch {
+  --haptic-switch-handle-color: white;
+  --haptic-switch-handle-color-checked: white;
+  --haptic-switch-handle-outline-color-focus: #00000020;
+  --haptic-switch-track-color: #00000060;
+  --haptic-switch-track-color-checked: #{$haptic-primary-color};
+  background-color: transparent;
+
+  &::before {
+    background-color: var(--haptic-switch-track-color);
+  }
+
+  &::after {
+    background-color: var(--haptic-switch-handle-color);
+    outline-color: transparent;
+  }
+
+  &:checked {
+    &::before {
+      background-color: var(--haptic-switch-track-color-checked);
+    }
+    &::after {
+      background-color: var(--haptic-switch-handle-color-checked);
+    }
+  }
+
+  &:focus-visible::after {
+    outline-color: var(--haptic-switch-handle-outline-color-focus);
+  }
+
+  &.red-green {
+    --haptic-switch-track-color: #{$haptic-dark-red};
+    --haptic-switch-track-color-checked: #{$haptic-dark-green};
+  }
+}
+
+/**********************************************************************
+ * Lists
+ **********************************************************************/
+
+.haptic-list-item {
+  --haptic-list-item-background-color-focus: #00000020;
+  --haptic-list-item-background-color-hover: #00000010;
+  --haptic-list-item-border-color: #{$haptic-border-color};
+
+  .haptic-list.divided &:not(:first-of-type) {
+    border-color: var(--haptic-list-item-border-color);
+  }
+
+  .haptic-checkbox {
+    &:hover {
+      background-color: var(--haptic-list-item-background-color-hover);
+    }
+    &:focus-visible {
+      background-color: var(--haptic-list-item-background-color-focus)
+    }
+  }
+}
+
+/**********************************************************************
+ * Dark mode
+ **********************************************************************/
+
+$haptic-dark-mode: true !default;
+
+@if $haptic-dark-mode == true {
+  @media(prefers-color-scheme: dark) {
+    .haptic-button:not(.filled) {
+      --haptic-button-background-color-hover: #FFFFFF10;
+
+      &.outlined, &.text {
+        --haptic-button-background-color-hover: #{$haptic-light-primary-color}20;
+        --haptic-button-foreground-color: #{$haptic-light-primary-color};
+
+        &.secondary {
+          --haptic-button-background-color-hover: #{$haptic-light-secondary-color}20;
+          --haptic-button-foreground-color: #{$haptic-light-secondary-color};
+        }
+        &.green {
+          --haptic-button-background-color-hover: #{$haptic-light-green}20;
+          --haptic-button-foreground-color: #{$haptic-light-green};
+        }
+        &.red {
+          --haptic-button-background-color-hover: #{$haptic-light-red}20;
+          --haptic-button-foreground-color: #{$haptic-light-red};
+        }
+      }
+      &.outlined {
+        --haptic-button-border-color: #{$haptic-light-border-color};
+      }
+    }
+
+    .haptic-button-segment, .haptic-chip {
+      --haptic-chip-background-color-focus: #{$haptic-light-primary-color}60;
+      --haptic-chip-background-color-hover: #{$haptic-light-primary-color}20;
+      --haptic-chip-border-color: #{$haptic-light-border-color};
+      --haptic-chip-foreground-color-checked: #{lighten($haptic-light-primary-color, 12.5%)};
+    }
+
+    .haptic-field {
+      --haptic-field-caret-color: #{$haptic-light-primary-color};
+      --haptic-field-foreground-color: #{$haptic-light-intense-text-color};
+      --haptic-field-placeholder-color: #FFFFFF60;
+
+      &.filled {
+        --haptic-field-background-color: #FFFFFF20;
+      }
+      &.outlined {
+        --haptic-field-border-color: #{$haptic-light-border-color};
+      }
+    }
+
+    haptic-text-field {
+      --haptic-text-field-error-color: #{$haptic-light-red};
+      --haptic-text-field-focus-indicator-color: #{$haptic-light-primary-color};
+
+      label {
+        --haptic-text-field-label-color: #{$haptic-light-primary-color};
+        --haptic-text-field-label-color-animated: #{$haptic-light-text-color};
+      }
+      .clear-button, .leading-icon, .trailing-icon {
+        --haptic-text-field-icon-color: #{$haptic-light-text-color};
+      }
+      .clear-button {
+        --haptic-text-field-clear-button-background-color-hover: #FFFFFF10;
+      }
+    }
+
+    .haptic-checkbox, .haptic-radio-button {
+      --haptic-box-background-color-focus:  #FFFFFF20;
+      --haptic-box-foreground-color-checked: #{$haptic-light-intense-text-color};
+
+      &.filled {
+        --haptic-box-background-color: #FFFFFF20;
+      }
+      &.outlined {
+        --haptic-box-border-color: #{$haptic-light-border-color};
+      }
+    }
+
+    .haptic-switch {
+      --haptic-switch-handle-color: #{$haptic-light-intense-text-color};
+      --haptic-switch-handle-outline-color-focus: #FFFFFF20;
+      --haptic-switch-track-color: #FFFFFF40;
+
+      &.red-green {
+        --haptic-switch-handle-color: white;
+        --haptic-switch-track-color: #{$haptic-red};
+        --haptic-switch-track-color-checked: #{$haptic-green};
+      }
+    }
+
+    .haptic-list-item {
+      --haptic-list-item-background-color-focus: #FFFFFF20;
+      --haptic-list-item-background-color-hover: #FFFFFF10;
+      --haptic-list-item-border-color: #{$haptic-light-border-color};
+    }
+  }
+}

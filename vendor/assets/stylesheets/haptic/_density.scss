@@ -1,0 +1,9 @@
+$haptic-high-density: false !default;
+
+@function haptic-measure($high-density, $default-density) {
+  @if $haptic-high-density == true {
+    @return $high-density;
+  } @else {
+    @return $default-density;
+  }
+}

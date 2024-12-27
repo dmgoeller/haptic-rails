@@ -1,0 +1,76 @@
+$haptic-font-family: sans-serif !default;
+
+/**********************************************************************
+ * Buttons
+ **********************************************************************/
+
+.haptic-button {
+  font-family: $haptic-font-family;
+  text-decoration: none;
+
+  &.icon {
+    font-size: haptic-measure(1.125rem, 1.5rem);
+  }
+
+  &.filled, &.outlined, &.text {
+    font-size: 1rem;
+    font-weight: bold;
+
+    .icon {
+      font-size: 1.125rem;
+      font-weight: normal;
+    }
+  }
+}
+
+/**********************************************************************
+ * Chips and segmented buttons
+ **********************************************************************/
+
+.haptic-button-segment, .haptic-chip {
+  label {
+    font-family: $haptic-font-family;
+    font-size: 1rem;
+  }
+}
+
+/**********************************************************************
+ * Fields
+ **********************************************************************/
+
+.haptic-field {
+  font-family: $haptic-font-family;
+  font-size: 1rem;
+}
+
+haptic-text-field {
+  label {
+    font-family: $haptic-font-family;
+    font-size: .875rem;
+    font-weight: bold;
+  }
+
+  &[animated][empty]:not([focus]) {
+    label {
+      font-size: 1rem;
+    }
+  }
+
+  .clear-button {
+    font-size: 1.125rem;
+  }
+
+  .error-icon, .leading-icon, .trailing-icon {
+    font-size: haptic-measure(1.125rem, 1.5rem);
+  }
+
+  &[with-label] {
+    .error-icon, .leading-icon, .trailing-icon {
+      font-size: 1.5rem;
+    }
+  }
+
+  .error-message, .supporting-text {
+    font-size: .875rem;
+  }
+}

@@ -355,7 +355,7 @@ class HapticTextFieldElement extends HTMLElement {
   }
 
   resetError() {
-    if (this.hasAttribute('error')) {
+    if (this.hasAttribute('invalid')) {
       if (this.hasAttribute('with-error-icon')) {
         setTimeout(() => {
           this.querySelectorAll('.error-icon').forEach(
@@ -363,7 +363,7 @@ class HapticTextFieldElement extends HTMLElement {
           );
         }, 400);
       }
-      this.removeAttribute('error');
+      this.removeAttribute('invalid');
     }
   }
 
@@ -381,11 +381,13 @@ class HapticTextFieldElement extends HTMLElement {
           if (node.disabled) {
             this.setAttribute('disabled', '');
           }
+          if (!node.validity.valid) {
+            this.setAttribute('invalid', '');
+          }
           if (node instanceof HapticTextAreaElement) {
             if (!node.hasAttribute('rows')) {
               node.setAttribute('rows', 1);
             }
-            this.setAttribute('auto-growing', '');
           }
           this.#mutationObserver.observe(node, { attributes: true });
           this.#startListen(node, 'change');
@@ -431,8 +433,8 @@ class HapticTextFieldElement extends HTMLElement {
       case this.#control:
         node.classList.remove('embedded');
         this.removeAttribute('disabled');
+        this.removeAttribute('invalid');
         this.removeAttribute('required');
-        this.removeAttribute('auto-growing');
         this.setAttribute('empty', '');
         this.#stopListen(node);
         this.#mutationObserver.disconnect();

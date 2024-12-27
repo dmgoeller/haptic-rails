@@ -131,6 +131,7 @@ module Haptic
       def haptic_text_field(method, field, options = {})
         options = options.slice(*HAPTIC_TEXT_FIELD_OPTIONS)
         options[:for] = _field_id(method)
+        options[:invalid] = object.errors&.key?(method)
         options[:error_message] = error_message_for(method)
 
         if (reset_error_on_change = options[:reset_error_on_change])

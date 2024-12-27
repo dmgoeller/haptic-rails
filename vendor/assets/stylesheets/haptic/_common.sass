@@ -157,7 +157,7 @@ haptic-text-field
   .error-icon
     opacity: 0
 
-  &[error]
+  &[invalid]
     .error-icon
       opacity: 1
 
@@ -187,10 +187,11 @@ input[type="radio"].haptic-radio-button
     @include haptic-grayed
 
 input[type="checkbox"].haptic-checkbox::after
-  -webkit-mask-image: url('checkbox-checked.svg')
+  $mask-image: "checkbox-checked-#{haptic-measure('16', '18')}.svg"
+  -webkit-mask-image: url(#{$mask-image})
   -webkit-mask-position: center
   -webkit-mask-repeat: no-repeat
-  mask-image: url('checkbox-checked.svg')
+  mask-image: url(#{$mask-image})
   mask-position: center
   mask-repeat: no-repeat
 
