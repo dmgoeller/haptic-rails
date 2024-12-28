@@ -1,0 +1,123 @@
+/**********************************************************************
+ * Buttons
+ **********************************************************************/
+
+.haptic-button {
+  transition-delay: .1s;
+  transition-duration: .4s;
+  transition-timing-function: linear;
+}
+
+button, input[type="submit"] {
+  &.haptic-button {
+    &:focus, &:focus-visible {
+      transition-delay: 0;
+    }
+  }
+}
+
+/**********************************************************************
+ * Chips and segmented buttons
+ **********************************************************************/
+
+.haptic-button-segment, .haptic-chip {
+  input {
+    transition: all .4s linear, background .1s linear;
+
+    &::after {
+      transition: .1s linear;
+    }
+    &:hover:not(:checked) {
+      &, &::after {
+        transition: .4s linear;
+      }
+    }
+  }
+
+  label {
+    transition: .4s linear;
+  }
+}
+
+/**********************************************************************
+ * Fields
+ **********************************************************************/
+
+input, select, textarea {
+  &.haptic-field {
+    transition: opacity .4s linear, filter .4s;
+  }
+}
+
+haptic-text-field {
+  transition: .4s linear;
+
+  label {
+    transition-duration: .4s;
+    transition-property: color, font-size, top;
+    transition-timing-function: linear;
+  }
+
+  .haptic-field {
+    transition: border-color .4s linear;
+  }
+
+  .clear-button {
+    transition: .4s linear;
+  }
+
+  .error-icon {
+    transition: opacity .4s linear;
+  }
+
+  .error-message {
+    transition: color .4s linear;
+  }
+
+  &[focus-indicator] {
+    .container::after {
+      transition: .4s linear;
+    }
+  }
+}
+
+/**********************************************************************
+ * Checkboxes and radio buttons
+ **********************************************************************/
+
+input[type="checkbox"].haptic-checkbox,
+input[type="radio"].haptic-radio-button {
+  transition: .4s linear;
+
+  &::before, &::after {
+    transition: background-color .1s linear;
+  }
+}
+
+/**********************************************************************
+ * Switches
+ **********************************************************************/
+
+input[type="checkbox"].haptic-switch {
+  transition: all .4s linear, background-color .2s linear;
+
+  &::after {
+    transition: .2s linear;
+  }
+}
+
+/**********************************************************************
+ * Lists
+ **********************************************************************/
+
+.haptic-list-item .haptic-checkbox {
+  transition: background-color .1s, filter .4s, opacity .4s;
+}
+
+/**********************************************************************
+ * Labels
+ **********************************************************************/
+
+.haptic-label {
+  transition: opacity .4s linear, filter .4s linear;
+}

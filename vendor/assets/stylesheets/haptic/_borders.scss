@@ -1,0 +1,144 @@
+
+/**********************************************************************
+ * Buttons
+ **********************************************************************/
+
+.haptic-button {
+  border-style: solid;
+  border-width: 0;
+  outline: none;
+
+  &.icon {
+    border-radius: 50%;
+  }
+  &.filled, &.outlined, &.text {
+    border-radius: .25rem; // .875rem
+  }
+  &.outlined {
+    border-width: 1px;
+  }
+}
+
+/**********************************************************************
+ * Chips and segmented buttons
+ **********************************************************************/
+
+.haptic-button-segment {
+  input {
+    border-style: solid;
+    border-width: 1px 0 1px 1px;
+  }
+  &:first-of-type input {
+    border-bottom-left-radius: .25rem;
+    border-top-left-radius: .25rem;
+  }
+  &:last-of-type input {
+    border-bottom-right-radius: .25rem;
+    border-top-right-radius: .25rem;
+    border-right-width: 1px;
+  }
+}
+
+.haptic-chip input {
+  border-radius: .25rem;
+  border-style: solid;
+  border-width: 1px;
+}
+
+/**********************************************************************
+ * Fields
+ **********************************************************************/
+
+.haptic-field {
+  outline-style: solid;
+  border-width: 0;
+  outline-width: 0;
+
+  &.filled, &.outlined {
+    border-radius: .25rem;
+  }
+  &.outlined {
+    border-width: 1px;
+    border-style: solid;
+  }
+}
+
+haptic-text-field {
+  .clear-button {
+    border-radius: 50%;
+  }
+
+  &[focus-indicator] .container::after {
+    border-bottom-left-radius: .25rem 3px;
+    border-bottom-right-radius: .25rem 3px;
+  }
+}
+
+/**********************************************************************
+ * Checkboxes, radio buttons
+ **********************************************************************/
+
+input[type="checkbox"].haptic-checkbox,
+input[type="radio"].haptic-radio-button {
+  &.embedded {
+    outline: none;
+  }
+  &:not(.embedded) {
+    border-radius: 50%;
+    outline-style: solid;
+  }
+  &.outlined::before {
+    border-style: solid;
+    border-width: 1px;
+  }
+}
+
+input[type="checkbox"].haptic-checkbox {
+  &, &::before, &::after {
+    border-radius: 2px;
+  }
+}
+
+input[type="radio"].haptic-radio-button {
+  &::before, &::after {
+    border-radius: 50%;
+  }
+}
+
+/**********************************************************************
+ * Switches
+ **********************************************************************/
+
+input[type="checkbox"].haptic-switch {
+  $track-height: haptic-measure(16px, 24px);
+  outline: none;
+
+  &, &::before {
+    border-radius: #{$track-height / 2};
+  }
+  &::after {
+    border-radius: 50%;
+    outline-style: solid;
+  }
+}
+
+/**********************************************************************
+ * Lists
+ **********************************************************************/
+
+.haptic-list-item {
+  &, input[type="checkbox"].haptic-checkbox {
+    border-radius: .25rem;
+  }
+
+  .haptic-list.divided & {
+    &, input[type="checkbox"].haptic-checkbox {
+      border-radius: 0;
+    }
+
+    &:not(:first-of-type) {
+      border-top-style: solid;
+      border-top-width: 1px;
+    }
+  }
+}

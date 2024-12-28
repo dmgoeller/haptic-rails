@@ -158,7 +158,7 @@
 
   &:not([with-leading-icon]) {
     @include haptic-text-field-padding-left(
-      $padding-left-right-with-icons
+      $padding-left-right-without-icons
     );
   }
 
@@ -268,10 +268,19 @@
 }
 
 .haptic-field {
+  $padding-top-bottom: haptic-measure(.25rem, .5rem);
+  $padding-left-right: haptic-measure(.5rem, 1rem);
+
   box-sizing: border-box;
-  line-height: 1.125;
+  line-height: 1.25;
   min-height: haptic-measure(1.75rem, 2.5rem);
-  padding: haptic-measure(.25rem .5rem, .5rem 1rem);
+  padding: $padding-top-bottom $padding-left-right;
+
+  &.outlined {
+    padding:
+      calc(#{$padding-top-bottom} - 1px)
+      calc(#{$padding-left-right} - 1px);
+  }
 }
 
 haptic-text-field {
@@ -318,21 +327,12 @@ haptic-text-field {
       min-height: $default-container-height;
       padding-bottom: $padding-top-bottom;
       padding-top: $padding-top-bottom + 1.25rem;
+      vertical-align: bottom;
 
       &.outlined {
         padding-bottom: calc(#{$padding-top-bottom} - 1px);
         padding-top: calc(#{$padding-top-bottom + 1.25rem} - 1px);
       }
-    }
-
-    input.haptic-field, select.haptic-field {
-      height: $default-container-height;
-      padding-top: $padding-top-bottom + 1.25rem;
-    }
-
-    textarea.haptic-field, div.haptic-field {
-      min-height: $default-container-height;
-      padding-top: $padding-top-bottom + 1.375rem;
     }
 
     label {
@@ -344,7 +344,9 @@ haptic-text-field {
 
     &[animated][empty]:not([focus]) {
       label {
-        top: #{($default-container-height - 1.125rem) / 2};
+        $line-height: 1.125rem;
+        line-height: $line-height;
+        top: #{($default-container-height - $line-height) / 2};
       }
     }
   }
