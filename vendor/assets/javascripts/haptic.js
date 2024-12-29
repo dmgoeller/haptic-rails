@@ -266,7 +266,7 @@ class HapticTextFieldElement extends HTMLElement {
   #label = null;
   #listens = null;
   #mutationObserver = null;
-  #resetErrorOnChange = null;
+  #setValidOnChange = null;
 
   constructor() {
     super();
@@ -292,13 +292,45 @@ class HapticTextFieldElement extends HTMLElement {
     });
   }
 
+  get valid() {
+    !this.hasAttribute('invalid');
+  }
+
+  set valid(value) {
+    switch (value) {
+      case true:
+        if (this.hasAttribute('invalid')) {
+          this.removeAttribute('invalid');
+        }
+        if (this.hasAttribute('with-error-icon')) {
+          setTimeout(
+            () => { this.removeAttribute('with-error-icon') },
+            400
+          );
+        }
+        return true;
+
+      case false:
+        if (!this.hasAttribute('with-error-icon')) {
+          this.setAttribute('with-error-icon', '');
+        }
+        if (!this.hasAttribute('invalid')) {
+          setTimeout(
+            () => { this.setAttribute('invalid', '') },
+            this.#clearButton ? 200 : 0
+          );
+        }
+        return false;
+    }
+  }
+
   connectedCallback() {
-    if (this.hasAttribute('reset-error-on-change')) {
-      const value = this.getAttribute('reset-error-on-change');
-      if (value == '' || value == 'reset-error-on-change') {
-        this.#resetErrorOnChange = ['itself'];
+    if (this.hasAttribute('set-valid-on-change')) {
+      const value = this.getAttribute('set-valid-on-change');
+      if (value == '' || value == 'set-valid-on-change') {
+        this.#setValidOnChange = ['itself'];
       } else {
-        this.#resetErrorOnChange = value.split(/\s+/);
+        this.#setValidOnChange = value.split(/\s+/);
       }
     }
     new MutationObserver(mutationList => {
@@ -319,15 +351,15 @@ class HapticTextFieldElement extends HTMLElement {
       case this.#control:
         switch (event.type) {
           case 'change':
-            this.#resetErrorOnChange?.forEach(fieldId => {
-              if (fieldId == 'itself') {
-                this.resetError();
-              } else {
+            this.#setValidOnChange?.forEach(fieldId => {
+              const textField = fieldId == 'itself' ? this :
                 this.#control?.form?.querySelector(
                   `haptic-text-field[for="${fieldId}"]`
-                )?.resetError();
+                );
+              if (textField) {
+                textField.valid = true;
               }
-            })
+            });
           case 'input':
             this.#refresh();
             break;
@@ -351,19 +383,6 @@ class HapticTextFieldElement extends HTMLElement {
     if (this.#control && this.#control.value != '') {
       this.#control.value = '';
       this.#control.dispatchEvent(new Event('change'));
-    }
-  }
-
-  resetError() {
-    if (this.hasAttribute('invalid')) {
-      if (this.hasAttribute('with-error-icon')) {
-        setTimeout(() => {
-          this.querySelectorAll('.error-icon').forEach(
-            element => { element.remove() }
-          );
-        }, 400);
-      }
-      this.removeAttribute('invalid');
     }
   }
 

@@ -10,7 +10,7 @@ module Haptic
         focus_indicator
         label
         leading_icon
-        reset_error_on_change
+        set_valid_on_change
         show_error_icon
         show_error_message
         supporting_text
@@ -134,10 +134,16 @@ module Haptic
         options[:invalid] = object.errors&.key?(method)
         options[:error_message] = error_message_for(method)
 
-        if (reset_error_on_change = options[:reset_error_on_change])
-          options[:reset_error_on_change] = Array(reset_error_on_change).map do |name|
-            name == true ? 'itself' : _field_id(name)
-          end.join(' ').presence
+        if (set_valid_on_change = options[:set_valid_on_change])
+          options[:set_valid_on_change] =
+            if set_valid_on_change == true
+              ''
+            else
+              Array(set_valid_on_change)
+                .map { |name| _field_id(name) }
+                .join(' ')
+                .presence
+            end
         end
 
         label =

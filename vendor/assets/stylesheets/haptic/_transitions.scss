@@ -63,7 +63,7 @@ haptic-text-field {
   }
 
   .clear-button {
-    transition: .4s linear;
+    transition: all .4s linear, right .2s linear;
   }
 
   .error-icon {

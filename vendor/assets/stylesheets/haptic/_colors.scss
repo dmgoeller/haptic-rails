@@ -296,7 +296,7 @@ haptic-text-field {
 
     &:hover {
       @include haptic-light-dark(
-        'color',
+        'background-color',
         #00000010,
         #FFFFFF10
       );

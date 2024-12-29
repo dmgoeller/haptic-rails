@@ -24,12 +24,15 @@ module Haptic
           field, label, options = capture(&block), field, label if block
           field = field.html_safe unless field.html_safe?
           options = options&.stringify_keys || {}
-          invalid = options['invalid'] || options['error_message'].present?
 
-          text_field_options = options.slice('for', 'reset_error_on_change')
+          text_field_options = options.slice('for', 'set_valid_on_change')
           text_field_options['animated'] = '' if options['animated']
           text_field_options['focus-indicator'] = '' if options['focus_indicator']
-          text_field_options['invalid'] = '' if invalid
+          text_field_options['invalid'] = '' if options['invalid']
+
+          if text_field_options['set_valid_on_change'] == true
+            text_field_options['set_valid_on_change'] = ''
+          end
 
           content_tag('haptic-text-field', text_field_options.transform_keys(&:dasherize)) do
             content_tag('div', class: 'container') do
@@ -40,7 +43,7 @@ module Haptic
                 if options['clear_button']
                   haptic_icon_tag('close', class: 'clear-button')
                 end +
-                if options['show_error_icon'] && invalid
+                if options['show_error_icon']
                   haptic_icon_tag('error', class: 'error-icon')
                 end +
                 if (leading_icon = options['leading_icon'])
@@ -50,7 +53,7 @@ module Haptic
                   haptic_icon_tag(trailing_icon, class: 'trailing-icon')
                 end
             end +
-              if options['show_error_message'] && options['error_message'].present? && invalid
+              if options['show_error_message'] && options['error_message'].present?
                 content_tag('div', options['error_message'], class: 'error-message')
               end +
               if (supporting_text = options['supporting_text'])
