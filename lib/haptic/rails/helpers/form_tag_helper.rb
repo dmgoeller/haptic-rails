@@ -20,6 +20,10 @@ module Haptic
           end
         end
 
+        def haptic_segmented_button_tag(options = {}, &block)
+          content_tag('haptic-segmented-button', options, &block)
+        end
+
         def haptic_text_field_tag(field = nil, label = nil, options = {}, &block)
           field, label, options = capture(&block), field, label if block
           field = field.html_safe unless field.html_safe?

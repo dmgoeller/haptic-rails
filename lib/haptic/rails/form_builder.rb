@@ -96,7 +96,7 @@ module Haptic
       end
 
       def segmented_button(method, collection, value_method, text_method, options = {})
-        @template.content_tag('div', class: 'haptic-segmented-button') do
+        @template.haptic_segmented_button_tag do
           button_segments(method, collection, value_method, text_method, options)
         end
       end

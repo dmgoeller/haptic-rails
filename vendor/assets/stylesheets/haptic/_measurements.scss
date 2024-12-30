@@ -98,6 +98,10 @@
   }
 }
 
+haptic-segmented-button:not(.outlined) {
+  grid-gap: 1px;
+}
+
 /**********************************************************************
  * Fields
  **********************************************************************/
@@ -420,6 +424,7 @@ input[type="checkbox"].haptic-switch {
   width: $track-width;
 
   &::before {
+    box-sizing: border-box;
     height: $track-height;
     margin: 0;
     width: $track-width;

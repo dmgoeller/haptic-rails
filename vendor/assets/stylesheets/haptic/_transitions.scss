@@ -35,7 +35,7 @@ button, input[type="submit"] {
   }
 
   label {
-    transition: .4s linear;
+    transition: .1s linear;
   }
 }
 
@@ -90,7 +90,9 @@ input[type="radio"].haptic-radio-button {
   transition: .4s linear;
 
   &::before, &::after {
-    transition: background-color .1s linear;
+    transition:
+      background-color .1s linear
+      border-color .1s linear;
   }
 }
 
@@ -99,8 +101,12 @@ input[type="radio"].haptic-radio-button {
  **********************************************************************/
 
 input[type="checkbox"].haptic-switch {
-  transition: all .4s linear, background-color .2s linear;
-
+  &::before {
+    transition:
+      all .4s linear,
+      border-color .2s linear,
+      background-color .2s linear;
+  }
   &::after {
     transition: .2s linear;
   }
@@ -111,7 +117,8 @@ input[type="checkbox"].haptic-switch {
  **********************************************************************/
 
 .haptic-list-item .haptic-checkbox {
-  transition: background-color .1s, filter .4s, opacity .4s;
+  transition:
+    background-color .1s, filter .4s, opacity .4s;
 }
 
 /**********************************************************************

@@ -204,6 +204,26 @@ class HapticListItemElement extends HTMLLIElement {
 }
 customElements.define('haptic-list-item', HapticListItemElement, { extends: 'li' });
 
+class HapticSegmentedButton extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    new MutationObserver(mutationList => {
+      for (let mutationRecord of mutationList) {
+        for (let node of mutationRecord.addedNodes) {
+          if (node instanceof HTMLInputElement &&
+              node.classList.contains('outlined')) {
+            this.classList.add('outlined');
+          }
+        }
+      }
+    }).observe(this, { childList: true, subtree: true });
+  }
+}
+customElements.define('haptic-segmented-button', HapticSegmentedButton);
+
 class HapticSelectElement extends HTMLSelectElement {
   #initialValue = null;
 
@@ -293,7 +313,7 @@ class HapticTextFieldElement extends HTMLElement {
   }
 
   get valid() {
-    !this.hasAttribute('invalid');
+    return !this.hasAttribute('invalid');
   }
 
   set valid(value) {
@@ -440,7 +460,9 @@ class HapticTextFieldElement extends HTMLElement {
       } else {
         for (let iconName of HapticTextFieldElement.ICON_NAMES) {
           if (node.classList.contains(`${iconName}-icon`)) {
-            this.setAttribute(`with-${iconName}-icon`, '');
+            if (iconName != 'error' || !this.valid) {
+              this.setAttribute(`with-${iconName}-icon`, '');
+            }
           }
         }
       }
