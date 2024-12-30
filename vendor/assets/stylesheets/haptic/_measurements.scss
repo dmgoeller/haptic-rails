@@ -58,7 +58,7 @@
 
 .haptic-button-segment, .haptic-chip {
   $padding-left-right: haptic-measure(.5rem, .75rem);
-  $icon-size: 1rem;
+  $icon-size: haptic-measure(1rem, 1.125rem);
   $spacing-between-icon-and-label: .5rem;
 
   box-sizing: border-box;

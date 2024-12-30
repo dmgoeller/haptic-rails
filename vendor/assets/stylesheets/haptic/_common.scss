@@ -67,8 +67,12 @@ button, input[type="submit"] {
     &::after {
       $mask-image: 'checkmark.svg';
       -webkit-mask-image: url(#{$mask-image});
+      -webkit-mask-position: center;
+      -webkit-mask-repeat: no-repeat;
       content: '\200b';
       mask-image: url(#{$mask-image});
+      mask-position: center;
+      mask-repeat: no-repeat;
       pointer-events: none;
       position: absolute;
     }
