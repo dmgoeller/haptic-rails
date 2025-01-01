@@ -43,7 +43,7 @@ button, input[type="submit"] {
  * Fields
  **********************************************************************/
 
-input, select, textarea {
+button, input, select, textarea {
   &.haptic-field {
     transition: opacity .4s linear, filter .4s;
   }

@@ -476,3 +476,37 @@ haptic-text-field {
     }
   }
 }
+
+/**********************************************************************
+ * Dropdowns
+ **********************************************************************/
+
+haptic-dropdown {
+  .popover {
+    $light-background-color: #FFFFFF;
+    $dark-background-color: #3C3C3C;
+    $blur: 'blur(16px)';
+
+    @include haptic-light-dark(
+      'background-color',
+      #{$light-background-color},
+      #{$dark-background-color}
+    );
+
+    @supports (backdrop-filter: #{$blur}) or
+      (-webkit-backdrop-filter: #{$blur}) {
+      -webkit-backdrop-filter: #{$blur};
+      backdrop-filter: #{$blur};
+
+      @include haptic-light-dark(
+        'background-color',
+        #{$light-background-color}80,
+        #{$dark-background-color}C0
+      );
+    }
+
+    &, section {
+      @include haptic-outline-color;
+    }
+  }
+}

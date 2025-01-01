@@ -479,3 +479,29 @@ input[type="checkbox"].haptic-switch {
     }
   }
 }
+
+/**********************************************************************
+ * Dropdowns
+ **********************************************************************/
+
+haptic-dropdown {
+  .popover {
+    box-sizing: border-box;
+    left: 0;
+    min-width: 100%;
+    top: 100%;
+
+    section {
+      padding:
+        calc(.5rem - 1px)
+        calc(#{haptic-measure(.5rem, 1rem)} - 1px);
+    }
+  }
+
+  .backdrop {
+    height: 100vh;
+    left: 0;
+    top: 0;
+    width: 100vw;
+  }
+}

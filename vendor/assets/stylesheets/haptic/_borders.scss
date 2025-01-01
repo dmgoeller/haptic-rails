@@ -47,8 +47,8 @@
   border-radius: .25rem;
 
   &.outlined {
-    border-width: 1px;
     border-style: solid;
+    border-width: 1px;
   }
 }
 
@@ -65,8 +65,8 @@
     border-radius: .25rem;
   }
   &.outlined {
-    border-width: 1px;
     border-style: solid;
+    border-width: 1px;
   }
 }
 
@@ -129,8 +129,8 @@ input[type="checkbox"].haptic-switch {
   }
 
   &.outlined::before {
-    border-width: 1px;
     border-style: solid;
+    border-width: 1px;
   }
 }
 
@@ -149,6 +149,23 @@ input[type="checkbox"].haptic-switch {
     }
 
     &:not(:first-of-type) {
+      border-top-style: solid;
+      border-top-width: 1px;
+    }
+  }
+}
+
+/**********************************************************************
+ * Popovers
+ **********************************************************************/
+
+haptic-dropdown {
+  .popover {
+    border-radius: .25rem;
+    border-style: solid;
+    border-width: 1px;
+
+    section:not(:first-of-type) {
       border-top-style: solid;
       border-top-width: 1px;
     }

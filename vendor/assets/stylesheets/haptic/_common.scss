@@ -1,3 +1,5 @@
+$haptic-popover-z-index: 10000;
+
 @mixin haptic-container {
   align-items: stretch;
   display: flex;
@@ -33,7 +35,7 @@
   }
 }
 
-button, input[type="submit"] {
+button, input[type="reset"], input[type="submit"] {
   &.haptic-button {
     appearance: none;
 
@@ -93,18 +95,21 @@ haptic-segmented-button {
  * Fields
  **********************************************************************/
 
-input, select, textarea {
-  &.haptic-field:not(.embedded):disabled {
-    @include haptic-grayed;
+button, input, select, textarea {
+  &.haptic-field {
+    appearance: none;
+
+    &:not(.embedded):disabled {
+      @include haptic-grayed;
+     }
   }
 }
 
-select.haptic-field {
-  appearance: none;
+button.haptic-field {
+  text-align: left;
 }
 
 textarea.haptic-field {
-  appearance: none;
   overflow: hidden;
   resize: none;
 }
@@ -271,5 +276,44 @@ input[type="checkbox"].haptic-checkbox::after {
 .haptic-label {
   &.grayed, fieldset:disabled & {
     @include haptic-grayed;
+  }
+}
+
+/**********************************************************************
+ * Dropdowns
+ **********************************************************************/
+
+haptic-dropdown {
+  @include haptic-container;
+  position: relative;
+
+  .toggle {
+    cursor: pointer;
+    z-index: $haptic-popover-z-index - 1;
+  }
+
+  .popover {
+    display: none;
+    box-shadow:
+      0 6px 10px rgba(0, 0, 0, .16),
+      0 3px 6px rgba(0, 0, 0, .23);
+    position: absolute;
+    z-index: $haptic-popover-z-index;
+  }
+
+  .backdrop {
+    display: none;
+    position: fixed;
+    z-index: $haptic-popover-z-index - 2;
+  }
+
+  &[popover-open] {
+    .popover {
+      display: flex;
+      flex-direction: column;
+    }
+    .backdrop {
+      display: initial;
+    }
   }
 }

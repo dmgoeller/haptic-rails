@@ -20,6 +20,13 @@ module Haptic
           end
         end
 
+        def haptic_dropdown_tag(options = {}, &block)
+          content_tag('haptic-dropdown', options) do
+            concat capture(&block) if block
+            concat content_tag('div', nil, class: 'backdrop')
+          end
+        end
+
         def haptic_segmented_button_tag(options = {}, &block)
           content_tag('haptic-segmented-button', options, &block)
         end
@@ -29,7 +36,7 @@ module Haptic
           field = field.html_safe unless field.html_safe?
           options = options&.stringify_keys || {}
 
-          text_field_options = options.slice('for', 'set_valid_on_change')
+          text_field_options = options.slice('class', 'for', 'set_valid_on_change')
           text_field_options['animated'] = '' if options['animated']
           text_field_options['focus-indicator'] = '' if options['focus_indicator']
           text_field_options['invalid'] = '' if options['invalid']

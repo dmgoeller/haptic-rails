@@ -1,4 +1,23 @@
 
+class HapticMutationObserver extends MutationObserver {
+  constructor(callbacks = {}) {
+    super(mutationList => {
+      for (let mutationRecord of mutationList) {
+        for (let node of mutationRecord.addedNodes) {
+          if (callbacks.nodeAdded) {
+            callbacks.nodeAdded(node);
+          }
+        }
+        for (let node of mutationRecord.removedNodes) {
+          if (callbacks.nodeRemoved) {
+            callbacks.nodeRemoved(node);
+          }
+        }
+      }
+    });
+  }
+}
+
 class HapticButtonElement extends HTMLButtonElement {
   constructor() {
     super();
@@ -10,14 +29,131 @@ class HapticButtonElement extends HTMLButtonElement {
 }
 customElements.define('haptic-button', HapticButtonElement, { extends: 'button' });
 
+class HapticDropdownElement extends HTMLElement {
+  static get openDropdown() {
+    return document.querySelector('haptic-dropdown[popover-open]');
+  }
+
+  #toggle = null;
+  #popover = null;
+  #backdrop = null;
+  #fields = new Set();
+  #resetButtons = new Set();
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.addEventListener('keyup', this);
+
+    new HapticMutationObserver({
+      nodeAdded: node => {
+        if (node instanceof HTMLElement) {
+          const classList = node.classList;
+
+          if (classList.contains('toggle')) {
+            if (!this.#toggle) {
+              node.addEventListener('click', this);
+              this.#toggle = node;
+            }
+          } else
+          if (classList.contains('popover')) {
+            if (!this.#popover) {
+              this.#popover = node;
+            }
+          } else
+          if (classList.contains('backdrop')) {
+            if (!this.#backdrop) {
+              node.addEventListener('click', this);
+              this.#backdrop = node;
+            }
+          } else
+          if (node.type == 'reset') {
+            node.addEventListener('click', this);
+            this.#resetButtons.add(node);
+          } else
+          if (node instanceof HapticInputElement ||
+              node instanceof HapticSelectElement ||
+              node instanceof HapticTextAreaElement) {
+            this.#fields.add(node);
+          }
+        }   
+      },
+      nodeRemoved: node => {
+        switch (node) {
+          case this.#toggle:
+            node.removeEventListener('click', this);
+            this.#toggle = null;
+            break;
+          case this.#popover:
+            this.#popover = null;
+            break;
+          case this.#backdrop:
+            node.removeEventListener('click', this);
+            this.#backdrop = null;
+            break;
+          default:
+            if (this.#fields.contains(node)) {
+              this.#fields.remove(node);
+            } else
+            if (this.#resetButtons.contains(node)) {
+              node.removeEventListener('click', this);
+              this.#resetButtons.remove(node);
+            }
+        }
+      }
+    }).observe(this, { childList: true, subtree: true });
+  }
+
+  get isOpen() {
+    return this.hasAttribute('popover-open');
+  }
+
+  showPopover() {
+    this.setAttribute('popover-open', '');
+  }
+
+  hidePopover() {
+    this.removeAttribute('popover-open');
+  }
+
+  resetAndClose() {
+    if (this.hasAttribute('popover-open')) {
+      this.hidePopover();
+      for (let field of this.#fields) {
+        field.reset();
+      }
+    }
+  }
+
+  handleEvent(event) {
+    switch (event.type) {
+      case 'click':
+        if (event.target === this.#toggle && !this.isOpen) {
+          HapticDropdownElement.openDropdown?.resetAndClose();
+          this.showPopover();
+          // TODO: Focus first focusable element?
+        } else {
+          this.resetAndClose();
+        }
+        event.preventDefault();
+        break;
+      case 'keyup':
+        if (event.key === 'Escape') {
+          this.resetAndClose();
+        }
+    }
+  }
+}
+customElements.define('haptic-dropdown', HapticDropdownElement);
+
 class HapticFormElement extends HTMLFormElement {
-  #requiredFields;
-  #submitButtons;
+  #requiredFields = new Set();
+  #submitButtons = new Set();
 
   constructor() {
-    super();
-    this.#requiredFields = new Set();
-    this.#submitButtons = new Set();
+    super();   
   }
 
   connectedCallback() {
@@ -204,7 +340,7 @@ class HapticListItemElement extends HTMLLIElement {
 }
 customElements.define('haptic-list-item', HapticListItemElement, { extends: 'li' });
 
-class HapticSegmentedButton extends HTMLElement {
+class HapticSegmentedButtonElement extends HTMLElement {
   constructor() {
     super();
   }
@@ -222,7 +358,7 @@ class HapticSegmentedButton extends HTMLElement {
     }).observe(this, { childList: true, subtree: true });
   }
 }
-customElements.define('haptic-segmented-button', HapticSegmentedButton);
+customElements.define('haptic-segmented-button', HapticSegmentedButtonElement);
 
 class HapticSelectElement extends HTMLSelectElement {
   #initialValue = null;
@@ -408,7 +544,8 @@ class HapticTextFieldElement extends HTMLElement {
 
   #nodeAdded(node) {
     if (node instanceof HTMLElement) {
-      if (node instanceof HTMLInputElement ||
+      if (node instanceof HTMLButtonElement ||
+          node instanceof HTMLInputElement ||
           node instanceof HTMLTextAreaElement ||
           node instanceof HTMLSelectElement) {
         if (!this.#control) {
