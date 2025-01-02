@@ -162,6 +162,7 @@ input[type="checkbox"].haptic-switch {
 haptic-dropdown {
   .toggle.button {
     border-radius: .25rem;
+    outline: none;
 
     &.outlined {
       border-style: solid;

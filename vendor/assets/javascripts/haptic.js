@@ -130,7 +130,7 @@ class HapticDropdownElement extends HTMLElement {
   handleEvent(event) {
     switch (event.type) {
       case 'click':
-        if (event.target === this.#toggle && !this.isOpen) {
+        if (!this.isOpen) {
           HapticDropdownElement.openDropdown?.resetAndClose();
           this.showPopover();
         } else {

@@ -79,6 +79,11 @@ haptic-text-field {
  * Dropdowns
  **********************************************************************/
 
-haptic-dropdown .toggle.button .arrow-icon {
-  font-size: 1.5rem;
+haptic-dropdown .toggle.button {
+  font-family: $haptic-font-family;
+  font-size: 1rem;
+
+  .arrow-icon {
+    font-size: 1.5rem;
+  }
 }
