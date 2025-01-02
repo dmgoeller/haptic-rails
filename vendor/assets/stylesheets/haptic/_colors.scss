@@ -508,8 +508,8 @@ haptic-dropdown {
     &, section {
       @include haptic-light-dark(
         'border-color',
-      #00000030,
-      #FFFFFF30
+      #00000040,
+      #FFFFFF40
       );
     }
   }

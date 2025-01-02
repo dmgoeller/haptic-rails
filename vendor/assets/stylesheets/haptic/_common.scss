@@ -1,4 +1,4 @@
-$haptic-popover-z-index: 10000;
+$haptic-popover-z-index: 10000 !default;
 
 @mixin haptic-container {
   align-items: stretch;
