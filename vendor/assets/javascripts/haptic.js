@@ -133,7 +133,6 @@ class HapticDropdownElement extends HTMLElement {
         if (event.target === this.#toggle && !this.isOpen) {
           HapticDropdownElement.openDropdown?.resetAndClose();
           this.showPopover();
-          // TODO: Focus first focusable element?
         } else {
           this.resetAndClose();
         }
