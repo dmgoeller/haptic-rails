@@ -487,9 +487,12 @@ input[type="checkbox"].haptic-switch {
 haptic-dropdown {
   .popover {
     box-sizing: border-box;
-    left: 0;
     min-width: 100%;
     top: 100%;
+
+    &.align-right {
+      right: 0;
+    }
 
     section {
       padding:
