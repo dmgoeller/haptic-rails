@@ -482,6 +482,11 @@ haptic-text-field {
  **********************************************************************/
 
 haptic-dropdown {
+  .toggle.button {
+    &.outlined {
+      @include haptic-outline-color;
+    }
+  }
   .popover {
     $light-background-color: #FFFFFF;
     $dark-background-color: #3C3C3C;

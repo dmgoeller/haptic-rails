@@ -145,6 +145,7 @@ haptic-text-field {
     @include haptic-container;
   }
 
+  // TODO: Remove
   .overflow-ellipsis {
     @include haptic-overflow-ellipsis;
     position: absolute;
@@ -290,6 +291,13 @@ haptic-dropdown {
   .toggle {
     cursor: pointer;
     z-index: $haptic-popover-z-index - 1;
+
+    &.button {
+      align-items: center;
+      display: flex;
+      flex: 1;
+      justify-content: center;
+    }
   }
 
   .popover {
