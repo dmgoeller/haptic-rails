@@ -485,6 +485,30 @@ input[type="checkbox"].haptic-switch {
  **********************************************************************/
 
 haptic-dropdown {
+  .toggle.button {
+    $arrow-icon-size: 1.5rem;
+    $padding-top-bottom: .5rem;
+    $padding-left: haptic-measure(.5rem, 1rem);
+    $padding-right: haptic-measure(.5rem, .75rem);
+    $spacing-between-arrow-icon-and-content: haptic-measure(.5rem, 1rem);
+
+    box-sizing: border-box;
+    padding-bottom: $padding-top-bottom;
+    padding-left: $padding-left;
+    padding-right:
+      $spacing-between-arrow-icon-and-content +
+      $arrow-icon-size +
+      $padding-right;
+    padding-top: $padding-top-bottom;
+
+    .arrow-icon {
+      height: $arrow-icon-size;
+      right: haptic-measure(.5rem, .75rem);
+      top: calc(50% - #{$arrow-icon-size / 2});
+      width: $arrow-icon-size;
+    }
+  }
+
   .popover {
     box-sizing: border-box;
     min-width: 100%;

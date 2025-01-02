@@ -293,10 +293,15 @@ haptic-dropdown {
     z-index: $haptic-popover-z-index - 1;
 
     &.button {
-      align-items: center;
-      display: flex;
-      flex: 1;
-      justify-content: center;
+      flex: 1 0 auto;
+      position: relative;
+
+      .arrow-icon {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        position: absolute;
+      }
     }
   }
 
