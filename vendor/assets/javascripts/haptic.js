@@ -556,9 +556,9 @@ class HapticTextFieldElement extends HTMLElement {
           if (node.disabled) {
             this.setAttribute('disabled', '');
           }
-          if (!node.validity.valid) {
+          /*if (!node.validity.valid) {
             this.setAttribute('invalid', '');
-          }
+          }*/
           if (node instanceof HapticTextAreaElement) {
             if (!node.hasAttribute('rows')) {
               node.setAttribute('rows', 1);
