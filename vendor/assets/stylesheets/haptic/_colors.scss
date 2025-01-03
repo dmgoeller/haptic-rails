@@ -250,6 +250,55 @@ $haptic-dark-mode: true !default;
 }
 
 /**********************************************************************
+ * Dropdowns
+ **********************************************************************/
+
+ haptic-dropdown {
+  &[popover-open] .toggle,
+  .toggle:hover {
+    &:not(.filled):not(.outlined) {
+      @include haptic-light-dark(
+        'background-color',
+        #00000010,
+        #FFFFFF10
+      );
+    }
+  }
+
+  .popover {
+    $light-background-color: #FFFFFF;
+    $dark-background-color: #3C3C3C;
+    $blur: 'blur(16px)';
+
+    @include haptic-light-dark(
+      'background-color',
+      #{$light-background-color},
+      #{$dark-background-color}
+    );
+
+    @supports (backdrop-filter: #{$blur}) or
+      (-webkit-backdrop-filter: #{$blur}) {
+      -webkit-backdrop-filter: #{$blur};
+      backdrop-filter: #{$blur};
+
+      @include haptic-light-dark(
+        'background-color',
+        #{$light-background-color}80,
+        #{$dark-background-color}C0
+      );
+    }
+
+    &, section {
+      @include haptic-light-dark(
+        'border-color',
+      #00000040,
+      #FFFFFF40
+      );
+    }
+  }
+}
+
+/**********************************************************************
  * Fields
  **********************************************************************/
 
@@ -281,6 +330,28 @@ $haptic-dark-mode: true !default;
   }
 }
 
+haptic-dropdown-field, haptic-text-field {
+  label {
+    @include haptic-primary-color;
+  }
+
+  &[focus-indicator] .container::after {
+    @include haptic-primary-color('background-color');
+  }
+
+  &[invalid] {
+    label {
+      @include haptic-red;
+    }
+    .haptic-field.outlined {
+      @include haptic-red('border-color');
+    }
+    &[focus-indicator] .container::after {
+      @include haptic-red('background-color');
+    }
+  }
+}
+
 haptic-dropdown-field {
   &::after {
     @include haptic-foreground-color('background-color');
@@ -288,10 +359,6 @@ haptic-dropdown-field {
 }
 
 haptic-text-field {
-  label {
-    @include haptic-primary-color;
-  }
-
   &[animated][empty]:not([focus]) label {
     @include haptic-foreground-color;
   }
@@ -312,24 +379,9 @@ haptic-text-field {
     }
   }
 
+  &[invalid] .error-message,
   .error-icon {
     @include haptic-red;
-  }
-
-  &[focus-indicator] .container::after {
-    @include haptic-primary-color('background-color');
-  }
-
-  &[invalid] {
-    label, .error-message {
-      @include haptic-red;
-    }
-    .haptic-field.outlined {
-      @include haptic-red('border-color');
-    }
-    &[focus-indicator] .container::after {
-      @include haptic-red('background-color');
-    }
   }
 }
 
@@ -478,63 +530,6 @@ haptic-text-field {
         'background-color',
         #00000020,
         #FFFFFF20
-      );
-    }
-  }
-}
-
-/**********************************************************************
- * Dropdowns
- **********************************************************************/
-
-haptic-dropdown {
-  .toggle.button {
-    background-color: transparent;
-
-    &.outlined {
-      @include haptic-outline-color;
-    }
-  }
-
-  &[popover-open] .toggle.button,
-  .toggle.button:hover {
-    &:not(.outlined) {
-      @include haptic-light-dark(
-        'background-color',
-        #00000010,
-        #FFFFFF10
-      );
-    }
-  }
-
-  .popover {
-    $light-background-color: #FFFFFF;
-    $dark-background-color: #3C3C3C;
-    $blur: 'blur(16px)';
-
-    @include haptic-light-dark(
-      'background-color',
-      #{$light-background-color},
-      #{$dark-background-color}
-    );
-
-    @supports (backdrop-filter: #{$blur}) or
-      (-webkit-backdrop-filter: #{$blur}) {
-      -webkit-backdrop-filter: #{$blur};
-      backdrop-filter: #{$blur};
-
-      @include haptic-light-dark(
-        'background-color',
-        #{$light-background-color}80,
-        #{$dark-background-color}C0
-      );
-    }
-
-    &, section {
-      @include haptic-light-dark(
-        'border-color',
-      #00000040,
-      #FFFFFF40
       );
     }
   }

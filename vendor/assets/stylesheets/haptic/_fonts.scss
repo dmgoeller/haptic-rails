@@ -43,13 +43,15 @@ $haptic-font-family: sans-serif !default;
   font-size: 1rem;
 }
 
-haptic-text-field {
+haptic-dropdown-field, haptic-text-field {
   label {
     font-family: $haptic-font-family;
     font-size: .875rem;
     font-weight: bold;
   }
+}
 
+haptic-text-field {
   &[animated][empty]:not([focus]) {
     label {
       font-size: 1rem;
@@ -72,18 +74,5 @@ haptic-text-field {
 
   .error-message, .supporting-text {
     font-size: .875rem;
-  }
-}
-
-/**********************************************************************
- * Dropdowns
- **********************************************************************/
-
-haptic-dropdown .toggle.button {
-  font-family: $haptic-font-family;
-  font-size: 1rem;
-
-  .arrow-icon {
-    font-size: 1.5rem;
   }
 }

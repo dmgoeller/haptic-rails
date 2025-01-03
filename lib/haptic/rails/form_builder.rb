@@ -153,7 +153,7 @@ module Haptic
             send(*args, is: nil)
           end
 
-        @template.haptic_text_field_tag(field, label, options)
+        @template.haptic_field_tag('text', field, label, options)
       end
 
       def _field_id(method)

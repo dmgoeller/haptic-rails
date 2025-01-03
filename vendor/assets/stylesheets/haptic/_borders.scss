@@ -53,31 +53,48 @@
 }
 
 /**********************************************************************
+ * Dropdowns
+ **********************************************************************/
+
+ haptic-dropdown {
+  .popover {
+    border-radius: .25rem;
+    border-style: solid;
+    border-width: 1px;
+
+    section:not(:first-of-type) {
+      border-top-style: solid;
+      border-top-width: 1px;
+    }
+  }
+}
+
+/**********************************************************************
  * Fields
  **********************************************************************/
 
 .haptic-field {
+  border-radius: .25rem;
   outline-style: solid;
   border-width: 0;
   outline-width: 0;
 
-  &.filled, &.outlined {
-    border-radius: .25rem;
-  }
   &.outlined {
     border-style: solid;
     border-width: 1px;
   }
 }
 
-haptic-text-field {
-  .clear-button {
-    border-radius: 50%;
-  }
-
+haptic-dropdown-field, haptic-text-field {
   &[focus-indicator] .container::after {
     border-bottom-left-radius: .25rem 3px;
     border-bottom-right-radius: .25rem 3px;
+  }
+}
+
+haptic-text-field {
+  .clear-button {
+    border-radius: 50%;
   }
 }
 
@@ -149,34 +166,6 @@ input[type="checkbox"].haptic-switch {
     }
 
     &:not(:first-of-type) {
-      border-top-style: solid;
-      border-top-width: 1px;
-    }
-  }
-}
-
-/**********************************************************************
- * Dropdowns
- **********************************************************************/
-
-haptic-dropdown {
-  .toggle.button {
-    border-radius: .25rem;
-    border-style: solid;
-    border-width: 0;
-    outline: none;
-
-    &.outlined {
-      border-width: 1px;
-    }
-  }
-
-  .popover {
-    border-radius: .25rem;
-    border-style: solid;
-    border-width: 1px;
-
-    section:not(:first-of-type) {
       border-top-style: solid;
       border-top-width: 1px;
     }

@@ -27,11 +27,7 @@ module Haptic
           end
         end
 
-        def haptic_segmented_button_tag(options = {}, &block)
-          content_tag('haptic-segmented-button', options, &block)
-        end
-
-        def haptic_text_field_tag(field = nil, label = nil, options = {}, &block)
+        def haptic_field_tag(type, field = nil, label = nil, options = {}, &block)
           field, label, options = capture(&block), field, label if block
           field = field.html_safe unless field.html_safe?
           options = options&.stringify_keys || {}
@@ -45,7 +41,7 @@ module Haptic
             text_field_options['set_valid_on_change'] = ''
           end
 
-          content_tag('haptic-text-field', text_field_options.transform_keys(&:dasherize)) do
+          content_tag("haptic-#{type}-field", text_field_options.transform_keys(&:dasherize)) do
             content_tag('div', class: 'container') do
               field +
                 if label
@@ -71,6 +67,10 @@ module Haptic
                 content_tag('div', supporting_text, class: 'supporting-text')
               end
           end
+        end
+
+        def haptic_segmented_button_tag(options = {}, &block)
+          content_tag('haptic-segmented-button', options, &block)
         end
       end
     end

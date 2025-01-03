@@ -95,12 +95,52 @@ haptic-segmented-button {
 }
 
 /**********************************************************************
+ * Dropdowns
+ **********************************************************************/
+
+ haptic-dropdown {
+  @include haptic-container;
+  position: relative;
+
+  .toggle {
+    cursor: pointer;
+    z-index: $haptic-popover-z-index - 1;
+  }
+
+  .popover {
+    display: none;
+    box-shadow:
+      0 6px 10px rgba(0, 0, 0, .16),
+      0 3px 6px rgba(0, 0, 0, .23);
+    position: absolute;
+    z-index: $haptic-popover-z-index;
+  }
+
+  .backdrop {
+    display: none;
+    position: fixed;
+    z-index: $haptic-popover-z-index - 2;
+  }
+
+  &[popover-open] {
+    .popover {
+      display: flex;
+      flex-direction: column;
+    }
+    .backdrop {
+      display: initial;
+    }
+  }
+}
+
+/**********************************************************************
  * Fields
  **********************************************************************/
 
 button, input, select, textarea {
   &.haptic-field {
     appearance: none;
+    text-align: left;
 
     &:not(.embedded):disabled {
       @include haptic-grayed;
@@ -108,22 +148,58 @@ button, input, select, textarea {
   }
 }
 
-button.haptic-field {
-  text-align: left;
-}
-
 textarea.haptic-field {
   overflow: hidden;
   resize: none;
 }
 
-haptic-dropdown-field {
+haptic-dropdown-field, haptic-text-field {
   @include haptic-container;
-  flex: 1 0 auto;
-  position: relative;
 
-  .haptic-field {
-    flex: 1 0 auto;
+  .container {
+    @include haptic-container;
+    position: relative;
+
+    label {
+      @include haptic-overflow-ellipsis;
+      pointer-events: none;
+      position: absolute;
+    }
+  }
+
+  &[required] {
+    .container label::after {
+      content: ' *';
+    }
+  }
+
+  &[focus-indicator] {
+    .container::after {
+      content: '\200b';
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+    }
+
+    &[focus] {
+      .container::after {
+        opacity: 1;
+      }
+    }
+  }
+
+  .field_with_errors {
+    @include haptic-container;
+  }
+
+  &[disabled], fieldset:disabled & {
+    @include haptic-grayed;
+  }
+}
+
+haptic-dropdown-field {
+  &, .container, .haptic-field {
+    flex-grow: 1;
   }
 
   &::after {
@@ -135,8 +211,6 @@ haptic-dropdown-field {
 }
 
 haptic-text-field {
-  @include haptic-container;
-
   ::-webkit-inner-spin-button {
     appearance: none;
   }
@@ -156,44 +230,10 @@ haptic-text-field {
     }
   }
 
-  .container {
-    @include haptic-container;
-    position: relative;
-  }
-
-  .field_with_errors {
-    @include haptic-container;
-  }
-
   // TODO: Remove
   .overflow-ellipsis {
     @include haptic-overflow-ellipsis;
     position: absolute;
-  }
-
-  &[focus-indicator] {
-    .container::after {
-      content: '\200b';
-      opacity: 0;
-      pointer-events: none;
-      position: absolute;
-    }
-
-    &[focus] {
-      .container::after {
-        opacity: 1;
-      }
-    }
-  }
-
-  label {
-    @include haptic-overflow-ellipsis;
-    pointer-events: none;
-    position: absolute;
-  }
-
-  &[required] label::after {
-    content: ' *';
   }
 
   .clear-button, .error-icon, .leading-icon, .trailing-icon {
@@ -225,8 +265,6 @@ haptic-text-field {
   }
 
   &[disabled], fieldset:disabled & {
-    @include haptic-grayed;
-
     .clear-button {
       pointer-events: none
     }
@@ -292,61 +330,5 @@ input[type="checkbox"].haptic-checkbox::after {
 .haptic-label {
   &.grayed, fieldset:disabled & {
     @include haptic-grayed;
-  }
-}
-
-/**********************************************************************
- * Dropdowns
- **********************************************************************/
-
-haptic-dropdown {
-  @include haptic-container;
-  position: relative;
-
-  .toggle {
-    cursor: pointer;
-    z-index: $haptic-popover-z-index - 1;
-
-    &.button {
-      flex: 1 0 auto;
-      position: relative;
-
-      .arrow-icon {
-        align-items: center;
-        display: flex;
-        justify-content: center;
-        pointer-events: none;
-        position: absolute;
-      }
-    }
-  }
-
-  button.toggle.button {
-    appearance: none;
-  }
-
-  .popover {
-    display: none;
-    box-shadow:
-      0 6px 10px rgba(0, 0, 0, .16),
-      0 3px 6px rgba(0, 0, 0, .23);
-    position: absolute;
-    z-index: $haptic-popover-z-index;
-  }
-
-  .backdrop {
-    display: none;
-    position: fixed;
-    z-index: $haptic-popover-z-index - 2;
-  }
-
-  &[popover-open] {
-    .popover {
-      display: flex;
-      flex-direction: column;
-    }
-    .backdrop {
-      display: initial;
-    }
   }
 }
