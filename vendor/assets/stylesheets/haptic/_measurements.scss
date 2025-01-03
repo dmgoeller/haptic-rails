@@ -157,152 +157,6 @@ haptic-dropdown {
   }
 }
 
-@mixin haptic-text-field-spacing($default-container-height,
-                                 $padding-left-right-without-icons,
-                                 $padding-left-right-with-icons,
-                                 $spacing-between-icons,
-                                 $spacing-between-icons-and-text,
-                                 $clear-button-size,
-                                 $icon-size) {
-
-   min-height: $default-container-height;
-
-   .clear-button {
-      height: $clear-button-size;
-      margin: ($icon-size - $clear-button-size) / 2;
-      top: ($default-container-height - $icon-size) / 2;
-      width: $clear-button-size;
-   }
-
-  .error-icon, .leading-icon, .trailing-icon,
-  ::-webkit-calendar-picker-indicator {
-    height: $icon-size;
-    top: ($default-container-height - $icon-size) / 2;
-    width: $icon-size;
-  }
-
-  &[with-leading-icon] {
-    @include haptic-field-padding-left(
-      $padding-left-right-with-icons +
-      $icon-size +
-      $spacing-between-icons-and-text
-    );
-    .leading-icon {
-      left: $padding-left-right-with-icons;
-    }
-  }
-
-  &:not([with-leading-icon]) {
-    @include haptic-field-padding-left(
-      $padding-left-right-without-icons
-    );
-  }
-
-  &[with-trailing-icon] {
-    .trailing-icon, ::-webkit-calendar-picker-indicator {
-      right: $padding-left-right-with-icons;
-    }
-    &[with-error-icon] {
-      .error-icon {
-        right:
-          $padding-left-right-with-icons +
-          $icon-size +
-          $spacing-between-icons;
-      }
-      &[with-clear-button] {
-        @include haptic-field-padding-right(
-          $padding-left-right-with-icons +
-          $icon-size * 3 +
-          $spacing-between-icons * 2 +
-          $spacing-between-icons-and-text
-        );
-        .clear-button {
-          right:
-            $padding-left-right-with-icons +
-            ($icon-size + $spacing-between-icons) * 2;
-        }
-      }
-      &:not([with-clear-button]) {
-        @include haptic-field-padding-right(
-          $padding-left-right-with-icons +
-          $icon-size * 2 +
-          $spacing-between-icons +
-          $spacing-between-icons-and-text
-        );
-      }
-    }
-    &:not([with-error-icon]) {
-      &[with-clear-button] {
-        @include haptic-field-padding-right(
-          $padding-left-right-with-icons +
-          $icon-size * 2 +
-          $spacing-between-icons +
-          $spacing-between-icons-and-text
-        );
-        .clear-button {
-          right:
-            $padding-left-right-with-icons +
-            $icon-size +
-            $spacing-between-icons;
-        }
-      }
-      &:not([with-clear-button]) {
-        @include haptic-field-padding-right(
-          $padding-left-right-with-icons +
-          $icon-size +
-          $spacing-between-icons-and-text
-        );
-      }
-    }
-  }
-
-  &:not([with-trailing-icon]) {
-    &[with-error-icon] {
-      .error-icon {
-        right: $padding-left-right-with-icons;
-      }
-      &[with-clear-button] {
-        @include haptic-field-padding-right(
-          $padding-left-right-with-icons +
-          $icon-size * 2 +
-          $spacing-between-icons +
-          $spacing-between-icons-and-text
-        );
-        .clear-button {
-          right:
-            $padding-left-right-with-icons +
-            $icon-size +
-            $spacing-between-icons;
-        }
-      }
-      &:not([with-clear-button]) {
-        @include haptic-field-padding-right(
-          $padding-left-right-with-icons +
-          $icon-size +
-          $spacing-between-icons-and-text
-        );
-      }
-    }
-    &:not([with-error-icon]) {
-      &[with-clear-button] {
-        @include haptic-field-padding-right(
-          $padding-left-right-with-icons +
-          $icon-size +
-          $spacing-between-icons-and-text
-        );
-        .clear-button {
-          right: $padding-left-right-with-icons;
-        }
-      }
-      &:not([with-clear-button]) {
-        @include haptic-field-padding-right(
-          $padding-left-right-without-icons
-        );
-      }
-    }
-  }
-}
-
 .haptic-field {
   $padding-top-bottom: haptic-measure(.25rem, .5rem);
   $padding-left-right: haptic-measure(.5rem, 1rem);
@@ -357,46 +211,192 @@ haptic-dropdown-field, haptic-text-field {
 }
 
 haptic-dropdown-field {
-  $dropdown-arrow-size: 1rem;
+  @mixin dropdown-field-spacing($padding-left-right-without-icons,
+                                $padding-left-right-with-icons,
+                                $spacing-between-content-and-icons,
+                                $icon-size) {
 
-  &::after {
-    height: $dropdown-arrow-size;
-    top: calc(50% - #{$dropdown-arrow-size / 2});
-    width: $dropdown-arrow-size;
-  }
-
-  @include haptic-field-padding-left(
-    haptic-measure(.5rem, 1rem)
-  );
-
-  &[with-label] {
-    $padding-right: haptic-measure(.5rem, .75rem);
+    @include haptic-field-padding-left($padding-left-right-without-icons);
 
     @include haptic-field-padding-right(
-      haptic-measure(.5rem, 1rem) + // spacing between content and icon
-      $dropdown-arrow-size +
-      $padding-right
+      $spacing-between-content-and-icons +
+      $icon-size +
+      $padding-left-right-with-icons
     );
     &::after {
-      right: $padding-right;
+      height: $icon-size;
+      top: calc(50% - #{$icon-size / 2});
+      right: $padding-left-right-with-icons;
+      width: $icon-size;
     }
+  }
+
+  &[with-label] {
+    @include dropdown-field-spacing(
+      $padding-left-right-without-icons: haptic-measure(.5rem, 1rem),
+      $padding-left-right-with-icons: haptic-measure(.5rem, .75rem),
+      $spacing-between-content-and-icons: haptic-measure(.5rem, 1rem),
+      $icon-size: 1.5rem
+    );
   }
 
   &:not([with-label]) {
-    $padding-right: haptic-measure(.25rem, .75rem);
-
-    @include haptic-field-padding-right(
-      haptic-measure(.25rem, 1rem) + // spacing between content and icon
-      $dropdown-arrow-size +
-      $padding-right
+    @include dropdown-field-spacing(
+      $padding-left-right-without-icons: haptic-measure(.5rem, 1rem),
+      $padding-left-right-with-icons: haptic-measure(.25rem, .75rem),
+      $spacing-between-content-and-icons: haptic-measure(.25rem, 1rem),
+      $icon-size: 1.5rem
     );
-    &::after {
-      right: $padding-right;
-    }
   }
 }
 
 haptic-text-field {
+  @mixin text-field-spacing($default-container-height,
+                            $padding-left-right-without-icons,
+                            $padding-left-right-with-icons,
+                            $spacing-between-icons,
+                            $spacing-between-icons-and-text,
+                            $clear-button-size,
+                            $icon-size) {
+
+    min-height: $default-container-height;
+
+    .clear-button {
+      height: $clear-button-size;
+      margin: ($icon-size - $clear-button-size) / 2;
+      top: ($default-container-height - $icon-size) / 2;
+      width: $clear-button-size;
+    }
+
+    .error-icon, .leading-icon, .trailing-icon,
+    ::-webkit-calendar-picker-indicator {
+      height: $icon-size;
+      top: ($default-container-height - $icon-size) / 2;
+      width: $icon-size;
+    }
+
+    &[with-leading-icon] {
+      @include haptic-field-padding-left(
+        $padding-left-right-with-icons +
+        $icon-size +
+        $spacing-between-icons-and-text
+      );
+      .leading-icon {
+        left: $padding-left-right-with-icons;
+      }
+    }
+
+    &:not([with-leading-icon]) {
+      @include haptic-field-padding-left(
+        $padding-left-right-without-icons
+      );
+    }
+
+    &[with-trailing-icon] {
+      .trailing-icon, ::-webkit-calendar-picker-indicator {
+        right: $padding-left-right-with-icons;
+      }
+      &[with-error-icon] {
+        .error-icon {
+          right:
+            $padding-left-right-with-icons +
+            $icon-size +
+            $spacing-between-icons;
+        }
+        &[with-clear-button] {
+          @include haptic-field-padding-right(
+            $padding-left-right-with-icons +
+            $icon-size * 3 +
+            $spacing-between-icons * 2 +
+            $spacing-between-icons-and-text
+          );
+          .clear-button {
+            right:
+              $padding-left-right-with-icons +
+              ($icon-size + $spacing-between-icons) * 2;
+          }
+        }
+        &:not([with-clear-button]) {
+          @include haptic-field-padding-right(
+            $padding-left-right-with-icons +
+            $icon-size * 2 +
+            $spacing-between-icons +
+            $spacing-between-icons-and-text
+          );
+        }
+      }
+      &:not([with-error-icon]) {
+        &[with-clear-button] {
+          @include haptic-field-padding-right(
+            $padding-left-right-with-icons +
+            $icon-size * 2 +
+            $spacing-between-icons +
+            $spacing-between-icons-and-text
+          );
+          .clear-button {
+            right:
+              $padding-left-right-with-icons +
+              $icon-size +
+              $spacing-between-icons;
+          }
+        }
+        &:not([with-clear-button]) {
+          @include haptic-field-padding-right(
+            $padding-left-right-with-icons +
+            $icon-size +
+            $spacing-between-icons-and-text
+          );
+        }
+      }
+    }
+
+    &:not([with-trailing-icon]) {
+      &[with-error-icon] {
+        .error-icon {
+          right: $padding-left-right-with-icons;
+        }
+        &[with-clear-button] {
+          @include haptic-field-padding-right(
+            $padding-left-right-with-icons +
+            $icon-size * 2 +
+            $spacing-between-icons +
+            $spacing-between-icons-and-text
+          );
+          .clear-button {
+            right:
+              $padding-left-right-with-icons +
+              $icon-size +
+              $spacing-between-icons;
+          }
+        }
+        &:not([with-clear-button]) {
+          @include haptic-field-padding-right(
+            $padding-left-right-with-icons +
+            $icon-size +
+            $spacing-between-icons-and-text
+          );
+        }
+      }
+      &:not([with-error-icon]) {
+        &[with-clear-button] {
+          @include haptic-field-padding-right(
+            $padding-left-right-with-icons +
+            $icon-size +
+            $spacing-between-icons-and-text
+          );
+          .clear-button {
+            right: $padding-left-right-with-icons;
+          }
+        }
+        &:not([with-clear-button]) {
+          @include haptic-field-padding-right(
+            $padding-left-right-without-icons
+          );
+        }
+      }
+    }
+  }
+
   .overflow-ellipsis { // TODO: Remove
     box-sizing: border-box;
     left: 0;
@@ -414,7 +414,7 @@ haptic-text-field {
   &[with-label] {
     $default-container-height: 3.5rem;
 
-    @include haptic-text-field-spacing(
+    @include text-field-spacing(
       $default-container-height: $default-container-height,
       $padding-left-right-without-icons: haptic-measure(.5rem, 1rem),
       $padding-left-right-with-icons: haptic-measure(.5rem, .75rem),
@@ -434,7 +434,7 @@ haptic-text-field {
   }
 
   &:not([with-label]) {
-    @include haptic-text-field-spacing(
+    @include text-field-spacing(
       $default-container-height: haptic-measure(1.75rem, 2.5rem),
       $padding-left-right-without-icons: haptic-measure(.5rem, 1rem),
       $padding-left-right-with-icons: haptic-measure(.25rem, .75rem),

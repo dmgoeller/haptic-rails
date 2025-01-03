@@ -207,7 +207,7 @@ haptic-dropdown-field {
   }
 
   &::after {
-    @include haptic-mask-image('checkmark.svg');
+    @include haptic-mask-image('dropdown-arrow.svg');
     content: '\200b';
     pointer-events: none;
     position: absolute;
