@@ -361,7 +361,6 @@ haptic-dropdown-field {
 
   &::after {
     height: $dropdown-arrow-size;
-    right: .5rem;
     top: calc(50% - #{$dropdown-arrow-size / 2});
     width: $dropdown-arrow-size;
   }
@@ -371,19 +370,29 @@ haptic-dropdown-field {
   );
 
   &[with-label] {
+    $padding-right: haptic-measure(.5rem, .75rem);
+
     @include haptic-field-padding-right(
       haptic-measure(.5rem, 1rem) + // spacing between content and icon
       $dropdown-arrow-size +
-      haptic-measure(.25rem, .75rem) // padding right
+      $padding-right
     );
+    &::after {
+      right: $padding-right;
+    }
   }
 
   &:not([with-label]) {
+    $padding-right: haptic-measure(.25rem, .75rem);
+
     @include haptic-field-padding-right(
       haptic-measure(.25rem, 1rem) + // spacing between content and icon
       $dropdown-arrow-size +
-      haptic-measure(.25rem, .75rem) // padding right
+      $padding-right
     );
+    &::after {
+      right: $padding-right;
+    }
   }
 }
 

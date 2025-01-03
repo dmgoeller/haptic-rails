@@ -140,12 +140,16 @@ haptic-segmented-button {
 button, input, select, textarea {
   &.haptic-field {
     appearance: none;
-    text-align: left;
 
     &:not(.embedded):disabled {
       @include haptic-grayed;
     }
   }
+}
+
+button.haptic-field {
+  @include haptic-overflow-ellipsis;
+  text-align: left;
 }
 
 textarea.haptic-field {
