@@ -413,7 +413,7 @@ class HapticTextAreaElement extends HTMLTextAreaElement {
 }
 customElements.define('haptic-textarea', HapticTextAreaElement, { extends: 'textarea' });
 
-class HapticTextFieldElement extends HTMLElement {
+class HapticFieldElement extends HTMLElement {
   static ICON_NAMES = ['error', 'leading', 'trailing'];
 
   #control = null;
@@ -667,6 +667,19 @@ class HapticTextFieldElement extends HTMLElement {
       target.removeEventListener(type, this);
     });
     this.#listens.delete(target);
+  }
+}
+
+class HapticDropdownFieldElement extends HapticFieldElement {
+  constructor() {
+    super();
+  }
+}
+customElements.define('haptic-dropdown-field', HapticDropdownFieldElement);
+
+class HapticTextFieldElement extends HapticFieldElement {
+  constructor() {
+    super();
   }
 }
 customElements.define('haptic-text-field', HapticTextFieldElement);
