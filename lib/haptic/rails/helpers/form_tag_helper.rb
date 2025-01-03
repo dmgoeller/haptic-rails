@@ -32,7 +32,7 @@ module Haptic
           field = field.html_safe unless field.html_safe?
           options = options&.stringify_keys || {}
 
-          text_field_options = options.slice('class', 'for', 'set_valid_on_change')
+          text_field_options = options.slice('class', 'for', 'id', 'set_valid_on_change')
           text_field_options['animated'] = '' if options['animated']
           text_field_options['focus-indicator'] = '' if options['focus_indicator']
           text_field_options['invalid'] = '' if options['invalid']
