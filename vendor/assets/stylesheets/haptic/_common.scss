@@ -18,6 +18,15 @@ $haptic-popover-z-index: 10000 !default;
   white-space: nowrap;
 }
 
+@mixin haptic-mask-image($image-url) {
+  -webkit-mask-image: url(#{$image-url});
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-image: url(#{$image-url});
+  mask-position: center;
+  mask-repeat: no-repeat;
+}
+
 /**********************************************************************
  * Buttons
  **********************************************************************/
@@ -67,14 +76,8 @@ button, input[type="reset"], input[type="submit"] {
     position: absolute;
 
     &::after {
-      $mask-image: 'checkmark.svg';
-      -webkit-mask-image: url(#{$mask-image});
-      -webkit-mask-position: center;
-      -webkit-mask-repeat: no-repeat;
+      @include haptic-mask-image('checkmark.svg');
       content: '\200b';
-      mask-image: url(#{$mask-image});
-      mask-position: center;
-      mask-repeat: no-repeat;
       pointer-events: none;
       position: absolute;
     }
@@ -101,7 +104,7 @@ button, input, select, textarea {
 
     &:not(.embedded):disabled {
       @include haptic-grayed;
-     }
+    }
   }
 }
 
@@ -112,6 +115,23 @@ button.haptic-field {
 textarea.haptic-field {
   overflow: hidden;
   resize: none;
+}
+
+haptic-dropdown-field {
+  @include haptic-container;
+  flex: 1 0 auto;
+  position: relative;
+
+  .haptic-field {
+    flex: 1 0 auto;
+  }
+
+  &::after {
+    @include haptic-mask-image('checkmark.svg');
+    content: '\200b';
+    pointer-events: none;
+    position: absolute;
+  }
 }
 
 haptic-text-field {
@@ -237,12 +257,7 @@ input[type="radio"].haptic-radio-button {
 
 input[type="checkbox"].haptic-checkbox::after {
   $mask-image: "checkbox-checked-#{haptic-measure('16', '18')}.svg";
-  -webkit-mask-image: url(#{$mask-image});
-  -webkit-mask-position: center;
-  -webkit-mask-repeat: no-repeat;
-  mask-image: url(#{$mask-image});
-  mask-position: center;
-  mask-repeat: no-repeat;
+  @include haptic-mask-image($mask-image);
 }
 
 /**********************************************************************

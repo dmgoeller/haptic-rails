@@ -106,8 +106,7 @@ haptic-segmented-button:not(.outlined) {
  * Fields
  **********************************************************************/
 
-
-@mixin haptic-text-field-padding-left($padding-left) {
+@mixin haptic-field-padding-left($padding-left) {
   label, .haptic-field, .overflow-ellipsis {
     padding-left: $padding-left;
   }
@@ -116,7 +115,7 @@ haptic-segmented-button:not(.outlined) {
   }
 }
 
-@mixin haptic-text-field-padding-right($padding-right) {
+@mixin haptic-field-padding-right($padding-right) {
   label, .haptic-field, .overflow-ellipsis {
     padding-right: $padding-right;
   }
@@ -150,7 +149,7 @@ haptic-segmented-button:not(.outlined) {
   }
 
   &[with-leading-icon] {
-    @include haptic-text-field-padding-left(
+    @include haptic-field-padding-left(
       $padding-left-right-with-icons +
       $icon-size +
       $spacing-between-icons-and-text
@@ -161,7 +160,7 @@ haptic-segmented-button:not(.outlined) {
   }
 
   &:not([with-leading-icon]) {
-    @include haptic-text-field-padding-left(
+    @include haptic-field-padding-left(
       $padding-left-right-without-icons
     );
   }
@@ -178,7 +177,7 @@ haptic-segmented-button:not(.outlined) {
           $spacing-between-icons;
       }
       &[with-clear-button] {
-        @include haptic-text-field-padding-right(
+        @include haptic-field-padding-right(
           $padding-left-right-with-icons +
           $icon-size * 3 +
           $spacing-between-icons * 2 +
@@ -191,7 +190,7 @@ haptic-segmented-button:not(.outlined) {
         }
       }
       &:not([with-clear-button]) {
-        @include haptic-text-field-padding-right(
+        @include haptic-field-padding-right(
           $padding-left-right-with-icons +
           $icon-size * 2 +
           $spacing-between-icons +
@@ -201,7 +200,7 @@ haptic-segmented-button:not(.outlined) {
     }
     &:not([with-error-icon]) {
       &[with-clear-button] {
-        @include haptic-text-field-padding-right(
+        @include haptic-field-padding-right(
           $padding-left-right-with-icons +
           $icon-size * 2 +
           $spacing-between-icons +
@@ -215,7 +214,7 @@ haptic-segmented-button:not(.outlined) {
         }
       }
       &:not([with-clear-button]) {
-        @include haptic-text-field-padding-right(
+        @include haptic-field-padding-right(
           $padding-left-right-with-icons +
           $icon-size +
           $spacing-between-icons-and-text
@@ -230,7 +229,7 @@ haptic-segmented-button:not(.outlined) {
         right: $padding-left-right-with-icons;
       }
       &[with-clear-button] {
-        @include haptic-text-field-padding-right(
+        @include haptic-field-padding-right(
           $padding-left-right-with-icons +
           $icon-size * 2 +
           $spacing-between-icons +
@@ -244,7 +243,7 @@ haptic-segmented-button:not(.outlined) {
         }
       }
       &:not([with-clear-button]) {
-        @include haptic-text-field-padding-right(
+        @include haptic-field-padding-right(
           $padding-left-right-with-icons +
           $icon-size +
           $spacing-between-icons-and-text
@@ -253,7 +252,7 @@ haptic-segmented-button:not(.outlined) {
     }
     &:not([with-error-icon]) {
       &[with-clear-button] {
-        @include haptic-text-field-padding-right(
+        @include haptic-field-padding-right(
           $padding-left-right-with-icons +
           $icon-size +
           $spacing-between-icons-and-text
@@ -263,7 +262,7 @@ haptic-segmented-button:not(.outlined) {
         }
       }
       &:not([with-clear-button]) {
-        @include haptic-text-field-padding-right(
+        @include haptic-field-padding-right(
           $padding-left-right-without-icons
         );
       }
@@ -287,9 +286,29 @@ haptic-segmented-button:not(.outlined) {
   }
 }
 
+haptic-dropdown-field {
+  $dropdown-arrow-size: 1rem;
+
+  @include haptic-field-padding-left(
+    haptic-measure(.5rem, 1rem)
+  );
+  @include haptic-field-padding-right(
+    haptic-measure(.25rem, .75rem)
+  );
+  box-sizing: border-box;
+
+  &::after {
+    height: $dropdown-arrow-size;
+    right: .5rem;
+    top: calc(50% - #{$dropdown-arrow-size / 2});
+    width: $dropdown-arrow-size;
+  }
+}
+
 haptic-text-field {
   box-sizing: border-box;
 
+  // TODO: Remove
   .overflow-ellipsis {
     box-sizing: border-box;
     left: 0;

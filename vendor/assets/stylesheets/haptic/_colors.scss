@@ -281,6 +281,12 @@ $haptic-dark-mode: true !default;
   }
 }
 
+haptic-dropdown-field {
+  &::after {
+    @include haptic-foreground-color('background-color');
+  }
+}
+
 haptic-text-field {
   label {
     @include haptic-primary-color;
