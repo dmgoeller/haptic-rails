@@ -253,7 +253,7 @@ $haptic-dark-mode: true !default;
  * Dropdowns
  **********************************************************************/
 
- haptic-dropdown {
+haptic-dropdown {
   &[popover-open] .toggle,
   .toggle:hover {
     &:not(.filled):not(.outlined) {
@@ -288,7 +288,7 @@ $haptic-dark-mode: true !default;
       );
     }
 
-    &, section {
+    &, & > .section {
       @include haptic-light-dark(
         'border-color',
       #00000040,
@@ -335,7 +335,7 @@ haptic-dropdown-field, haptic-text-field {
     @include haptic-primary-color;
   }
 
-  &[focus-indicator] .container::after {
+  &[focus-indicator] > .container::after {
     @include haptic-primary-color('background-color');
   }
 
@@ -346,16 +346,14 @@ haptic-dropdown-field, haptic-text-field {
     .haptic-field.outlined {
       @include haptic-red('border-color');
     }
-    &[focus-indicator] .container::after {
+    &[focus-indicator] > .container::after {
       @include haptic-red('background-color');
     }
   }
 }
 
-haptic-dropdown-field {
-  .container::before {
-    @include haptic-foreground-color('background-color');
-  }
+haptic-dropdown-field > .container::before {
+  @include haptic-foreground-color('background-color');
 }
 
 haptic-text-field {
@@ -363,26 +361,24 @@ haptic-text-field {
     @include haptic-foreground-color;
   }
 
-  .container {
-    .clear-button, .leading-icon, .trailing-icon {
-      @include haptic-foreground-color;
-    }
+  .clear-button, .leading-icon, .trailing-icon {
+    @include haptic-foreground-color;
+  }
 
-    .clear-button {
-      background-color: transparent;
+  .clear-button {
+    background-color: transparent;
 
-      &:hover {
-        @include haptic-light-dark(
-          'background-color',
-          #00000010,
-          #FFFFFF10
-        );
-      }
+    &:hover {
+      @include haptic-light-dark(
+        'background-color',
+        #00000010,
+        #FFFFFF10
+      );
     }
+  }
 
-    .error-icon {
-      @include haptic-red;
-    }
+  .error-icon {
+    @include haptic-red;
   }
 }
 

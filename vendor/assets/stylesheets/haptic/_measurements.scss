@@ -3,7 +3,7 @@
  * Buttons
  **********************************************************************/
 
-.haptic-button {
+ .haptic-button {
   box-sizing: border-box;
   border-width: 0;
 
@@ -116,10 +116,14 @@ haptic-dropdown {
       right: 0;
     }
 
-    section {
+    & > .section {
       padding:
         calc(.5rem - 1px)
         calc(#{haptic-measure(.5rem, 1rem)} - 1px);
+
+      &.haptic-list {
+        padding: calc(.5rem - 1px);
+      }
     }
   }
 
@@ -136,24 +140,20 @@ haptic-dropdown {
  **********************************************************************/
 
 @mixin haptic-field-padding-left($padding-left) {
-  .container {
-    label, .haptic-field, .overflow-ellipsis {
-      padding-left: $padding-left;
-    }
-    .haptic-field.outlined {
-      padding-left: calc(#{$padding-left} - 1px);
-    }
+  label, .haptic-field {
+    padding-left: $padding-left;
+  }
+  .haptic-field.outlined {
+    padding-left: calc(#{$padding-left} - 1px);
   }
 }
 
 @mixin haptic-field-padding-right($padding-right) {
-  .container {
-    label, .haptic-field, .overflow-ellipsis {
-      padding-right: $padding-right;
-    }
-    .haptic-field.outlined {
-      padding-right: calc(#{$padding-right} - 1px);
-    }
+  label, .haptic-field {
+    padding-right: $padding-right;
+  }
+  .haptic-field.outlined {
+    padding-right: calc(#{$padding-right} - 1px);
   }
 }
 
@@ -177,7 +177,7 @@ haptic-dropdown-field, haptic-text-field {
   box-sizing: border-box;
 
   &[focus-indicator] {
-    .container::after {
+    & > .container::after {
       bottom: 0;
       height: 3px;
       left: 0;
@@ -185,7 +185,7 @@ haptic-dropdown-field, haptic-text-field {
     }
   }
 
-  &[with-label] .container {
+  &[with-label] {
     $default-container-height: 3.5rem;
     $padding-top-bottom: .5rem;
 
@@ -232,7 +232,7 @@ haptic-dropdown-field {
       $padding-left-right-with-icons
     );
 
-    .container::before {
+    & > .container::before {
       height: $icon-size;
       top: calc(50% - #{$icon-size / 2});
       right: $padding-left-right-with-icons;
@@ -270,20 +270,18 @@ haptic-text-field {
 
     min-height: $default-container-height;
 
-    .container {
-      .clear-button {
-        height: $clear-button-size;
-        margin: ($icon-size - $clear-button-size) / 2;
-        top: ($default-container-height - $icon-size) / 2;
-        width: $clear-button-size;
-      }
+    .clear-button {
+      height: $clear-button-size;
+      margin: ($icon-size - $clear-button-size) / 2;
+      top: ($default-container-height - $icon-size) / 2;
+      width: $clear-button-size;
+    }
 
-      .error-icon, .leading-icon, .trailing-icon,
-      ::-webkit-calendar-picker-indicator {
-        height: $icon-size;
-        top: ($default-container-height - $icon-size) / 2;
-        width: $icon-size;
-      }
+    .error-icon, .leading-icon, .trailing-icon,
+    ::-webkit-calendar-picker-indicator {
+      height: $icon-size;
+      top: ($default-container-height - $icon-size) / 2;
+      width: $icon-size;
     }
 
     &[with-leading-icon] {
@@ -292,7 +290,7 @@ haptic-text-field {
         $icon-size +
         $spacing-between-icons-and-text
       );
-      .container .leading-icon {
+      .leading-icon {
         left: $padding-left-right-with-icons;
       }
     }
@@ -304,12 +302,12 @@ haptic-text-field {
     }
 
     &[with-trailing-icon] {
-      .container .trailing-icon,
+      .trailing-icon,
       ::-webkit-calendar-picker-indicator {
         right: $padding-left-right-with-icons;
       }
       &[with-error-icon] {
-        .container .error-icon {
+        .error-icon {
           right:
             $padding-left-right-with-icons +
             $icon-size +
@@ -322,7 +320,7 @@ haptic-text-field {
             $spacing-between-icons * 2 +
             $spacing-between-icons-and-text
           );
-          .container .clear-button {
+          .clear-button {
             right:
               $padding-left-right-with-icons +
               ($icon-size + $spacing-between-icons) * 2;
@@ -345,7 +343,7 @@ haptic-text-field {
             $spacing-between-icons +
             $spacing-between-icons-and-text
           );
-          .container .clear-button {
+          .clear-button {
             right:
               $padding-left-right-with-icons +
               $icon-size +
@@ -364,7 +362,7 @@ haptic-text-field {
 
     &:not([with-trailing-icon]) {
       &[with-error-icon] {
-        .container .error-icon {
+        .error-icon {
           right: $padding-left-right-with-icons;
         }
         &[with-clear-button] {
@@ -374,7 +372,7 @@ haptic-text-field {
             $spacing-between-icons +
             $spacing-between-icons-and-text
           );
-          .container .clear-button {
+          .clear-button {
             right:
               $padding-left-right-with-icons +
               $icon-size +
@@ -396,7 +394,7 @@ haptic-text-field {
             $icon-size +
             $spacing-between-icons-and-text
           );
-          .container .clear-button {
+          .clear-button {
             right: $padding-left-right-with-icons;
           }
         }
@@ -530,17 +528,31 @@ input[type="checkbox"].haptic-switch {
 }
 
 .haptic-list-item {
-  $padding-top-bottom: haptic-measure(.25rem, .5rem);
-  $padding-left-right: haptic-measure(.5rem, 1rem);
-  $spacing: haptic-measure(.75rem, 1rem);
+  @mixin spacing-left-right($padding-left-right, $spacing, $icon-size) {
+    padding-left: #{$padding-left-right + $icon-size + $spacing};
+    padding-right: $padding-left-right;
+
+    input[type="checkbox"].haptic-checkbox {
+      &::before, &::after {
+        left: $padding-left-right;
+      }
+    }
+  }
+
   $min-content-height: 1.25rem;
+  $padding-top-bottom: haptic-measure(.25rem, .5rem);
+  $spacing: haptic-measure(.75rem, 1rem);
   $icon-size: haptic-measure(1rem, 1.125rem);
+
+  @include spacing-left-right(
+    $padding-left-right: haptic-measure(.5rem, 1rem),
+    $spacing: $spacing,
+    $icon-size: $icon-size
+  );
 
   box-sizing: content-box;
   min-height: $min-content-height;
   padding-bottom: $padding-top-bottom;
-  padding-left: #{$padding-left-right + $icon-size + $spacing};
-  padding-right: $padding-left-right;
   padding-top: $padding-top-bottom;
 
   input[type="checkbox"].haptic-checkbox {
@@ -550,8 +562,15 @@ input[type="checkbox"].haptic-switch {
     width: 100%;
 
     &::before, &::after {
-      left: $padding-left-right;
       top: #{$padding-top-bottom + ($min-content-height - $icon-size) / 2};
     }
+  }
+
+  .haptic-list.section & {
+    @include spacing-left-right(
+      $padding-left-right: .5rem,
+      $spacing: $spacing,
+      $icon-size: $icon-size
+    );
   }
 }

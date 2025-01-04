@@ -62,17 +62,15 @@ haptic-text-field {
     }
   }
 
-  .container {
-    .clear-button {
-      font-size: 1.125rem;
-    }
-
-    .error-icon, .leading-icon, .trailing-icon {
-      font-size: haptic-measure(1.125rem, 1.5rem);
-    }
+  .clear-button {
+    font-size: 1.125rem;
   }
 
-  &[with-label] .container {
+  .error-icon, .leading-icon, .trailing-icon {
+    font-size: haptic-measure(1.125rem, 1.5rem);
+  }
+
+  &[with-label] {
     .error-icon, .leading-icon, .trailing-icon {
       font-size: 1.5rem;
     }
