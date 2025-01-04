@@ -353,7 +353,7 @@ haptic-dropdown-field, haptic-text-field {
 }
 
 haptic-dropdown-field {
-  &::after {
+  .container::before {
     @include haptic-foreground-color('background-color');
   }
 }
@@ -363,24 +363,29 @@ haptic-text-field {
     @include haptic-foreground-color;
   }
 
-  .clear-button, .leading-icon, .trailing-icon {
-    @include haptic-foreground-color;
-  }
+  .container {
+    .clear-button, .leading-icon, .trailing-icon {
+      @include haptic-foreground-color;
+    }
 
-  .clear-button {
-    background-color: transparent;
+    .clear-button {
+      background-color: transparent;
 
-    &:hover {
-      @include haptic-light-dark(
-        'background-color',
-        #00000010,
-        #FFFFFF10
-      );
+      &:hover {
+        @include haptic-light-dark(
+          'background-color',
+          #00000010,
+          #FFFFFF10
+        );
+      }
+    }
+
+    .error-icon {
+      @include haptic-red;
     }
   }
 
-  &[invalid] .error-message,
-  .error-icon {
+  &[invalid] .error-message {
     @include haptic-red;
   }
 }

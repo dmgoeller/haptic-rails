@@ -49,6 +49,20 @@ button, input, select, textarea {
   }
 }
 
+haptic-dropdown-field, haptic-text-field {
+  .container {
+    .haptic-field {
+      transition: border-color .4s linear;
+    }
+  }
+
+  &[focus-indicator] {
+    .container::after {
+      transition: .4s linear;
+    }
+  }
+}
+
 haptic-text-field {
   transition: .4s linear;
 
@@ -58,26 +72,18 @@ haptic-text-field {
     transition-timing-function: linear;
   }
 
-  .haptic-field {
-    transition: border-color .4s linear;
-  }
+  .container {
+    .clear-button {
+      transition: background-color .4s linear;
+    }
 
-  .clear-button {
-    transition: all .4s linear, right .2s linear;
-  }
-
-  .error-icon {
-    transition: opacity .4s linear;
+    .error-icon {
+      transition: opacity .4s linear;
+    }
   }
 
   .error-message {
     transition: color .4s linear;
-  }
-
-  &[focus-indicator] {
-    .container::after {
-      transition: .4s linear;
-    }
   }
 }
 

@@ -47,16 +47,16 @@ module Haptic
                 if label
                   label.html_safe? ? label : content_tag('label', label)
                 end +
-                if options['clear_button']
+                if type == 'text' && options['clear_button']
                   haptic_icon_tag('close', class: 'clear-button')
                 end +
-                if options['show_error_icon']
+                if type == 'text' && options['show_error_icon']
                   haptic_icon_tag('error', class: 'error-icon')
                 end +
-                if (leading_icon = options['leading_icon'])
+                if type == 'text' && (leading_icon = options['leading_icon'])
                   haptic_icon_tag(leading_icon, class: 'leading-icon')
                 end +
-                if (trailing_icon = options['trailing_icon'])
+                if type == 'text' && (trailing_icon = options['trailing_icon'])
                   haptic_icon_tag(trailing_icon, class: 'trailing-icon')
                 end
             end +

@@ -40,7 +40,7 @@ module Haptic
           field = super(method, options.except(*HAPTIC_TEXT_FIELD_OPTIONS))
           return field unless HAPTIC_TEXT_FIELD_OPTIONS.any? { |key| options.key? key }
 
-          haptic_text_field(method, field, options)
+          haptic_field('text', method, field, options)
         end
       end
 
@@ -63,7 +63,8 @@ module Haptic
       def date_field(method, options = {})
         options = @field_options.merge(options)
 
-        haptic_text_field(
+        haptic_field(
+          'text',
           method,
           super(method, options.except(*HAPTIC_TEXT_FIELD_OPTIONS)),
           options.reverse_merge(trailing_icon: 'calendar').except(:animated)
@@ -102,11 +103,7 @@ module Haptic
       end
 
       def select(method, choices = nil, options = {}, html_options = {}, &block)
-        text_field_options = @field_options.merge(trailing_icon: 'arrow_drop_down')
-        text_field_options.merge!(options)
-        text_field_options.delete(:clear_button)
-
-        haptic_text_field(method, super, text_field_options)
+        haptic_field('dropdown', method, super, @field_options.merge(options))
       end
 
       def with_field_options(options = {})
@@ -128,7 +125,7 @@ module Haptic
         "#{full_messages.map { |m| m.delete_suffix('.') }.join('. ')}."
       end
 
-      def haptic_text_field(method, field, options = {})
+      def haptic_field(type, method, field, options = {})
         options = options.slice(*HAPTIC_TEXT_FIELD_OPTIONS)
         options[:for] = _field_id(method)
         options[:invalid] = object&.errors&.key?(method) || false
@@ -153,7 +150,7 @@ module Haptic
             send(*args, is: nil)
           end
 
-        @template.haptic_field_tag('text', field, label, options)
+        @template.haptic_field_tag(type, field, label, options)
       end
 
       def _field_id(method)

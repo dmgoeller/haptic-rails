@@ -223,7 +223,8 @@ haptic-dropdown-field {
       $icon-size +
       $padding-left-right-with-icons
     );
-    &::after {
+
+    .container::before {
       height: $icon-size;
       top: calc(50% - #{$icon-size / 2});
       right: $padding-left-right-with-icons;
@@ -261,18 +262,20 @@ haptic-text-field {
 
     min-height: $default-container-height;
 
-    .clear-button {
-      height: $clear-button-size;
-      margin: ($icon-size - $clear-button-size) / 2;
-      top: ($default-container-height - $icon-size) / 2;
-      width: $clear-button-size;
-    }
+    .container {
+      .clear-button {
+        height: $clear-button-size;
+        margin: ($icon-size - $clear-button-size) / 2;
+        top: ($default-container-height - $icon-size) / 2;
+        width: $clear-button-size;
+      }
 
-    .error-icon, .leading-icon, .trailing-icon,
-    ::-webkit-calendar-picker-indicator {
-      height: $icon-size;
-      top: ($default-container-height - $icon-size) / 2;
-      width: $icon-size;
+      .error-icon, .leading-icon, .trailing-icon,
+      ::-webkit-calendar-picker-indicator {
+        height: $icon-size;
+        top: ($default-container-height - $icon-size) / 2;
+        width: $icon-size;
+      }
     }
 
     &[with-leading-icon] {
@@ -281,7 +284,7 @@ haptic-text-field {
         $icon-size +
         $spacing-between-icons-and-text
       );
-      .leading-icon {
+      .container .leading-icon {
         left: $padding-left-right-with-icons;
       }
     }
@@ -293,11 +296,12 @@ haptic-text-field {
     }
 
     &[with-trailing-icon] {
-      .trailing-icon, ::-webkit-calendar-picker-indicator {
+      .container .trailing-icon,
+      ::-webkit-calendar-picker-indicator {
         right: $padding-left-right-with-icons;
       }
       &[with-error-icon] {
-        .error-icon {
+        .container .error-icon {
           right:
             $padding-left-right-with-icons +
             $icon-size +
@@ -310,7 +314,7 @@ haptic-text-field {
             $spacing-between-icons * 2 +
             $spacing-between-icons-and-text
           );
-          .clear-button {
+          .container .clear-button {
             right:
               $padding-left-right-with-icons +
               ($icon-size + $spacing-between-icons) * 2;
@@ -333,7 +337,7 @@ haptic-text-field {
             $spacing-between-icons +
             $spacing-between-icons-and-text
           );
-          .clear-button {
+          .container .clear-button {
             right:
               $padding-left-right-with-icons +
               $icon-size +
@@ -352,7 +356,7 @@ haptic-text-field {
 
     &:not([with-trailing-icon]) {
       &[with-error-icon] {
-        .error-icon {
+        .container .error-icon {
           right: $padding-left-right-with-icons;
         }
         &[with-clear-button] {
@@ -362,7 +366,7 @@ haptic-text-field {
             $spacing-between-icons +
             $spacing-between-icons-and-text
           );
-          .clear-button {
+          .container .clear-button {
             right:
               $padding-left-right-with-icons +
               $icon-size +
@@ -384,7 +388,7 @@ haptic-text-field {
             $icon-size +
             $spacing-between-icons-and-text
           );
-          .clear-button {
+          .container .clear-button {
             right: $padding-left-right-with-icons;
           }
         }
@@ -395,12 +399,6 @@ haptic-text-field {
         }
       }
     }
-  }
-
-  .overflow-ellipsis { // TODO: Remove
-    box-sizing: border-box;
-    left: 0;
-    width: 100%;
   }
 
   .error-message, .supporting-text {

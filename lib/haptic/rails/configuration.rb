@@ -10,7 +10,7 @@ module Haptic
 
       attr_writer :icon_builder
 
-      # arrow_drop_down, calendar close, error
+      # calendar close, error
       def icon_builder
         @icon_builder || DEFAULT_ICON_BUILDER
       end
