@@ -107,6 +107,10 @@ haptic-segmented-button:not(.outlined) {
  **********************************************************************/
 
 haptic-dropdown {
+  .toggle {
+    height: 100%;
+    width: 100%;
+  }
   .popover {
     box-sizing: border-box;
     min-width: 100%;
