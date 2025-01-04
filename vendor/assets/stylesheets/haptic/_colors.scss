@@ -340,7 +340,7 @@ haptic-dropdown-field, haptic-text-field {
   }
 
   &[invalid] {
-    label {
+    label, .error-message {
       @include haptic-red;
     }
     .haptic-field.outlined {
@@ -383,10 +383,6 @@ haptic-text-field {
     .error-icon {
       @include haptic-red;
     }
-  }
-
-  &[invalid] .error-message {
-    @include haptic-red;
   }
 }
 

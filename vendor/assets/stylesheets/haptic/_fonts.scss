@@ -49,6 +49,10 @@ haptic-dropdown-field, haptic-text-field {
     font-size: .875rem;
     font-weight: bold;
   }
+
+  .error-message, .supporting-text {
+    font-size: .875rem;
+  }
 }
 
 haptic-text-field {
@@ -72,9 +76,5 @@ haptic-text-field {
     .error-icon, .leading-icon, .trailing-icon {
       font-size: 1.5rem;
     }
-  }
-
-  .error-message, .supporting-text {
-    font-size: .875rem;
   }
 }
