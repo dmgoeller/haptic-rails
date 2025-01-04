@@ -178,13 +178,13 @@ haptic-dropdown {
   }
 }
 
-button.haptic-field.overflow-ellipsis {
-  height: 100%;
-  width: 100%;
-}
-
 haptic-dropdown-field, haptic-text-field {
   box-sizing: border-box;
+
+  .haptic-field.overflow-ellipsis {
+    height: 100%;
+    width: 100%;
+  }
 
   &[focus-indicator] {
     & > .container::after {
@@ -198,6 +198,7 @@ haptic-dropdown-field, haptic-text-field {
   &[with-label] {
     $default-container-height: 3.5rem;
     $padding-top-bottom: .5rem;
+    min-height: $default-container-height;
 
     label {
       box-sizing: border-box;
@@ -217,6 +218,10 @@ haptic-dropdown-field, haptic-text-field {
         padding-top: calc(#{$padding-top-bottom + 1.25rem} - 1px);
       }
     }
+  }
+
+  &:not([with-label]) {
+    min-height: haptic-measure(1.75rem, 2.5rem);
   }
 
   .error-message, .supporting-text {

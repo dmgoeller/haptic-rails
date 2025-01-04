@@ -254,14 +254,15 @@ $haptic-dark-mode: true !default;
  **********************************************************************/
 
 haptic-dropdown {
-  &[popover-open] .toggle,
-  .toggle:hover {
-    &:not(.filled):not(.outlined) {
-      @include haptic-light-dark(
-        'background-color',
-        #00000010,
-        #FFFFFF10
-      );
+  &[popover-open] .toggle, .toggle:hover {
+    &.haptic-field, & .haptic-field {
+      &:not(.filled):not(.outlined) {
+        @include haptic-light-dark(
+          'background-color',
+          #00000010,
+          #FFFFFF10
+        );
+      }
     }
   }
 
