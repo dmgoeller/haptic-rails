@@ -27,21 +27,27 @@ module Haptic
           end
         end
 
+        def haptic_dropdown_field_tag(field = nil, label = nil, options = {}, &block)
+          haptic_field_tag('dropdown', field, label, options, &block)
+        end
+
         def haptic_field_tag(type, field = nil, label = nil, options = {}, &block)
           field, label, options = capture(&block), field, label if block
           field = field.html_safe unless field.html_safe?
+
+          label, options = nil, label if label.is_a?(Hash)
           options = options&.stringify_keys || {}
 
-          text_field_options = options.slice('class', 'for', 'id', 'set_valid_on_change')
-          text_field_options['animated'] = '' if options['animated']
-          text_field_options['focus-indicator'] = '' if options['focus_indicator']
-          text_field_options['invalid'] = '' if options['invalid']
+          field_options = options.slice('class', 'for', 'id', 'set_valid_on_change')
+          field_options['animated'] = '' if options['animated']
+          field_options['focus-indicator'] = '' if options['focus_indicator']
+          field_options['invalid'] = '' if options['invalid']
 
-          if text_field_options['set_valid_on_change'] == true
-            text_field_options['set_valid_on_change'] = ''
+          if field_options['set_valid_on_change'] == true
+            field_options['set_valid_on_change'] = ''
           end
 
-          content_tag("haptic-#{type}-field", text_field_options.transform_keys(&:dasherize)) do
+          content_tag("haptic-#{type}-field", field_options.transform_keys(&:dasherize)) do
             content_tag('div', class: 'container') do
               field +
                 if label
@@ -71,6 +77,10 @@ module Haptic
 
         def haptic_segmented_button_tag(options = {}, &block)
           content_tag('haptic-segmented-button', options, &block)
+        end
+
+        def haptic_text_field_tag(field = nil, label = nil, options = {}, &block)
+          haptic_field_tag('text', field, label, options, &block)
         end
       end
     end

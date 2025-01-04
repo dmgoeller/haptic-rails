@@ -103,7 +103,6 @@ haptic-segmented-button {
   position: relative;
 
   .toggle {
-    cursor: pointer;
     position: relative;
     z-index: $haptic-popover-z-index - 1;
   }
@@ -149,6 +148,7 @@ button, input, select, textarea {
 }
 
 button.haptic-field {
+  cursor: pointer;
   text-align: left;
 }
 
