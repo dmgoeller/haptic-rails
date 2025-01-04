@@ -145,7 +145,7 @@ haptic-dropdown {
  **********************************************************************/
 
 @mixin haptic-field-padding-left($padding-left) {
-  label, .haptic-field, .overflow-ellipsis {
+  label, .haptic-field {
     padding-left: $padding-left;
   }
   .haptic-field.outlined {
@@ -154,7 +154,7 @@ haptic-dropdown {
 }
 
 @mixin haptic-field-padding-right($padding-right) {
-  label, .haptic-field, .overflow-ellipsis {
+  label, .haptic-field {
     padding-right: $padding-right;
   }
   .haptic-field.outlined {
@@ -178,17 +178,13 @@ haptic-dropdown {
   }
 }
 
+button.haptic-field.overflow-ellipsis {
+  height: 100%;
+  width: 100%;
+}
+
 haptic-dropdown-field, haptic-text-field {
   box-sizing: border-box;
-
-  .overflow-ellipsis {
-    $line-height: 1.25rem;
-    box-sizing: border-box;
-    left: 0;
-    line-height: $line-height;
-    width: 100%;
-    top: calc(50% - #{$line-height / 2});
-  }
 
   &[focus-indicator] {
     & > .container::after {
@@ -220,10 +216,6 @@ haptic-dropdown-field, haptic-text-field {
         padding-bottom: calc(#{$padding-top-bottom} - 1px);
         padding-top: calc(#{$padding-top-bottom + 1.25rem} - 1px);
       }
-    }
-
-    .overflow-ellipsis {
-      top: $padding-top-bottom + 1.25rem;
     }
   }
 

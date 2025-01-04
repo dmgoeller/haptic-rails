@@ -150,6 +150,11 @@ button, input, select, textarea {
 
 button.haptic-field {
   text-align: left;
+
+  &.overflow-ellipsis {
+    @include haptic-overflow-ellipsis;
+    position: absolute;
+  }
 }
 
 textarea.haptic-field {
@@ -165,7 +170,7 @@ haptic-dropdown-field, haptic-text-field {
     position: relative;
   }
 
-  label, .overflow-ellipsis {
+  label {
     @include haptic-overflow-ellipsis;
     pointer-events: none;
     position: absolute;
