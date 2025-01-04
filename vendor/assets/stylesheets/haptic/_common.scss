@@ -149,7 +149,6 @@ button, input, select, textarea {
 }
 
 button.haptic-field {
-  @include haptic-overflow-ellipsis;
   text-align: left;
 }
 
@@ -164,15 +163,15 @@ haptic-dropdown-field, haptic-text-field {
   & > .container {
     @include haptic-container;
     position: relative;
-
-    & > label {
-      @include haptic-overflow-ellipsis;
-      pointer-events: none;
-      position: absolute;
-    }
   }
 
-  &[required] > .container > label::after {
+  label, .overflow-ellipsis {
+    @include haptic-overflow-ellipsis;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  &[required] label::after {
     content: ' *';
   }
 
