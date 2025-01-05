@@ -8,6 +8,7 @@ module Haptic
         animated
         clear_button
         focus_indicator
+        haptic_field_id
         label
         leading_icon
         set_valid_on_change
@@ -131,16 +132,13 @@ module Haptic
         options[:invalid] = object&.errors&.key?(method) || false
         options[:error_message] = error_message_for(method)
 
-        if (set_valid_on_change = options[:set_valid_on_change])
+        set_valid_on_change = options[:set_valid_on_change]
+        if [nil, '', true, false].exclude?(set_valid_on_change)
           options[:set_valid_on_change] =
-            if set_valid_on_change == true
-              ''
-            else
-              Array(set_valid_on_change)
-                .map { |name| _field_id(name) }
-                .join(' ')
-                .presence
-            end
+            Array(set_valid_on_change)
+              .map { |name| _field_id(name) }
+              .join(' ')
+              .presence
         end
 
         label =

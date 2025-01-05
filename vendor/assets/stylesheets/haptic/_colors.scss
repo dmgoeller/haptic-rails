@@ -336,7 +336,15 @@ haptic-dropdown-field, haptic-text-field {
     @include haptic-primary-color;
   }
 
-  &[focus-indicator] > .container::after {
+  .leading-icon {
+    @include haptic-foreground-color;
+  }
+
+  .error-icon {
+    @include haptic-red;
+  }
+
+  &[focus-indicator] .container::after {
     @include haptic-primary-color('background-color');
   }
 
@@ -347,13 +355,13 @@ haptic-dropdown-field, haptic-text-field {
     .haptic-field.outlined {
       @include haptic-red('border-color');
     }
-    &[focus-indicator] > .container::after {
+    &[focus-indicator] .container::after {
       @include haptic-red('background-color');
     }
   }
 }
 
-haptic-dropdown-field > .container::before {
+haptic-dropdown-field .container::before {
   @include haptic-foreground-color('background-color');
 }
 
@@ -362,11 +370,8 @@ haptic-text-field {
     @include haptic-foreground-color;
   }
 
-  .clear-button, .leading-icon, .trailing-icon {
-    @include haptic-foreground-color;
-  }
-
   .clear-button {
+    @include haptic-foreground-color;
     background-color: transparent;
 
     &:hover {
@@ -378,8 +383,8 @@ haptic-text-field {
     }
   }
 
-  .error-icon {
-    @include haptic-red;
+  .trailing-icon {
+    @include haptic-foreground-color;
   }
 }
 

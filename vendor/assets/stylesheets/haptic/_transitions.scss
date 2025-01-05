@@ -67,9 +67,17 @@ haptic-dropdown-field, haptic-text-field {
   }
 
   &[focus-indicator] {
-    & > .container::after {
+    .container::after {
       transition: .4s linear;
     }
+  }
+
+  .error-icon {
+    transition: opacity .4s linear;
+  }
+
+  .error-message {
+    transition: color .4s linear;
   }
 }
 
@@ -84,14 +92,6 @@ haptic-text-field {
 
   .clear-button {
     transition: background-color .4s linear;
-  }
-
-  .error-icon {
-    transition: opacity .4s linear;
-  }
-
-  .error-message {
-    transition: color .4s linear;
   }
 }
 

@@ -38,16 +38,14 @@ module Haptic
           label, options = nil, label if label.is_a?(Hash)
           options = options&.stringify_keys || {}
 
-          field_options = options.slice('class', 'for', 'id', 'set_valid_on_change')
-          field_options['animated'] = '' if options['animated']
-          field_options['focus-indicator'] = '' if options['focus_indicator']
-          field_options['invalid'] = '' if options['invalid']
+          field_options = options.except(
+            'clear_button', 'error_message', 'leading_icon', 'show_error_icon',
+            'show_error_message', 'supporting_text', 'trailing_icon'
+          ).filter_map do |key, value|
+            [key.dasherize, value == true ? '' : value] unless value == false
+          end.to_h
 
-          if field_options['set_valid_on_change'] == true
-            field_options['set_valid_on_change'] = ''
-          end
-
-          content_tag("haptic-#{type}-field", field_options.transform_keys(&:dasherize)) do
+          content_tag("haptic-#{type}-field", field_options) do
             content_tag('div', class: 'container') do
               field +
                 if label
@@ -56,10 +54,10 @@ module Haptic
                 if type == 'text' && options['clear_button']
                   haptic_icon_tag('close', class: 'clear-button')
                 end +
-                if type == 'text' && options['show_error_icon']
+                if options['show_error_icon']
                   haptic_icon_tag('error', class: 'error-icon')
                 end +
-                if type == 'text' && (leading_icon = options['leading_icon'])
+                if (leading_icon = options['leading_icon'])
                   haptic_icon_tag(leading_icon, class: 'leading-icon')
                 end +
                 if type == 'text' && (trailing_icon = options['trailing_icon'])

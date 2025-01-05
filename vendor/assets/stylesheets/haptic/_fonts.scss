@@ -50,6 +50,16 @@ haptic-dropdown-field, haptic-text-field {
     font-weight: bold;
   }
 
+  .error-icon, .leading-icon {
+    font-size: haptic-measure(1.125rem, 1.5rem);
+  }
+
+  &[with-label] {
+    .error-icon, .leading-icon {
+      font-size: 1.5rem;
+    }
+  }
+
   .error-message, .supporting-text {
     font-size: .875rem;
   }
@@ -66,12 +76,12 @@ haptic-text-field {
     font-size: 1.125rem;
   }
 
-  .error-icon, .leading-icon, .trailing-icon {
+  .trailing-icon {
     font-size: haptic-measure(1.125rem, 1.5rem);
   }
 
   &[with-label] {
-    .error-icon, .leading-icon, .trailing-icon {
+    .trailing-icon {
       font-size: 1.5rem;
     }
   }

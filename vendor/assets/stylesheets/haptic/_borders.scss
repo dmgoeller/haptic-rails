@@ -86,7 +86,7 @@
 }
 
 haptic-dropdown-field, haptic-text-field {
-  &[focus-indicator] > .container::after {
+  &[focus-indicator] .container::after {
     border-bottom-left-radius: .25rem 3px;
     border-bottom-right-radius: .25rem 3px;
   }

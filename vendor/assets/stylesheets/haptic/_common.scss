@@ -160,7 +160,7 @@ textarea.haptic-field {
 haptic-dropdown-field, haptic-text-field {
   @include haptic-container;
 
-  & > .container {
+  .container {
     @include haptic-container;
     position: relative;
   }
@@ -181,7 +181,7 @@ haptic-dropdown-field, haptic-text-field {
   }
 
   &[focus-indicator] {
-    & > .container::after {
+    .container::after {
       content: '\200b';
       opacity: 0;
       pointer-events: none;
@@ -189,7 +189,7 @@ haptic-dropdown-field, haptic-text-field {
     }
 
     &[focus] {
-      & > .container::after {
+      .container::after {
         opacity: 1;
       }
     }
@@ -199,17 +199,33 @@ haptic-dropdown-field, haptic-text-field {
     @include haptic-container;
   }
 
+  .leading-icon, .error-icon {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  .error-icon {
+    opacity: 0;
+  }
+
+  &[invalid] .error-icon {
+    opacity: 1;
+  }
+
   &[disabled], fieldset:disabled & {
     @include haptic-grayed;
   }
 }
 
 haptic-dropdown-field {
-  &, & > .container, .haptic-field {
+  &, .container, .haptic-field {
     flex-grow: 1;
   }
 
-  & > .container::before {
+  .container::before {
     @include haptic-mask-image('dropdown-arrow.svg');
     content: '\200b';
     pointer-events: none;
@@ -237,7 +253,7 @@ haptic-text-field {
     }
   }
 
-  .clear-button, .error-icon, .leading-icon, .trailing-icon {
+  .clear-button, .trailing-icon {
     align-items: center;
     display: flex;
     justify-content: center;
@@ -248,27 +264,19 @@ haptic-text-field {
     cursor: pointer;
   }
 
-  .error-icon, .leading-icon, .trailing-icon {
-    pointer-events: none;
-  }
-
-  .error-icon {
-    opacity: 0;
-  }
-
   &[empty] .clear-button {
     opacity: 0;
     pointer-events: none;
-  }
-
-  &[invalid] .error-icon {
-    opacity: 1;
   }
 
   &[disabled], fieldset:disabled & {
     .clear-button {
       pointer-events: none
     }
+  }
+
+  .trailing-icon {
+    pointer-events: none;
   }
 }
 
