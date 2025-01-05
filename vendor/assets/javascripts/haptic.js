@@ -249,6 +249,9 @@ class HapticFieldElement extends HTMLElement {
           this.#refresh();
           break;
         case 'focusin':
+          if (this.hasAttribute('reset-and-close-dropdown-on-focus')) {
+            HapticDropdownElement.openDropdown?.resetAndClose();
+          }
           this.setAttribute('focus', '');
           break;
         case 'focusout':
