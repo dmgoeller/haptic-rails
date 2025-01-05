@@ -442,9 +442,13 @@ class HapticFormElement extends HTMLFormElement {
   connectedCallback() {
     new HapticMutationObserver({
       nodeAdded: node => {
-        if (node instanceof HTMLInputElement ||
-            node instanceof HTMLTextAreaElement ||
-            node instanceof HTMLSelectElement) {
+        if (node instanceof HTMLButtonElement) {
+          if (node.type == 'submit') {
+            this.#submitButtons.add(node);
+            this.#refresh();
+          }
+        } else
+        if (node instanceof HTMLInputElement) {
           switch (node.type) {
             case 'submit':
               this.#submitButtons.add(node);
@@ -459,7 +463,23 @@ class HapticFormElement extends HTMLFormElement {
                 this.#refresh();
               }
           }
-        }
+        } else
+        if (node instanceof HTMLTextAreaElement ||
+            node instanceof HTMLSelectElement) {
+          if (node.hasAttribute('required')) {
+            node.addEventListener('change', this);
+            node.addEventListener('input', this);
+            this.#requiredFields.add(node);
+            this.#refresh();
+          }
+        } else
+        if (node instanceof HapticListElement) {
+          if (node.hasAttribute('data-required')) {
+            node.addEventListener('change', this);
+            this.#requiredFields.add(node);
+            this.#refresh();
+          }
+        }
       },
       nodeRemoved: node => {
         if (this.#requiredFields.has(node)) {
@@ -567,8 +587,53 @@ class HapticLabelElement extends HTMLLabelElement {
 }
 customElements.define('haptic-label', HapticLabelElement, { extends: 'label' });
 
+class HapticListElement extends HTMLUListElement {
+  #listItems = new Set();
+
+  constructor() {
+    super();
+  }
+
+  get required() {
+    this.hasAttribute('required');
+  }
+
+  get value() {
+    for (let listItem of this.#listItems) {
+      if (listItem.checkbox?.checked) {
+        return listItem.checkbox.value;
+      }
+    }
+    return null;
+  }
+
+  connectedCallback() {
+    this.classList.add('haptic-list');
+
+    new HapticMutationObserver({
+      nodeAdded: node => {
+        if (node instanceof HapticListItemElement) {
+          node.addEventListener('change', this);
+          this.#listItems.add(node);
+        }
+      },
+      nodeRemoved: node => {
+        if (this.#listItems.has(node)) {
+          node.removeEventListener('change', this);
+          this.#listItems.remove(node);
+        }
+      }
+    }).observe(this, { childList: true, subtree: true });
+  }
+
+  handleEvent(event) {
+    this.dispatchEvent(new Event('change'));
+  }
+}
+customElements.define('haptic-list', HapticListElement, { extends: 'ul' });
+
 class HapticListItemElement extends HTMLLIElement {
-  #checkbox = null;
+  checkbox = null;
 
   #mutationObserver = new MutationObserver((mutationList) => {
     for (let mutationRecord of mutationList) {
@@ -591,17 +656,17 @@ class HapticListItemElement extends HTMLLIElement {
 
     new HapticMutationObserver({
       nodeAdded: node => {
-        if (node instanceof HTMLInputElement && node.type == 'checkbox' && !this.#checkbox) {
+        if (node instanceof HTMLInputElement && node.type == 'checkbox' && !this.checkbox) {
           node.classList.add('embedded');
           this.#mutationObserver.observe(node, { attributes: true });
-          this.#checkbox = node;
+          this.checkbox = node;
         }
       },
       nodeRemoved: node => {
-        if (node === this.#checkbox) {
+        if (node === this.checkbox) {
           node.classList.remove('embedded');
           this.#mutationObserver.disconnect();
-          this.#checkbox = null;
+          this.checkbox = null;
         }
       }
     }).observe(this, { childList: true, subtree: true });

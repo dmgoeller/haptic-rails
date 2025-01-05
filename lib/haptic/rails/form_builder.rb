@@ -4,7 +4,7 @@ module Haptic
   module Rails
     # Builds forms with haptic components.
     class FormBuilder < ActionView::Helpers::FormBuilder
-      HAPTIC_TEXT_FIELD_OPTIONS = %i[
+      HAPTIC_FIELD_OPTIONS = %i[
         animated
         clear_button
         focus_indicator
@@ -39,8 +39,8 @@ module Haptic
       %i[file_field number_field text_area text_field].each do |name|
         define_method name do |method, options = {}|
           options = @field_options.merge(options)
-          field = super(method, options.except(*HAPTIC_TEXT_FIELD_OPTIONS))
-          return field unless HAPTIC_TEXT_FIELD_OPTIONS.any? { |key| options.key? key }
+          field = super(method, options.except(*HAPTIC_FIELD_OPTIONS))
+          return field unless HAPTIC_FIELD_OPTIONS.any? { |key| options.key? key }
 
           haptic_field('text', method, field, options)
         end
@@ -68,7 +68,7 @@ module Haptic
         haptic_field(
           'text',
           method,
-          super(method, options.except(*HAPTIC_TEXT_FIELD_OPTIONS)),
+          super(method, options.except(*HAPTIC_FIELD_OPTIONS)),
           options.reverse_merge(trailing_icon: 'calendar').except(:animated)
         )
       end
@@ -85,7 +85,12 @@ module Haptic
       end
 
       def list(method, collection, value_method, text_method, options = {}, &block)
-        @template.content_tag('ul', class: 'haptic-list') do
+        options = options.dup
+
+        list_options = { is: 'haptic-list' }
+        list_options[:'data-required'] = '' if options.delete(:required)
+
+        @template.content_tag('ul', list_options) do
           list_items(method, collection, value_method, text_method, options, &block)
         end
       end
@@ -128,7 +133,7 @@ module Haptic
       end
 
       def haptic_field(type, method, field, options = {})
-        options = options.slice(*HAPTIC_TEXT_FIELD_OPTIONS)
+        options = options.slice(*HAPTIC_FIELD_OPTIONS)
         options[:for] = _field_id(method)
         options[:invalid] = object&.errors&.key?(method) || false
         options[:error_message] = error_message_for(method)
