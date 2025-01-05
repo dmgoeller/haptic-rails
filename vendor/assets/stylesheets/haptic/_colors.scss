@@ -253,7 +253,7 @@ $haptic-dark-mode: true !default;
  * Dropdowns
  **********************************************************************/
 
-haptic-dropdown {
+haptic-dropdown, haptic-select-dropdown {
   &[popover-open] .toggle, .toggle:hover {
     &.haptic-field, & .haptic-field {
       &:not(.filled):not(.outlined) {
@@ -276,6 +276,11 @@ haptic-dropdown {
       #{$light-background-color},
       #{$dark-background-color}
     );
+    @include haptic-light-dark(
+      'border-color',
+      #00000040,
+      #FFFFFF40
+    );
 
     @supports (backdrop-filter: #{$blur}) or
       (-webkit-backdrop-filter: #{$blur}) {
@@ -288,13 +293,34 @@ haptic-dropdown {
         #{$dark-background-color}C0
       );
     }
+  }
+}
 
-    &, & > .section {
-      @include haptic-light-dark(
-        'border-color',
-      #00000040,
-      #FFFFFF40
-      );
+haptic-dropdown .popover > .section {
+  @include haptic-light-dark(
+    'border-color',
+  #00000040,
+  #FFFFFF40
+  );
+}
+
+haptic-select-dropdown option {
+  @include haptic-foreground-color;
+
+  &:checked::after {
+    @include haptic-foreground-color('background-color');
+  }
+
+  &:hover {
+    @include haptic-intense-foreground-color;
+    @include haptic-light-dark(
+      'background-color',
+      #00000020,
+      #FFFFFF20
+    );
+
+    &:checked::after {
+      @include haptic-intense-foreground-color('background-color');
     }
   }
 }

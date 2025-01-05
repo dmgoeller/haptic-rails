@@ -56,17 +56,21 @@
  * Dropdowns
  **********************************************************************/
 
- haptic-dropdown {
+haptic-dropdown, haptic-select-dropdown {
   .popover {
     border-radius: .25rem;
     border-style: solid;
     border-width: 1px;
-
-    & > .section:not(:first-child) {
-      border-top-style: solid;
-      border-top-width: 1px;
-    }
   }
+}
+
+haptic-dropdown > .section:not(:first-child) {
+  border-top-style: solid;
+  border-top-width: 1px;
+}
+
+haptic-select-dropdown option {
+  border-radius: .25rem;
 }
 
 /**********************************************************************

@@ -109,7 +109,7 @@ haptic-segmented-button:not(.outlined) {
  * Dropdowns
  **********************************************************************/
 
-haptic-dropdown {
+haptic-dropdown, haptic-select-dropdown {
   .toggle {
     height: 100%;
     width: 100%;
@@ -123,12 +123,6 @@ haptic-dropdown {
     &.align-right {
       right: 0;
     }
-
-    & > .section {
-      padding:
-        calc(.5rem - 1px)
-        calc(#{haptic-measure(.5rem, 1rem)} - 1px);
-    }
   }
 
   .backdrop {
@@ -136,6 +130,39 @@ haptic-dropdown {
     left: 0;
     top: 0;
     width: 100vw;
+  }
+}
+
+haptic-dropdown {
+  .popover > .section {
+    padding:
+      calc(.5rem - 1px)
+      calc(#{haptic-measure(.5rem, 1rem)} - 1px);
+  }
+}
+
+haptic-select-dropdown {
+  .popover {
+    padding: .25rem;
+  }
+
+  option {
+    $padding-top-bottom: .125rem;
+    $padding-left: .25rem;
+    $checkmark-size: 1rem;
+
+    line-height: 1.25rem;
+    padding-bottom: $padding-top-bottom;
+    padding-left: $padding-left + $checkmark-size + .25rem;
+    padding-right: .5rem;
+    padding-top: $padding-top-bottom;
+
+    &::after {
+      height: $checkmark-size;
+      left: $padding-left;
+      top: calc(50% - #{$checkmark-size / 2});
+      width: $checkmark-size;
+    }
   }
 }
 

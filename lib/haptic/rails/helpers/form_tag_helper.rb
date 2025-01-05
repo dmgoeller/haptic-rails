@@ -20,6 +20,13 @@ module Haptic
           end
         end
 
+        def haptic_select_dropdown_tag(options = {}, &block)
+          content_tag('haptic-select-dropdown', options) do
+            concat capture(&block) if block
+            concat content_tag('div', nil, class: 'backdrop')
+          end
+        end
+
         def haptic_dropdown_tag(options = {}, &block)
           content_tag('haptic-dropdown', options) do
             concat capture(&block) if block

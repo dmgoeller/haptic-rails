@@ -113,6 +113,19 @@ module Haptic
         haptic_field('dropdown', method, super, @field_options.merge(options))
       end
 
+      def select_dropdown(method, choices = nil, options = {})
+        button = '<button type="button" class="haptic-field outlined"></button>' # TODO: options
+        @template.haptic_select_dropdown_tag do
+          hidden_field(method) +
+            @template.content_tag('div', class: 'toggle') do
+              haptic_field('dropdown', method, button, @field_options.merge(options))
+            end +
+            @template.content_tag('datalist', class: 'popover') do
+              @template.options_for_select(choices, object.send(method))
+            end
+        end
+      end
+
       def with_field_options(options = {})
         @field_options.push(options)
         begin

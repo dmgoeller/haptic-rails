@@ -98,7 +98,7 @@ haptic-segmented-button {
  * Dropdowns
  **********************************************************************/
 
- haptic-dropdown {
+ haptic-dropdown, haptic-select-dropdown {
   @include haptic-container;
   position: relative;
 
@@ -130,6 +130,19 @@ haptic-segmented-button {
     .backdrop {
       display: initial;
     }
+  }
+}
+
+haptic-select-dropdown option {
+  cursor: default;
+  position: relative;
+  white-space: nowrap;
+
+  &::after {
+    @include haptic-mask-image('checkmark.svg');
+    content: '\200b';
+    pointer-events: none;
+    position: absolute;
   }
 }
 
