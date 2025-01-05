@@ -287,7 +287,8 @@ class HapticFieldElement extends HTMLElement {
           this.startListen(node, 'change');
           this.startListen(node, 'input');
 
-          if (this.hasAttribute('focus-indicator')) {
+          if (this.hasAttribute('focus-indicator') ||
+              this.hasAttribute('reset-and-close-dropdown-on-focus')) {
             this.startListen(node, 'focusin');
             this.startListen(node, 'focusout');
           }
