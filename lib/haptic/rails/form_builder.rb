@@ -96,9 +96,19 @@ module Haptic
       end
 
       def list_items(method, collection, value_method, text_method, options = {}, &block)
-        collection_check_boxes(method, collection, value_method, text_method, options) do |b|
-          @template.content_tag('li', is: 'haptic-list-item') do
-            block ? block.call(b) : b.check_box + b.label
+        options = options.dup
+
+        if options.delete(:multiple)
+          collection_check_boxes(method, collection, value_method, text_method, options) do |b|
+            @template.content_tag('li', is: 'haptic-list-item') do
+              block ? block.call(b) : b.check_box + b.label
+            end
+          end
+        else
+          collection_radio_buttons(method, collection, value_method, text_method, options) do |b|
+            @template.content_tag('li', is: 'haptic-list-item') do
+              block ? block.call(b) : b.radio_button + b.label
+            end
           end
         end
       end

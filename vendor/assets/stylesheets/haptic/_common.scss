@@ -342,7 +342,8 @@ input[type="checkbox"].haptic-checkbox::after {
   position: relative;
   user-select: none;
 
-  input[type="checkbox"].haptic-checkbox {
+  input[type="checkbox"].haptic-checkbox,
+  input[type="radio"].haptic-radio-button {
     position: absolute;
   }
 

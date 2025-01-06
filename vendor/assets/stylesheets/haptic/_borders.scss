@@ -160,12 +160,16 @@ input[type="checkbox"].haptic-switch {
  **********************************************************************/
 
 .haptic-list-item {
-  &, input[type="checkbox"].haptic-checkbox {
+  &,
+  input[type="checkbox"].haptic-checkbox,
+  input[type="radio"].haptic-radio-button {
     border-radius: .25rem;
   }
 
   .haptic-list.divided & {
-    &, input[type="checkbox"].haptic-checkbox {
+    &,
+    input[type="checkbox"].haptic-checkbox,
+    input[type="radio"].haptic-radio-button {
       border-radius: 0;
     }
 
