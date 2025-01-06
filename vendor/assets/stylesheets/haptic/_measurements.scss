@@ -11,7 +11,7 @@ $haptic-field-with-label-min-height: 3.5rem !default;
   border-width: 0;
 
   &.icon {
-    $content-size: haptic-measure(1.5rem, 2.5rem);
+    $content-size: haptic-measure(1.125rem, 2.5rem);
     box-sizing: content-box;
     height: $content-size;
     line-height: haptic-measure(1.125rem, 1.5rem);
