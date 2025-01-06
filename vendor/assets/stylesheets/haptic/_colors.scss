@@ -546,8 +546,7 @@ haptic-text-field {
     @include haptic-outline-color;
   }
 
-  input[type="checkbox"].haptic-checkbox,
-  input[type="radio"].haptic-radio-button {
+  .haptic-checkbox, .haptic-radio-button {
     &:hover {
       @include haptic-light-dark(
         'background-color',

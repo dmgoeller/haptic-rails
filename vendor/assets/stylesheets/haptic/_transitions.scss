@@ -99,8 +99,7 @@ haptic-text-field {
  * Checkboxes and radio buttons
  **********************************************************************/
 
-input[type="checkbox"].haptic-checkbox,
-input[type="radio"].haptic-radio-button {
+.haptic-checkbox, .haptic-radio-button {
   transition: .4s linear;
 
   &::before, &::after {
@@ -114,7 +113,7 @@ input[type="radio"].haptic-radio-button {
  * Switches
  **********************************************************************/
 
-input[type="checkbox"].haptic-switch {
+.haptic-switch {
   &::before {
     transition:
       all .4s linear,
@@ -133,14 +132,6 @@ input[type="checkbox"].haptic-switch {
 .haptic-list-item .haptic-checkbox {
   transition:
     background-color .1s, filter .4s, opacity .4s;
-}
-
-/**********************************************************************
- * Dropdowns
- **********************************************************************/
-
-haptic-dropdown .toggle.button {
-  transition: background-color .4s linear;
 }
 
 /**********************************************************************

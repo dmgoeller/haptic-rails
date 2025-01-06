@@ -166,16 +166,8 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
 
   handleEvent(event) {
     if (this.#options.has(event.target)) {
-      const option = event.target;
-
-      if (this.#input) {
-        this.#input.value = option.value;
-      }
-      if (this.#button) {
-        this.#button.innerHTML = option.innerHTML;
-      }
+      this.#select(event.target);
       this.hidePopover();
-
     } else {
       super.handleEvent(event);
     }
@@ -194,6 +186,9 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     } else
     if (node instanceof HTMLOptionElement) {
       node.addEventListener('click', this);
+      if (node.checked) {
+        this.#select(node);
+      }
       this.#options.add(node);
     } else {
       super.nodeAdded(node);
@@ -215,6 +210,15 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         } else {
           super.nodeRemoved(node);
         }
+    }
+  }
+
+  #select(option) {
+    if (this.#input) {
+      this.#input.value = option.value;
+    }
+    if (this.#button) {
+      this.#button.innerHTML = option.innerHTML;
     }
   }
 }

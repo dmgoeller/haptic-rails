@@ -522,8 +522,7 @@ haptic-text-field {
  * Checkboxes and radio buttons
  **********************************************************************/
 
-input[type="checkbox"].haptic-checkbox,
-input[type="radio"].haptic-radio-button {
+.haptic-checkbox, .haptic-radio-button {
   margin: 0;
 
   &:not(.embedded) {
@@ -532,7 +531,7 @@ input[type="radio"].haptic-radio-button {
   }
 }
 
-input[type="checkbox"].haptic-checkbox {
+.haptic-checkbox {
   $size: haptic-measure(1rem, 1.125rem);
 
   &, &::before, &::after {
@@ -542,7 +541,7 @@ input[type="checkbox"].haptic-checkbox {
   }
 }
 
-input[type="radio"].haptic-radio-button {
+.haptic-radio-button {
   $size: haptic-measure(1rem, 1.25rem);
 
   &, &::before {
@@ -563,7 +562,7 @@ input[type="radio"].haptic-radio-button {
  * Switches
  **********************************************************************/
 
-input[type="checkbox"].haptic-switch {
+.haptic-switch {
   $track-height: haptic-measure(1rem, 1.5rem);
   $track-width: haptic-measure(1.75rem, 2.5rem);
 
@@ -617,22 +616,21 @@ input[type="checkbox"].haptic-switch {
   padding-right: $padding-left-right;
   padding-top: $padding-top-bottom;
 
-  input[type="checkbox"].haptic-checkbox,
-  input[type="radio"].haptic-radio-button {
+  .haptic-checkbox, .haptic-radio-button {
     height: 100%;
     left: 0;
     top: 0;
     width: 100%;
   }
 
-  input[type="checkbox"].haptic-checkbox {
+  .haptic-checkbox {
     &::before, &::after {
       left: $padding-left-right;
       top: #{$padding-top-bottom + ($min-content-height - $icon-size) / 2};
     }
   }
 
-  input[type="radio"].haptic-radio-button {
+  .haptic-radio-button {
     $icon-top: $padding-top-bottom + ($min-content-height - $icon-size) / 2;
 
     &::before {

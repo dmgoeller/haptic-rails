@@ -303,10 +303,7 @@ haptic-text-field {
  * Checkboxes, radio buttons and switches
  **********************************************************************/
 
-input[type="checkbox"].haptic-checkbox,
-input[type="checkbox"].haptic-switch,
-input[type="radio"].haptic-radio-button {
-  appearance: none;
+.haptic-checkbox, .haptic-switch, .haptic-radio-button {
   cursor: pointer;
   position: relative;
 
@@ -315,15 +312,21 @@ input[type="radio"].haptic-radio-button {
     pointer-events: none;
     position: absolute;
   }
+}
+
+.haptic-checkbox::after {
+  $mask-image: "checkbox-checked-#{haptic-measure('16', '18')}.svg";
+  @include haptic-mask-image($mask-image);
+}
+
+input[type="checkbox"].haptic-checkbox,
+input[type="checkbox"].haptic-switch,
+input[type="radio"].haptic-radio-button {
+  appearance: none;
 
   &:not(.embedded):disabled {
     @include haptic-grayed;
   }
-}
-
-input[type="checkbox"].haptic-checkbox::after {
-  $mask-image: "checkbox-checked-#{haptic-measure('16', '18')}.svg";
-  @include haptic-mask-image($mask-image);
 }
 
 /**********************************************************************
@@ -342,8 +345,7 @@ input[type="checkbox"].haptic-checkbox::after {
   position: relative;
   user-select: none;
 
-  input[type="checkbox"].haptic-checkbox,
-  input[type="radio"].haptic-radio-button {
+  .haptic-checkbox, .haptic-radio-button {
     position: absolute;
   }
 

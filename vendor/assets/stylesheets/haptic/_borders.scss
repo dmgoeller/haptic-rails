@@ -106,8 +106,7 @@ haptic-text-field {
  * Checkboxes, radio buttons
  **********************************************************************/
 
-input[type="checkbox"].haptic-checkbox,
-input[type="radio"].haptic-radio-button {
+.haptic-checkbox, .haptic-radio-button {
   &.embedded {
     outline: none;
   }
@@ -121,13 +120,13 @@ input[type="radio"].haptic-radio-button {
   }
 }
 
-input[type="checkbox"].haptic-checkbox {
+.haptic-checkbox {
   &::before, &::after {
     border-radius: 2px;
   }
 }
 
-input[type="radio"].haptic-radio-button {
+.haptic-radio-button {
   &::before, &::after {
     border-radius: 50%;
   }
@@ -137,7 +136,7 @@ input[type="radio"].haptic-radio-button {
  * Switches
  **********************************************************************/
 
-input[type="checkbox"].haptic-switch {
+.haptic-switch {
   $track-height: haptic-measure(16px, 24px);
   outline: none;
 
@@ -160,16 +159,12 @@ input[type="checkbox"].haptic-switch {
  **********************************************************************/
 
 .haptic-list-item {
-  &,
-  input[type="checkbox"].haptic-checkbox,
-  input[type="radio"].haptic-radio-button {
+  &, .haptic-checkbox, .haptic-radio-button {
     border-radius: .25rem;
   }
 
   .haptic-list.divided & {
-    &,
-    input[type="checkbox"].haptic-checkbox,
-    input[type="radio"].haptic-radio-button {
+    &, .haptic-checkbox, .haptic-radio-button {
       border-radius: 0;
     }
 
