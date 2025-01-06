@@ -24,7 +24,9 @@ class HapticButtonElement extends HTMLButtonElement {
   }
 
   connectedCallback() {
-    this.classList.add('haptic-button');
+    if (!this.classList.contains('haptic-field')) {
+      this.classList.add('haptic-button');
+    }
   }
 }
 customElements.define('haptic-button', HapticButtonElement, { extends: 'button' });
@@ -143,10 +145,10 @@ class HapticDropdownElement extends HTMLElement {
         this.#backdrop = null;
         break;
       default:
-        if (this.#fields.contains(node)) {
+        if (this.#fields.has(node)) {
           this.#fields.remove(node);
         } else
-        if (this.#resetButtons.contains(node)) {
+        if (this.#resetButtons.has(node)) {
           node.removeEventListener('click', this);
           this.#resetButtons.remove(node);
         }
@@ -186,7 +188,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     } else
     if (node instanceof HTMLOptionElement) {
       node.addEventListener('click', this);
-      if (node.checked) {
+      if (node.hasAttribute('selected')) {
         this.#select(node);
       }
       this.#options.add(node);
@@ -390,29 +392,31 @@ class HapticFieldElement extends HTMLElement {
   }
 
   nodeRemoved(node) {
-    switch (node) {
-      case this.control:
-        node.classList.remove('embedded');
-        this.removeAttribute('disabled');
-        this.removeAttribute('invalid');
-        this.removeAttribute('required');
-        this.setAttribute('empty', '');
-        this.stopListen(node);
-        this.#mutationObserver.disconnect();
-        this.control = null;
-        break;
-      case this.label:
-        this.removeAttribute('with-label');
-        this.label = null;
-        break;
-      default:
-        for (let iconName of HapticFieldElement.ICON_NAMES) {
-          if (node.classList.contains(`${iconName}-icon`)) {
-            if (!this.querySelector(`${iconName}-icon`)) {
-              this.removeAttribute(`with-${iconName}-icon`);
+    if (node instanceof HTMLElement) {
+      switch (node) {
+        case this.control:
+          node.classList.remove('embedded');
+          this.removeAttribute('disabled');
+          this.removeAttribute('invalid');
+          this.removeAttribute('required');
+          this.setAttribute('empty', '');
+          this.stopListen(node);
+          this.#mutationObserver.disconnect();
+          this.control = null;
+          break;
+        case this.label:
+          this.removeAttribute('with-label');
+          this.label = null;
+          break;
+        default:
+          for (let iconName of HapticFieldElement.ICON_NAMES) {
+            if (node.classList.contains(`${iconName}-icon`)) {
+              if (!this.querySelector(`${iconName}-icon`)) {
+                this.removeAttribute(`with-${iconName}-icon`);
+              }
             }
           }
-        }
+      }
     }
   }
 
