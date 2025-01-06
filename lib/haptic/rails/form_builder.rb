@@ -133,7 +133,7 @@ module Haptic
         @template.haptic_select_dropdown_tag do
           hidden_field(method) +
             @template.content_tag('div', class: 'toggle') do
-              haptic_field('dropdown', button(button_options), field, options)
+              haptic_field('dropdown', button(button_options), options)
             end +
             @template.content_tag('datalist', class: 'popover') do
               @template.options_for_select(choices, object.send(method))
