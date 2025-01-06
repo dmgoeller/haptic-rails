@@ -7,6 +7,7 @@ module Haptic
       HAPTIC_FIELD_OPTIONS = %i[
         animated
         clear_button
+        field_id
         focus_indicator
         haptic_field_id
         label
@@ -126,19 +127,21 @@ module Haptic
       def select_dropdown(method, choices = nil, options = {})
         options = @field_options.merge(options)
 
-        button_options = options.except(*HAPTIC_FIELD_OPTIONS).merge(
-          class: [options[:class], 'haptic-field'],
-          type: 'button'
-        )
-        @template.haptic_select_dropdown_tag do
+        field = @template.haptic_select_dropdown_tag do
           hidden_field(method) +
-            @template.content_tag('div', class: 'toggle') do
-              haptic_field('dropdown', method, button(button_options), options)
-            end +
+            @template.button_tag(
+              options.except(*HAPTIC_FIELD_OPTIONS).merge(
+                is: nil,
+                class: [options[:class], 'haptic-field', 'toggle'],
+                type: 'button'
+              )
+            ) +
             @template.content_tag('datalist', class: 'popover') do
               @template.options_for_select(choices, object.send(method))
             end
         end
+
+        haptic_field('dropdown', method, field, options)
       end
 
       def with_field_options(options = {})
@@ -162,6 +165,7 @@ module Haptic
 
       def haptic_field(type, method, field, options = {})
         options = options.slice(*HAPTIC_FIELD_OPTIONS)
+        options[:id] = options.delete(:field_id)
         options[:for] = _field_id(method)
         options[:invalid] = object&.errors&.key?(method) || false
         options[:error_message] = error_message_for(method)

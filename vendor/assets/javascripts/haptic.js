@@ -24,31 +24,43 @@ class HapticButtonElement extends HTMLButtonElement {
   }
 
   connectedCallback() {
-    if (!this.classList.contains('haptic-field')) {
-      this.classList.add('haptic-button');
-    }
+    this.classList.add('haptic-button');
   }
 }
 customElements.define('haptic-button', HapticButtonElement, { extends: 'button' });
 
 class HapticDropdownElement extends HTMLElement {
   static get openDropdown() {
-    return document.querySelector(
-      'haptic-dropdown[popover-open],haptic-select-dropdown[popover-open]'
-    );
+    return document.querySelector('.haptic-dropdown[popover-open]');
   }
 
-  #toggle = null;
-  #popover = null;
-  #backdrop = null;
-  #fields = new Set();
-  #resetButtons = new Set();
+  toggleElement = null;
+  popoverElement = null;
+  #backdropElement = null;
 
   constructor() {
     super();
   }
 
+  showPopover() {
+    this.setAttribute('popover-open', '');
+  }
+
+  hidePopover(options = {}) {
+    if (this.hasAttribute('popover-open')) {
+      this.removeAttribute('popover-open');
+
+      if (options.reset) {
+        this.reset();
+      }
+    }
+  }
+
+  reset() {
+  }
+
   connectedCallback() {
+    this.classList.add('haptic-dropdown');
     this.addEventListener('keyup', this);
 
     new HapticMutationObserver({
@@ -61,41 +73,21 @@ class HapticDropdownElement extends HTMLElement {
     }).observe(this, { childList: true, subtree: true });
   }
 
-  get isOpen() {
-    return this.hasAttribute('popover-open');
-  }
-
-  showPopover() {
-    this.setAttribute('popover-open', '');
-  }
-
-  hidePopover() {
-    this.removeAttribute('popover-open');
-  }
-
-  resetAndClose() {
-    if (this.hasAttribute('popover-open')) {
-      this.hidePopover();
-      for (let field of this.#fields) {
-        field.reset();
-      }
-    }
-  }
-
   handleEvent(event) {
     switch (event.type) {
       case 'click':
-        if (!this.isOpen) {
-          HapticDropdownElement.openDropdown?.resetAndClose();
+        const openDropdown = HapticDropdownElement.openDropdown;
+        if (openDropdown !== this) {
+          openDropdown?.hidePopover({ reset: true });
           this.showPopover();
         } else {
-          this.resetAndClose();
+          this.hidePopover({ reset: true });
         }
         event.preventDefault();
         break;
       case 'keyup':
         if (event.key === 'Escape') {
-          this.resetAndClose();
+          this.hidePopover({ reset: true });
         }
     }
   }
@@ -105,22 +97,59 @@ class HapticDropdownElement extends HTMLElement {
       const classList = node.classList;
 
       if (classList.contains('toggle')) {
-        if (!this.#toggle) {
+        if (!this.toggleElement) {
           node.addEventListener('click', this);
-          this.#toggle = node;
+          node.addEventListener('focusout', this);
+          this.toggleElement = node;
         }
       } else
       if (classList.contains('popover')) {
-        if (!this.#popover) {
-          this.#popover = node;
+        if (!this.popoverElement) {
+          this.popoverElement = node;
         }
       } else
       if (classList.contains('backdrop')) {
-        if (!this.#backdrop) {
+        if (!this.#backdropElement) {
           node.addEventListener('click', this);
-          this.#backdrop = node;
+          this.#backdropElement = node;
         }
-      } else
+      }
+    }   
+  }
+
+  nodeRemoved(node) {
+    switch (node) {
+      case this.toggleElement:
+        node.removeEventListener('click', this);
+        node.removeEventListener('focusout', this);
+        this.toggleElement = null;
+        break;
+      case this.popoverElement:
+        this.popoverElement = null;
+        break;
+      case this.#backdropElement:
+        node.removeEventListener('click', this);
+        this.#backdropElement = null;
+    }
+  }
+}
+
+class HapticDialogDropdownElement extends HapticDropdownElement {
+  #fields = new Set();
+  #resetButtons = new Set();
+
+  constructor() {
+    super();
+  }
+
+  reset() {
+    for (let field of this.#fields) {
+      field.reset();
+    }
+  }
+
+  nodeAdded(node) {
+    if (node instanceof HTMLElement) {
       if (node.type == 'reset') {
         node.addEventListener('click', this);
         this.#resetButtons.add(node);
@@ -130,38 +159,25 @@ class HapticDropdownElement extends HTMLElement {
           node instanceof HapticTextAreaElement) {
         this.#fields.add(node);
       }
-    }   
+    } 
+    super.nodeAdded(node);  
   }
 
   nodeRemoved(node) {
-    switch (node) {
-      case this.#toggle:
-        node.removeEventListener('click', this);
-        this.#toggle = null;
-        break;
-      case this.#popover:
-        this.#popover = null;
-        break;
-      case this.#backdrop:
-        node.removeEventListener('click', this);
-        this.#backdrop = null;
-        break;
-      default:
-        if (this.#fields.has(node)) {
-          this.#fields.remove(node);
-        } else
-        if (this.#resetButtons.has(node)) {
-          node.removeEventListener('click', this);
-          this.#resetButtons.remove(node);
-        }
+    if (this.#fields.has(node)) {
+      this.#fields.remove(node);
+    } else
+    if (this.#resetButtons.has(node)) {
+      node.removeEventListener('click', this);
+      this.#resetButtons.remove(node);
     }
+    super.nodeRemoved(node);
   }
 }
-customElements.define('haptic-dropdown', HapticDropdownElement);
+customElements.define('haptic-dropdown', HapticDialogDropdownElement);
 
 class HapticSelectDropdownElement extends HapticDropdownElement {
-  #input = null;
-  #button = null;
+  #inputElement = null;
   #options = new Set();
 
   constructor() {
@@ -169,12 +185,16 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   handleEvent(event) {
+    console.log(event);
+    /*if (event.type === 'focusout') {
+      this.hidePopover();
+    }*/
     if (this.#options.has(event.target)) {
       const option = event.target;
 
       if (!option.hasAttribute('selected')) {
         this.#select(option);
-        this.#button?.dispatchEvent(new Event('change'));
+        this.toggleElement?.dispatchEvent(new Event('change'));
       }
       this.hidePopover();
     } else {
@@ -183,14 +203,9 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   nodeAdded(node) {
-    if (node instanceof HTMLButtonElement) {
-      if (!this.#button) {
-        this.#button = node;
-      }
-    } else
     if (node instanceof HTMLInputElement) {
-      if (!this.#input) {
-        this.#input = node;
+      if (!this.#inputElement) {
+        this.#inputElement = node;
       }
     } else
     if (node instanceof HTMLOptionElement) {
@@ -206,11 +221,8 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
 
   nodeRemoved(node) {
     switch (node) {
-      case this.#button:
-        this.#button = null;
-        break;
-      case this.#input:
-        this.#input = null;
+      case this.#inputElement:
+        this.#inputElement = null;
         break;
       default:
         if (this.#options.has(node)) {
@@ -225,16 +237,17 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   #select(option) {
     for (let o of this.#options) {
       if (o === option) {
+        console.log(o);
         option.setAttribute('selected', '');
       } else {
         o.removeAttribute('selected');
       }
     }
-    if (this.#input) {
-      this.#input.value = option.value;
+    if (this.#inputElement) {
+      this.#inputElement.value = option.value;
     }
-    if (this.#button) {
-      this.#button.innerHTML = option.innerHTML;
+    if (this.toggleElement) {
+      this.toggleElement.innerHTML = option.innerHTML;
     }
   }
 }
@@ -343,7 +356,7 @@ class HapticFieldElement extends HTMLElement {
           break;
         case 'focusin':
           if (this.hasAttribute('reset-and-close-dropdown-on-focus')) {
-            HapticDropdownElement.openDropdown?.resetAndClose();
+            HapticDropdownElement.openDropdown?.hidePopover({ reset: true });
           }
           this.setAttribute('focus', '');
           break;
