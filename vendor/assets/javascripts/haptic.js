@@ -33,7 +33,9 @@ customElements.define('haptic-button', HapticButtonElement, { extends: 'button' 
 
 class HapticDropdownElement extends HTMLElement {
   static get openDropdown() {
-    return document.querySelector('haptic-dropdown[popover-open]');
+    return document.querySelector(
+      'haptic-dropdown[popover-open],haptic-select-dropdown[popover-open]'
+    );
   }
 
   #toggle = null;
