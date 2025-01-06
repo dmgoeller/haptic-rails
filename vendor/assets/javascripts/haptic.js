@@ -168,7 +168,12 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
 
   handleEvent(event) {
     if (this.#options.has(event.target)) {
-      this.#select(event.target);
+      const option = event.target;
+
+      if (!option.hasAttribute('selected')) {
+        this.#select(option);
+        this.#button?.dispatchEvent(new Event('change'));
+      }
       this.hidePopover();
     } else {
       super.handleEvent(event);
@@ -216,6 +221,13 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   #select(option) {
+    for (let o of this.#options) {
+      if (o === option) {
+        option.setAttribute('selected', '');
+      } else {
+        o.removeAttribute('selected');
+      }
+    }
     if (this.#input) {
       this.#input.value = option.value;
     }
