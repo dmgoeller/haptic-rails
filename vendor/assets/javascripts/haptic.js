@@ -185,7 +185,6 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   handleEvent(event) {
-    console.log(event);
     /*if (event.type === 'focusout') {
       this.hidePopover();
     }*/

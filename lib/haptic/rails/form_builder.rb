@@ -128,14 +128,14 @@ module Haptic
         options = @field_options.merge(options)
 
         field = @template.haptic_select_dropdown_tag do
-          hidden_field(method) +
-            @template.button_tag(
-              options.except(*HAPTIC_FIELD_OPTIONS).merge(
-                is: nil,
-                class: [options[:class], 'haptic-field', 'toggle'],
-                type: 'button'
-              )
-            ) +
+          @template.button_tag(
+            options.except(*HAPTIC_FIELD_OPTIONS).merge(
+              is: nil,
+              class: [options[:class], 'haptic-field', 'toggle'],
+              type: 'button'
+            )
+          ) +
+            hidden_field(method) +
             @template.content_tag('datalist', class: 'popover') do
               @template.options_for_select(choices, object.send(method))
             end
