@@ -80,6 +80,17 @@ module Haptic
           end
         end
 
+        def haptic_list_tag(options = {}, &block)
+          options = options.stringify_keys
+          options['required'] = '' if options['required'] == true
+
+          content_tag('haptic-list', options, &block)
+        end
+
+        def haptic_list_item_tag(content = nil, options = nil, &block)
+          content_tag('haptic-list-item', content, options, &block)
+        end
+
         def haptic_segmented_button_tag(options = {}, &block)
           content_tag('haptic-segmented-button', options, &block)
         end

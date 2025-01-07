@@ -129,9 +129,10 @@ haptic-text-field {
  * Lists
  **********************************************************************/
 
-.haptic-list-item .haptic-checkbox {
-  transition:
-    background-color .1s, filter .4s, opacity .4s;
+haptic-list-item {
+  .haptic-checkbox, .haptic-radio-button {
+    transition: background-color .1s linear;
+  }
 }
 
 /**********************************************************************

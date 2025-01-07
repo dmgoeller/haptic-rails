@@ -333,13 +333,13 @@ input[type="radio"].haptic-radio-button {
  * Lists
  **********************************************************************/
 
-.haptic-list {
+haptic-list {
   display: flex;
   flex-direction: column;
   list-style-type: none;
 }
 
-.haptic-list-item {
+haptic-list-item {
   align-items: center;
   display: flex;
   position: relative;

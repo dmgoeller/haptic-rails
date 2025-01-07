@@ -38,7 +38,7 @@ module Haptic
       # :call-seq: text_field(method, options = {})
 
       %i[file_field number_field text_area text_field].each do |name|
-        define_method name do |method, options = {}|
+        define_method(name) do |method, options = {}|
           options = @field_options.merge(options)
           field = super(method, options.except(*HAPTIC_FIELD_OPTIONS))
           return field unless HAPTIC_FIELD_OPTIONS.any? { |key| options.key? key }
@@ -47,20 +47,61 @@ module Haptic
         end
       end
 
-      def button_segments(method, collection, value_method, text_method, options = {}, &block)
-        collection_radio_buttons(method, collection, value_method, text_method, options) do |b|
-          @template.content_tag('div', class: 'haptic-button-segment') do
-            block ? block.call(b) : b.radio_button(is: nil) + b.label(is: nil)
-          end
+      ##
+      # :method: chips
+      # :call-seq: chips(method, choices, options = {}, &block)
+
+      ##
+      # :method: list
+      # :call-seq: list(method, choices, options = {}, &block)
+
+      ##
+      # :method: list
+      # :call-seq: segmented_button(method, choices, options = {})
+
+      %i[chips list segmented_button].each do |name|
+        define_method(name) do |method, choices, options = {}, &block|
+          choices = choices.to_a if choices.is_a?(Hash)
+          public_send(:"collection_#{name}", method, choices, :last, :first, options, &block)
         end
       end
 
-      def chips(method, collection, value_method, text_method, options = {}, &block)
+      def collection_chips(method, collection, value_method, text_method, options = {}, &block)
         collection_check_boxes(method, collection, value_method, text_method, options) do |b|
           @template.content_tag('div', class: 'haptic-chip') do
             block ? block.call(b) : b.check_box(is: nil) + b.label(is: nil)
           end
         end
+      end
+
+      def collection_list(method, collection, value_method, text_method, options = {}, &block)
+        options = options.stringify_keys
+
+        @template.haptic_list_tag(required: options.delete('required') == true) do
+          if options.delete('multiple' == true)
+            collection_check_boxes(method, collection, value_method, text_method, options) do |b|
+              @template.haptic_list_item_tag { block ? block.call(b) : b.check_box + b.label }
+            end
+          else
+            collection_radio_buttons(method, collection, value_method, text_method, options) do |b|
+              @template.haptic_list_item_tag { block ? block.call(b) : b.radio_button + b.label }
+            end
+          end
+        end
+      end
+
+      def collection_segmented_button(method, collection, value_method, text_method, options = {}, &block)
+        @template.haptic_segmented_button_tag do
+          collection_radio_buttons(method, collection, value_method, text_method, options) do |b|
+            @template.content_tag('div', class: 'haptic-button-segment') do
+              block ? block.call(b) : b.radio_button(is: nil) + b.label(is: nil)
+            end
+          end
+        end
+      end
+
+      def collection_select(method, collection, value_method, text_method, options = {}, html_options = {})
+        haptic_field('dropdown', method, super, @field_options.merge(options))
       end
 
       def date_field(method, options = {})
@@ -83,41 +124,6 @@ module Haptic
           error_message,
           options.merge(class: [options[:class], 'error'])
         )
-      end
-
-      def list(method, collection, value_method, text_method, options = {}, &block)
-        options = options.dup
-
-        list_options = { is: 'haptic-list' }
-        list_options[:'data-required'] = '' if options.delete(:required)
-
-        @template.content_tag('ul', list_options) do
-          list_items(method, collection, value_method, text_method, options, &block)
-        end
-      end
-
-      def list_items(method, collection, value_method, text_method, options = {}, &block)
-        options = options.dup
-
-        if options.delete(:multiple)
-          collection_check_boxes(method, collection, value_method, text_method, options) do |b|
-            @template.content_tag('li', is: 'haptic-list-item') do
-              block ? block.call(b) : b.check_box + b.label
-            end
-          end
-        else
-          collection_radio_buttons(method, collection, value_method, text_method, options) do |b|
-            @template.content_tag('li', is: 'haptic-list-item') do
-              block ? block.call(b) : b.radio_button + b.label
-            end
-          end
-        end
-      end
-
-      def segmented_button(method, collection, value_method, text_method, options = {})
-        @template.haptic_segmented_button_tag do
-          button_segments(method, collection, value_method, text_method, options)
-        end
       end
 
       def select(method, choices = nil, options = {}, html_options = {}, &block)

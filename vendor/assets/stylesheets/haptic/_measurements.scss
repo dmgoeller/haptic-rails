@@ -597,12 +597,7 @@ haptic-text-field {
  * Lists
  **********************************************************************/
 
-.haptic-list {
-  margin: 0;
-  padding: 0;
-}
-
-.haptic-list-item {
+haptic-list-item {
   $min-content-height: 1.25rem;
   $padding-left-right: haptic-measure(.5rem, 1rem);
   $padding-top-bottom: haptic-measure(.25rem, .5rem);

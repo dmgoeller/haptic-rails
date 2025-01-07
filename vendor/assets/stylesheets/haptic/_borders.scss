@@ -158,12 +158,12 @@ haptic-text-field {
  * Lists
  **********************************************************************/
 
-.haptic-list-item {
+haptic-list-item {
   &, .haptic-checkbox, .haptic-radio-button {
     border-radius: .25rem;
   }
 
-  .haptic-list.divided & {
+  haptic-list.divided & {
     &, .haptic-checkbox, .haptic-radio-button {
       border-radius: 0;
     }

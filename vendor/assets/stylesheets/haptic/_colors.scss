@@ -541,11 +541,7 @@ haptic-text-field {
  * Lists
  **********************************************************************/
 
-.haptic-list-item {
-  .haptic-list.divided &:not(:first-of-type) {
-    @include haptic-outline-color;
-  }
-
+haptic-list-item {
   .haptic-checkbox, .haptic-radio-button {
     &:hover {
       @include haptic-light-dark(
@@ -561,5 +557,9 @@ haptic-text-field {
         #FFFFFF20
       );
     }
+  }
+
+  haptic-list.divided &:not(:first-of-type) {
+    @include haptic-outline-color;
   }
 }
