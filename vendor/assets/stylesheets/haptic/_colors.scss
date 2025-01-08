@@ -358,7 +358,7 @@ haptic-select-dropdown option {
 }
 
 haptic-dropdown-field, haptic-text-field {
-  label {
+  .field-label {
     @include haptic-primary-color;
   }
 
@@ -370,29 +370,29 @@ haptic-dropdown-field, haptic-text-field {
     @include haptic-red;
   }
 
-  &[focus-indicator] .container::after {
+  &[focus-indicator] .field-container::after {
     @include haptic-primary-color('background-color');
   }
 
   &[invalid] {
-    label, .error-message {
+    .field-label, .error-message {
       @include haptic-red;
     }
     .haptic-field.outlined {
       @include haptic-red('border-color');
     }
-    &[focus-indicator] .container::after {
+    &[focus-indicator] .field-container::after {
       @include haptic-red('background-color');
     }
   }
 }
 
-haptic-dropdown-field .container::before {
+haptic-dropdown-field .field-container::before {
   @include haptic-foreground-color('background-color');
 }
 
 haptic-text-field {
-  &[animated][empty]:not([focus]) label {
+  &[animated][empty]:not([focus]) .field-label {
     @include haptic-foreground-color;
   }
 

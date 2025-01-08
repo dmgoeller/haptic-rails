@@ -173,13 +173,13 @@ textarea.haptic-field {
 haptic-dropdown-field, haptic-text-field {
   @include haptic-container;
 
-  .container {
+  .field-container {
     @include haptic-container;
     position: relative;
   }
 
   &[reset-and-close-dropdown-on-focus] {
-    .container {
+    .field-container {
       z-index: $haptic-popover-z-index - 1;
     }
   }
@@ -189,18 +189,18 @@ haptic-dropdown-field, haptic-text-field {
     position: absolute;
   }
 
-  label {
+  .field-label {
     @include haptic-overflow-ellipsis;
     pointer-events: none;
     position: absolute;
   }
 
-  &[required] label::after {
+  &[required] .field-label::after {
     content: ' *';
   }
 
   &[focus-indicator] {
-    .container::after {
+    .field-container::after {
       content: '\200b';
       opacity: 0;
       pointer-events: none;
@@ -208,7 +208,7 @@ haptic-dropdown-field, haptic-text-field {
     }
 
     &[focus] {
-      .container::after {
+      .field-container::after {
         opacity: 1;
       }
     }
@@ -240,11 +240,11 @@ haptic-dropdown-field, haptic-text-field {
 }
 
 haptic-dropdown-field {
-  &, .container, .haptic-dropdown, .haptic-field {
+  &, .field-container, .haptic-dropdown, .haptic-field {
     flex-grow: 1;
   }
 
-  .container::before {
+  .field-container::before {
     @include haptic-mask-image('dropdown-arrow.svg');
     content: '\200b';
     pointer-events: none;

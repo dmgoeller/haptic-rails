@@ -400,7 +400,7 @@ class HapticFieldElement extends HTMLElement {
           this.control = node;
         }
       } else
-      if (node instanceof HTMLLabelElement) {
+      if (node.classList.contains('field-label')) {
         if (!this.label) {
           this.setAttribute('with-label', '');
           this.label = node;
