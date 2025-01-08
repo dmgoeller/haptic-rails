@@ -115,6 +115,18 @@ module Haptic
         )
       end
 
+      def dropdown_field(options = {}, &block)
+        field_options = @field_options.slice(*HAPTIC_FIELD_OPTIONS)
+        field_options.merge!(options)
+
+        label = field_options.delete(:label)
+        label = nil if label == true
+
+        @template.haptic_field_tag('dropdown', label, field_options) do
+          @template.haptic_dropdown_tag { block&.call(DropdownBuilder.new(@template)) }
+        end
+      end
+
       def error_messages(method, options = {})
         error_message = error_message_for(method)
         return if error_message.blank?
