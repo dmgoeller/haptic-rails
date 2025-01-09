@@ -53,13 +53,15 @@ module Haptic
           end.to_h
 
           content_tag("haptic-#{type}-field", field_options) do
-            content_tag('div', class: 'field-container') do
+            content_tag('div', class: 'haptic-field-container') do
               field +
                 if label
-                  label.html_safe? ? label : content_tag('label', label, class: 'field-label')
+                  label.html_safe? ? label : content_tag('label', label, class: 'haptic-field-label')
                 end +
                 if type == 'text' && options['clear_button']
-                  haptic_icon_tag('close', class: 'clear-button')
+                  content_tag('button', type: 'button', tabindex: -1, class: 'clear-button') do
+                    haptic_icon_tag('close')
+                  end
                 end +
                 if options['show_error_icon']
                   haptic_icon_tag('error', class: 'error-icon')

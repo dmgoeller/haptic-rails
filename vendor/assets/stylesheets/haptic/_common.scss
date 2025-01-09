@@ -154,8 +154,13 @@ button, input, select, textarea {
   &.haptic-field {
     appearance: none;
 
-    &:not(.embedded):disabled {
-      @include haptic-grayed;
+    &:disabled {
+      &.embedded {
+        opacity: 1;
+      }
+      &:not(.embedded) {
+        @include haptic-grayed;
+      }
     }
   }
 }
@@ -173,13 +178,13 @@ textarea.haptic-field {
 haptic-dropdown-field, haptic-text-field {
   @include haptic-container;
 
-  & > .field-container {
+  & > .haptic-field-container {
     @include haptic-container;
     position: relative;
   }
 
   &[reset-and-close-dropdown-on-focus] {
-    & > .field-container {
+    & > .haptic-field-container {
       z-index: $haptic-popover-z-index - 1;
     }
   }
@@ -189,26 +194,26 @@ haptic-dropdown-field, haptic-text-field {
     position: absolute;
   }
 
-  .field-label {
+  .haptic-field-label {
     @include haptic-overflow-ellipsis;
     pointer-events: none;
     position: absolute;
   }
 
-  &[required] .field-label::after {
+  &[required] .haptic-field-label::after {
     content: ' *';
   }
 
   &[focus-indicator] {
-    & > .field-container::after {
+    & > .haptic-field-container::after {
       content: '\200b';
       opacity: 0;
       pointer-events: none;
       position: absolute;
     }
 
-    &[focus], &:focus-within {
-      & > .field-container::after {
+    &:focus-within {
+      & > .haptic-field-container::after {
         opacity: 1;
       }
     }
@@ -240,11 +245,12 @@ haptic-dropdown-field, haptic-text-field {
 }
 
 haptic-dropdown-field {
-  &, & > .field-container, .haptic-dropdown, .haptic-field {
+  &, & > .haptic-field-container, .haptic-field,
+  haptic-dropdown, haptic-select-dropdown {
     flex-grow: 1;
   }
 
-  & > .field-container::before {
+  & > .haptic-field-container::before {
     @include haptic-mask-image('dropdown-arrow.svg');
     content: '\200b';
     pointer-events: none;
@@ -280,7 +286,12 @@ haptic-text-field {
   }
 
   .clear-button {
+    appearance: none;
     cursor: pointer;
+
+    .haptic-icon {
+      pointer-events: none;
+    }
   }
 
   &[empty] .clear-button {

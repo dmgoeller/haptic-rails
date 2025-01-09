@@ -175,7 +175,7 @@ haptic-select-dropdown {
  **********************************************************************/
 
 @mixin haptic-field-padding-left($padding-left) {
-  .haptic-field, .field-label {
+  .haptic-field, .haptic-field-label {
     padding-left: $padding-left;
   }
   .haptic-field.outlined {
@@ -184,7 +184,7 @@ haptic-select-dropdown {
 }
 
 @mixin haptic-field-padding-right($padding-right) {
-  .haptic-field, .field-label {
+  .haptic-field, .haptic-field-label {
     padding-right: $padding-right;
   }
   .haptic-field.outlined {
@@ -216,13 +216,11 @@ haptic-dropdown-field, haptic-text-field {
     width: 100%;
   }
 
-  &[focus-indicator] {
-    .field-container::after {
-      bottom: 0;
-      height: 3px;
-      left: 0;
-      width: 100%;
-    }
+  &[focus-indicator] > .haptic-field-container::after {
+    bottom: 0;
+    height: 3px;
+    left: 0;
+    width: 100%;
   }
 
   &[with-label] {
@@ -240,7 +238,7 @@ haptic-dropdown-field, haptic-text-field {
       }
     }
 
-    .field-label {
+    .haptic-field-label {
       box-sizing: border-box;
       left: 0;
       top: $padding-top-bottom;
@@ -269,13 +267,13 @@ haptic-dropdown-field {
                                 $spacing-between-icons,
                                 $icon-size) {
 
-    .field-container::before, .error-icon, .leading-icon {
+    & > .haptic-field-container::before, .error-icon, .leading-icon {
       height: $icon-size;
       top: calc(50% - #{$icon-size / 2});
       width: $icon-size;
     }
 
-    .field-container::before {
+    & > .haptic-field-container::before {
       right: $padding-left-right-with-icons;
     }
 
@@ -500,8 +498,8 @@ haptic-text-field {
       $icon-size: 1.5rem
     );
 
-    &[animated][empty]:not([focus]) {
-      label {
+    &[animated][empty]:not(:focus-within) {
+      .haptic-field-label {
         $line-height: 1.125rem;
         line-height: $line-height;
         top: #{($haptic-field-with-label-min-height - $line-height) / 2};

@@ -52,7 +52,7 @@ haptic-dropdown .popover > .section > .legend {
 }
 
 haptic-dropdown-field, haptic-text-field {
-  .field-label {
+  .haptic-field-label {
     font-family: $haptic-font-family;
     font-size: .875rem;
     font-weight: bold;
@@ -74,8 +74,8 @@ haptic-dropdown-field, haptic-text-field {
 }
 
 haptic-text-field {
-  &[animated][empty]:not([focus]) {
-    .field-label {
+  &[animated][empty]:not(:focus-within) {
+    .haptic-field-label {
       font-size: 1rem;
     }
   }

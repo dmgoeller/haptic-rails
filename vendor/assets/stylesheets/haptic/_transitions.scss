@@ -3,9 +3,13 @@
  **********************************************************************/
 
 .haptic-button {
-  transition-delay: .1s;
+  /*transition-delay: .1s;
   transition-duration: .4s;
-  transition-timing-function: linear;
+  transition-timing-function: linear;*/
+  transition:
+    all .4s linear .1s,
+    filter .2s linear,
+    opacity .2s linear;
 }
 
 button, input[type="submit"] {
@@ -22,7 +26,11 @@ button, input[type="submit"] {
 
 .haptic-button-segment, .haptic-chip {
   input {
-    transition: all .4s linear, background .1s linear;
+    transition:
+      all .4s linear,
+      background .1s linear,
+      filter .2s linear,
+      opacity .2s linear;
 
     &::after {
       transition: .1s linear;
@@ -35,7 +43,10 @@ button, input[type="submit"] {
   }
 
   label {
-    transition: .1s linear;
+    transition:
+      all .1s linear,
+      filter .2s linear,
+      opacity .2s linear;
   }
 }
 
@@ -57,19 +68,15 @@ haptic-dropdown .toggle {
 
 button, input, select, textarea {
   &.haptic-field {
-    transition: opacity .4s linear, filter .4s;
+    transition:
+      filter .2s linear,
+      opacity .2s linear;
   }
 }
 
 haptic-dropdown-field, haptic-text-field {
   .haptic-field {
     transition: border-color .4s linear;
-  }
-
-  &[focus-indicator] {
-    .field-container::after {
-      transition: .4s linear;
-    }
   }
 
   .error-icon {
@@ -79,19 +86,28 @@ haptic-dropdown-field, haptic-text-field {
   .error-message {
     transition: color .4s linear;
   }
+
+  &[focus-indicator] > .haptic-field-container::after {
+    transition: .4s linear;
+  }
 }
 
 haptic-text-field {
-  transition: .4s linear;
+  transition:
+    all .4s linear,
+    filter .2s linear,
+    opacity .2s linear;
 
-  .field-label {
+  .haptic-field-label {
     transition-duration: .4s;
     transition-property: color, font-size, top;
     transition-timing-function: linear;
   }
 
   .clear-button {
-    transition: background-color .4s linear;
+    transition:
+      background-color .4s linear,
+      opacity .1s linear;
   }
 }
 
@@ -100,7 +116,10 @@ haptic-text-field {
  **********************************************************************/
 
 .haptic-checkbox, .haptic-radio-button {
-  transition: .4s linear;
+  transition:
+    all .4s linear,
+    filter .2s linear,
+    opacity .2s linear;
 
   &::before, &::after {
     transition:
@@ -118,7 +137,9 @@ haptic-text-field {
     transition:
       all .4s linear,
       border-color .2s linear,
-      background-color .2s linear;
+      background-color .2s linear,
+      filter .2s linear,
+      opacity .2s linear;
   }
   &::after {
     transition: .2s linear;
@@ -131,7 +152,10 @@ haptic-text-field {
 
 haptic-list-item {
   .haptic-checkbox, .haptic-radio-button {
-    transition: background-color .1s linear;
+    transition:
+      background-color .1s linear,
+      filter .2s linear,
+      opacity .2s linear;
   }
 }
 
@@ -140,5 +164,7 @@ haptic-list-item {
  **********************************************************************/
 
 .haptic-label {
-  transition: opacity .4s linear, filter .4s linear;
+  transition:
+    opacity .2s linear,
+    filter .2s linear;
 }

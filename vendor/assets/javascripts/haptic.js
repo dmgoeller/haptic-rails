@@ -357,18 +357,14 @@ class HapticFieldElement extends HTMLElement {
           if (this.hasAttribute('reset-and-close-dropdown-on-focus')) {
             HapticDropdownElement.openDropdown?.hidePopover({ reset: true });
           }
-          this.setAttribute('focus', '');
-          break;
-        case 'focusout':
-          this.removeAttribute('focus');
       }
     }
   }
 
   nodeAdded(node) {
     if (node instanceof HTMLElement) {
-      if (node instanceof HTMLButtonElement ||
-          node instanceof HTMLInputElement ||
+      if ((node instanceof HTMLInputElement && node.type !== 'hidden') ||
+          node instanceof HTMLButtonElement ||
           node instanceof HTMLTextAreaElement ||
           node instanceof HTMLSelectElement) {
         if (!this.control) {
@@ -391,16 +387,11 @@ class HapticFieldElement extends HTMLElement {
           this.#mutationObserver.observe(node, { attributes: true });
           this.startListen(node, 'change');
           this.startListen(node, 'input');
-
-          if (this.hasAttribute('focus-indicator') ||
-              this.hasAttribute('reset-and-close-dropdown-on-focus')) {
-            this.startListen(node, 'focusin');
-            this.startListen(node, 'focusout');
-          }
+          this.startListen(node, 'focusin');
           this.control = node;
         }
       } else
-      if (node.classList.contains('field-label')) {
+      if (node.classList.contains('haptic-field-label')) {
         if (!this.label) {
           this.setAttribute('with-label', '');
           this.label = node;
@@ -502,11 +493,9 @@ class HapticTextFieldElement extends HapticFieldElement {
 
   handleEvent(event) {
     if (event.target === this.#clearButton) {
-      if (event.type == 'click') {
-        this.clear();
-        this.control?.focus();
-        event.preventDefault();
-      }
+      this.clear();
+      this.control?.focus();
+      event.preventDefault();
     } else {
       super.handleEvent(event);
     }
@@ -518,7 +507,6 @@ class HapticTextFieldElement extends HapticFieldElement {
       if (!this.#clearButton) {
         this.setAttribute('with-clear-button', '');
         this.startListen(node, 'click');
-
         this.#clearButton = node;
       }
     } else {
@@ -683,7 +671,9 @@ class HapticLabelElement extends HTMLLabelElement {
   }
 
   connectedCallback() {
-    this.classList.add('haptic-label');
+    if (!this.classList.contains('haptic-field-label')) {
+      this.classList.add('haptic-label');
+    }
   }
 }
 customElements.define('haptic-label', HapticLabelElement, { extends: 'label' });

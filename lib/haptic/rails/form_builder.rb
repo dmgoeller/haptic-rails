@@ -149,15 +149,15 @@ module Haptic
         options = @field_options.merge(options)
 
         field = @template.haptic_select_dropdown_tag do
-          @template.button_tag(
-            '',
-            options.except(*HAPTIC_FIELD_OPTIONS).merge(
-              is: nil,
-              class: [options[:class], 'haptic-field', 'toggle'],
-              type: 'button'
-            )
-          ) +
-            hidden_field(method) +
+          hidden_field(method) +
+            @template.button_tag(
+              '',
+              options.except(*HAPTIC_FIELD_OPTIONS).merge(
+                class: [options[:class], 'haptic-field', 'toggle'],
+                is: nil,
+                type: 'button'
+              )
+            ) +
             @template.content_tag('datalist', class: 'popover') do
               @template.options_for_select(choices, object.send(method))
             end
@@ -205,7 +205,7 @@ module Haptic
           if (label_option = options.delete(:label))
             args = [:label, method]
             args << label_option unless label_option == true
-            send(*args, is: nil, class: 'field-label')
+            send(*args, class: 'haptic-field-label')
           end
 
         @template.haptic_field_tag(type, field, label, options)

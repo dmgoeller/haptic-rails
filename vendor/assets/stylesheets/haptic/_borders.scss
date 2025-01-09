@@ -90,7 +90,7 @@ haptic-select-dropdown option {
 }
 
 haptic-dropdown-field, haptic-text-field {
-  &[focus-indicator] > .field-container::after {
+  &[focus-indicator] > .haptic-field-container::after {
     border-bottom-left-radius: .25rem 3px;
     border-bottom-right-radius: .25rem 3px;
   }
@@ -99,6 +99,8 @@ haptic-dropdown-field, haptic-text-field {
 haptic-text-field {
   .clear-button {
     border-radius: 50%;
+    border: none;
+    outline: none;
   }
 }
 
