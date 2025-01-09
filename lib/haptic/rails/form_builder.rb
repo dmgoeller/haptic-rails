@@ -150,6 +150,7 @@ module Haptic
 
         field = @template.haptic_select_dropdown_tag do
           @template.button_tag(
+            '',
             options.except(*HAPTIC_FIELD_OPTIONS).merge(
               is: nil,
               class: [options[:class], 'haptic-field', 'toggle'],
