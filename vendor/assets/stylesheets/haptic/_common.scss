@@ -98,7 +98,7 @@ haptic-segmented-button {
  * Dropdowns
  **********************************************************************/
 
- haptic-dropdown, haptic-select-dropdown {
+haptic-dropdown, haptic-select-dropdown {
   @include haptic-container;
   position: relative;
 
@@ -173,13 +173,13 @@ textarea.haptic-field {
 haptic-dropdown-field, haptic-text-field {
   @include haptic-container;
 
-  .field-container {
+  & > .field-container {
     @include haptic-container;
     position: relative;
   }
 
   &[reset-and-close-dropdown-on-focus] {
-    .field-container {
+    & > .field-container {
       z-index: $haptic-popover-z-index - 1;
     }
   }
@@ -200,15 +200,15 @@ haptic-dropdown-field, haptic-text-field {
   }
 
   &[focus-indicator] {
-    .field-container::after {
+    & > .field-container::after {
       content: '\200b';
       opacity: 0;
       pointer-events: none;
       position: absolute;
     }
 
-    &[focus] {
-      .field-container::after {
+    &[focus], &:focus-within {
+      & > .field-container::after {
         opacity: 1;
       }
     }
@@ -240,11 +240,11 @@ haptic-dropdown-field, haptic-text-field {
 }
 
 haptic-dropdown-field {
-  &, .field-container, .haptic-dropdown, .haptic-field {
+  &, & > .field-container, .haptic-dropdown, .haptic-field {
     flex-grow: 1;
   }
 
-  .field-container::before {
+  & > .field-container::before {
     @include haptic-mask-image('dropdown-arrow.svg');
     content: '\200b';
     pointer-events: none;
