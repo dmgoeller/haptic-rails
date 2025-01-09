@@ -34,7 +34,11 @@ $haptic-font-family: sans-serif !default;
   }
 }
 
-haptic-dropdown .popover > .legend {
+/**********************************************************************
+ * Dropdowns
+ **********************************************************************/
+
+haptic-dropdown .popover > .section > .legend {
   font-weight: bold;
 }
 
