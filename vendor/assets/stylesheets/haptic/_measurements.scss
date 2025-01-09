@@ -138,6 +138,10 @@ haptic-dropdown {
     padding:
       calc(.5rem - 1px)
       calc(#{haptic-measure(.5rem, 1rem)} - 1px);
+
+    & > .legend {
+      margin-bottom: .5rem;
+    }
   }
 }
 
