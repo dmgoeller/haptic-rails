@@ -22,7 +22,11 @@ module Haptic
         content, options = nil, content if content.is_a?(Hash)
         options = options.merge(class: [options[:class], 'popover'])
 
-        @builder.content_tag('div', content, options, &block)
+        if block
+          @builder.content_tag('div', options) { block.call(PopoverBuilder.new(@builder)) }
+        else
+          builder.content_tag('div', content, options)
+        end
       end
     end
   end

@@ -296,7 +296,7 @@ haptic-dropdown, haptic-select-dropdown {
   }
 }
 
-haptic-dropdown .popover > .section {
+haptic-dropdown .popover > .segment {
   @include haptic-light-dark(
     'border-color',
   #00000040,
@@ -392,8 +392,14 @@ haptic-dropdown-field > .haptic-field-container::before {
 }
 
 haptic-text-field {
-  &[animated][empty]:not(:focus-within) .haptic-field-label {
-    @include haptic-foreground-color;
+  &[animated-label] {
+    ::placeholder {
+      color: transparent;
+    }
+
+    &[empty]:not(:focus-within) .haptic-field-label {
+      @include haptic-foreground-color;
+    }
   }
 
   .clear-button {

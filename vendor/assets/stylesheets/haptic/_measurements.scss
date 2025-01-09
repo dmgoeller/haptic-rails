@@ -134,7 +134,7 @@ haptic-dropdown, haptic-select-dropdown {
 }
 
 haptic-dropdown {
-  .popover > .section {
+  .popover > .segment {
     padding:
       calc(.5rem - 1px)
       calc(#{haptic-measure(.5rem, 1rem)} - 1px);
@@ -498,7 +498,7 @@ haptic-text-field {
       $icon-size: 1.5rem
     );
 
-    &[animated][empty]:not(:focus-within) {
+    &[animated-label][empty]:not(:focus-within) {
       .haptic-field-label {
         $line-height: 1.125rem;
         line-height: $line-height;

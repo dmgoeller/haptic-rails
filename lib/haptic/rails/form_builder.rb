@@ -5,7 +5,7 @@ module Haptic
     # Builds forms with haptic components.
     class FormBuilder < ActionView::Helpers::FormBuilder
       HAPTIC_FIELD_OPTIONS = %i[
-        animated
+        animated_label
         clear_button
         field_id
         focus_indicator
@@ -111,7 +111,7 @@ module Haptic
           'text',
           method,
           super(method, options.except(*HAPTIC_FIELD_OPTIONS)),
-          options.reverse_merge(trailing_icon: 'calendar').except(:animated)
+          options.reverse_merge(trailing_icon: 'calendar').except(:animated_label)
         )
       end
 

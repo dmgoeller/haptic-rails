@@ -362,7 +362,8 @@ class HapticFieldElement extends HTMLElement {
   }
 
   nodeAdded(node) {
-    if (node instanceof HTMLElement) {
+    if (node instanceof HTMLElement &&
+        node.closest('haptic-dropdown-field, haptic-text-field') === this) {
       if ((node instanceof HTMLInputElement && node.type !== 'hidden') ||
           node instanceof HTMLButtonElement ||
           node instanceof HTMLTextAreaElement ||
