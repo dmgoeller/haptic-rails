@@ -159,7 +159,8 @@ module Haptic
                 type: 'button'
               )
             ) +
-            @template.content_tag('datalist', class: 'popover') do
+            @template.content_tag('div', '', class: 'popover') +
+            @template.content_tag('datalist') do
               if block
                 @template.capture(&block)
               else

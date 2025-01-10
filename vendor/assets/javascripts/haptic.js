@@ -1,4 +1,32 @@
 
+class HapticEventListeners {
+  #listeners = new Map();
+
+  add(target, type, listener) {
+    let listenersForTarget = this.#listeners.get(target);
+    if (typeof listenersForTarget === 'undefined') {
+      listenersForTarget = new Map();
+      this.#listeners.set(target, listenersForTarget);
+    }
+    let listeners = listenersForTarget.get(type);
+    if (typeof listeners === 'undefined') {
+      listeners = new Set();
+      listenersForTarget.set(type, listeners);
+    }
+    listeners.add(listener);
+    target.addEventListener(type, listener);
+  }
+
+  removeAll(target) {
+    this.#listeners.get(target)?.forEach((listeners, type) => {
+      for (let listener of listeners) {
+        target.removeEventListener(type, listener);
+      }
+    });
+    this.#listeners.delete(target);
+  }
+}
+
 class HapticMutationObserver extends MutationObserver {
   constructor(callbacks = {}) {
     super(mutationList => {
@@ -184,20 +212,28 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     super();
   }
 
-  handleEvent(event) {
-    /*if (event.type === 'focusout') {
-      this.hidePopover();
-    }*/
-    if (this.#options.has(event.target)) {
-      const option = event.target;
+  set selected(value) {
+    let found = false;
 
-      if (!option.hasAttribute('selected')) {
-        this.#select(option);
-        this.toggleElement?.dispatchEvent(new Event('change'));
+    for (let option of this.#options) {
+      if (option.getAttribute('data-value') == value) {
+        option.setAttribute('data-checked', '');
+
+        if (this.#inputElement) {
+          this.#inputElement.value = value;
+        }
+        if (this.toggleElement) {
+          this.toggleElement.innerHTML = option.innerHTML;
+        }
+        found = true;
+
+      } else {
+        option.removeAttribute('data-checked');
       }
-      this.hidePopover();
-    } else {
-      super.handleEvent(event);
+    }
+    if (!found) {
+      this.#inputElement.value = null;
+      this.toggleElement.innerHTML = '';
     }
   }
 
@@ -208,11 +244,28 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       }
     } else
     if (node instanceof HTMLOptionElement) {
-      node.addEventListener('click', this);
-      if (node.hasAttribute('selected')) {
-        this.#select(node);
+      if (this.popoverElement) {
+        const value = node.value;
+
+        const option = document.createElement('div');
+        option.setAttribute('data-value', value);
+        option.classList.add('option');
+        option.innerHTML = node.innerHTML;
+
+        option.addEventListener('click', event => {
+          if (!option.hasAttribute('data-checked')) {
+            this.selected = value;
+            this.toggleElement?.dispatchEvent(new Event('change'));
+          }
+          this.hidePopover();
+        });
+        this.popoverElement.appendChild(option);
+        this.#options.add(option);
+
+        if (node.hasAttribute('selected')) {
+          this.selected = value;
+        }
       }
-      this.#options.add(node);
     } else {
       super.nodeAdded(node);
     }
@@ -223,30 +276,6 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       case this.#inputElement:
         this.#inputElement = null;
         break;
-      default:
-        if (this.#options.has(node)) {
-          node.removeEventListener('click', this);
-          this.#options.remove(node);
-        } else {
-          super.nodeRemoved(node);
-        }
-    }
-  }
-
-  #select(option) {
-    for (let o of this.#options) {
-      if (o === option) {
-        console.log(o);
-        option.setAttribute('selected', '');
-      } else {
-        o.removeAttribute('selected');
-      }
-    }
-    if (this.#inputElement) {
-      this.#inputElement.value = option.value;
-    }
-    if (this.toggleElement) {
-      this.toggleElement.innerHTML = option.innerHTML;
     }
   }
 }
@@ -256,9 +285,9 @@ class HapticFieldElement extends HTMLElement {
   static ICON_NAMES = ['error', 'leading', 'trailing'];
 
   control = null;
-  label = null;
+  label = null; // TODO: private?
 
-  #listens = new Map();
+  #listeners = new HapticEventListeners();
   #setValidOnChange = null;
 
   #mutationObserver = new MutationObserver((mutationList) => {
@@ -386,9 +415,9 @@ class HapticFieldElement extends HTMLElement {
             }
           }
           this.#mutationObserver.observe(node, { attributes: true });
-          this.startListen(node, 'change');
-          this.startListen(node, 'input');
-          this.startListen(node, 'focusin');
+          this.#listeners.add(node, 'change', this);
+          this.#listeners.add(node, 'input', this);
+          this.#listeners.add(node, 'focusin', this);
           this.control = node;
         }
       } else
@@ -418,7 +447,7 @@ class HapticFieldElement extends HTMLElement {
           this.removeAttribute('invalid');
           this.removeAttribute('required');
           this.setAttribute('empty', '');
-          this.stopListen(node);
+          this.#listeners.removeAll(node);
           this.#mutationObserver.disconnect();
           this.control = null;
           break;
@@ -436,25 +465,6 @@ class HapticFieldElement extends HTMLElement {
           }
       }
     }
-  }
-
-  startListen(target, type) {
-    let types = this.#listens.get(target);
-    if (typeof(types) == 'undefined') {
-      types = new Set();
-      this.#listens.set(target, types);
-    }
-    if (!types.has(type)) {
-      target.addEventListener(type, this);
-      types.add(type);
-    }
-  }
-
-  stopListen(target) {
-    this.#listens.get(target)?.forEach(type => {
-      target.removeEventListener(type, this);
-    });
-    this.#listens.delete(target);
   }
 
   #refresh() {
@@ -479,6 +489,7 @@ class HapticDropdownFieldElement extends HapticFieldElement {
 customElements.define('haptic-dropdown-field', HapticDropdownFieldElement);
 
 class HapticTextFieldElement extends HapticFieldElement {
+  #listeners = new HapticEventListeners();
   #clearButton = null;
 
   constructor() {
@@ -492,22 +503,16 @@ class HapticTextFieldElement extends HapticFieldElement {
     }
   }
 
-  handleEvent(event) {
-    if (event.target === this.#clearButton) {
-      this.clear();
-      this.control?.focus();
-      event.preventDefault();
-    } else {
-      super.handleEvent(event);
-    }
-  }
-
   nodeAdded(node) {
     if (node instanceof HTMLElement &&
         node.classList.contains('clear-button')) {
       if (!this.#clearButton) {
         this.setAttribute('with-clear-button', '');
-        this.startListen(node, 'click');
+        this.#listeners.add(node, 'click', event => {
+          this.clear();
+          this.control?.focus();
+          event.preventDefault();
+        });
         this.#clearButton = node;
       }
     } else {
@@ -518,7 +523,7 @@ class HapticTextFieldElement extends HapticFieldElement {
   nodeRemoved(node) {
     if (node === this.#clearButton) {
       this.removeAttribute('with-clear-button');
-      this.stopListen(node);
+      this.#listeners.removeAll(node);
       this.#clearButton = null;
     } else {
       super.nodeRemoved(node);

@@ -304,10 +304,10 @@ haptic-dropdown .popover > .segment {
   );
 }
 
-haptic-select-dropdown option {
+haptic-select-dropdown .option {
   @include haptic-foreground-color;
 
-  &:checked::after {
+  &[data-checked]::after {
     @include haptic-foreground-color('background-color');
   }
 
@@ -319,7 +319,7 @@ haptic-select-dropdown option {
       #FFFFFF20
     );
 
-    &:checked::after {
+    &[data-checked]::after {
       @include haptic-intense-foreground-color('background-color');
     }
   }
