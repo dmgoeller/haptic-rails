@@ -99,7 +99,7 @@ haptic-segmented-button {
  **********************************************************************/
 
 haptic-dropdown, haptic-select-dropdown {
-  @include haptic-container;
+  //@include haptic-container;
   position: relative;
 
   .toggle {
