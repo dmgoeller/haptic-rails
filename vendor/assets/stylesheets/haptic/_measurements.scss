@@ -163,9 +163,10 @@ haptic-option {
   padding-right: .5rem;
   padding-top: $padding-top-bottom;
 
-  &.double-padding {
-    padding-bottom: $padding-top-bottom * 2;
-    padding-top: $padding-top-bottom * 2;
+  &.double-padding-top-bottom {
+    $double-padding-top-bottom: $padding-top-bottom * 2;
+    padding-bottom: $double-padding-top-bottom;
+    padding-top: $double-padding-top-bottom;
   }
 
   &::after {

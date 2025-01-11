@@ -308,6 +308,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
               this.value = selectedOption.value;
               this.dispatchEvent(new Event('change'));
             }
+            this.toggleElement?.focus();
             this.hidePopover();
             event.preventDefault();
         }
@@ -340,6 +341,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
           this.value = event.target.value;
           this.dispatchEvent(new Event('change'));
         }
+        this.toggleElement?.focus();
         this.hidePopover();
       });
       node.addEventListener('mouseover', event => {

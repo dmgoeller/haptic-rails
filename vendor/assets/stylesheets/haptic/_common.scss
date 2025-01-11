@@ -143,6 +143,10 @@ haptic-option {
     pointer-events: none;
     position: absolute;
   }
+
+  * {
+    pointer-events: none;
+  }
 }
 
 /**********************************************************************
