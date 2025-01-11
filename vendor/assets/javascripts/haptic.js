@@ -294,12 +294,14 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
             if (selectedIndex < this.#optionElements.length - 1) {
               this.#selectedIndex = selectedIndex + 1;
             }
+            event.preventDefault();
             break;
           case 'ArrowUp':
             selectedIndex = this.#selectedIndex;
             if (selectedIndex > 0) {
               this.#selectedIndex = selectedIndex - 1;
             }
+            event.preventDefault();
             break;
           case ' ':
             const selectedOption = this.#selectedOption;
@@ -317,6 +319,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
           case 'ArrowDown':
             this.#selectedIndex = 0;
           case ' ':
+            HapticDropdownElement.openDropdown?.hidePopover({ reset: true });
             this.showPopover();
             event.preventDefault();
         }
