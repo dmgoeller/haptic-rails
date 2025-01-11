@@ -59,19 +59,32 @@ customElements.define('haptic-button', HapticButtonElement, { extends: 'button' 
 
 class HapticDropdownElement extends HTMLElement {
   static get openDropdown() {
-    return document.querySelector('.haptic-dropdown[popover-open]');
+    return document.querySelector(
+      'haptic-dialog-dropdown[popover-open],haptic-select-dropdown[popover-open]'
+    );
   }
 
   toggleElement = null;
   popoverElement = null;
-  #backdropElement = null;
+  backdropElement = null;
 
   constructor() {
     super();
   }
 
+  isOpen() {
+    return this.hasAttribute('popover-open');
+  }
+
   showPopover() {
-    this.setAttribute('popover-open', '');
+    if (this.popoverElement) {
+      if (this.getBoundingClientRect().x > (window.innerWidth / 2)) {
+        this.popoverElement.classList.add('auto-justify-right');
+      } else {
+        this.popoverElement.classList.remove('auto-justify-right');
+      }
+      this.setAttribute('popover-open', '');
+    }
   }
 
   hidePopover(options = {}) {
@@ -88,7 +101,6 @@ class HapticDropdownElement extends HTMLElement {
   }
 
   connectedCallback() {
-    this.classList.add('haptic-dropdown');
     this.addEventListener('keyup', this);
 
     new HapticMutationObserver({
@@ -137,9 +149,9 @@ class HapticDropdownElement extends HTMLElement {
         }
       } else
       if (classList.contains('backdrop')) {
-        if (!this.#backdropElement) {
+        if (!this.backdropElement) {
           node.addEventListener('click', this);
-          this.#backdropElement = node;
+          this.backdropElement = node;
         }
       }
     }   
@@ -155,9 +167,9 @@ class HapticDropdownElement extends HTMLElement {
       case this.popoverElement:
         this.popoverElement = null;
         break;
-      case this.#backdropElement:
+      case this.backdropElement:
         node.removeEventListener('click', this);
-        this.#backdropElement = null;
+        this.backdropElement = null;
     }
   }
 }
@@ -202,25 +214,29 @@ class HapticDialogDropdownElement extends HapticDropdownElement {
     super.nodeRemoved(node);
   }
 }
-customElements.define('haptic-dropdown', HapticDialogDropdownElement);
+customElements.define('haptic-dialog-dropdown', HapticDialogDropdownElement);
 
 class HapticSelectDropdownElement extends HapticDropdownElement {
   #inputElement = null;
-  #options = new Set();
+  #optionElements = [];
 
   constructor() {
     super();
   }
 
-  set selected(value) {
+  get value() {
+    this.#inputElement?.value;
+  }
+
+  set value(value) {
     let found = false;
 
-    for (let option of this.#options) {
-      if (option.getAttribute('data-value') == value) {
-        option.setAttribute('data-checked', '');
+    for (let option of this.#optionElements) {
+      if (option.value == value) {
+        option.checked = true
 
         if (this.#inputElement) {
-          this.#inputElement.value = value;
+          this.#inputElement.value = option.value;
         }
         if (this.toggleElement) {
           this.toggleElement.innerHTML = option.innerHTML;
@@ -228,13 +244,84 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         found = true;
 
       } else {
-        option.removeAttribute('data-checked');
+        option.checked = false;
       }
     }
     if (!found) {
       this.#inputElement.value = null;
       this.toggleElement.innerHTML = '';
     }
+  }
+
+  get #selectedIndex() {
+    for (let i = 0; i < this.#optionElements.length; i++) {
+      if (this.#optionElements[i].selected) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  set #selectedIndex(index) {
+    for (let i = 0; i < this.#optionElements.length; i++) {
+      this.#optionElements[i].selected = (i == index);
+    }
+  }
+
+  get #selectedOption() {
+    for (let option of this.#optionElements) {
+      if (option.selected) {
+        return option;
+      }
+    }
+    return null;
+  }
+
+  set #selectedOption(option) {
+    for (let opt of this.#optionElements) {
+      opt.selected = (opt === option);
+    }
+  }
+
+  connectedCallback() {
+    this.addEventListener('keyup', event => {
+      if (this.isOpen()) {
+        let selectedIndex;
+
+        switch (event.key) {
+          case 'ArrowDown':
+            selectedIndex = this.#selectedIndex;
+            if (selectedIndex < this.#optionElements.length - 1) {
+              this.#selectedIndex = selectedIndex + 1;
+            }
+            break;
+          case 'ArrowUp':
+            selectedIndex = this.#selectedIndex;
+            if (selectedIndex > 0) {
+              this.#selectedIndex = selectedIndex - 1;
+            }
+            break;
+          case ' ':
+            const selectedOption = this.#selectedOption;
+            console.log(selectedOption);
+            if (selectedOption) { // && !selectedOption.checked) {
+              this.value = selectedOption.value;
+              this.dispatchEvent(new Event('change'));
+            }
+            this.hidePopover();
+            event.preventDefault();
+        }
+      } else {
+        switch (event.key) {
+          case 'ArrowDown':
+            this.#selectedIndex = 0;
+          case ' ':
+            this.showPopover();
+            event.preventDefault();
+        }
+      }
+    });
+    super.connectedCallback();
   }
 
   nodeAdded(node) {
@@ -244,27 +331,27 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       }
     } else
     if (node instanceof HTMLOptionElement) {
-      if (this.popoverElement) {
-        const value = node.value;
-
-        const option = document.createElement('div');
-        option.setAttribute('data-value', value);
-        option.classList.add('option');
-        option.innerHTML = node.innerHTML;
-
-        option.addEventListener('click', event => {
-          if (!option.hasAttribute('data-checked')) {
-            this.selected = value;
-            this.toggleElement?.dispatchEvent(new Event('change'));
-          }
-          this.hidePopover();
-        });
-        this.popoverElement.appendChild(option);
-        this.#options.add(option);
-
-        if (node.hasAttribute('selected')) {
-          this.selected = value;
+      const option = HapticOptionElement.from(node);
+      this.popoverElement?.appendChild(option);
+    } else
+    if (node instanceof HapticOptionElement) {
+      node.addEventListener('click', event => {
+        if (!event.target.checked) {
+          this.value = event.target.value;
+          this.dispatchEvent(new Event('change'));
         }
+        this.hidePopover();
+      });
+      node.addEventListener('mouseover', event => {
+        this.#selectedOption = event.target;
+      });
+      node.addEventListener('mouseout', event => {
+        event.target.selected = false;
+      });
+      this.#optionElements.push(node);
+
+      if (node.checked) {
+        this.value = node.value;
       }
     } else {
       super.nodeAdded(node);
@@ -278,8 +365,63 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         break;
     }
   }
+
+  reset() {
+    this.#selectedOption = null;
+  }
 }
 customElements.define('haptic-select-dropdown', HapticSelectDropdownElement);
+
+class HapticOptionElement extends HTMLElement {
+  static from(optionElement) {
+    const hapticOptionElement = document.createElement('haptic-option');
+    hapticOptionElement.value = optionElement.value;
+    hapticOptionElement.checked = optionElement.hasAttribute('selected');
+    hapticOptionElement.innerHTML = optionElement.innerHTML;
+    return hapticOptionElement;
+  }
+
+  constructor() {
+    super();
+  }
+
+  get checked() {
+    return this.hasAttribute('checked');
+  }
+
+  set checked(value) {
+    if (value == true) {
+      this.setAttribute('checked', '');
+    } else {
+      this.removeAttribute('checked');
+    }
+  }
+
+  get selected() {
+    return this.hasAttribute('selected');
+  }
+
+  set selected(value) {
+    if (value == true) {
+      this.setAttribute('selected', '');
+    } else {
+      this.removeAttribute('selected');
+    }
+  }
+
+  get value() {
+    return this.getAttribute('value');
+  }
+
+  set value(value) {
+    if (value) {
+      this.setAttribute('value', value);
+    } else {
+      this.removeAttribute('selected');
+    }
+  }
+}
+customElements.define('haptic-option', HapticOptionElement);
 
 class HapticFieldElement extends HTMLElement {
   static ICON_NAMES = ['error', 'leading', 'trailing'];

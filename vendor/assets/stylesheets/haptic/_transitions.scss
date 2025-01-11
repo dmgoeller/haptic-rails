@@ -54,10 +54,12 @@ button, input[type="submit"] {
  * Dropdowns
  **********************************************************************/
 
-haptic-dropdown .toggle {
-  &.haptic-field, & .haptic-field {
-    &:not(.filled):not(.outlined) {
-      transition: background-color .4s linear;
+haptic-dialog-dropdown, haptic-select-dropdown {
+  & > .toggle {
+    &.haptic-field, & .haptic-field {
+      &:not(.filled):not(.outlined) {
+        transition: background-color .4s linear;
+      }
     }
   }
 }

@@ -98,16 +98,15 @@ haptic-segmented-button {
  * Dropdowns
  **********************************************************************/
 
-haptic-dropdown, haptic-select-dropdown {
-  //@include haptic-container;
+haptic-dialog-dropdown, haptic-select-dropdown {
   position: relative;
 
-  .toggle {
+  & > .toggle {
     position: relative;
     z-index: $haptic-popover-z-index - 1;
   }
 
-  .popover {
+  & > .popover {
     display: none;
     box-shadow:
       0 6px 10px rgba(0, 0, 0, .16),
@@ -116,24 +115,24 @@ haptic-dropdown, haptic-select-dropdown {
     z-index: $haptic-popover-z-index;
   }
 
-  .backdrop {
+  & > .backdrop {
     display: none;
     position: fixed;
     z-index: $haptic-popover-z-index - 2;
   }
 
   &[popover-open] {
-    .popover {
+    & > .popover {
       display: flex;
       flex-direction: column;
     }
-    .backdrop {
+    & > .backdrop {
       display: initial;
     }
   }
 }
 
-haptic-select-dropdown .option {
+haptic-option {
   cursor: default;
   position: relative;
   white-space: nowrap;
@@ -246,7 +245,7 @@ haptic-dropdown-field, haptic-text-field {
 
 haptic-dropdown-field {
   &, & > .haptic-field-container, .haptic-field,
-  haptic-dropdown, haptic-select-dropdown {
+  haptic-dialog-dropdown, haptic-select-dropdown {
     flex-grow: 1;
   }
 

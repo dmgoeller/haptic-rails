@@ -109,23 +109,28 @@ haptic-segmented-button:not(.outlined) {
  * Dropdowns
  **********************************************************************/
 
-haptic-dropdown, haptic-select-dropdown {
-  .toggle {
+haptic-dialog-dropdown, haptic-select-dropdown {
+  & > .toggle {
     height: 100%;
     width: 100%;
   }
 
-  .popover {
+  & > .popover {
     box-sizing: border-box;
     min-width: 100%;
     top: 100%;
 
-    &.align-right {
+    &.auto-justify-right {
       right: 0;
+    }
+
+    &.to-top {
+      bottom: 100%;
+      top: unset;
     }
   }
 
-  .backdrop {
+  & > .backdrop {
     height: 100vh;
     left: 0;
     top: 0;
@@ -133,40 +138,41 @@ haptic-dropdown, haptic-select-dropdown {
   }
 }
 
-haptic-dropdown {
-  .popover > .segment {
-    padding:
-      calc(.5rem - 1px)
-      calc(#{haptic-measure(.5rem, 1rem)} - 1px);
+haptic-dialog-dropdown > .popover > .segment {
+  padding:
+    calc(.5rem - 1px)
+    calc(#{haptic-measure(.5rem, 1rem)} - 1px);
 
-    & > .legend {
-      margin-bottom: .5rem;
-    }
+  & > .legend {
+    margin-bottom: .5rem;
   }
 }
 
-haptic-select-dropdown {
-  .popover {
-    padding: .25rem;
+haptic-select-dropdown > .popover {
+  padding: .25rem;
+}
+
+haptic-option {
+  $padding-top-bottom: .125rem;
+  $padding-left: .25rem;
+  $checkmark-size: 1rem;
+
+  line-height: 1.25rem;
+  padding-bottom: $padding-top-bottom;
+  padding-left: $padding-left + $checkmark-size + .25rem;
+  padding-right: .5rem;
+  padding-top: $padding-top-bottom;
+
+  &.double-padding {
+    padding-bottom: $padding-top-bottom * 2;
+    padding-top: $padding-top-bottom * 2;
   }
 
-  .option {
-    $padding-top-bottom: .125rem;
-    $padding-left: .25rem;
-    $checkmark-size: 1rem;
-
-    line-height: 1.25rem;
-    padding-bottom: $padding-top-bottom;
-    padding-left: $padding-left + $checkmark-size + .25rem;
-    padding-right: .5rem;
-    padding-top: $padding-top-bottom;
-
-    &::after {
-      height: $checkmark-size;
-      left: $padding-left;
-      top: calc(50% - #{$checkmark-size / 2});
-      width: $checkmark-size;
-    }
+  &::after {
+    height: $checkmark-size;
+    left: $padding-left;
+    top: calc(50% - #{$checkmark-size / 2});
+    width: $checkmark-size;
   }
 }
 

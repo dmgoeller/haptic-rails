@@ -123,7 +123,7 @@ module Haptic
         label = nil if label == true
 
         @template.haptic_field_tag('dropdown', label, field_options) do
-          @template.haptic_dropdown_tag do
+          @template.haptic_dialog_dropdown_tag do
             options = @field_options.merge(class: [@field_options[:class], 'haptic-field'])
             block&.call(DropdownBuilder.new(@template, options))
           end
@@ -159,12 +159,13 @@ module Haptic
                 type: 'button'
               )
             ) +
-            @template.content_tag('div', '', class: 'popover') +
-            @template.content_tag('datalist') do
-              if block
+            @template.content_tag('div', '', class: 'popover') do
+              if choices
+                @template.content_tag('datalist') do
+                  @template.options_for_select(choices, object.send(method))
+                end
+              elsif block
                 @template.capture(&block)
-              else
-                @template.options_for_select(choices, object.send(method))
               end
             end
         end
