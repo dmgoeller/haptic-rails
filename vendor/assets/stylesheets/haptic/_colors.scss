@@ -311,7 +311,7 @@ haptic-option {
     @include haptic-foreground-color('background-color');
   }
 
-  &[selected] {
+  &[highlighted] {
     @include haptic-intense-foreground-color;
     @include haptic-light-dark(
       'background-color',
