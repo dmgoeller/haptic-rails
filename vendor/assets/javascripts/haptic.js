@@ -224,6 +224,14 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     super();
   }
 
+  get size() {
+    if (this.hasAttribute('size')) {
+      return parseInt(this.getAttribute('size'));
+    } else {
+      return null;
+    }
+  }
+
   get value() {
     return this.#inputElement?.value;
   }
@@ -321,6 +329,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       } else {
         switch (event.key) {
           case 'ArrowDown':
+          case 'ArrowUp':
             if (this.#optionElements.length > 0) {
               this.#highlightedIndex = 0;
             }
@@ -335,6 +344,8 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   nodeAdded(node) {
+    super.nodeAdded(node);
+
     if (node instanceof HTMLElement) {
       if (node instanceof HTMLInputElement) {
         if (!this.#inputElement) {
@@ -359,6 +370,12 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
           this.#setValue(node.value);
         }
       } else
+      if (node.classList.contains('popover')) {
+        const size = this.size;
+        if (size) {
+          node.style.maxHeight = `${1.5 * size + 0.5}rem`
+        }
+      } else
       if (node.classList.contains('backdrop')) {
         if (this.#optionElements.length > 0) {
           let hasCheckedOption = false;
@@ -375,7 +392,6 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         }
       }
     }
-    super.nodeAdded(node);
   }
 
   nodeRemoved(node) {

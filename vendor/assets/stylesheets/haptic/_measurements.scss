@@ -157,10 +157,8 @@ haptic-select-dropdown {
   }
 
   &[size] > .popover {
-    max-height: #{$option-height * 10 + $popover-padding * 2};
-
     &::-webkit-scrollbar {
-      width: .375rem;
+      width: .75rem;
     }
   }
 }
