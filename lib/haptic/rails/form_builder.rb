@@ -148,13 +148,13 @@ module Haptic
       def select_dropdown(method, choices = nil, options = {}, &block)
         choices, options = nil, choices || {} if block
         choices = choices.to_a if choices.is_a?(Hash)
-        options = @field_options.merge(options).except!(:size, :to_top)
+        options = @field_options.merge(options)
 
         field = @template.haptic_select_dropdown_tag(options.slice(:size, :to_top)) do
           hidden_field(method) +
             @template.button_tag(
               '',
-              options.except(*HAPTIC_FIELD_OPTIONS).merge(
+              options.except(:size, :to_top, *HAPTIC_FIELD_OPTIONS).merge(
                 class: [options[:class], 'haptic-field', 'toggle'],
                 is: nil,
                 type: 'button'
