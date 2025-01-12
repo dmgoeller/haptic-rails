@@ -91,6 +91,10 @@ module Haptic
         end
 
         def haptic_select_dropdown_tag(options = {}, &block)
+          options = options.filter_map do |key, value|
+            [key.to_s.dasherize, value == true ? '' : value] unless value == false
+          end.to_h
+
           content_tag('haptic-select-dropdown', options) do
             concat capture(&block) if block
             concat content_tag('div', nil, class: 'backdrop')

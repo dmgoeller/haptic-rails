@@ -282,6 +282,14 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   connectedCallback() {
+    this.addEventListener('keydown', event => {
+      switch (event.key) {
+        case 'ArrowDown':
+        case 'ArrowUp':
+          // Prevent page scrolling
+          event.preventDefault();
+      }
+    });
     this.addEventListener('keyup', event => {
       if (this.isOpen()) {
         let index;

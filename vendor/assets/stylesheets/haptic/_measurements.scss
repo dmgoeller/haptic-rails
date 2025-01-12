@@ -123,11 +123,6 @@ haptic-dialog-dropdown, haptic-select-dropdown {
     &.auto-justify-right {
       right: 0;
     }
-
-    &.to-top {
-      bottom: 100%;
-      top: unset;
-    }
   }
 
   & > .backdrop {
@@ -135,6 +130,11 @@ haptic-dialog-dropdown, haptic-select-dropdown {
     left: 0;
     top: 0;
     width: 100vw;
+  }
+
+  &[to-top] > .popover {
+    bottom: 100%;
+    top: unset;
   }
 }
 
@@ -162,12 +162,6 @@ haptic-option {
   padding-left: $padding-left + $checkmark-size + .25rem;
   padding-right: .5rem;
   padding-top: $padding-top-bottom;
-
-  &.double-padding-top-bottom {
-    $double-padding-top-bottom: $padding-top-bottom * 2;
-    padding-bottom: $double-padding-top-bottom;
-    padding-top: $double-padding-top-bottom;
-  }
 
   &::after {
     height: $checkmark-size;
