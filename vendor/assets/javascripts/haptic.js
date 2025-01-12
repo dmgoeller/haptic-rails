@@ -356,10 +356,10 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         }
       } else
       if (node.classList.contains('backdrop')) {
-        if (typeof this.value === 'undefined' &&
+        /*if (typeof this.value === 'undefined' &&
             this.#optionElements.length > 0) {
           this.value = this.#optionElements[0].value;
-        }
+        }*/
       }
     }
     super.nodeAdded(node);
