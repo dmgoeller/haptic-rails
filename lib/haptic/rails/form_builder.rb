@@ -147,6 +147,7 @@ module Haptic
 
       def select_dropdown(method, choices = nil, options = {}, &block)
         choices, options = nil, choices || {} if block
+        choices = choices.to_a if choices.is_a?(Hash)
         options = @field_options.merge(options)
 
         field = @template.haptic_select_dropdown_tag do
@@ -161,8 +162,19 @@ module Haptic
             ) +
             @template.content_tag('div', '', class: 'popover') do
               if choices
-                @template.content_tag('datalist') do
-                  @template.options_for_select(choices, object.send(method))
+                selected = object.send(method)
+
+                choices.each do |choice|
+                  value = choice.last
+
+                  @template.concat(
+                    @template.content_tag(
+                      'haptic-option',
+                      choice.first,
+                      value: value,
+                      checked: value == selected
+                    )
+                  )
                 end
               elsif block
                 @template.capture(&block)

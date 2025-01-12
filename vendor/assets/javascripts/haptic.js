@@ -229,7 +229,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   set value(value) {
-    let found = false;
+    let checked = false;
 
     for (let option of this.#optionElements) {
       if (option.value == value) {
@@ -241,13 +241,13 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         if (this.toggleElement) {
           this.toggleElement.innerHTML = option.innerHTML;
         }
-        found = true;
+        checked = true;
 
       } else {
         option.checked = false;
       }
     }
-    if (!found) {
+    if (!checked) {
       this.#inputElement.value = null;
       this.toggleElement.innerHTML = '';
     }
@@ -305,10 +305,9 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
             break;
           case ' ':
             const selectedOption = this.#selectedOption;
-            console.log(selectedOption);
             if (selectedOption) { // && !selectedOption.checked) {
               this.value = selectedOption.value;
-              this.dispatchEvent(new Event('change'));
+              this.toggleElement?.dispatchEvent(new Event('change'));
             }
             this.toggleElement?.focus();
             this.hidePopover();
@@ -329,38 +328,41 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   nodeAdded(node) {
-    if (node instanceof HTMLInputElement) {
-      if (!this.#inputElement) {
-        this.#inputElement = node;
-      }
-    } else
-    if (node instanceof HTMLOptionElement) {
-      const option = HapticOptionElement.from(node);
-      this.popoverElement?.appendChild(option);
-    } else
-    if (node instanceof HapticOptionElement) {
-      node.addEventListener('click', event => {
-        if (!event.target.checked) {
-          this.value = event.target.value;
-          this.dispatchEvent(new Event('change'));
+    if (node instanceof HTMLElement) {
+      if (node instanceof HTMLInputElement) {
+        if (!this.#inputElement) {
+          this.#inputElement = node;
         }
-        this.toggleElement?.focus();
-        this.hidePopover();
-      });
-      node.addEventListener('mouseover', event => {
-        this.#selectedOption = event.target;
-      });
-      node.addEventListener('mouseout', event => {
-        event.target.selected = false;
-      });
-      this.#optionElements.push(node);
+      } else
+      if (node instanceof HapticOptionElement) {
+        node.addEventListener('click', event => {
+          if (!event.target.checked) {
+            this.value = event.target.value;
+            this.toggleElement?.dispatchEvent(new Event('change'));
+          }
+          this.toggleElement?.focus();
+          this.hidePopover();
+        });
+        node.addEventListener('mouseover', event => {
+          this.#selectedOption = event.target;
+        });
+        node.addEventListener('mouseout', event => {
+          event.target.selected = false;
+        });
+        this.#optionElements.push(node);
 
-      if (node.checked) {
-        this.value = node.value;
+        if (node.checked) {
+          this.value = node.value;
+        }
+      } else
+      if (node.classList.contains('backdrop')) {
+        if (typeof this.value === 'undefined' &&
+            this.#optionElements.length > 0) {
+          this.value = this.#optionElements[0].value;
+        }
       }
-    } else {
-      super.nodeAdded(node);
     }
+    super.nodeAdded(node);
   }
 
   nodeRemoved(node) {
@@ -369,6 +371,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         this.#inputElement = null;
         break;
     }
+    super.nodeRemoved(node);
   }
 
   reset() {
@@ -378,14 +381,6 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
 customElements.define('haptic-select-dropdown', HapticSelectDropdownElement);
 
 class HapticOptionElement extends HTMLElement {
-  static from(optionElement) {
-    const hapticOptionElement = document.createElement('haptic-option');
-    hapticOptionElement.value = optionElement.value;
-    hapticOptionElement.checked = optionElement.hasAttribute('selected');
-    hapticOptionElement.innerHTML = optionElement.innerHTML;
-    return hapticOptionElement;
-  }
-
   constructor() {
     super();
   }
