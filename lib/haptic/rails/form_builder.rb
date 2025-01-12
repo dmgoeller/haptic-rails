@@ -148,7 +148,7 @@ module Haptic
       def select_dropdown(method, choices = nil, options = {}, &block)
         choices, options = nil, choices || {} if block
         choices = choices.to_a if choices.is_a?(Hash)
-        options = @field_options.merge(options)
+        options = @field_options.merge(options).except!(:size, :to_top)
 
         field = @template.haptic_select_dropdown_tag(options.slice(:size, :to_top)) do
           hidden_field(method) +
