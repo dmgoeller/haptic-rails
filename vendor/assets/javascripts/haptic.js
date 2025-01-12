@@ -251,6 +251,15 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     }
   }
 
+  get #checkedOption() {
+    for (let option of this.#optionElements) {
+      if (option.checked) {
+        return option;
+      }
+    }
+    return null;
+  }
+
   get #selectedIndex() {
     for (let i = 0; i < this.#optionElements.length; i++) {
       if (this.#optionElements[i].selected) {
@@ -350,7 +359,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         }
       } else
       if (node.classList.contains('backdrop')) {
-        if (this.value === '' && this.#optionElements.length > 0) {
+        if (this.#optionElements.length > 0 && !this.#checkedOption ) {
           this.#setValue(this.#optionElements[0].value);
         }
       }
