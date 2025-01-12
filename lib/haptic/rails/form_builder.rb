@@ -150,7 +150,7 @@ module Haptic
         choices = choices.to_a if choices.is_a?(Hash)
         options = @field_options.merge(options)
 
-        field = @template.haptic_select_dropdown_tag(to_top: options[:supporting_text].present?) do
+        field = @template.haptic_select_dropdown_tag(options.slice(:size, :to_top)) do
           hidden_field(method) +
             @template.button_tag(
               '',

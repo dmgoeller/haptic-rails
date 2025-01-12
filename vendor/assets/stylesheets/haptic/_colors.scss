@@ -304,6 +304,21 @@ haptic-dialog-dropdown > .popover > .segment {
   );
 }
 
+haptic-select-dropdown[size] > .popover {
+  &::-webkit-scrollbar {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @include haptic-light-dark(
+      'background-color',
+    #00000040,
+    #FFFFFF40
+    );
+    border-color: transparent;
+  }
+}
+
 haptic-option {
   @include haptic-foreground-color;
 

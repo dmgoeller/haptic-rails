@@ -148,8 +148,21 @@ haptic-dialog-dropdown > .popover > .segment {
   }
 }
 
-haptic-select-dropdown > .popover {
-  padding: .25rem;
+haptic-select-dropdown {
+  $option-height: 1.5rem;
+  $popover-padding: .25rem;
+
+  & > .popover {
+    padding: $popover-padding;
+  }
+
+  &[size] > .popover {
+    max-height: #{$option-height * 10 + $popover-padding * 2};
+
+    &::-webkit-scrollbar {
+      width: .375rem;
+    }
+  }
 }
 
 haptic-option {
