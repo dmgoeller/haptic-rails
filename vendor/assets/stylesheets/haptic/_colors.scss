@@ -390,11 +390,18 @@ haptic-dropdown-field, haptic-text-field {
   }
 
   &[invalid] {
-    .haptic-field-label, .error-message {
-      @include haptic-red;
+    & > .haptic-field-container {
+      & > .haptic-field-label,
+      & > .field_with_errors > .haptic-field-label {
+        @include haptic-red;
+      }
+      & > .haptic-field.outlined,
+      & > .field_with_errors >  .haptic-field.outlined {
+        @include haptic-red('border-color');
+      }
     }
-    .haptic-field.outlined {
-      @include haptic-red('border-color');
+    & > .error-message {
+      @include haptic-red;
     }
     &[focus-indicator] > .haptic-field-container::after {
       @include haptic-red('background-color');

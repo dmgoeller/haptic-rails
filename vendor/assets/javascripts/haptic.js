@@ -58,12 +58,6 @@ class HapticButtonElement extends HTMLButtonElement {
 customElements.define('haptic-button', HapticButtonElement, { extends: 'button' });
 
 class HapticDropdownElement extends HTMLElement {
-  static get openDropdown() {
-    return document.querySelector(
-      'haptic-dialog-dropdown[popover-open],haptic-select-dropdown[popover-open]'
-    );
-  }
-
   toggleElement = null;
   popoverElement = null;
   backdropElement = null;
@@ -101,6 +95,7 @@ class HapticDropdownElement extends HTMLElement {
   }
 
   connectedCallback() {
+    this.addEventListener('focusout', this);
     this.addEventListener('keyup', this);
 
     new HapticMutationObserver({
@@ -116,14 +111,18 @@ class HapticDropdownElement extends HTMLElement {
   handleEvent(event) {
     switch (event.type) {
       case 'click':
-        const openDropdown = HapticDropdownElement.openDropdown;
-        if (openDropdown !== this) {
-          openDropdown?.hidePopover({ reset: true });
-          this.showPopover();
-        } else {
+        if (this.isOpen()) {
           this.hidePopover({ reset: true });
+        } else {
+          this.showPopover();
         }
         event.preventDefault();
+        break;
+      case 'focusout':
+        const related = event.relatedTarget;
+        if (related && !this.contains(related)) {
+          this.hidePopover({ reset: true });
+        }
         break;
       case 'keyup':
         if (event.key === 'Escape') {
@@ -557,11 +556,6 @@ class HapticFieldElement extends HTMLElement {
           });
         case 'input':
           this.#refresh();
-          break;
-        case 'focusin':
-          if (this.hasAttribute('reset-and-close-dropdown-on-focus')) {
-            HapticDropdownElement.openDropdown?.hidePopover({ reset: true });
-          }
       }
     }
   }
@@ -593,7 +587,6 @@ class HapticFieldElement extends HTMLElement {
           this.#mutationObserver.observe(node, { attributes: true });
           this.#listeners.add(node, 'change', this);
           this.#listeners.add(node, 'input', this);
-          this.#listeners.add(node, 'focusin', this);
           this.control = node;
         }
       } else
