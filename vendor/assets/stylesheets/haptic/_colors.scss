@@ -396,7 +396,9 @@ haptic-dropdown-field, haptic-text-field {
         @include haptic-red;
       }
       & > .haptic-field.outlined,
-      & > .field_with_errors >  .haptic-field.outlined {
+      & > .field_with_errors > .haptic-field.outlined,
+      & > haptic-dialog-dropdown > .haptic-field-container > .haptic-field.outlined,
+      & > haptic-select-dropdown > .haptic-field-container > .haptic-field.outlined {
         @include haptic-red('border-color');
       }
     }

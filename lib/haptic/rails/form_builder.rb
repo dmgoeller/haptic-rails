@@ -12,7 +12,6 @@ module Haptic
         haptic_field_id
         label
         leading_icon
-        reset_and_close_dropdown_on_focus
         set_valid_on_change
         show_error_icon
         show_error_message

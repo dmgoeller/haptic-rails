@@ -98,6 +98,14 @@ haptic-segmented-button {
  * Dropdowns
  **********************************************************************/
 
+.haptic-dropdown-layer {
+  z-index: $haptic-popover-z-index - 1;
+}
+
+.haptic-popover-layer {
+  z-index: $haptic-popover-z-index;
+}
+
 haptic-dialog-dropdown, haptic-select-dropdown {
   position: relative;
 
@@ -155,10 +163,6 @@ haptic-option {
   * {
     pointer-events: none;
   }
-}
-
-.dropdown-toggle-layer {
-  z-index: $haptic-popover-z-index - 1;
 }
 
 /**********************************************************************
