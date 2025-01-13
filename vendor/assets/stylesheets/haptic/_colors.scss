@@ -395,7 +395,7 @@ haptic-dropdown-field, haptic-text-field {
       & > .field_with_errors > .haptic-field-label {
         @include haptic-red;
       }
-      & > .haptic-field
+      & > .haptic-field,
       & > .field_with_errors > .haptic-field,
       & > haptic-dialog-dropdown > .haptic-field,
       & > haptic-select-dropdown > .haptic-field {
