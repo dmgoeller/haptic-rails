@@ -546,12 +546,10 @@ class HapticFieldElement extends HTMLElement {
       switch (event.type) {
         case 'change':
           this.#setValidOnChange?.forEach(fieldId => {
-            const textField = fieldId == 'itself' ? this :
-              this.control?.form?.querySelector(
-                `haptic-text-field[for="${fieldId}"]`
-              );
-            if (textField) {
-              textField.valid = true;
+            const field = fieldId == 'itself' ? this :
+              this.control?.form?.querySelector(`[for="${fieldId}"]`);
+            if (field) {
+              field.valid = true;
             }
           });
         case 'input':

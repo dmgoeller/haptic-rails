@@ -202,12 +202,6 @@ haptic-dropdown-field, haptic-text-field {
     position: relative;
   }
 
-  &[reset-and-close-dropdown-on-focus] {
-    & > .haptic-field-container {
-      z-index: $haptic-popover-z-index - 1;
-    }
-  }
-
   .haptic-field.overflow-ellipsis {
     @include haptic-overflow-ellipsis;
     position: absolute;
