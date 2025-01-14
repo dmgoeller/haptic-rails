@@ -270,6 +270,14 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
               if (index < this.#optionElements.length - 1) {
                 this.#highlightedIndex = index + 1;
               }
+            } else {
+              this.showPopover();
+
+              if (this.#size) {
+                this.#highlightedIndex = this.#scrollOffset;
+              } else {
+                this.#highlightedIndex = 0;
+              }
             }
             event.preventDefault();
             break;
@@ -285,6 +293,14 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
               } else
               if (index > 0) {
                 this.#highlightedIndex = index - 1;
+              }
+            } else {
+              this.showPopover();
+
+              if (this.#size) {
+                this.#highlightedIndex = this.#scrollOffset + this.#size - 1;
+              } else {
+                this.#highlightedIndex = this.#optionElements.length - 1;
               }
             }
             event.preventDefault();
@@ -306,10 +322,10 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     });
     this.addEventListener('keyup', event => {
       if (this.#optionElements.length > 0) {
-        if (this.isOpen()) {
-          switch (event.key) {
-            case ' ':
-            case 'Enter':
+        switch (event.key) {
+          case ' ':
+          case 'Enter':
+            if (this.isOpen()) {
               const option = this.#highlightedOption;
               if (option) {
                 this.#setValue(option.value, true);
@@ -317,47 +333,25 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
               this.focus();
               this.hidePopover();
               event.preventDefault();
+            } else {
+              this.showPopover();
+              event.preventDefault();
               break;
-            default:
-              if (event.key.length === 1) {
-                const lowerCaseKey = event.key.toLowerCase();
+            }
+            break;
+          default:
+            if (event.key.length === 1) {
+              const lowerCaseKey = event.key.toLowerCase();
 
-                for (let i = 0; i < this.#optionElements.length; i++) {
-                  const text = this.#optionElements[i].innerText;
+              for (let i = 0; i < this.#optionElements.length; i++) {
+                const text = this.#optionElements[i].innerText;
 
-                  if (text.length > 0 && text[0].toLowerCase() === lowerCaseKey) {
-                    this.#highlightedIndex = i;
-                    break;
-                  }
+                if (text.length > 0 && text[0].toLowerCase() === lowerCaseKey) {
+                  this.#highlightedIndex = i;
+                  break;
                 }
               }
-          }
-        } else {
-          switch (event.key) {
-            case ' ':
-              this.showPopover();
-              event.preventDefault();
-              break;
-            case 'ArrowDown':
-              this.showPopover();
-
-              if (this.#size) {
-                this.#highlightedIndex = this.#scrollOffset;
-              } else {
-                this.#highlightedIndex = 0;
-              }
-              event.preventDefault();
-              break;
-            case 'ArrowUp':
-              this.showPopover();
-
-              if (this.#size) {
-                this.#highlightedIndex = this.#scrollOffset + this.#size - 1;
-              } else {
-                this.#highlightedIndex = this.#optionElements.length - 1;
-              }
-              event.preventDefault();
-          }
+            }
         }
       }
     });
