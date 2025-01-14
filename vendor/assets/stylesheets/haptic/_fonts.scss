@@ -74,7 +74,7 @@ haptic-dropdown-field, haptic-text-field {
 }
 
 haptic-text-field {
-  &[animated][empty]:not(:focus-within) {
+  &[animated-label][empty]:not(:focus-within) {
     .haptic-field-label {
       font-size: 1rem;
     }
