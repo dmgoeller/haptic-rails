@@ -78,10 +78,6 @@ class HapticDropdownElement extends HTMLElement {
         this.popoverElement.classList.remove('auto-justify-right');
       }
       this.setAttribute('popover-open', '');
-
-      if ('openCallback' in this) {
-        this.openCallback(true);
-      }
     }
   }
 
@@ -139,7 +135,7 @@ class HapticDropdownElement extends HTMLElement {
 
       if (classList.contains('toggle')) {
         if (!this.toggleElement) {
-          node.setAttribute('tabindex', -1);
+          node.setAttribute('tabindex', '-1');
           node.addEventListener('click', this);
           node.addEventListener('focusout', this);
           this.toggleElement = node;
@@ -162,6 +158,7 @@ class HapticDropdownElement extends HTMLElement {
   nodeRemoved(node) {
     switch (node) {
       case this.toggleElement:
+        node.removeAttribute('tabindex');
         node.removeEventListener('click', this);
         node.removeEventListener('focusout', this);
         this.toggleElement = null;
@@ -219,117 +216,148 @@ class HapticDialogDropdownElement extends HapticDropdownElement {
 customElements.define('haptic-dialog-dropdown', HapticDialogDropdownElement);
 
 class HapticSelectDropdownElement extends HapticDropdownElement {
+  static observedAttributes = ['size'];
+
   #inputElement = null;
   #optionElements = [];
+  #size = null;
 
   constructor() {
     super();
-  }
-
-  get size() {
-    if (this.hasAttribute('size')) {
-      return parseInt(this.getAttribute('size'));
-    } else {
-      return null;
-    }
   }
 
   get value() {
     return this.#inputElement?.value;
   }
 
+  showPopover() {
+    if (this.#optionElements.length > 0) {
+      if (this.popoverElement && this.#size) {
+        this.popoverElement.style.maxHeight = `calc(${24 * this.#size}px + 0.5rem)`
+      }
+      super.showPopover();
+
+      for (let i = 0; i < this.#optionElements.length; i++) {
+        if (this.#optionElements[i].checked) {
+          this.#scrollTo(i);
+          break;
+        }
+      }
+    }
+  }
+
+  reset() {
+    this.#highlightedOption = null;
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'size') {
+      this.#size = parseInt(newValue);
+    }
+  }
+
   connectedCallback() {
     this.addEventListener('keydown', event => {
-      switch (event.key) {
-        case 'End':
-        case 'Home':
-          if (!this.isOpen()) {
-            break;
-          }
-        case 'ArrowDown':
-        case 'ArrowUp':
-          // Prevent page scrolling
-          event.preventDefault();
-      }
-    });
-    this.addEventListener('keyup', event => {
-      if (this.isOpen()) {
-        let index;
-
+      if (this.#optionElements.length > 0) {
         switch (event.key) {
           case 'ArrowDown':
-            index = this.#highlightedIndex;
-            if (index === -1 && this.size) {
-              this.#highlightedIndex = this.#scrollOffset;
-            } else
-            if (index < this.#optionElements.length - 1) {
-              this.#highlightedIndex = index + 1;
+            if (this.isOpen()) {
+              const index = this.#highlightedIndex;
+
+              if (index === -1 && this.#size) {
+                this.#highlightedIndex = this.#scrollOffset;
+              } else
+              if (index < this.#optionElements.length - 1) {
+                this.#highlightedIndex = index + 1;
+              }
             }
             event.preventDefault();
             break;
           case 'ArrowUp':
-            index = this.#highlightedIndex;
-            if (index === -1 && this.size) {
-              this.#highlightedIndex = Math.min(
-                this.#scrollOffset + this.size - 1,
-                this.#optionElements.length - 1
-              );
-            } else
-            if (index > 0) {
-              this.#highlightedIndex = index - 1;
+            if (this.isOpen()) {
+              const index = this.#highlightedIndex;
+
+              if (index === -1 && this.#size) {
+                this.#highlightedIndex = Math.min(
+                  this.#scrollOffset + this.#size,
+                  this.#optionElements.length
+                ) - 1;
+              } else
+              if (index > 0) {
+                this.#highlightedIndex = index - 1;
+              }
             }
             event.preventDefault();
             break;
           case 'End':
-            if (this.#optionElements.length > 0) {
+            if (this.isOpen()) {
               this.#highlightedIndex = this.#optionElements.length - 1;
+              event.preventDefault();
             }
-            event.preventDefault();
             break;
           case 'Home':
-            if (this.#optionElements.length > 0) {
+            if (this.isOpen()) {
               this.#highlightedIndex = 0;
+              event.preventDefault();
             }
-            event.preventDefault();
             break;
-          case ' ':
-            const option = this.#highlightedOption;
-            if (option) {
-              this.#setValue(option.value, true);
-            }
-            this.toggleElement?.focus();
-            this.hidePopover();
-            event.preventDefault();
         }
-      } else {
-        switch (event.key) {
-          case 'ArrowDown':
-            this.showPopover();
+      }
+    });
+    this.addEventListener('keyup', event => {
+      if (this.#optionElements.length > 0) {
+        if (this.isOpen()) {
+          switch (event.key) {
+            case ' ':
+            case 'Enter':
+              const option = this.#highlightedOption;
+              if (option) {
+                this.#setValue(option.value, true);
+              }
+              this.focus();
+              this.hidePopover();
+              event.preventDefault();
+              break;
+            default:
+              if (event.key.length === 1) {
+                const lowerCaseKey = event.key.toLowerCase();
 
-            if (this.#optionElements.length > 0) {
-              if (this.size) {
+                for (let i = 0; i < this.#optionElements.length; i++) {
+                  const text = this.#optionElements[i].innerText;
+
+                  if (text.length > 0 && text[0].toLowerCase() === lowerCaseKey) {
+                    this.#highlightedIndex = i;
+                    break;
+                  }
+                }
+              }
+          }
+        } else {
+          switch (event.key) {
+            case ' ':
+              this.showPopover();
+              event.preventDefault();
+              break;
+            case 'ArrowDown':
+              this.showPopover();
+
+              if (this.#size) {
                 this.#highlightedIndex = this.#scrollOffset;
               } else {
                 this.#highlightedIndex = 0;
               }
-            }
-            event.preventDefault();
-            break;
-          case 'ArrowUp':
-            this.showPopover();
+              event.preventDefault();
+              break;
+            case 'ArrowUp':
+              this.showPopover();
 
-            if (this.#optionElements.length > 0) {
-              if (this.size) {
-                this.#highlightedIndex = this.#scrollOffset + this.size - 1;
+              if (this.#size) {
+                this.#highlightedIndex = this.#scrollOffset + this.#size - 1;
               } else {
                 this.#highlightedIndex = this.#optionElements.length - 1;
               }
-            }
-            event.preventDefault();
-            break;
-          case ' ':
-            this.showPopover();
-            event.preventDefault();
+              event.preventDefault();
+          }
         }
       }
     });
@@ -348,7 +376,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       if (node instanceof HapticOptionElement) {
         node.addEventListener('click', event => {
           this.#setValue(event.target.value, true)
-          this.toggleElement?.focus();
+          this.focus();
           this.hidePopover();
         });
         node.addEventListener('mouseover', event => {
@@ -361,12 +389,6 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
 
         if (node.checked) {
           this.#setValue(node.value);
-        }
-      } else
-      if (node.classList.contains('popover')) {
-        const size = this.size;
-        if (size) {
-          node.style.maxHeight = `${1.5 * size + 0.5}rem`
         }
       } else
       if (node.classList.contains('backdrop')) {
@@ -399,19 +421,6 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         }
     }
     super.nodeRemoved(node);
-  }
-
-  openCallback() {
-    for (let i = 0; i < this.#optionElements.length; i++) {
-      if (this.#optionElements[i].checked) {
-        this.#scrollTo(i);
-        break;
-      }
-    }
-  }
-
-  reset() {
-    this.#highlightedOption = null;
   }
 
   #setValue(value, dispatchChangeEvent = false) {
@@ -481,14 +490,14 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   #scrollTo(index) {
-    if (this.size && this.popoverElement) {
+    if (this.#size && this.popoverElement) {
       const offset = this.#scrollOffset;
 
       if (index < offset) {
         this.#scrollOffset = index;
       } else
-      if (index > offset + this.size - 1) {
-        this.#scrollOffset = index - this.size + 1;
+      if (index > offset + this.#size - 1) {
+        this.#scrollOffset = index - this.#size + 1;
       }
     }
   }

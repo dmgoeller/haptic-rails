@@ -168,7 +168,9 @@ haptic-option {
   $padding-left: .25rem;
   $checkmark-size: 1rem;
 
+  box-sizing: border-box;
   line-height: 1.25rem;
+  min-height: 24px;
   padding-bottom: $padding-top-bottom;
   padding-left: $padding-left + $checkmark-size + .25rem;
   padding-right: .5rem;
