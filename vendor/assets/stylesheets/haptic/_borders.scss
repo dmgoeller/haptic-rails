@@ -57,6 +57,8 @@
  **********************************************************************/
 
 haptic-dialog-dropdown, haptic-select-dropdown {
+  outline: none;
+
   & > .popover {
     border-radius: .25rem;
     border-style: solid;

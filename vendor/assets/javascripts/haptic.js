@@ -96,6 +96,7 @@ class HapticDropdownElement extends HTMLElement {
   }
 
   connectedCallback() {
+    this.setAttribute('tabindex', '0');
     this.addEventListener('focusout', this);
     this.addEventListener('keyup', this);
 
@@ -138,6 +139,7 @@ class HapticDropdownElement extends HTMLElement {
 
       if (classList.contains('toggle')) {
         if (!this.toggleElement) {
+          node.setAttribute('tabindex', -1);
           node.addEventListener('click', this);
           node.addEventListener('focusout', this);
           this.toggleElement = node;
