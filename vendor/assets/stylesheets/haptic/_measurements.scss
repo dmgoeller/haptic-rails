@@ -158,7 +158,7 @@ haptic-select-dropdown {
 
   &[size] > .popover {
     &::-webkit-scrollbar {
-      width: .75rem;
+      width: calc(.5rem - 2px);
     }
   }
 }

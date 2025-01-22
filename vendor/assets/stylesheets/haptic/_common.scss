@@ -110,6 +110,7 @@ haptic-dialog-dropdown, haptic-select-dropdown {
   position: relative;
 
   & > .toggle {
+    cursor: default;
     position: relative;
     z-index: $haptic-popover-z-index - 1;
   }
@@ -185,7 +186,6 @@ button, input, select, textarea {
 }
 
 button.haptic-field {
-  cursor: pointer;
   text-align: left;
 }
 
