@@ -894,10 +894,10 @@ class HapticFormElement extends HTMLFormElement {
           this.#submitButtons.add(node);
           this.#refresh();
         } else
-        if ((node instanceof HTMLInputElement ||
+        if ((node instanceof HapticListElement ||
+             node instanceof HTMLInputElement ||
              node instanceof HTMLTextAreaElement ||
-             node instanceof HTMLSelectElement ||
-             node instanceof HapticListElement) &&
+             node instanceof HTMLSelectElement) &&
             node.required) {
           this.#eventListeners.add(node, 'change', this);
           this.#eventListeners.add(node, 'input', this);
@@ -1025,13 +1025,13 @@ class HapticListElement extends HTMLElement {
   }
 
   get required() {
-    this.hasAttribute('required');
+    return this.hasAttribute('required');
   }
 
   get value() {
     for (let listItemElement of this.#listItemElements) {
-      if (listItemElement.inputElement?.checked) {
-        return listItemElement.inputElement.value;
+      if (listItemElement.checked) {
+        return listItemElement.value;
       }
     }
     return null;
@@ -1065,9 +1065,18 @@ customElements.define('haptic-list', HapticListElement);
 class HapticListItemElement extends HTMLElement {
   #inputElement = null;
   #inputElementObserver = new HapticControlObserver(this);
+  #eventListeners = new HapticEventListeners();
 
   constructor() {
     super();
+  }
+
+  get checked() {
+    return this.#inputElement?.checked;
+  }
+
+  get value() {
+    return this.#inputElement?.value;
   }
 
   connectedCallback() {
@@ -1075,6 +1084,10 @@ class HapticListItemElement extends HTMLElement {
       nodeAdded: node => {
         if (node instanceof HTMLInputElement && !this.#inputElement) {
           node.classList.add('embedded');
+
+          this.#eventListeners.add(node, 'change', () => {
+            this.dispatchEvent(new Event('change'));
+          });
           this.#inputElementObserver.observe(node);
           this.#inputElement = node;
         }
@@ -1082,11 +1095,16 @@ class HapticListItemElement extends HTMLElement {
       nodeRemoved: node => {
         if (node === this.#inputElement) {
           node.classList.remove('embedded');
+          this.#eventListeners.remove(node);
           this.#inputElementObserver.disconnect();
           this.#inputElement = null;
         }
       }
     }).observe(this);
+  }
+
+  disconnectedCallback() {
+    this.#eventListeners.removeAll();
   }
 }
 customElements.define('haptic-list-item', HapticListItemElement);
