@@ -98,21 +98,11 @@ haptic-segmented-button {
  * Dropdowns
  **********************************************************************/
 
-.haptic-dropdown-layer {
-  z-index: $haptic-popover-z-index - 1;
-}
-
-.haptic-popover-layer {
-  z-index: $haptic-popover-z-index;
-}
-
 haptic-dialog-dropdown, haptic-select-dropdown {
   position: relative;
 
   & > .toggle {
     cursor: default;
-    position: relative;
-    z-index: $haptic-popover-z-index - 1;
   }
 
   & > .popover {
@@ -127,7 +117,7 @@ haptic-dialog-dropdown, haptic-select-dropdown {
   & > .backdrop {
     display: none;
     position: fixed;
-    z-index: $haptic-popover-z-index - 2;
+    z-index: $haptic-popover-z-index - 1;
   }
 
   &[popover-open] {
@@ -170,6 +160,12 @@ haptic-option {
  * Fields
  **********************************************************************/
 
+@mixin haptic-field-overlay {
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+}
+
 button, input, select, textarea {
   &.haptic-field {
     appearance: none;
@@ -208,9 +204,8 @@ haptic-dropdown-field, haptic-text-field {
   }
 
   .haptic-field-label {
+    @include haptic-field-overlay;
     @include haptic-overflow-ellipsis;
-    pointer-events: none;
-    position: absolute;
   }
 
   &[required] .haptic-field-label::after {
@@ -219,10 +214,9 @@ haptic-dropdown-field, haptic-text-field {
 
   &[focus-indicator] {
     & > .haptic-field-container::after {
+      @include haptic-field-overlay;
       content: '\200b';
       opacity: 0;
-      pointer-events: none;
-      position: absolute;
     }
 
     &:focus-within {
@@ -237,11 +231,10 @@ haptic-dropdown-field, haptic-text-field {
   }
 
   .leading-icon, .error-icon {
+    @include haptic-field-overlay;
     align-items: center;
     display: flex;
     justify-content: center;
-    pointer-events: none;
-    position: absolute;
   }
 
   .error-icon {
@@ -265,9 +258,8 @@ haptic-dropdown-field {
 
   & > .haptic-field-container::before {
     @include haptic-mask-image('dropdown-arrow.svg');
+    @include haptic-field-overlay;
     content: '\200b';
-    pointer-events: none;
-    position: absolute;
   }
 }
 
@@ -296,6 +288,7 @@ haptic-text-field {
     display: flex;
     justify-content: center;
     position: absolute;
+    z-index: 1;
   }
 
   .clear-button {
