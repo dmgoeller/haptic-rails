@@ -155,7 +155,7 @@ module Haptic
         field = @template.haptic_select_dropdown_tag(options.slice(:size, :to_top)) do
           hidden_field(method, options.slice(:disabled, :required)) +
             @template.content_tag('div', '', class: toggle_class) +
-            @template.content_tag('div', '', class: 'popover') do
+            @template.content_tag('div', class: 'popover') do
               if choices
                 selected = object.send(method)
 
