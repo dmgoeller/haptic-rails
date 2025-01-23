@@ -921,6 +921,10 @@ class HapticFormElement extends HTMLFormElement {
     this.#eventListeners.removeAll();
   }
 
+  handleEvent() {
+    this.#refresh();
+  }
+
   #refresh() {
     if (this.#submitButtons.size > 0) {
       let submittable = true;

@@ -152,7 +152,7 @@ module Haptic
         toggle_class = %w[toggle haptic-field]
         toggle_class << options[:class] if options[:class]
 
-        field = @template.haptic_select_dropdown_tag(options.slice(:size, :to_top)) do
+        field = @template.haptic_select_dropdown_tag(options.slice(:onchange, :size, :to_top)) do
           hidden_field(method, options.slice(:disabled, :required)) +
             @template.content_tag('div', '', class: toggle_class) +
             @template.content_tag('div', class: 'popover') do
