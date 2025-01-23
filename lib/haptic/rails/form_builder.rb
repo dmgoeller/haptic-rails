@@ -149,29 +149,33 @@ module Haptic
         choices = choices.to_a if choices.is_a?(Hash)
         options = @field_options.merge(options)
 
-        toggle_class = %w[toggle haptic-field]
-        toggle_class << options[:class] if options[:class]
+        dropdown_options = options.extract!(:onchange, :size, :to_top)
 
-        field = @template.haptic_select_dropdown_tag(options.slice(:onchange, :size, :to_top)) do
+        toggle_class = %w[toggle haptic-field]
+        toggle_class << options.delete(:class) if options[:class]
+
+        field = @template.haptic_select_dropdown_tag(dropdown_options) do
           hidden_field(method, options.slice(:disabled, :required)) +
             @template.content_tag('div', '', class: toggle_class) +
             @template.content_tag('div', class: 'popover') do
-              if choices
-                selected = object.send(method)
+              @template.content_tag('haptic-option-list') do
+                if choices
+                  selected = object.send(method)
 
-                choices.each do |choice|
-                  value = choice.last
-                  @template.concat(
-                    @template.content_tag(
-                      'haptic-option',
-                      choice.first,
-                      value: value,
-                      checked: value == selected
+                  choices.each do |choice|
+                    value = choice.last
+                    @template.concat(
+                      @template.content_tag(
+                        'haptic-option',
+                        choice.first,
+                        value: value,
+                        checked: value == selected
+                      )
                     )
-                  )
+                  end
+                elsif block
+                  @template.capture(&block)
                 end
-              elsif block
-                @template.capture(&block)
               end
             end
         end

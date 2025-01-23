@@ -138,28 +138,30 @@ haptic-dialog-dropdown, haptic-select-dropdown {
   }
 }
 
-haptic-dialog-dropdown > .popover > .segment {
-  padding:
-    calc(.5rem - 1px)
-    calc(#{haptic-measure(.5rem, 1rem)} - 1px);
+haptic-dialog-dropdown {
+  & > .popover > .segment {
+    padding:
+      calc(.5rem - 1px)
+      calc(#{haptic-measure(.5rem, 1rem)} - 1px);
 
-  & > .legend {
-    margin-bottom: .5rem;
+    & > .legend {
+      margin-bottom: .5rem;
+    }
   }
 }
 
 haptic-select-dropdown {
-  $option-height: 1.5rem;
-  $popover-padding: .25rem;
-
   & > .popover {
-    padding: $popover-padding;
+    box-sizing: border-box;
+    padding: .25rem 0;
   }
+}
 
-  &[size] > .popover {
-    &::-webkit-scrollbar {
-      width: calc(.5rem - 2px);
-    }
+haptic-option-list {
+  padding: 0 .25rem;
+
+  &::-webkit-scrollbar {
+    width: calc(1rem - 4px);
   }
 }
 

@@ -131,8 +131,11 @@ haptic-dialog-dropdown, haptic-select-dropdown {
   }
 }
 
-haptic-select-dropdown[size] > .popover {
-  overflow-y: scroll;
+haptic-option-list {
+  display: flex;
+  flex-direction: column;
+  scroll-snap-type: y mandatory;
+  overflow-y: auto;
 
   &::-webkit-scrollbar-thumb {
     background-clip: padding-box;
@@ -142,6 +145,7 @@ haptic-select-dropdown[size] > .popover {
 haptic-option {
   cursor: default;
   position: relative;
+  scroll-snap-align: start;
   white-space: nowrap;
 
   &::after {
