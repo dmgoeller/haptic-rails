@@ -73,7 +73,7 @@ haptic-dialog-dropdown > .popover > .segment:not(:first-child) {
 
 haptic-option-list {
   &::-webkit-scrollbar-thumb {
-    border-radius: calc(.5rem - 2px);
+    border-radius: 5px;
     border-style: solid;
     border-width: 2px;
   }

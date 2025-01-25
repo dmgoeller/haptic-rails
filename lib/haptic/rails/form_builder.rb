@@ -55,7 +55,7 @@ module Haptic
       # :call-seq: list(method, choices, options = {}, &block)
 
       ##
-      # :method: list
+      # :method: segmented_button
       # :call-seq: segmented_button(method, choices, options = {})
 
       %i[chips list segmented_button].each do |name|
@@ -100,7 +100,34 @@ module Haptic
       end
 
       def collection_select(method, collection, value_method, text_method, options = {}, html_options = {})
-        haptic_field('dropdown', method, super, @field_options.merge(options))
+        haptic_field('dropdown', method, super, @field_options.merge(html_options))
+      end
+
+      # Returns a <code><haptic-dropdown-field></code> containing a <code><haptic-select-dropdown></code>.
+      def collection_select_dropdown(method, collection, value_method, text_method, options = {}, html_options = {})
+        html_options = @field_options.merge(html_options)
+        current_value = object.send(method)
+
+        haptic_options = collection.map do |object|
+          value = object.public_send(value_method)
+          @template.haptic_option_tag(
+            object.public_send(text_method),
+            value: value,
+            checked: value == current_value
+          )
+        end
+
+        if options[:include_blank] == true
+          haptic_options = [
+            @template.haptic_option_tag(
+              options[:prompt] || '',
+              value: '',
+              checked: current_value.blank?
+            )
+          ] + haptic_options
+        end
+
+        haptic_select_dropdown_field(method, haptic_options.reduce(:+), html_options)
       end
 
       def date_field(method, options = {})
@@ -149,36 +176,23 @@ module Haptic
         choices = choices.to_a if choices.is_a?(Hash)
         options = @field_options.merge(options)
 
-        toggle_class = %w[toggle haptic-field]
-        toggle_class << options.delete(:class) if options[:class]
+        haptic_options =
+          if block
+            @template.capture(&block)
+          else
+            current_value = object.send(method)
 
-        field = @template.haptic_select_dropdown_tag(options.slice(:onchange, :to_top)) do
-          hidden_field(method, options.slice(:disabled, :required)) +
-            @template.content_tag('div', '', class: toggle_class) +
-            @template.content_tag('div', class: 'popover') do
-              @template.content_tag('haptic-option-list', options.slice(:size)) do
-                if choices
-                  selected = object.send(method)
+            choices&.map do |choice|
+              value = choice.last
+              @template.haptic_option_tag(
+                choice.first,
+                value: value,
+                checked: value == current_value
+              )
+            end&.reduce(:+)
+          end
 
-                  choices.each do |choice|
-                    value = choice.last
-                    @template.concat(
-                      @template.content_tag(
-                        'haptic-option',
-                        choice.first,
-                        value: value,
-                        checked: value == selected
-                      )
-                    )
-                  end
-                elsif block
-                  @template.capture(&block)
-                end
-              end
-            end
-        end
-
-        haptic_field('dropdown', method, field, options)
+        haptic_select_dropdown_field(method, haptic_options, options)
       end
 
       def with_field_options(options = {})
@@ -224,6 +238,17 @@ module Haptic
           end
 
         @template.haptic_field_tag(type, field, label, options)
+      end
+
+      def haptic_select_dropdown_field(method, haptic_options, options = {})
+        field = @template.haptic_select_dropdown_tag(options.slice(:onchange, :to_top)) do
+          hidden_field(method, options.slice(:disabled, :required)) +
+            @template.content_tag('div', '', class: ['toggle', 'haptic-field', options[:class]]) +
+            @template.content_tag('div', class: 'popover') do
+              @template.haptic_option_list_tag(haptic_options, options.slice(:size))
+            end
+        end
+        haptic_field('dropdown', method, field, options)
       end
 
       def _field_id(method)

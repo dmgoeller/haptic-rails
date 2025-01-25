@@ -86,6 +86,14 @@ module Haptic
           content_tag('haptic-list-item', content, options, &block)
         end
 
+        def haptic_option_list_tag(content = nil, options = nil, &block)
+          content_tag('haptic-option-list', content, options, &block)
+        end
+
+        def haptic_option_tag(content = nil, options = nil, &block)
+          content_tag('haptic-option', content, options, &block)
+        end
+
         def haptic_segmented_button_tag(options = {}, &block)
           content_tag('haptic-segmented-button', options, &block)
         end
