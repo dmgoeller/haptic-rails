@@ -9,7 +9,6 @@ module Haptic
         clear_button
         field_id
         focus_indicator
-        haptic_field_id
         label
         leading_icon
         set_valid_on_change

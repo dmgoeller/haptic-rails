@@ -17,6 +17,19 @@ module Haptic
           )
         end
 
+        define_method("test_#{type}_field_with_field_id") do
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-text-field for="dummy_foo" id="bar">
+                <div class="haptic-field-container">
+                  <input is="haptic-input" type="#{type}" name="dummy[foo]" id="dummy_foo">
+                </div>
+              </haptic-text-field>
+            HTML
+            form_builder.send(:"#{type}_field", :foo, field_id: 'bar')
+          )
+        end
+
         define_method("test_#{type}_field_with_clear_button") do
           assert_dom_equal(
             <<~HTML,
