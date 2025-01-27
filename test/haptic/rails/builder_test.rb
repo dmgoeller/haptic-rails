@@ -11,7 +11,7 @@ module Haptic
             <<~HTML,
               <input type="#{type}" is="haptic-input" name="foo[bar]" id="foo_bar">
             HTML
-            builder.public_send("#{type}_field", :foo, :bar)
+            builder.public_send(:"#{type}_field", :foo, :bar)
           )
         end
 
@@ -20,7 +20,7 @@ module Haptic
             <<~HTML,
               <input type="#{type}" name="foo[bar]" id="foo_bar">
             HTML
-            builder.public_send("#{type}_field", :foo, :bar, is: nil)
+            builder.public_send(:"#{type}_field", :foo, :bar, is: nil)
           )
         end
 
@@ -29,7 +29,7 @@ module Haptic
             <<~HTML,
               <input type="#{type}" is="haptic-input" name="foo[bar]" id="foo_bar" class="foo bar">
             HTML
-            builder(class: 'foo').public_send("#{type}_field", :foo, :bar, class: 'bar')
+            builder(class: 'foo').public_send(:"#{type}_field", :foo, :bar, class: 'bar')
           )
         end
       end

@@ -414,6 +414,16 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         }
       }
     });
+    this.#eventListeners.add(document, 'DOMContentLoaded', () => {
+      const optionElements = this.#optionListElement.optionElements;
+
+      if (optionElements && optionElements.length > 0) {
+        if (!this.#optionListElement.checkedOptionElement) {
+          optionElements[0].checked = true;
+        }
+        this.#refresh();
+      }
+    });
     super.connectedCallback();
   }
 
@@ -450,16 +460,6 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
             this.hidePopover();
           });
           this.#optionListElement = node;
-        }
-      } else
-      if (node.classList.contains('backdrop')) {
-        const optionElements = this.#optionListElement.optionElements;
-
-        if (optionElements && optionElements.length > 0) {
-          if (!this.#optionListElement.checkedOptionElement) {
-            optionElements[0].checked = true;
-          }
-          this.#refresh();
         }
       }
     }

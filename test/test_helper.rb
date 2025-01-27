@@ -27,19 +27,15 @@ require 'active_support/core_ext/string'
 # Active Model
 require 'active_model'
 
-class Dummy
-  include ActiveModel::Model
-  extend ActiveModel::Naming
-
-  attr_accessor :foo
-end
-
 # Action View
 require 'action_view'
 
 module Rails
   class Engine; end
 end
+
+# Dummies
+require 'dummy'
 
 # This gem
 require 'haptic-rails'
