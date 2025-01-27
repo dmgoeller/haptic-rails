@@ -5,8 +5,14 @@ module Haptic
     class FieldOptions
       delegate_missing_to :options
 
-      def initialize
-        @stacked_options = [{}]
+      %i[merge merge! reverse_merge reverse_merge!].each do |name|
+        define_method(name) do |options = {}|
+          self.options.public_send(name, options.symbolize_keys)
+        end
+      end
+
+      def initialize(options = {})
+        @stacked_options = [options]
       end
 
       def options
@@ -18,7 +24,7 @@ module Haptic
       end
 
       def push(options = {})
-        @stacked_options.push(options.merge(@stacked_options.last))
+        @stacked_options.push(options.merge(self.options))
         self
       end
     end

@@ -9,11 +9,10 @@ module Haptic
 
       def segment(legend = nil, options = {}, &block)
         legend, options = nil, legend if legend.is_a?(Hash)
-        options = options.merge(class: [options[:class], 'segment'].flatten)
 
-        @builder.content_tag('div', options) do
+        @builder.content_tag('div', options.merge(class: ['segment', options[:class]])) do
           @builder.concat(@builder.content_tag('div', legend, class: 'legend')) if legend
-          block&.call
+          @builder.concat(@builder.capture(&block))
         end
       end
     end

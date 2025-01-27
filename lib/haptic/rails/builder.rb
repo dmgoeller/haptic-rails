@@ -3,28 +3,28 @@
 module Haptic
   module Rails
     class Builder < SimpleDelegator
-      def initialize(template, defaults)
+      def initialize(template, field_options)
         super(template)
-        @defaults = defaults
+        @field_options = field_options
       end
 
       %i[date_field file_field number_field text_field].each do |name|
         define_method name do |object_name, method, options = {}|
-          super(object_name, method, tag_options(options, is: 'haptic-input'))
+          super(object_name, method, field_options(options, is: 'haptic-input'))
         end
       end
 
       def button_tag(content_or_options = nil, options = nil, &block)
         if content_or_options.is_a?(Hash)
-          content_or_options = content_or_options.merge(is: 'haptic-button') unless content_or_options.key?(:is)
+          content_or_options = content_or_options.reverse_merge(is: 'haptic-button')
         else
-          options = (options || {}).merge(is: 'haptic-button') unless options.key?(:is)
+          options = (options || {}).reverse_merge(is: 'haptic-button')
         end
         super(content_or_options, options, &block)
       end
 
       def check_box(object_name, method, options = {}, checked_value = '1', unchecked_value = '0')
-        super(object_name, method, tag_options(options, is: 'haptic-input'), checked_value, unchecked_value)
+        super(object_name, method, field_options(options, is: 'haptic-input'), checked_value, unchecked_value)
       end
 
       def collection_check_boxes(object_name, method, collection, value_method, text_method, options = {}, html_options = {}, &block)
@@ -41,34 +41,37 @@ module Haptic
 
       def label(object_name, method, content_or_options = nil, options = nil, &block)
         if content_or_options.is_a?(Hash)
-          content_or_options = content_or_options.merge(is: 'haptic-label') unless content_or_options.key?(:is)
+          content_or_options = content_or_options.reverse_merge(is: 'haptic-label')
         else
-          options = (options || {}).merge(is: 'haptic-label') unless options.key?(:is)
+          options = (options || {}).reverse_merge(is: 'haptic-label')
         end
         ActionView::Helpers::Tags::Label.new(object_name, method, self, content_or_options, options).render(&block)
       end
 
       def radio_button(object_name, method, tag_value, options = {})
-        super(object_name, method, tag_value, tag_options(options, is: 'haptic-input'))
+        super(object_name, method, tag_value, field_options(options, is: 'haptic-input'))
       end
 
       def select(object_name, method, choices = nil, options = {}, html_options = {}, &block)
-        super(object_name, method, choices, options, tag_options(html_options, is: 'haptic-select'), &block)
+        super(object_name, method, choices, options, field_options(html_options, is: 'haptic-select'), &block)
       end
 
       def submit_tag(value = 'Save changes', options = {})
-        super(value, options.merge(is: 'haptic-input'))
+        super(value, options.reverse_merge(is: 'haptic-input'))
       end
 
       def text_area(object_name, method, options = {})
-        super(object_name, method, tag_options(options, is: 'haptic-textarea'))
+        super(object_name, method, field_options(options, is: 'haptic-textarea'))
       end
 
       private
 
-      def tag_options(options, is: nil)
-        options.merge(class: [options[:class], @defaults[:class]].flatten).tap do |tag_options|
-          tag_options[:is] = is unless options.key?(:is)
+      def field_options(options, is: nil)
+        classes = [@field_options[:class], options[:class]].flatten.compact
+
+        options.dup.tap do |field_options|
+          field_options[:class] = classes if classes.any?
+          field_options[:is] = is unless options.key?(:is)
         end
       end
     end
