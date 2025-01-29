@@ -73,10 +73,10 @@ module Haptic
       end
 
       def collection_list(method, collection, value_method, text_method, options = {}, &block)
-        options = options.stringify_keys
+        options = options.symbolize_keys
 
-        @template.haptic_list_tag(required: options.delete('required') == true) do
-          if options.delete('multiple') == true
+        @template.haptic_list_tag(required: options.delete(:required) == true) do
+          if options.delete(:multiple) == true
             collection_check_boxes(method, collection, value_method, text_method, options) do |b|
               @template.haptic_list_item_tag { block ? block.call(b) : b.check_box + b.label }
             end

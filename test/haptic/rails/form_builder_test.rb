@@ -17,6 +17,15 @@ module Haptic
           )
         end
 
+        define_method("test_#{type}_field_with_option") do
+          assert_dom_equal(
+            <<~HTML,
+              <input is="haptic-input" type="#{type}" name="dummy[foo]" id="dummy_foo" bar="">
+            HTML
+            form_builder.send(:"#{type}_field", :foo, bar: '')
+          )
+        end
+
         define_method("test_#{type}_field_with_field_id") do
           assert_dom_equal(
             <<~HTML,
@@ -46,32 +55,20 @@ module Haptic
           )
         end
 
-        define_method("test_#{type}_field_with_leading_icon") do
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field for="dummy_foo">
-                <div class="haptic-field-container">
-                  <input is="haptic-input" type="#{type}" name="dummy[foo]" id="dummy_foo">
-                  <div class="haptic-icon leading-icon">bar</div></div>
-                </div>
-              </haptic-text-field>
-            HTML
-            form_builder.send(:"#{type}_field", :foo, leading_icon: 'bar')
-          )
-        end
-
-        define_method("test_#{type}_field_with_trailing_icon") do
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field for="dummy_foo">
-                <div class="haptic-field-container">
-                  <input is="haptic-input" type="#{type}" name="dummy[foo]" id="dummy_foo">
-                  <div class="haptic-icon trailing-icon">bar</div></div>
-                </div>
-              </haptic-text-field>
-            HTML
-            form_builder.send(:"#{type}_field", :foo, trailing_icon: 'bar')
-          )
+        %w[leading trailing].each do |position|
+          define_method("test_#{type}_field_with_#{position}_icon") do
+            assert_dom_equal(
+              <<~HTML,
+                <haptic-text-field for="dummy_foo">
+                  <div class="haptic-field-container">
+                    <input is="haptic-input" type="#{type}" name="dummy[foo]" id="dummy_foo">
+                    <div class="haptic-icon #{position}-icon">bar</div>
+                  </div>
+                </haptic-text-field>
+              HTML
+              form_builder.send(:"#{type}_field", :foo, { "#{position}_icon": 'bar' })
+            )
+          end
         end
 
         define_method("test_#{type}_field_with_error_icon") do
@@ -80,7 +77,7 @@ module Haptic
               <haptic-text-field for="dummy_foo">
                 <div class="haptic-field-container">
                   <input is="haptic-input" type="#{type}" name="dummy[foo]" id="dummy_foo">
-                  <div class="haptic-icon error-icon">error</div></div>
+                  <div class="haptic-icon error-icon">error</div>
                 </div>
               </haptic-text-field>
             HTML
@@ -138,7 +135,7 @@ module Haptic
         define_method("test_#{type}_field_with_set_valid_on_change") do
           assert_dom_equal(
             <<~HTML,
-              <haptic-text-field set-valid-on-change="dummy_bar" for="dummy_foo">
+              <haptic-text-field for="dummy_foo" set-valid-on-change="dummy_bar">
                 <div class="haptic-field-container">
                   <input is="haptic-input" type="#{type}" name="dummy[foo]" id="dummy_foo">
                 </div>
@@ -147,6 +144,143 @@ module Haptic
             form_builder.send(:"#{type}_field", :foo, set_valid_on_change: :bar)
           )
         end
+      end
+
+      def test_text_area
+        assert_dom_equal(
+          <<~HTML,
+            <textarea is="haptic-textarea" name="dummy[foo]" id="dummy_foo"></textarea>
+          HTML
+          form_builder.text_area(:foo)
+        )
+      end
+
+      def test_text_area_with_option
+        assert_dom_equal(
+          <<~HTML,
+            <textarea is="haptic-textarea" name="dummy[foo]" id="dummy_foo" bar=""></textarea>
+          HTML
+          form_builder.text_area(:foo, bar: '')
+        )
+      end
+
+      def test_text_area_with_field_id
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-text-field for="dummy_foo" id="bar">
+              <div class="haptic-field-container">
+                <textarea is="haptic-textarea" name="dummy[foo]" id="dummy_foo"></textarea>
+              </div>
+            </haptic-text-field>
+          HTML
+          form_builder.text_area(:foo, field_id: :bar)
+        )
+      end
+
+      def test_text_area_with_clear_button
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-text-field for="dummy_foo">
+              <div class="haptic-field-container">
+                <textarea is="haptic-textarea" name="dummy[foo]" id="dummy_foo"></textarea>
+                <button type="button" tabindex="-1" class="clear-button">
+                  <div class="haptic-icon">close</div>
+                </button>
+              </div>
+            </haptic-text-field>
+          HTML
+          form_builder.text_area(:foo, clear_button: true)
+        )
+      end
+
+      %w[leading trailing].each do |position|
+        define_method "test_text_area_with_#{position}_icon" do
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-text-field for="dummy_foo">
+                <div class="haptic-field-container">
+                  <textarea is="haptic-textarea" name="dummy[foo]" id="dummy_foo"></textarea>
+                  <div class="haptic-icon #{position}-icon">bar</div>
+                </div>
+              </haptic-text-field>
+            HTML
+            form_builder.text_area(:foo, { "#{position}_icon": 'bar' })
+          )
+        end
+      end
+
+      def test_text_area_with_error_icon
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-text-field for="dummy_foo">
+              <div class="haptic-field-container">
+                <textarea is="haptic-textarea" name="dummy[foo]" id="dummy_foo"></textarea>
+                <div class="haptic-icon error-icon">error</div>
+              </div>
+            </haptic-text-field>
+          HTML
+          form_builder.text_area(:foo, show_error_icon: true)
+        )
+      end
+
+      def test_text_area_with_label
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-text-field for="dummy_foo">
+              <div class="haptic-field-container">
+                <textarea is="haptic-textarea" name="dummy[foo]" id="dummy_foo"></textarea>
+                <label is="haptic-label" class="haptic-field-label" for="dummy_foo">Foo</label>
+              </div>
+            </haptic-text-field>
+          HTML
+          form_builder.text_area(:foo, label: true)
+        )
+      end
+
+      def test_text_area_with_supporting_text
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-text-field for="dummy_foo">
+              <div class="haptic-field-container">
+                <textarea is="haptic-textarea" name="dummy[foo]" id="dummy_foo"></textarea>
+              </div>
+              <div class="supporting-text">Supporting text</div>
+            </haptic-text-field>
+          HTML
+          form_builder.text_area(:foo, supporting_text: 'Supporting text')
+        )
+      end
+
+      def test_text_area_with_error_message
+        dummy = Dummy.new
+        dummy.errors.add(:foo, :invalid)
+
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-text-field for="dummy_foo" invalid="">
+              <div class="haptic-field-container">
+                <div class="field_with_errors">
+                  <textarea is="haptic-textarea" name="dummy[foo]" id="dummy_foo"></textarea>
+                </div>
+              </div>
+              <div class="error-message">Foo is invalid.</div>
+            </haptic-text-field>
+          HTML
+          form_builder(dummy).text_area(:foo, show_error_message: true)
+        )
+      end
+
+      def test_text_area_with_set_valid_on_change
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-text-field for="dummy_foo" set-valid-on-change="dummy_bar">
+              <div class="haptic-field-container">
+                <textarea is="haptic-textarea" name="dummy[foo]" id="dummy_foo"></textarea>
+              </div>
+            </haptic-text-field>
+          HTML
+          form_builder.text_area(:foo, set_valid_on_change: :bar)
+        )
       end
 
       def test_chips
@@ -163,6 +297,42 @@ module Haptic
             </div>
           HTML
           form_builder.chips(:foo, [%w[Foo foo], %w[Bar bar]])
+        )
+      end
+
+      def test_chips_on_hash
+        assert_dom_equal(
+          <<~HTML,
+            <input type="hidden" name="dummy[foo][]" value="" autocomplete="off">
+            <div class="haptic-chip">
+              <input type="checkbox" value="foo" name="dummy[foo][]" id="dummy_foo_foo">
+              <label for="dummy_foo_foo">Foo</label>
+            </div>
+            <div class="haptic-chip">
+              <input type="checkbox" value="bar" name="dummy[foo][]" id="dummy_foo_bar">
+              <label for="dummy_foo_bar">Bar</label>
+            </div>
+          HTML
+          form_builder.chips(:foo, { 'Foo' => 'foo', 'Bar' => 'bar' })
+        )
+      end
+
+      def test_chips_with_block
+        assert_dom_equal(
+          <<~HTML,
+            <input type="hidden" name="dummy[foo][]" value="" autocomplete="off">
+            <div class="haptic-chip">
+              <input type="checkbox" value="foo" name="dummy[foo][]" id="dummy_foo_foo" data-foo="bar">
+              <label for="dummy_foo_foo">Foo</label>
+            </div>
+            <div class="haptic-chip">
+              <input type="checkbox" value="bar" name="dummy[foo][]" id="dummy_foo_bar" data-foo="bar">
+              <label for="dummy_foo_bar">Bar</label>
+            </div>
+          HTML
+          form_builder.chips(:foo, [%w[Foo foo], %w[Bar bar]]) do |builder|
+            builder.check_box(is: nil, data: { foo: 'bar' }) + builder.label(is: nil)
+          end
         )
       end
 
@@ -185,6 +355,46 @@ module Haptic
         )
       end
 
+      def test_list_on_hash
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-list>
+              <input type="hidden" name="dummy[foo]" value="" autocomplete="off">
+              <haptic-list-item>
+                <input is="haptic-input" type="radio" value="foo" name="dummy[foo]" id="dummy_foo_foo">
+                <label is="haptic-label" for="dummy_foo_foo">Foo</label>
+              </haptic-list-item>
+              <haptic-list-item>
+                <input is="haptic-input" type="radio" value="bar" name="dummy[foo]" id="dummy_foo_bar">
+                <label is="haptic-label" for="dummy_foo_bar">Bar</label>
+              </haptic-list-item>
+            </haptic-list>
+          HTML
+          form_builder.list(:foo, { 'Foo' => 'foo', 'Bar' => 'bar' })
+        )
+      end
+
+      def test_list_with_block
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-list>
+              <input type="hidden" name="dummy[foo]" value="" autocomplete="off">
+              <haptic-list-item>
+                <input is="haptic-input" type="radio" value="foo" name="dummy[foo]" id="dummy_foo_foo" data-foo="bar">
+                <label is="haptic-label" for="dummy_foo_foo">Foo</label>
+              </haptic-list-item>
+              <haptic-list-item>
+                <input is="haptic-input" type="radio" value="bar" name="dummy[foo]" id="dummy_foo_bar" data-foo="bar">
+                <label is="haptic-label" for="dummy_foo_bar">Bar</label>
+              </haptic-list-item>
+            </haptic-list>
+          HTML
+          form_builder.list(:foo, [%w[Foo foo], %w[Bar bar]]) do |builder|
+            builder.radio_button(data: { foo: 'bar' }) + builder.label
+          end
+        )
+      end
+
       def test_segmented_button
         assert_dom_equal(
           <<~HTML,
@@ -204,6 +414,46 @@ module Haptic
         )
       end
 
+      def test_segmented_button_on_hash
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-segmented-button>
+              <input type="hidden" name="dummy[foo]" value="" autocomplete="off">
+              <div class="haptic-button-segment">
+                <input type="radio" value="foo" name="dummy[foo]" id="dummy_foo_foo">
+                <label for="dummy_foo_foo">Foo</label>
+              </div>
+              <div class="haptic-button-segment">
+                <input type="radio" value="bar" name="dummy[foo]" id="dummy_foo_bar">
+                <label for="dummy_foo_bar">Bar</label>
+              </div>
+            </haptic-segmented-button>
+          HTML
+          form_builder.segmented_button(:foo, { 'Foo' => 'foo', 'Bar' => 'bar' })
+        )
+      end
+
+      def test_segmented_button_with_block
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-segmented-button>
+              <input type="hidden" name="dummy[foo]" value="" autocomplete="off">
+              <div class="haptic-button-segment">
+                <input type="radio" value="foo" name="dummy[foo]" id="dummy_foo_foo" data-foo="bar">
+                <label for="dummy_foo_foo">Foo</label>
+              </div>
+              <div class="haptic-button-segment">
+                <input type="radio" value="bar" name="dummy[foo]" id="dummy_foo_bar" data-foo="bar">
+                <label for="dummy_foo_bar">Bar</label>
+              </div>
+            </haptic-segmented-button>
+          HTML
+          form_builder.segmented_button(:foo, [%w[Foo foo], %w[Bar bar]]) do |builder|
+            builder.radio_button(is: nil, data: { foo: 'bar' }) + builder.label(is: nil)
+          end
+        )
+      end
+
       def test_collection_list
         assert_dom_equal(
           <<~HTML,
@@ -220,6 +470,46 @@ module Haptic
             </haptic-list>
           HTML
           form_builder.collection_list(:foo, [%w[foo Foo], %w[bar Bar]], :first, :second)
+        )
+      end
+
+      def test_collection_list_with_block
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-list>
+              <input type="hidden" name="dummy[foo]" value="" autocomplete="off">
+              <haptic-list-item>
+                <input is="haptic-input" type="radio" value="foo" name="dummy[foo]" id="dummy_foo_foo" data-foo="bar">
+                <label is="haptic-label" for="dummy_foo_foo">Foo</label>
+              </haptic-list-item>
+              <haptic-list-item>
+                <input is="haptic-input" type="radio" value="bar" name="dummy[foo]" id="dummy_foo_bar" data-foo="bar">
+                <label is="haptic-label" for="dummy_foo_bar">Bar</label>
+              </haptic-list-item>
+            </haptic-list>
+          HTML
+          form_builder.collection_list(:foo, [%w[foo Foo], %w[bar Bar]], :first, :second) do |builder|
+            builder.radio_button(data: { foo: 'bar' }) + builder.label
+          end
+        )
+      end
+
+      def test_collection_list_on_multiple
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-list>
+              <input type="hidden" name="dummy[foo][]" value="" autocomplete="off">
+              <haptic-list-item>
+                <input is="haptic-input" type="checkbox" value="foo" name="dummy[foo][]" id="dummy_foo_foo">
+                <label is="haptic-label" for="dummy_foo_foo">Foo</label>
+              </haptic-list-item>
+              <haptic-list-item>
+                <input is="haptic-input" type="checkbox" value="bar" name="dummy[foo][]" id="dummy_foo_bar">
+                <label is="haptic-label" for="dummy_foo_bar">Bar</label>
+              </haptic-list-item>
+            </haptic-list>
+          HTML
+          form_builder.collection_list(:foo, [%w[foo Foo], %w[bar Bar]], :first, :second, multiple: true)
         )
       end
 
