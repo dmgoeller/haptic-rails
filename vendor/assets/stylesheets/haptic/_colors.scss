@@ -169,6 +169,23 @@ $haptic-dark-mode: true !default;
   }
 }
 
+.haptic-icon-button {
+  background-color: transparent;
+  color: inherit;
+
+  &.outlined {
+    @include haptic-outline-color;
+  }
+
+  &:hover:not(:disabled), &:focus, &:focus-visible {
+    @include haptic-light-dark(
+      'background-color',
+      #00000010,
+      #FFFFFF10
+    );
+  }
+}
+
 /**********************************************************************
  * Chips and segmented buttons
  **********************************************************************/

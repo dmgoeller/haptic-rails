@@ -23,6 +23,11 @@ $haptic-font-family: sans-serif !default;
   }
 }
 
+.haptic-icon-button {
+  font-size: haptic-measure(1.125rem, 1.5rem);
+  text-decoration: none;
+}
+
 /**********************************************************************
  * Chips and segmented buttons
  **********************************************************************/

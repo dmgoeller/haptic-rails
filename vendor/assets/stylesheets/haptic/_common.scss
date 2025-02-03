@@ -31,12 +31,14 @@ $haptic-popover-z-index: 10000 !default;
  * Buttons
  **********************************************************************/
 
-.haptic-button {
+.haptic-button, .haptic-icon-button {
   align-items: center;
   cursor: pointer;
   display: flex;
   justify-content: center;
+}
 
+.haptic-button {
   &.filled, &.outlined, &.text {
     @include haptic-overflow-ellipsis;
     display: grid;
@@ -45,7 +47,7 @@ $haptic-popover-z-index: 10000 !default;
 }
 
 button, input[type="reset"], input[type="submit"] {
-  &.haptic-button {
+  &.haptic-button, &.haptic-icon-button {
     appearance: none;
 
     &:disabled {

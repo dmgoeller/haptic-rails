@@ -3,20 +3,27 @@
  * Buttons
  **********************************************************************/
 
-.haptic-button {
+.haptic-button, .haptic-icon-button {
   border-style: solid;
   border-width: 0;
   outline: none;
 
+  &.outlined {
+    border-width: 1px;
+  }
+}
+
+.haptic-button {
   &.icon {
     border-radius: 50%;
   }
   &.filled, &.outlined, &.text {
     border-radius: .25rem; // .875rem
   }
-  &.outlined {
-    border-width: 1px;
-  }
+}
+
+.haptic-icon-button {
+  border-radius: 50%;
 }
 
 /**********************************************************************

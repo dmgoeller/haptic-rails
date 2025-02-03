@@ -2,7 +2,7 @@
  * Buttons
  **********************************************************************/
 
-.haptic-button {
+.haptic-button, .haptic-icon-button {
   transition:
     all .4s linear .1s,
     filter .2s linear,
@@ -10,7 +10,7 @@
 }
 
 button, input[type="submit"] {
-  &.haptic-button {
+  &.haptic-button, &.haptic-icon-button {
     &:focus, &:focus-visible {
       transition-delay: 0;
     }
