@@ -4,7 +4,7 @@ module Haptic
   module Rails
     # Builds a form containing haptic components.
     #
-    # ==== Haptic field options
+    # ==== \Haptic field options
     #
     # - <code>animated_label</code>
     # - <code>clear_button</code>
@@ -40,10 +40,16 @@ module Haptic
       ##
       # :method: number_field
       # :call-seq: number_field(method, options = {})
+      #
+      # Creates a number field. The number field is wrapped by a <code>haptic-text-field</code>
+      # tag if any of the haptic field options are specified.
 
       ##
       # :method: text_area
       # :call-seq: text_area(method, options = {})
+      #
+      # Creates a text area. The text area is wrapped by a <code>haptic-text-field</code>
+      # tag if any of the haptic field options are specified.
 
       ##
       # :method: text_field
@@ -115,8 +121,8 @@ module Haptic
       #
       # ==== Options
       #
-      # - <code>:multiple</code> - true or false, false by default.
-      # - <code>:required</code> - true or false, false by default.
+      # - <code>:multiple</code> -
+      # - <code>:required</code> -
       #
       # ==== Examples
       #
@@ -221,7 +227,7 @@ module Haptic
         end
       end
 
-      # Creates a <code><haptic-list></code> tag. The list items are build by calling
+      # Creates a <code><haptic-list></code> tag. The list items are built by calling
       # <code>collection_radio_buttons</code> or <code>collection_check_boxes</code>
       # with the given arguments.
       #
@@ -263,7 +269,7 @@ module Haptic
         end
       end
 
-      # Creates a <code><haptic-segmented-button></code> tag. The button segments are build by
+      # Creates a <code><haptic-segmented-button></code> tag. The button segments are built by
       # calling <code>collection_radio_buttons</code> with the given arguments.
       #
       # ==== Example
@@ -533,27 +539,32 @@ module Haptic
       end
 
       def haptic_select_dropdown_field(method, haptic_options, options = {})
-        field = @template.haptic_select_dropdown_tag(options.slice(:onchange, :to_top)) do
-          hidden_field(method, options.slice(:disabled, :required)) +
-            @template.content_tag('div', '', class: ['toggle', 'haptic-field', options[:class]]) +
+        options = options.dup
+        hidden_field_options = options.extract!(:disabled, :required)
+        option_list_options = options.extract!(:size)
+        toggle_class = ['toggle', 'haptic-field', options.delete(:class)]
+
+        field = @template.haptic_select_dropdown_tag(options.except(*HAPTIC_FIELD_OPTIONS)) do
+          hidden_field(method, hidden_field_options) +
+            @template.content_tag('div', '', class: toggle_class) +
             @template.content_tag('div', class: 'popover') do
-              @template.haptic_option_list_tag(haptic_options, options.slice(:size))
+              @template.haptic_option_list_tag(haptic_options, option_list_options)
             end
         end
         haptic_field('dropdown', method, field, options)
       end
 
-      def _field_id(method_name)
+      def _field_id(method_name, namespace: @options[:namespace], index: @index)
         if respond_to?(:field_id)
           # Rails 7
-          field_id(method_name, namespace: @options[:namespace], index: @index)
+          field_id(method_name, namespace: namespace, index: index)
         else
           # Rails 6
           [
-            @options[:namespace],
+            namespace,
             # ActionView::Helpers::Tags::Base#sanitized_object_name:
             @object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, '_').delete_suffix('_'),
-            @index,
+            index,
             # ActionView::Helpers::Tags::Base#sanitized_method_name:
             method_name.to_s.delete_suffix('?')
           ].map(&:presence).compact.join('_')
