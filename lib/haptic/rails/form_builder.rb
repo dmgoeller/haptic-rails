@@ -2,7 +2,21 @@
 
 module Haptic
   module Rails
-    # Builds forms with haptic components.
+    # Builds a form containing haptic components.
+    #
+    # ==== Haptic field options
+    #
+    # - <code>animated_label</code>
+    # - <code>clear_button</code>
+    # - <code>field_id</code>
+    # - <code>focus_indicator</code>
+    # - <code>label</code>
+    # - <code>leading_icon</code>
+    # - <code>set_valid_on_change</code>
+    # - <code>show_error_icon</code>
+    # - <code>show_error_message</code>
+    # - <code>supporting_text</code>
+    # - <code>trailing_icon</code>
     class FormBuilder < ActionView::Helpers::FormBuilder
       HAPTIC_FIELD_OPTIONS = %i[
         animated_label
@@ -16,9 +30,9 @@ module Haptic
         show_error_message
         supporting_text
         trailing_icon
-      ].freeze
+      ].freeze # :nodoc:
 
-      def initialize(object_name, object, template, options)
+      def initialize(object_name, object, template, options) # :nodoc:
         @field_options = FieldOptions.new
         super(object_name, object, Builder.new(template, @field_options), options)
       end
@@ -34,6 +48,23 @@ module Haptic
       ##
       # :method: text_field
       # :call-seq: text_field(method, options = {})
+      #
+      # Creates a text field. The text field is wrapped by a <code>haptic-text-field</code>
+      # tag if any of the haptic field options are specified.
+      #
+      # ==== Examples
+      #
+      #   form.text_field :name
+      #   # => <input is="haptic-input" type="text" name="dummy[name]" id="dummy_name">
+      #
+      #   form.text_field :name, label: true
+      #   # =>
+      #   # <haptic-text-field for="dummy_name">
+      #   #   <div class="haptic-field-container">
+      #   #     <input is="haptic-input" type="text" name="dummy[name]" id="dummy_name">
+      #   #     <label is="haptic-label" class="haptic-field-label" for="dummy_name">Name</label>
+      #   #   </div>
+      #   # </haptic-text-field>
 
       %i[file_field number_field text_area text_field].each do |name|
         define_method(name) do |method, options = {}|
@@ -48,14 +79,119 @@ module Haptic
       ##
       # :method: chips
       # :call-seq: chips(method, choices, options = {}, &block)
+      #
+      # ==== Examples
+      #
+      #   form.chips :color, [%w[Blue blue], %w[Green green]]
+      #   # =>
+      #   # <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
+      #   # <div class="haptic-chip">
+      #   #   <input type="checkbox" value="blue" name="dummy[color][]" id="dummy_color_blue">
+      #   #   <label for="dummy_color_blue">Blue</label>
+      #   # </div>
+      #   # <div class="haptic-chip">
+      #   #   <input type="checkbox" value="green" name="dummy[color][]" id="dummy_color_green">
+      #   #   <label for="dummy_color_green">Green</label>
+      #   # </div>
+      #
+      #   form.chips :color, [%w[Blue blue], %w[Green green]] do |b|
+      #     b.check_box(is: nil, checked: b.value == 'blue') + b.label(is: nil)
+      #   end
+      #   # =>
+      #   # <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
+      #   # <div class="haptic-chip">
+      #   #   <input type="checkbox" value="blue" name="dummy[color][]" id="dummy_color_blue"
+      #   #     checked="checked">
+      #   #   <label for="dummy_color_blue">Blue</label>
+      #   # </div>
+      #   # <div class="haptic-chip">
+      #   #   <input type="checkbox" value="green" name="dummy[color][]" id="dummy_color_green">
+      #   #   <label for="dummy_color_green">Green</label>
+      #   # </div>
 
       ##
       # :method: list
       # :call-seq: list(method, choices, options = {}, &block)
+      #
+      # ==== Options
+      #
+      # - <code>:multiple</code> - true or false, false by default.
+      # - <code>:required</code> - true or false, false by default.
+      #
+      # ==== Examples
+      #
+      #   form.list :color, [%w[Blue blue], %w[Green green]]
+      #   # =>
+      #   # <haptic-list>
+      #   #   <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+      #   #   <haptic-list-item>
+      #   #     <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
+      #   #       id="dummy_color_blue">
+      #   #     <label is="haptic-label" for="dummy_color_blue">Blue</label>
+      #   #   </haptic-list-item>
+      #   #   <haptic-list-item>
+      #   #     <input is="haptic-input" type="radio" value="green" name="dummy[color]"
+      #   #       id="dummy_color_green">
+      #   #     <label is="haptic-label" for="dummy_color_green">Green</label>
+      #   #   </haptic-list-item>
+      #   #   </haptic-list>
+      #
+      #   form.list :color, [%w[Blue blue], %w[Green green]]  do |b|
+      #     b.radio_button(checked: b.value == 'blue') + b.label
+      #   end
+      #   # =>
+      #   # <haptic-list>
+      #   #   <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+      #   #   <haptic-list-item>
+      #   #     <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
+      #   #       id="dummy_color_blue" checked="checked">
+      #   #     <label is="haptic-label" for="dummy_color_blue">Blue</label>
+      #   #   </haptic-list-item>
+      #   #   <haptic-list-item>
+      #   #     <input is="haptic-input" type="radio" value="green" name="dummy[color]"
+      #   #      id="dummy_color_green">
+      #   #     <label is="haptic-label" for="dummy_color_green">Green</label>
+      #   #   </haptic-list-item>
+      #   # </haptic-list>
 
       ##
       # :method: segmented_button
       # :call-seq: segmented_button(method, choices, options = {})
+      #
+      # Creates a <code><haptic-segmented-button></code> tag with the given choices.
+      #
+      # ==== Examples
+      #
+      #   form.segmented_button :color, [%w[Blue blue], %w[Green green]]
+      #   # =>
+      #   # <haptic-segmented-button>
+      #   #   <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+      #   #   <div class="haptic-button-segment">
+      #   #     <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue">
+      #   #     <label for="dummy_color_blue">Blue</label>
+      #   #   </div>
+      #   #   <div class="haptic-button-segment">
+      #   #     <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
+      #   #     <label for="dummy_color_green">Green</label>
+      #   #   </div>
+      #   # </haptic-segmented-button>
+      #
+      #   form_builder.segmented_button(:color, [%w[Blue blue], %w[Green green]]) do |b|
+      #     b.radio_button(is: nil, checked: b.value == 'blue') + b.label(is: nil)
+      #   end
+      #   # =>
+      #   # <haptic-segmented-button>
+      #   #   <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+      #   #   <div class="haptic-button-segment">
+      #   #     <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue"
+      #   #       checked="checked">
+      #   #     <label for="dummy_color_blue">Blue</label>
+      #   #   </div>
+      #   #   <div class="haptic-button-segment">
+      #   #     <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
+      #   #     <label for="dummy_color_green">Green</label>
+      #   #   </div>
+      #   # </haptic-segmented-button>
 
       %i[chips list segmented_button].each do |name|
         define_method(name) do |method, choices, options = {}, &block|
@@ -64,6 +200,19 @@ module Haptic
         end
       end
 
+      # ==== Example
+      #
+      #   form.collection_chips :color, %w[Blue Green], :downcase, :itself
+      #   # =>
+      #   # <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
+      #   # <div class="haptic-chip">
+      #   #   <input type="checkbox" value="blue" name="dummy[color][]" id="dummy_color_blue">
+      #   #   <label for="dummy_color_blue">Blue</label>
+      #   # </div>
+      #   # <div class="haptic-chip">
+      #   #   <input type="checkbox" value="green" name="dummy[color][]" id="dummy_color_green">
+      #   #   <label for="dummy_color_green">Green</label>
+      #   # </div>
       def collection_chips(method, collection, value_method, text_method, options = {}, &block)
         collection_check_boxes(method, collection, value_method, text_method, options) do |b|
           @template.content_tag('div', class: 'haptic-chip') do
@@ -72,6 +221,32 @@ module Haptic
         end
       end
 
+      # Creates a <code><haptic-list></code> tag. The list items are build by calling
+      # <code>collection_radio_buttons</code> or <code>collection_check_boxes</code>
+      # with the given arguments.
+      #
+      # ==== Options
+      #
+      # - <code>:multiple</code> -
+      # - <code>:required</code> -
+      #
+      # ==== Example
+      #
+      #   form.collection_list :color, %w[Blue Green], :downcase, :itself
+      #   # =>
+      #   # <haptic-list>
+      #   #   <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+      #   #   <haptic-list-item>
+      #   #     <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
+      #   #       id="dummy_color_blue">
+      #   #     <label is="haptic-label" for="dummy_color_blue">Blue</label>
+      #   #   </haptic-list-item>
+      #   #   <haptic-list-item>
+      #   #     <input is="haptic-input" type="radio" value="green" name="dummy[color]"
+      #   #       id="dummy_color_green">
+      #   #     <label is="haptic-label" for="dummy_color_green">Green</label>
+      #   #   </haptic-list-item>
+      #   # </haptic-list>
       def collection_list(method, collection, value_method, text_method, options = {}, &block)
         options = options.symbolize_keys
 
@@ -88,6 +263,24 @@ module Haptic
         end
       end
 
+      # Creates a <code><haptic-segmented-button></code> tag. The button segments are build by
+      # calling <code>collection_radio_buttons</code> with the given arguments.
+      #
+      # ==== Example
+      #
+      #   form.haptic_segmented_button :color, %w[Blue Green], :downcase, :itself
+      #   # =>
+      #   # <haptic-segmented-button>
+      #   #   <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+      #   #   <div class="haptic-button-segment">
+      #   #     <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue">
+      #   #     <label for="dummy_color_blue">Blue</label>
+      #   #   </div>
+      #   #   <div class="haptic-button-segment">
+      #   #     <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
+      #   #     <label for="dummy_color_green">Green</label>
+      #   #   </div>
+      #   # </haptic-segmented-button>
       def collection_segmented_button(method, collection, value_method, text_method, options = {}, &block)
         @template.haptic_segmented_button_tag do
           collection_radio_buttons(method, collection, value_method, text_method, options) do |b|
@@ -98,11 +291,61 @@ module Haptic
         end
       end
 
+      # Creates a <code><select></code> tag wrapped by a <code><haptic-dropdown-field></code>
+      # tag.
+      #
+      # ==== Example
+      #
+      #   form.collection_select :color, %w[Blue Green], :downcase, :itself
+      #   # =>
+      #   # <haptic-dropdown-field for="dummy_color">
+      #   #   <div class="haptic-field-container">
+      #   #     <select name="dummy[color]" id="dummy_color">
+      #   #       <option value="blue">Blue</option>
+      #   #       <option value="green">Green</option>
+      #   #     </select>
+      #   #   </div>
+      #   # </haptic-dropdown-field>
       def collection_select(method, collection, value_method, text_method, options = {}, html_options = {})
-        haptic_field('dropdown', method, super, @field_options.merge(html_options))
+        html_options = @field_options.merge(html_options)
+        field = super(
+          method,
+          collection,
+          value_method,
+          text_method,
+          options,
+          html_options.except(*HAPTIC_FIELD_OPTIONS)
+        )
+        haptic_field('dropdown', method, field, html_options)
       end
 
-      # Returns a <code><haptic-dropdown-field></code> containing a <code><haptic-select-dropdown></code>.
+      # Creates a <code><haptic-select-dropdown</code> tag wrapped by a
+      # <code>haptic-dropdown-field</code> tag.
+      #
+      # ==== Options
+      #
+      # - <code>:include_blank</code>
+      # - <code>:prompt</code>
+      #
+      # ==== Example
+      #
+      #   form.collection_select_dropdown :color, %w[Blue Green], :downcase, :itself
+      #   # =>
+      #   # <haptic-dropdown-field for="dummy_color">
+      #   #   <div class="haptic-field-container">
+      #   #     <haptic-select-dropdown>
+      #   #       <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
+      #   #       <div class="toggle haptic-field"></div>
+      #   #       <div class="popover">
+      #   #         <haptic-option-list>
+      #   #           <haptic-option value="blue">Blue</haptic-option>
+      #   #           <haptic-option value="green">Green</haptic-option>
+      #   #         </haptic-option-list>
+      #   #       </div>
+      #   #       <div class="backdrop"></div>
+      #   #     </haptic-select-dropdown>
+      #   #   </div>
+      #   #  </haptic-dropdown-field>
       def collection_select_dropdown(method, collection, value_method, text_method, options = {}, html_options = {})
         html_options = @field_options.merge(html_options)
         current_value = object.send(method)
@@ -129,6 +372,7 @@ module Haptic
         haptic_select_dropdown_field(method, haptic_options.reduce(:+), html_options)
       end
 
+      # Creates a date field wrapped by a <code><haptic-text-field></code> tag.
       def date_field(method, options = {})
         options = @field_options.merge(options)
 
@@ -140,6 +384,8 @@ module Haptic
         )
       end
 
+      # Creates a <code>haptic-dialog-dropdown</code> tag wrapped by a
+      # <code>haptic-dropdown-field</code>.
       def dropdown_field(options = {}, &block)
         field_options = @field_options.slice(*HAPTIC_FIELD_OPTIONS)
         field_options.merge!(options)
@@ -155,6 +401,7 @@ module Haptic
         end
       end
 
+      # Creates a <code><div></code> tag containing the error messages for the given attribute.
       def error_messages(method, options = {})
         error_message = error_message_for(method)
         return if error_message.blank?
@@ -166,10 +413,55 @@ module Haptic
         )
       end
 
+      # Creates a <code><select></code> tag wrapped by a <code><haptic-dropdown-field></code>
+      # tag.
+      #
+      # ==== Example
+      #
+      #   form.select :color, [%w[Blue blue], %w[Green green]]
+      #   # =>
+      #   # <haptic-dropdown-field for="dummy_color">
+      #   #   <div class="haptic-field-container">
+      #   #     <select is="haptic-select" name="dummy[color]" id="dummy_color">
+      #   #       <option value="blue">Blue</option>
+      #   #       <option value="green">Green</option>
+      #   #     </select>
+      #   #   </div>
+      #   # </haptic-dropdown-field>
       def select(method, choices = nil, options = {}, html_options = {}, &block)
         haptic_field('dropdown', method, super, @field_options.merge(options))
       end
 
+      # Creates a <code><haptic-select-dropdown</code> tag wrapped by a
+      # <code>haptic-dropdown-field</code> tag.
+      #
+      # ==== Options
+      #
+      # - <code>:disabled</code>
+      # - <code>:onchange</code>
+      # - <code>:required</code>
+      # - <code>:size</code>
+      # - <code>:to_top</code>
+      #
+      # ==== Example
+      #
+      #   form.select_dropdown :color, [%w[Blue blue], %w[Green green]]
+      #   # =>
+      #   # <haptic-dropdown-field for="dummy_color">
+      #   #   <div class="haptic-field-container">
+      #   #     <haptic-select-dropdown>
+      #   #       <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
+      #   #       <div class="toggle haptic-field"></div>
+      #   #         <div class="popover">
+      #   #           <haptic-option-list>
+      #   #             <haptic-option value="blue">Blue</haptic-option>
+      #   #             <haptic-option value="green">Green</haptic-option>
+      #   #           </haptic-option-list>
+      #   #         </div>
+      #   #       <div class="backdrop"></div>
+      #   #     </haptic-select-dropdown>
+      #   #   </div>
+      #   # </haptic-dropdown-field>
       def select_dropdown(method, choices = nil, options = {}, &block)
         choices, options = nil, choices || {} if block
         choices = choices.to_a if choices.is_a?(Hash)
@@ -201,6 +493,7 @@ module Haptic
         ensure
           @field_options.pop
         end
+        nil
       end
 
       private
@@ -250,14 +543,21 @@ module Haptic
         haptic_field('dropdown', method, field, options)
       end
 
-      def _field_id(method)
-        return field_id(method) if respond_to?(:field_id)
-
-        object_name = @object_name
-        object_name = object_name.model_name.singular if object_name.respond_to?(:model_name)
-        object_name = object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, '_').delete_suffix('_')
-
-        [object_name, method.to_s.delete_suffix('?')].tap(&:compact!).join('_')
+      def _field_id(method_name)
+        if respond_to?(:field_id)
+          # Rails 7
+          field_id(method_name, namespace: @options[:namespace], index: @index)
+        else
+          # Rails 6
+          [
+            @options[:namespace],
+            # ActionView::Helpers::Tags::Base#sanitized_object_name:
+            @object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, '_').delete_suffix('_'),
+            @index,
+            # ActionView::Helpers::Tags::Base#sanitized_method_name:
+            method_name.to_s.delete_suffix('?')
+          ].map(&:presence).compact.join('_')
+        end
       end
     end
   end

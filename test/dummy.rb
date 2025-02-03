@@ -4,5 +4,5 @@ class Dummy
   include ActiveModel::Model
   extend ActiveModel::Naming
 
-  attr_accessor :foo
+  attr_accessor :color, :date, :name
 end

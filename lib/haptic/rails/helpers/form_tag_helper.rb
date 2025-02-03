@@ -8,6 +8,19 @@ module Haptic
       module FormTagHelper
         include IconHelper
 
+        # Creates a <code><button is="haptic-button"></code> tag.
+        #
+        # ==== Examples
+        #
+        #   haptic_button_tag 'Text'
+        #   # => <button is="haptic-button">Text</button>
+        #
+        #   haptic_button_tag 'Text', icon: 'icon_name'
+        #   # =>
+        #   # <button is="haptic-button">
+        #   #   <div class="haptic-icon icon">icon_name</div>
+        #   #   Text
+        #   # </button>
         def haptic_button_tag(content = nil, options = {}, &block)
           content, options = capture(&block), content if block
           options = options&.stringify_keys || {}
@@ -20,6 +33,24 @@ module Haptic
           end
         end
 
+        # Creates a <code><haptic-dialog-dropdown></code> tag.
+        #
+        # ==== Example
+        #
+        #   haptic_dialog_dropdown_tag do
+        #     content_tag 'div', class: 'toggle' do
+        #       # ...
+        #     end +
+        #     content_tag 'div', class: 'popover' do
+        #       # ...
+        #     end
+        #   end
+        #   # =>
+        #   # <haptic-dialog-dropdown>
+        #   #   <div class="toggle"></div>
+        #   #   <div class="popover"></div>
+        #   #   <div class="backdrop"></div>
+        #   # </haptic-dialog-dropdown>
         def haptic_dialog_dropdown_tag(options = {}, &block)
           content_tag('haptic-dialog-dropdown', options) do
             concat capture(&block) if block
@@ -27,16 +58,30 @@ module Haptic
           end
         end
 
-        def haptic_dropdown_field_tag(field = nil, label = nil, options = {}, &block)
+        # Creates a <code><haptic-dropdown-field></code> tag that wraps the given field.
+        #
+        # ==== Options
+        #
+        # - <code>:animated_label</code>
+        # - <code>:error_message</code>
+        # - <code>:focus_indicator</code>
+        # - <code>:leading_icon</code>
+        # - <code>:set_valid_on_change</code>
+        # - <code>:show_error_icon</code>
+        # - <code>:show_error_message</code>
+        # - <code>:supporting_text</code>
+        # - <code>:trailing_icon</code>
+        def haptic_dropdown_field_tag(field = nil, label = nil, options = nil, &block)
           haptic_field_tag('dropdown', field, label, options, &block)
         end
 
-        def haptic_field_tag(type, field = nil, label = nil, options = {}, &block)
+        def haptic_field_tag(type, field = nil, label = nil, options = nil, &block) # :nodoc:
           field, label, options = capture(&block), field, label if block
+          field = '' if field.nil?
           field = field.html_safe unless field.html_safe?
 
           label, options = nil, label if label.is_a?(Hash)
-          options = options&.stringify_keys || {}
+          options = (options || {}).stringify_keys
 
           field_options = options.except(
             'clear_button', 'error_message', 'leading_icon', 'show_error_icon',
@@ -75,33 +120,63 @@ module Haptic
           end
         end
 
-        def haptic_list_tag(options = {}, &block)
-          options = options.stringify_keys
-          options['required'] = '' if options['required'] == true
-
-          content_tag('haptic-list', options, &block)
+        # Creates a <code><haptic-list></code> tag.
+        def haptic_list_tag(content = nil, options = nil, &block)
+          content_tag('haptic-list', content, options, &block)
         end
 
+        # Creates a <code><haptic-list-item></code> tag.
         def haptic_list_item_tag(content = nil, options = nil, &block)
           content_tag('haptic-list-item', content, options, &block)
         end
 
+        # Creates a <code><haptic-option-list></code> tag.
+        #
+        # ==== Options
+        #
+        # - <code>:size</code> - The number of options to be visible at one time. If the
+        #   list contains more options than <code>:size</code> the list is presented as
+        #   a scrolling box.
         def haptic_option_list_tag(content = nil, options = nil, &block)
           content_tag('haptic-option-list', content, options, &block)
         end
 
+        # Creates a <code><haptic-option></code> tag.
+        #
+        # ==== Options
+        #
+        # - <code>:checked</code> - Specifies whether or not the option is checked.
         def haptic_option_tag(content = nil, options = nil, &block)
           content_tag('haptic-option', content, options, &block)
         end
 
-        def haptic_segmented_button_tag(options = {}, &block)
-          content_tag('haptic-segmented-button', options, &block)
+        # Creates a <code><haptic-segmented-button></code> tag.
+        def haptic_segmented_button_tag(content = nil, options = nil, &block)
+          content_tag('haptic-segmented-button', content, options, &block)
         end
 
+        # Creates a <code><haptic-select-dropdown></code> tag.
+        #
+        # ==== Options
+        #
+        # - <code>:to_top</code>
+        #
+        # ==== Examples
+        #
+        #   haptic_select_dropdown_tag
+        #   # =>
+        #   # <haptic-select-dropdown>
+        #   #   <div class="backdrop"></div>
+        #   # </haptic-select-dropdown>
+        #
+        #   haptic_select_dropdown_tag to_top: true
+        #   # =>
+        #   # <haptic-select-dropdown to-top="">
+        #   #   <div class="backdrop"></div>
+        #   # </haptic-select-dropdown>
         def haptic_select_dropdown_tag(options = {}, &block)
-          options = options.filter_map do |key, value|
-            [key.to_s.dasherize, value == true ? '' : value] unless value == false
-          end.to_h
+          options = options.stringify_keys
+          options['to-top'] = '' if options.delete('to_top')
 
           content_tag('haptic-select-dropdown', options) do
             concat capture(&block) if block
@@ -109,7 +184,51 @@ module Haptic
           end
         end
 
-        def haptic_text_field_tag(field = nil, label = nil, options = {}, &block)
+        # Creates a <code><haptic-text-field></code> tag that wraps the given field.
+        #
+        # ==== Options
+        #
+        # - <code>:animated_label</code>
+        # - <code>:clear_button</code>
+        # - <code>:error_message</code>
+        # - <code>:focus_indicator</code>
+        # - <code>:leading_icon</code>
+        # - <code>:set_valid_on_change</code>
+        # - <code>:show_error_icon</code>
+        # - <code>:show_error_message</code>
+        # - <code>:supporting_text</code>
+        # - <code>:trailing_icon</code>
+        #
+        # ==== Examples
+        #
+        #   haptic_text_field_tag { text_field_tag 'name' }
+        #   # =>
+        #   # <haptic-text-field>
+        #   #   <div class="haptic-field-container">
+        #   #     <input id="name" name="name" type="text">
+        #   #   </div>
+        #   # </haptic-text-field>
+        #
+        #   haptic_text_field_tag('Label') { text_field_tag 'name' }
+        #   # =>
+        #   # <haptic-text-field>
+        #   #   <div class="haptic-field-container">
+        #   #     <input id="name" name="name" type="text">
+        #   #     <label class="haptic-field-label">Label</label>
+        #   #   </div>
+        #   # </haptic-text-field>
+        #
+        #   haptic_text_field_tag(clear_button: true) { text_field_tag 'name' }
+        #   # =>
+        #   # <haptic-text-field>
+        #   #   <div class="haptic-field-container">
+        #   #     <input id="name" name="name" type="text">
+        #   #     <button type="button" tabindex="-1" class="clear-button">
+        #   #       <div class="haptic-icon">close</div>
+        #   #     </button>
+        #   #   </div>
+        #   # </haptic-text-field>
+        def haptic_text_field_tag(field = nil, label = nil, options = nil, &block)
           haptic_field_tag('text', field, label, options, &block)
         end
       end

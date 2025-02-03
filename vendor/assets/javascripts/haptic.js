@@ -1147,8 +1147,7 @@ class HapticSegmentedButtonElement extends HTMLElement {
   connectedCallback() {
     new HapticChildNodesObserver({
       nodeAdded: node => {
-        if (node instanceof HTMLInputElement &&
-            node.classList.contains('outlined')) {
+        if (node instanceof HTMLInputElement && node.classList.contains('outlined')) {
           this.classList.add('outlined');
         }
       }
