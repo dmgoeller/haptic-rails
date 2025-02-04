@@ -3,31 +3,35 @@ $haptic-field-min-height: haptic-measure(1.75rem, 2.5rem) !default;
 $haptic-field-with-label-min-height: 3.5rem !default;
 
 /**********************************************************************
+ * Badges
+ **********************************************************************/
+
+.haptic-badge {
+  box-sizing: border-box;
+  height: 1rem;
+  line-height: .75rem;
+  min-width: 1rem;
+  padding: .125rem .25rem;
+}
+
+/**********************************************************************
  * Buttons
  **********************************************************************/
 
-.haptic-button {
+.haptic-button, .haptic-icon-button {
   box-sizing: border-box;
+}
 
-  &.icon {
-    $content-size: haptic-measure(1.25rem, 2.5rem);
-    box-sizing: content-box;
-    height: $content-size;
-    line-height: haptic-measure(1.125rem, 1.5rem);
-    padding: haptic-measure(.125rem, .5rem);
-    width: $content-size;
+.haptic-button {
+  grid-gap: haptic-measure(.25rem, .5rem);
+  min-height: haptic-measure(1.75rem, 2.5rem);
+
+  .icon {
+    height: 1.125rem;
+    line-height: 1.125rem;
+    width: 1.125rem;
   }
 
-  &.filled, &.outlined, &.text {
-    grid-gap: haptic-measure(.25rem, .5rem);
-    min-height: haptic-measure(1.75rem, 2.5rem);
-
-    .icon {
-      height: 1.125rem;
-      line-height: 1.125rem;
-      width: 1.125rem;
-    }
-  }
   &.filled, &.outlined {
     .icon {
       margin-left: haptic-measure(-.25rem, -.5rem);
@@ -57,7 +61,6 @@ $haptic-field-with-label-min-height: 3.5rem !default;
 .haptic-icon-button {
   $size: haptic-measure(1.5rem, 2.5rem);
   $padding: haptic-measure(.1875rem, .5rem);
-  box-sizing: border-box;
   height: $size;
   line-height: haptic-measure(1.125rem, 1.5rem);
   padding: $padding;

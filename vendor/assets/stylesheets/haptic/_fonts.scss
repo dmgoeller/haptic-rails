@@ -1,31 +1,35 @@
 $haptic-font-family: sans-serif !default;
 
 /**********************************************************************
+ * Badges
+ **********************************************************************/
+
+.haptic-badge {
+  font-size: .75rem;
+  font-weight: bold;
+}
+
+/**********************************************************************
  * Buttons
  **********************************************************************/
 
-.haptic-button {
+.haptic-button, .haptic-icon-button {
   text-decoration: none;
+}
 
-  &.icon {
-    font-size: haptic-measure(1.125rem, 1.5rem);
-  }
+.haptic-button {
+  font-family: $haptic-font-family;
+  font-size: 1rem;
+  font-weight: bold;
 
-  &.filled, &.outlined, &.text {
-    font-family: $haptic-font-family;
-    font-size: 1rem;
-    font-weight: bold;
-
-    .icon {
-      font-size: 1.125rem;
-      font-weight: normal;
-    }
+  .icon {
+    font-size: 1.125rem;
+    font-weight: normal;
   }
 }
 
 .haptic-icon-button {
   font-size: haptic-measure(1.125rem, 1.5rem);
-  text-decoration: none;
 }
 
 /**********************************************************************
