@@ -32,8 +32,9 @@ $haptic-popover-z-index: 10000 !default;
  **********************************************************************/
 
 .haptic-badge {
-  display: inline-flex;
-  justify-content: center;
+  display: inline-block;
+  text-align: center;
+  vertical-align: 12.5%;
   white-space: nowrap;
 }
 

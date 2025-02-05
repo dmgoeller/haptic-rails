@@ -8,31 +8,6 @@ module Haptic
       module FormTagHelper
         include IconHelper
 
-        # Creates a <code><button is="haptic-button"></code> tag.
-        #
-        # ==== Examples
-        #
-        #   haptic_button_tag 'Text'
-        #   # => <button is="haptic-button">Text</button>
-        #
-        #   haptic_button_tag 'Text', icon: 'icon_name'
-        #   # =>
-        #   # <button is="haptic-button">
-        #   #   <div class="haptic-icon icon">icon_name</div>
-        #   #   Text
-        #   # </button>
-        def haptic_button_tag(content = nil, options = {}, &block)
-          content, options = capture(&block), content if block
-          options = options&.stringify_keys || {}
-          options['is'] = 'haptic-button'
-          icon = options.delete('icon')
-
-          content_tag('button', options) do
-            concat haptic_icon_tag(icon, class: 'icon') if icon
-            concat content if content
-          end
-        end
-
         # Creates a <code><haptic-dialog-dropdown></code> tag.
         #
         # ==== Example

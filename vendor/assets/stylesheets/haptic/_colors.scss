@@ -35,6 +35,14 @@ $haptic-dark-mode: true !default;
   );
 }
 
+@mixin haptic-secondary-color($property: 'color') {
+  @include haptic-light-dark(
+    $property,
+    $haptic-dark-secondary-color,
+    $haptic-light-secondary-color
+  );
+}
+
 @mixin haptic-green($property: 'color') {
   @include haptic-light-dark(
     $property,
@@ -80,13 +88,29 @@ $haptic-dark-mode: true !default;
  **********************************************************************/
 
 .haptic-badge {
-  @include haptic-primary-color('background-color');
   @include haptic-light-dark(
-    'color',
-    white,
-    $haptic-dark-primary-color
+    'background-color',
+    #00000030,
+    #FFFFFF30
   );
+  @include haptic-intense-foreground-color;
 
+  &.primary {
+    @include haptic-primary-color('background-color');
+    @include haptic-light-dark(
+      'color',
+      white,
+      $haptic-dark-primary-color
+    );
+  }
+  &.secondary {
+    @include haptic-secondary-color('background-color');
+    @include haptic-light-dark(
+      'color',
+      white,
+      $haptic-dark-secondary-color
+    );
+  }
   &.green {
     @include haptic-green('background-color');
     @include haptic-light-dark(
@@ -118,15 +142,14 @@ $haptic-dark-mode: true !default;
     color: white;
 
     &.secondary {
-      background-color: #{$haptic-secondary-color};
+      background-color: $haptic-secondary-color;
     }
     &.green {
-      background-color: #{$haptic-dark-green};
+      background-color: $haptic-dark-green;
     }
     &.red {
-      background-color: #{$haptic-dark-red};
+      background-color: $haptic-dark-red;
     }
-
     &:hover:not(:disabled), &:focus, &:focus-visible {
       filter: brightness(1.1875);
     }
@@ -138,59 +161,19 @@ $haptic-dark-mode: true !default;
 }
 
 .haptic-button:not(.filled) {
-  &.outlined, &.text {
+  @include haptic-light-dark(
+    'color',
+    $haptic-primary-color,
+    $haptic-light-primary-color
+  );
+
+  &.secondary {
     @include haptic-light-dark(
       'color',
-      $haptic-primary-color,
-      $haptic-light-primary-color
+      $haptic-secondary-color,
+      $haptic-light-secondary-color
     );
-
-    &.secondary {
-      @include haptic-light-dark(
-        'color',
-        $haptic-secondary-color,
-        $haptic-light-secondary-color
-      );
-    }
-    &.green {
-      @include haptic-green;
-    }
-    &.red {
-      @include haptic-red;
-    }
-
-    &:hover:not(:disabled), &:focus, &:focus-visible {
-      @include haptic-light-dark(
-        'background-color',
-        #{$haptic-primary-color}20,
-        #{$haptic-light-primary-color}20
-      );
-      &.secondary {
-        @include haptic-light-dark(
-          'background-color',
-          #{$haptic-secondary-color}20,
-          #{$haptic-light-secondary-color}20
-        );
-      }
-      &.green {
-        @include haptic-light-dark(
-          'background-color',
-          #{$haptic-dark-green}20,
-          #{$haptic-light-green}20
-        );
-      }
-      &.red {
-        @include haptic-light-dark(
-          'background-color',
-          #{$haptic-dark-red}20,
-          #{$haptic-light-red}20
-        );
-      }
-    }
   }
-}
-
-.haptic-icon-button:not(.filled) {
   &.green {
     @include haptic-green;
   }
@@ -201,10 +184,16 @@ $haptic-dark-mode: true !default;
   &:hover:not(:disabled), &:focus, &:focus-visible {
     @include haptic-light-dark(
       'background-color',
-      #00000010,
-      #FFFFFF10
+      #{$haptic-primary-color}20,
+      #{$haptic-light-primary-color}20
     );
-
+    &.secondary {
+      @include haptic-light-dark(
+        'background-color',
+        #{$haptic-secondary-color}20,
+        #{$haptic-light-secondary-color}20
+      );
+    }
     &.green {
       @include haptic-light-dark(
         'background-color',
@@ -219,6 +208,16 @@ $haptic-dark-mode: true !default;
         #{$haptic-light-red}20
       );
     }
+  }
+}
+
+.haptic-icon-button:not(.filled) {
+  &:hover:not(:disabled), &:focus, &:focus-visible {
+    @include haptic-light-dark(
+      'background-color',
+      #00000010,
+      #FFFFFF10
+    );
   }
 }
 

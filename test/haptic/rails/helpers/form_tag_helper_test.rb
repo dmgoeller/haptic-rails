@@ -8,59 +8,6 @@ module Haptic
       class FormTagHelperTest < ActionView::TestCase
         include FormTagHelper
 
-        def test_haptic_button_tag
-          assert_dom_equal(
-            <<~HTML,
-              <button is="haptic-button"></button>
-            HTML
-            haptic_button_tag(nil)
-          )
-        end
-
-        def test_haptic_button_tag_with_text
-          assert_dom_equal(
-            <<~HTML,
-              <button is="haptic-button">Text</button>
-            HTML
-            haptic_button_tag('Text')
-          )
-        end
-
-        def test_haptic_button_tag_with_text_and_icon
-          assert_dom_equal(
-            <<~HTML,
-              <button is="haptic-button">
-                <div class="haptic-icon icon">icon_name</div>
-                Text
-              </button>
-            HTML
-            haptic_button_tag('Text', icon: 'icon_name')
-          )
-        end
-
-        def test_haptic_button_tag_with_block
-          assert_dom_equal(
-            <<~HTML,
-              <button is="haptic-button">
-                <div>Text</div>
-              </button>
-            HTML
-            haptic_button_tag { content_tag('div', 'Text') }
-          )
-        end
-
-        def test_haptic_button_tag_with_block_and_icon
-          assert_dom_equal(
-            <<~HTML,
-              <button is="haptic-button">
-                <div class="haptic-icon icon">icon</div>
-                <div>Text</div>
-              </button>
-            HTML
-            haptic_button_tag(icon: 'icon') { content_tag('div', 'Text') }
-          )
-        end
-
         def test_haptic_dialog_dropdown_tag
           assert_dom_equal(
             <<~HTML,
