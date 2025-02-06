@@ -1,0 +1,2703 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+
+
+ */
+/**********************************************************************
+ * Badges
+ **********************************************************************/
+/* line 34, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+.haptic-badge {
+  display: inline-block;
+  text-align: center;
+  vertical-align: 12.5%;
+  white-space: nowrap;
+}
+
+/**********************************************************************
+ * Buttons
+ **********************************************************************/
+/* line 45, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+.haptic-button, .haptic-icon-button {
+  align-items: center;
+  cursor: pointer;
+  justify-content: center;
+}
+
+/* line 51, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+.haptic-button {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: grid;
+  grid-auto-flow: column;
+}
+
+/* line 57, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+.haptic-icon-button {
+  display: flex;
+}
+
+/* line 62, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+button.haptic-button, button.haptic-icon-button, input.haptic-button[type="reset"], input.haptic-icon-button[type="reset"], input.haptic-button[type="submit"], input.haptic-icon-button[type="submit"] {
+  appearance: none;
+}
+
+/* line 65, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+button.haptic-button:disabled, button.haptic-icon-button:disabled, input.haptic-button[type="reset"]:disabled, input.haptic-icon-button[type="reset"]:disabled, input.haptic-button[type="submit"]:disabled, input.haptic-icon-button[type="submit"]:disabled {
+  filter: grayscale(1);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/**********************************************************************
+ * Chips and segmented buttons
+ **********************************************************************/
+/* line 75, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+.haptic-button-segment, .haptic-chip {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* line 79, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+.haptic-button-segment label, .haptic-chip label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+  position: absolute;
+  text-align: center;
+}
+
+/* line 86, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+.haptic-button-segment input, .haptic-chip input {
+  appearance: none;
+  background-clip: padding-box;
+  cursor: pointer;
+  position: absolute;
+}
+
+/* line 92, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+.haptic-button-segment input::after, .haptic-chip input::after {
+  -webkit-mask-image: url(/assets/checkmark-ef85f7084bb6981eff0748b0daa1fd3d8531a293e1f5b7efec895d8de4389072.svg);
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-image: url(/assets/checkmark-ef85f7084bb6981eff0748b0daa1fd3d8531a293e1f5b7efec895d8de4389072.svg);
+  mask-position: center;
+  mask-repeat: no-repeat;
+  content: '\200b';
+  pointer-events: none;
+  position: absolute;
+}
+
+/* line 99, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+.haptic-button-segment input:disabled, .haptic-button-segment input:disabled ~ label, .haptic-chip input:disabled, .haptic-chip input:disabled ~ label {
+  filter: grayscale(1);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* line 106, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-segmented-button {
+  display: grid;
+  grid-auto-flow: column;
+}
+
+/**********************************************************************
+ * Dropdowns
+ **********************************************************************/
+/* line 115, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dialog-dropdown, haptic-select-dropdown {
+  position: relative;
+}
+
+/* line 118, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dialog-dropdown > .toggle, haptic-select-dropdown > .toggle {
+  cursor: default;
+}
+
+/* line 122, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dialog-dropdown > .popover, haptic-select-dropdown > .popover {
+  display: none;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  position: absolute;
+  z-index: 10000;
+}
+
+/* line 131, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dialog-dropdown > .backdrop, haptic-select-dropdown > .backdrop {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+}
+
+/* line 138, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dialog-dropdown[popover-open] > .popover, haptic-select-dropdown[popover-open] > .popover {
+  display: flex;
+  flex-direction: column;
+}
+
+/* line 142, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dialog-dropdown[popover-open] > .backdrop, haptic-select-dropdown[popover-open] > .backdrop {
+  display: initial;
+}
+
+/* line 148, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-option-list {
+  display: flex;
+  flex-direction: column;
+  scroll-snap-type: y mandatory;
+  overflow-y: auto;
+}
+
+/* line 154, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-option-list::-webkit-scrollbar-thumb {
+  background-clip: padding-box;
+}
+
+/* line 159, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-option {
+  cursor: default;
+  position: relative;
+  scroll-snap-align: start;
+  white-space: nowrap;
+}
+
+/* line 165, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-option::after {
+  -webkit-mask-image: url(/assets/checkmark-ef85f7084bb6981eff0748b0daa1fd3d8531a293e1f5b7efec895d8de4389072.svg);
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-image: url(/assets/checkmark-ef85f7084bb6981eff0748b0daa1fd3d8531a293e1f5b7efec895d8de4389072.svg);
+  mask-position: center;
+  mask-repeat: no-repeat;
+  content: '\200b';
+  pointer-events: none;
+  position: absolute;
+}
+
+/* line 172, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-option * {
+  pointer-events: none;
+}
+
+/**********************************************************************
+ * Fields
+ **********************************************************************/
+/* line 188, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+button.haptic-field, input.haptic-field, select.haptic-field, textarea.haptic-field {
+  appearance: none;
+}
+
+/* line 192, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+button.haptic-field.embedded:disabled, input.haptic-field.embedded:disabled, select.haptic-field.embedded:disabled, textarea.haptic-field.embedded:disabled {
+  opacity: 1;
+}
+
+/* line 195, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+button.haptic-field:disabled:not(.embedded), input.haptic-field:disabled:not(.embedded), select.haptic-field:disabled:not(.embedded), textarea.haptic-field:disabled:not(.embedded) {
+  filter: grayscale(1);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* line 202, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+button.haptic-field {
+  text-align: left;
+}
+
+/* line 206, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+textarea.haptic-field {
+  overflow: hidden;
+  resize: none;
+}
+
+/* line 211, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dropdown-field, haptic-text-field {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
+/* line 214, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dropdown-field > .haptic-field-container, haptic-text-field > .haptic-field-container {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dropdown-field .haptic-field.overflow-ellipsis, haptic-text-field .haptic-field.overflow-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: absolute;
+}
+
+/* line 224, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dropdown-field .haptic-field-label, haptic-text-field .haptic-field-label {
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* line 229, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dropdown-field[required] .haptic-field-label::after, haptic-text-field[required] .haptic-field-label::after {
+  content: ' *';
+}
+
+/* line 234, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dropdown-field[focus-indicator] > .haptic-field-container::after, haptic-text-field[focus-indicator] > .haptic-field-container::after {
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+  content: '\200b';
+  opacity: 0;
+}
+
+/* line 241, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dropdown-field[focus-indicator]:focus-within > .haptic-field-container::after, haptic-text-field[focus-indicator]:focus-within > .haptic-field-container::after {
+  opacity: 1;
+}
+
+/* line 247, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dropdown-field .field_with_errors, haptic-text-field .field_with_errors {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
+/* line 251, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dropdown-field .leading-icon, haptic-dropdown-field .error-icon, haptic-text-field .leading-icon, haptic-text-field .error-icon {
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+/* line 258, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dropdown-field .error-icon, haptic-text-field .error-icon {
+  opacity: 0;
+}
+
+/* line 262, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dropdown-field[invalid] .error-icon, haptic-text-field[invalid] .error-icon {
+  opacity: 1;
+}
+
+/* line 266, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dropdown-field[disabled], fieldset:disabled haptic-dropdown-field, haptic-text-field[disabled], fieldset:disabled haptic-text-field {
+  filter: grayscale(1);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* line 272, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dropdown-field, haptic-dropdown-field > .haptic-field-container, haptic-dropdown-field .haptic-field,
+haptic-dropdown-field haptic-dialog-dropdown, haptic-dropdown-field haptic-select-dropdown {
+  flex-grow: 1;
+}
+
+/* line 277, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-dropdown-field > .haptic-field-container::before {
+  -webkit-mask-image: url(/assets/dropdown-arrow-c891fac61004c2789356f0f7c4af9c43ca8e8cbb5265bcd00ad65abdc41c368c.svg);
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-image: url(/assets/dropdown-arrow-c891fac61004c2789356f0f7c4af9c43ca8e8cbb5265bcd00ad65abdc41c368c.svg);
+  mask-position: center;
+  mask-repeat: no-repeat;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+  content: '\200b';
+}
+
+/* line 285, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-text-field ::-webkit-inner-spin-button {
+  appearance: none;
+}
+
+/* line 292, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-text-field[with-trailing-icon] ::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+}
+
+/* line 299, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-text-field:not([with-trailing-icon]) ::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+/* line 304, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-text-field .clear-button, haptic-text-field .trailing-icon {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  z-index: 1;
+}
+
+/* line 312, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-text-field .clear-button {
+  appearance: none;
+  cursor: pointer;
+}
+
+/* line 316, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-text-field .clear-button .haptic-icon {
+  pointer-events: none;
+}
+
+/* line 321, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-text-field[empty] .clear-button {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* line 327, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-text-field[disabled] .clear-button, fieldset:disabled haptic-text-field .clear-button {
+  pointer-events: none;
+}
+
+/* line 332, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-text-field .trailing-icon {
+  pointer-events: none;
+}
+
+/**********************************************************************
+ * Checkboxes, radio buttons and switches
+ **********************************************************************/
+/* line 341, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+.haptic-checkbox, .haptic-switch, .haptic-radio-button {
+  cursor: pointer;
+  position: relative;
+}
+
+/* line 345, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+.haptic-checkbox::before, .haptic-checkbox::after, .haptic-switch::before, .haptic-switch::after, .haptic-radio-button::before, .haptic-radio-button::after {
+  content: '\200b';
+  pointer-events: none;
+  position: absolute;
+}
+
+/* line 352, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+.haptic-checkbox::after {
+  -webkit-mask-image: url(/assets/checkbox-checked-16-7a1fbbff3a6cbf4d9c79a97a950cfd8961fe321920ce74f219d377ea787f5a94.svg);
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-image: url(/assets/checkbox-checked-16-7a1fbbff3a6cbf4d9c79a97a950cfd8961fe321920ce74f219d377ea787f5a94.svg);
+  mask-position: center;
+  mask-repeat: no-repeat;
+}
+
+/* line 357, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+input.haptic-checkbox[type="checkbox"],
+input.haptic-switch[type="checkbox"],
+input.haptic-radio-button[type="radio"] {
+  appearance: none;
+}
+
+/* line 362, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+input.haptic-checkbox[type="checkbox"]:not(.embedded):disabled,
+input.haptic-switch[type="checkbox"]:not(.embedded):disabled,
+input.haptic-radio-button[type="radio"]:not(.embedded):disabled {
+  filter: grayscale(1);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/**********************************************************************
+ * Lists
+ **********************************************************************/
+/* line 371, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-list {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+}
+
+/* line 377, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-list-item {
+  align-items: center;
+  display: flex;
+  position: relative;
+  user-select: none;
+}
+
+/* line 383, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-list-item .haptic-checkbox, haptic-list-item .haptic-radio-button {
+  position: absolute;
+}
+
+/* line 387, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+haptic-list-item[disabled] {
+  filter: grayscale(1);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/**********************************************************************
+ * Labels
+ **********************************************************************/
+/* line 397, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
+.haptic-label.grayed, fieldset:disabled .haptic-label {
+  filter: grayscale(1);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/**********************************************************************
+ * Badges
+ **********************************************************************/
+/* line 6, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-badge {
+  border-radius: .5rem;
+}
+
+/**********************************************************************
+ * Buttons
+ **********************************************************************/
+/* line 14, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-button, .haptic-icon-button {
+  border-style: solid;
+  border-width: 0;
+  outline: none;
+}
+
+/* line 19, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-button.outlined, .haptic-icon-button.outlined {
+  border-width: 1px;
+}
+
+/* line 24, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-button {
+  border-radius: .25rem;
+}
+
+/* line 28, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-icon-button {
+  border-radius: 50%;
+}
+
+/**********************************************************************
+ * Chips and segmented buttons
+ **********************************************************************/
+/* line 37, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-button-segment input.outlined {
+  border-style: solid;
+  border-width: 1px 0 1px 1px;
+}
+
+/* line 42, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-button-segment:first-of-type input {
+  border-bottom-left-radius: .25rem;
+  border-top-left-radius: .25rem;
+}
+
+/* line 46, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-button-segment:last-of-type input {
+  border-bottom-right-radius: .25rem;
+  border-top-right-radius: .25rem;
+}
+
+/* line 50, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-button-segment:last-of-type input.outlined {
+  border-right-width: 1px;
+}
+
+/* line 56, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-chip input {
+  border-radius: .25rem;
+}
+
+/* line 59, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-chip input.outlined {
+  border-style: solid;
+  border-width: 1px;
+}
+
+/**********************************************************************
+ * Dropdowns
+ **********************************************************************/
+/* line 69, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+haptic-dialog-dropdown, haptic-select-dropdown {
+  outline: none;
+}
+
+/* line 72, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+haptic-dialog-dropdown > .popover, haptic-select-dropdown > .popover {
+  border-radius: .25rem;
+  border-style: solid;
+  border-width: 1px;
+}
+
+/* line 79, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+haptic-dialog-dropdown > .popover > .segment:not(:first-child) {
+  border-top-style: solid;
+  border-top-width: 1px;
+}
+
+/* line 85, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+haptic-option-list::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 2px;
+}
+
+/* line 92, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+haptic-option {
+  border-radius: .25rem;
+}
+
+/**********************************************************************
+ * Fields
+ **********************************************************************/
+/* line 100, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-field {
+  border-radius: .25rem;
+  outline-style: solid;
+  border-width: 0;
+  outline-width: 0;
+}
+
+/* line 106, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-field.outlined {
+  border-style: solid;
+  border-width: 1px;
+}
+
+/* line 113, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+haptic-dropdown-field[focus-indicator] > .haptic-field-container::after, haptic-text-field[focus-indicator] > .haptic-field-container::after {
+  border-bottom-left-radius: .25rem 3px;
+  border-bottom-right-radius: .25rem 3px;
+}
+
+/* line 120, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+haptic-text-field .clear-button {
+  border-radius: 50%;
+  border: none;
+  outline: none;
+}
+
+/**********************************************************************
+ * Checkboxes, radio buttons
+ **********************************************************************/
+/* line 132, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-checkbox.embedded, .haptic-radio-button.embedded {
+  outline: none;
+}
+
+/* line 135, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-checkbox:not(.embedded), .haptic-radio-button:not(.embedded) {
+  border-radius: 50%;
+  outline-style: solid;
+}
+
+/* line 139, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-checkbox.outlined::before, .haptic-radio-button.outlined::before {
+  border-style: solid;
+  border-width: 1px;
+}
+
+/* line 146, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-checkbox::before, .haptic-checkbox::after {
+  border-radius: 2px;
+}
+
+/* line 152, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-radio-button::before, .haptic-radio-button::after {
+  border-radius: 50%;
+}
+
+/**********************************************************************
+ * Switches
+ **********************************************************************/
+/* line 161, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-switch {
+  outline: none;
+}
+
+/* line 165, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-switch, .haptic-switch::before {
+  border-radius: 8px;
+}
+
+/* line 168, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-switch::after {
+  border-radius: 50%;
+  outline-style: solid;
+}
+
+/* line 173, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+.haptic-switch.outlined::before {
+  border-style: solid;
+  border-width: 1px;
+}
+
+/**********************************************************************
+ * Lists
+ **********************************************************************/
+/* line 184, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+haptic-list-item, haptic-list-item .haptic-checkbox, haptic-list-item .haptic-radio-button {
+  border-radius: .25rem;
+}
+
+/* line 189, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+haptic-list.divided haptic-list-item, haptic-list.divided haptic-list-item .haptic-checkbox, haptic-list.divided haptic-list-item .haptic-radio-button {
+  border-radius: 0;
+}
+
+/* line 193, ../haptic-rails/vendor/assets/stylesheets/haptic/_borders.scss */
+haptic-list.divided haptic-list-item:not(:first-of-type) {
+  border-top-style: solid;
+  border-top-width: 1px;
+}
+
+/**********************************************************************
+ * Badges
+ **********************************************************************/
+/* line 90, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-badge {
+  background-color: #00000030;
+  color: #303030;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 90, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-badge {
+    background-color: #FFFFFF30;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 90, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-badge {
+    color: #E0E0E0;
+  }
+}
+
+/* line 98, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-badge.primary {
+  background-color: #2670D0;
+  color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 98, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-badge.primary {
+    background-color: #7BA1D0;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 98, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-badge.primary {
+    color: #2670D0;
+  }
+}
+
+/* line 106, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-badge.secondary {
+  background-color: #B6581A;
+  color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 106, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-badge.secondary {
+    background-color: #E7C586;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 106, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-badge.secondary {
+    color: #B6581A;
+  }
+}
+
+/* line 114, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-badge.green {
+  background-color: #2E7D32;
+  color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 114, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-badge.green {
+    background-color: #A5D6A7;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 114, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-badge.green {
+    color: #2E7D32;
+  }
+}
+
+/* line 122, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-badge.red {
+  background-color: #C62828;
+  color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 122, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-badge.red {
+    background-color: #EF9A9A;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 122, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-badge.red {
+    color: #C62828;
+  }
+}
+
+/**********************************************************************
+ * Buttons
+ **********************************************************************/
+/* line 136, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button, .haptic-icon-button {
+  background-color: transparent;
+  color: inherit;
+}
+
+/* line 140, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button.filled, .haptic-icon-button.filled {
+  background-color: #2670D0;
+  color: white;
+}
+
+/* line 144, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button.filled.secondary, .haptic-icon-button.filled.secondary {
+  background-color: #C26C1D;
+}
+
+/* line 147, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button.filled.green, .haptic-icon-button.filled.green {
+  background-color: #2E7D32;
+}
+
+/* line 150, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button.filled.red, .haptic-icon-button.filled.red {
+  background-color: #C62828;
+}
+
+/* line 153, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button.filled:hover:not(:disabled), .haptic-button.filled:focus, .haptic-button.filled:focus-visible, .haptic-icon-button.filled:hover:not(:disabled), .haptic-icon-button.filled:focus, .haptic-icon-button.filled:focus-visible {
+  filter: brightness(1.1875);
+}
+
+/* line 158, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button.outlined, .haptic-icon-button.outlined {
+  border-color: #00000060;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 158, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button.outlined, .haptic-icon-button.outlined {
+    border-color: #FFFFFF60;
+  }
+}
+
+/* line 163, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button:not(.filled) {
+  color: #2670D0;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 163, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button:not(.filled) {
+    color: #7BA1D0;
+  }
+}
+
+/* line 170, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button.secondary:not(.filled) {
+  color: #C26C1D;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 170, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button.secondary:not(.filled) {
+    color: #E7C586;
+  }
+}
+
+/* line 177, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button.green:not(.filled) {
+  color: #2E7D32;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 177, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button.green:not(.filled) {
+    color: #A5D6A7;
+  }
+}
+
+/* line 180, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button.red:not(.filled) {
+  color: #C62828;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 180, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button.red:not(.filled) {
+    color: #EF9A9A;
+  }
+}
+
+/* line 184, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button:not(.filled):hover:not(:disabled), .haptic-button:not(.filled):focus, .haptic-button:not(.filled):focus-visible {
+  background-color: #2670D020;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 184, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button:not(.filled):hover:not(:disabled), .haptic-button:not(.filled):focus, .haptic-button:not(.filled):focus-visible {
+    background-color: #7BA1D020;
+  }
+}
+
+/* line 190, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button.secondary:not(.filled):hover:not(:disabled), .haptic-button.secondary:not(.filled):focus, .haptic-button.secondary:not(.filled):focus-visible {
+  background-color: #C26C1D20;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 190, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button.secondary:not(.filled):hover:not(:disabled), .haptic-button.secondary:not(.filled):focus, .haptic-button.secondary:not(.filled):focus-visible {
+    background-color: #E7C58620;
+  }
+}
+
+/* line 197, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button.green:not(.filled):hover:not(:disabled), .haptic-button.green:not(.filled):focus, .haptic-button.green:not(.filled):focus-visible {
+  background-color: #2E7D3220;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 197, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button.green:not(.filled):hover:not(:disabled), .haptic-button.green:not(.filled):focus, .haptic-button.green:not(.filled):focus-visible {
+    background-color: #A5D6A720;
+  }
+}
+
+/* line 204, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button.red:not(.filled):hover:not(:disabled), .haptic-button.red:not(.filled):focus, .haptic-button.red:not(.filled):focus-visible {
+  background-color: #C6282820;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 204, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button.red:not(.filled):hover:not(:disabled), .haptic-button.red:not(.filled):focus, .haptic-button.red:not(.filled):focus-visible {
+    background-color: #EF9A9A20;
+  }
+}
+
+/* line 215, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-icon-button:not(.filled):hover:not(:disabled), .haptic-icon-button:not(.filled):focus, .haptic-icon-button:not(.filled):focus-visible {
+  background-color: #00000010;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 215, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-icon-button:not(.filled):hover:not(:disabled), .haptic-icon-button:not(.filled):focus, .haptic-icon-button:not(.filled):focus-visible {
+    background-color: #FFFFFF10;
+  }
+}
+
+/**********************************************************************
+ * Chips and segmented buttons
+ **********************************************************************/
+/* line 230, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button-segment input::after, .haptic-chip input::after {
+  background-color: transparent;
+}
+
+/* line 234, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button-segment input.filled, .haptic-chip input.filled {
+  background-color: #0000002C;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 234, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button-segment input.filled, .haptic-chip input.filled {
+    background-color: #FFFFFF20;
+  }
+}
+
+/* line 241, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button-segment input.filled:checked, .haptic-chip input.filled:checked {
+  background-color: #2670D0;
+}
+
+/* line 244, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button-segment input.filled:checked::after, .haptic-chip input.filled:checked::after {
+  background-color: white;
+}
+
+/* line 247, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button-segment input.filled:checked ~ label, .haptic-chip input.filled:checked ~ label {
+  color: white;
+}
+
+/* line 252, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button-segment input.filled:hover:not(:checked), .haptic-chip input.filled:hover:not(:checked) {
+  background-color: #0000003C;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 252, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button-segment input.filled:hover:not(:checked), .haptic-chip input.filled:hover:not(:checked) {
+    background-color: #FFFFFF30;
+  }
+}
+
+/* line 262, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button-segment input:not(.filled):checked, .haptic-chip input:not(.filled):checked {
+  background-color: #2670D040;
+}
+
+/* line 265, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button-segment input:not(.filled):checked::after, .haptic-chip input:not(.filled):checked::after {
+  background-color: #2670D0;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 265, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button-segment input:not(.filled):checked::after, .haptic-chip input:not(.filled):checked::after {
+    background-color: #aac2e1;
+  }
+}
+
+/* line 272, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button-segment input:not(.filled):checked ~ label, .haptic-chip input:not(.filled):checked ~ label {
+  color: #2670D0;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 272, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button-segment input:not(.filled):checked ~ label, .haptic-chip input:not(.filled):checked ~ label {
+    color: #aac2e1;
+  }
+}
+
+/* line 281, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button-segment input:not(.filled):hover:not(:checked), .haptic-chip input:not(.filled):hover:not(:checked) {
+  background-color: #2670D020;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 281, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button-segment input:not(.filled):hover:not(:checked), .haptic-chip input:not(.filled):hover:not(:checked) {
+    background-color: #7BA1D020;
+  }
+}
+
+/* line 289, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button-segment input:not(.filled):focus-visible, .haptic-chip input:not(.filled):focus-visible {
+  background-color: #2670D060;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 289, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button-segment input:not(.filled):focus-visible, .haptic-chip input:not(.filled):focus-visible {
+    background-color: #7BA1D060;
+  }
+}
+
+/* line 298, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-button-segment input.outlined, .haptic-chip input.outlined {
+  border-color: #00000060;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 298, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-button-segment input.outlined, .haptic-chip input.outlined {
+    border-color: #FFFFFF60;
+  }
+}
+
+/**********************************************************************
+ * Dropdowns
+ **********************************************************************/
+/* line 311, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-dialog-dropdown[popover-open] > .toggle.haptic-field:not(.filled):not(.outlined), haptic-dialog-dropdown[popover-open] > .toggle .haptic-field:not(.filled):not(.outlined), haptic-dialog-dropdown > .toggle.haptic-field:hover:not(.filled):not(.outlined), haptic-dialog-dropdown > .toggle:hover .haptic-field:not(.filled):not(.outlined), haptic-select-dropdown[popover-open] > .toggle.haptic-field:not(.filled):not(.outlined), haptic-select-dropdown[popover-open] > .toggle .haptic-field:not(.filled):not(.outlined), haptic-select-dropdown > .toggle.haptic-field:hover:not(.filled):not(.outlined), haptic-select-dropdown > .toggle:hover .haptic-field:not(.filled):not(.outlined) {
+  background-color: #00000010;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 311, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-dialog-dropdown[popover-open] > .toggle.haptic-field:not(.filled):not(.outlined), haptic-dialog-dropdown[popover-open] > .toggle .haptic-field:not(.filled):not(.outlined), haptic-dialog-dropdown > .toggle.haptic-field:hover:not(.filled):not(.outlined), haptic-dialog-dropdown > .toggle:hover .haptic-field:not(.filled):not(.outlined), haptic-select-dropdown[popover-open] > .toggle.haptic-field:not(.filled):not(.outlined), haptic-select-dropdown[popover-open] > .toggle .haptic-field:not(.filled):not(.outlined), haptic-select-dropdown > .toggle.haptic-field:hover:not(.filled):not(.outlined), haptic-select-dropdown > .toggle:hover .haptic-field:not(.filled):not(.outlined) {
+    background-color: #FFFFFF10;
+  }
+}
+
+/* line 321, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-dialog-dropdown > .popover, haptic-select-dropdown > .popover {
+  background-color: #FFFFFF;
+  border-color: #00000040;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 321, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-dialog-dropdown > .popover, haptic-select-dropdown > .popover {
+    background-color: #3C3C3C;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 321, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-dialog-dropdown > .popover, haptic-select-dropdown > .popover {
+    border-color: #FFFFFF40;
+  }
+}
+
+@supports (backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px)) {
+  /* line 321, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-dialog-dropdown > .popover, haptic-select-dropdown > .popover {
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    background-color: #FFFFFF80;
+  }
+  @media (prefers-color-scheme: dark) {
+    /* line 321, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+    haptic-dialog-dropdown > .popover, haptic-select-dropdown > .popover {
+      background-color: #3C3C3CC0;
+    }
+  }
+}
+
+/* line 351, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-dialog-dropdown > .popover > .segment {
+  border-color: #00000040;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 351, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-dialog-dropdown > .popover > .segment {
+    border-color: #FFFFFF40;
+  }
+}
+
+/* line 360, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-option-list::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+/* line 364, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-option-list::-webkit-scrollbar-thumb {
+  background-color: #00000040;
+  border-color: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 364, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-option-list::-webkit-scrollbar-thumb {
+    background-color: #FFFFFF40;
+  }
+}
+
+/* line 374, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-option {
+  color: #606060;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 374, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-option {
+    color: #C0C0C0;
+  }
+}
+
+/* line 377, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-option[checked]::after {
+  background-color: #606060;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 377, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-option[checked]::after {
+    background-color: #C0C0C0;
+  }
+}
+
+/* line 381, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-option[highlighted] {
+  color: #303030;
+  background-color: #00000020;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 381, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-option[highlighted] {
+    color: #E0E0E0;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 381, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-option[highlighted] {
+    background-color: #FFFFFF20;
+  }
+}
+
+/* line 389, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-option[highlighted][checked]::after {
+  background-color: #303030;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 389, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-option[highlighted][checked]::after {
+    background-color: #E0E0E0;
+  }
+}
+
+/**********************************************************************
+ * Fields
+ **********************************************************************/
+/* line 399, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-field {
+  background-color: transparent;
+  outline-color: transparent;
+  caret-color: #303030;
+  color: #303030;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 399, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-field {
+    caret-color: #E0E0E0;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 399, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-field {
+    color: #E0E0E0;
+  }
+}
+
+/* line 406, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-field.filled {
+  background-color: #0000002C;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 406, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-field.filled {
+    background-color: #FFFFFF20;
+  }
+}
+
+/* line 414, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-field.outlined {
+  border-color: #00000060;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 414, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-field.outlined {
+    border-color: #FFFFFF60;
+  }
+}
+
+/* line 418, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-field::placeholder {
+  color: #00000060;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 418, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-field::placeholder {
+    color: #FFFFFF60;
+  }
+}
+
+/* line 428, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-dropdown-field .haptic-field-label, haptic-text-field .haptic-field-label {
+  color: #2670D0;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 428, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-dropdown-field .haptic-field-label, haptic-text-field .haptic-field-label {
+    color: #7BA1D0;
+  }
+}
+
+/* line 432, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-dropdown-field .leading-icon, haptic-text-field .leading-icon {
+  color: #606060;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 432, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-dropdown-field .leading-icon, haptic-text-field .leading-icon {
+    color: #C0C0C0;
+  }
+}
+
+/* line 436, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-dropdown-field .error-icon, haptic-text-field .error-icon {
+  color: #C62828;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 436, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-dropdown-field .error-icon, haptic-text-field .error-icon {
+    color: #EF9A9A;
+  }
+}
+
+/* line 440, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-dropdown-field[focus-indicator] > .haptic-field-container::after, haptic-text-field[focus-indicator] > .haptic-field-container::after {
+  background-color: #2670D0;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 440, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-dropdown-field[focus-indicator] > .haptic-field-container::after, haptic-text-field[focus-indicator] > .haptic-field-container::after {
+    background-color: #7BA1D0;
+  }
+}
+
+/* line 446, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-dropdown-field[invalid] > .haptic-field-container > .haptic-field-label, haptic-dropdown-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field-label, haptic-text-field[invalid] > .haptic-field-container > .haptic-field-label, haptic-text-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field-label {
+  color: #C62828;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 446, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-dropdown-field[invalid] > .haptic-field-container > .haptic-field-label, haptic-dropdown-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field-label, haptic-text-field[invalid] > .haptic-field-container > .haptic-field-label, haptic-text-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field-label {
+    color: #EF9A9A;
+  }
+}
+
+/* line 454, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-dropdown-field[invalid] > .haptic-field-container > .haptic-field.outlined, haptic-dropdown-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field.outlined, haptic-dropdown-field[invalid] > .haptic-field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-dropdown-field[invalid] > .haptic-field-container > haptic-select-dropdown > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > haptic-select-dropdown > .haptic-field.outlined {
+  border-color: #C62828;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 454, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-dropdown-field[invalid] > .haptic-field-container > .haptic-field.outlined, haptic-dropdown-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field.outlined, haptic-dropdown-field[invalid] > .haptic-field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-dropdown-field[invalid] > .haptic-field-container > haptic-select-dropdown > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > haptic-select-dropdown > .haptic-field.outlined {
+    border-color: #EF9A9A;
+  }
+}
+
+/* line 459, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-dropdown-field[invalid] > .error-message, haptic-text-field[invalid] > .error-message {
+  color: #C62828;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 459, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-dropdown-field[invalid] > .error-message, haptic-text-field[invalid] > .error-message {
+    color: #EF9A9A;
+  }
+}
+
+/* line 462, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-dropdown-field[invalid][focus-indicator] > .haptic-field-container::after, haptic-text-field[invalid][focus-indicator] > .haptic-field-container::after {
+  background-color: #C62828;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 462, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-dropdown-field[invalid][focus-indicator] > .haptic-field-container::after, haptic-text-field[invalid][focus-indicator] > .haptic-field-container::after {
+    background-color: #EF9A9A;
+  }
+}
+
+/* line 468, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-dropdown-field > .haptic-field-container::before {
+  background-color: #606060;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 468, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-dropdown-field > .haptic-field-container::before {
+    background-color: #C0C0C0;
+  }
+}
+
+/* line 474, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-text-field[animated-label] ::placeholder {
+  color: transparent;
+}
+
+/* line 478, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-text-field[animated-label][empty]:not(:focus-within) .haptic-field-label {
+  color: #606060;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 478, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-text-field[animated-label][empty]:not(:focus-within) .haptic-field-label {
+    color: #C0C0C0;
+  }
+}
+
+/* line 483, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-text-field .clear-button {
+  color: #606060;
+  background-color: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 483, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-text-field .clear-button {
+    color: #C0C0C0;
+  }
+}
+
+/* line 487, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-text-field .clear-button:hover {
+  background-color: #00000010;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 487, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-text-field .clear-button:hover {
+    background-color: #FFFFFF10;
+  }
+}
+
+/* line 496, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-text-field .trailing-icon {
+  color: #606060;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 496, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-text-field .trailing-icon {
+    color: #C0C0C0;
+  }
+}
+
+/**********************************************************************
+ * Checkboxes and radio buttons
+ **********************************************************************/
+/* line 506, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-checkbox, .haptic-checkbox::after, .haptic-radio-button, .haptic-radio-button::after {
+  background-color: transparent;
+}
+
+/* line 510, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-checkbox:checked::after, .haptic-radio-button:checked::after {
+  background-color: #303030;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 510, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-checkbox:checked::after, .haptic-radio-button:checked::after {
+    background-color: #E0E0E0;
+  }
+}
+
+/* line 514, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-checkbox.outlined::before, .haptic-radio-button.outlined::before {
+  border-color: #00000060;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 514, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-checkbox.outlined::before, .haptic-radio-button.outlined::before {
+    border-color: #FFFFFF60;
+  }
+}
+
+/* line 518, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-checkbox.filled::before, .haptic-radio-button.filled::before {
+  background-color: #0000002C;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 518, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-checkbox.filled::before, .haptic-radio-button.filled::before {
+    background-color: #FFFFFF20;
+  }
+}
+
+/* line 526, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-checkbox:not(.embedded), .haptic-radio-button:not(.embedded) {
+  outline-color: transparent;
+}
+
+/* line 529, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-checkbox:not(.embedded):focus-visible, .haptic-radio-button:not(.embedded):focus-visible {
+  background-color: #00000020;
+  outline-color: #00000020;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 529, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-checkbox:not(.embedded):focus-visible, .haptic-radio-button:not(.embedded):focus-visible {
+    background-color: #FFFFFF20;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 529, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-checkbox:not(.embedded):focus-visible, .haptic-radio-button:not(.embedded):focus-visible {
+    outline-color: #FFFFFF20;
+  }
+}
+
+/* line 545, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-checkbox.filled:checked::before {
+  background-color: transparent;
+}
+
+/* line 549, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-checkbox.outlined:checked::before {
+  border-color: transparent;
+}
+
+/**********************************************************************
+ * Switches
+ **********************************************************************/
+/* line 558, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-switch {
+  background-color: transparent;
+}
+
+/* line 561, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-switch.outlined::before {
+  border-color: #00000060;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 561, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-switch.outlined::before {
+    border-color: #FFFFFF60;
+  }
+}
+
+/* line 566, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-switch.filled::before {
+  background-color: #00000060;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 566, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-switch.filled::before {
+    background-color: #FFFFFF40;
+  }
+}
+
+/* line 573, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-switch.filled::after {
+  background-color: white;
+}
+
+/* line 576, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-switch.filled:checked::before {
+  background-color: #2670D0;
+}
+
+/* line 580, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-switch.filled.red-green::before {
+  background-color: #D32F2F;
+}
+
+/* line 583, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-switch.filled.red-green:checked::before {
+  background-color: #388E3C;
+}
+
+/* line 590, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-switch:not(.filled)::after {
+  background-color: #303030;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 590, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-switch:not(.filled)::after {
+    background-color: #E0E0E0;
+  }
+}
+
+/* line 594, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-switch.red-green.outlined:not(.filled)::before {
+  border-color: #C62828;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 594, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-switch.red-green.outlined:not(.filled)::before {
+    border-color: #EF9A9A;
+  }
+}
+
+/* line 597, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-switch.red-green:not(.filled)::after {
+  background-color: #C62828;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 597, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-switch.red-green:not(.filled)::after {
+    background-color: #EF9A9A;
+  }
+}
+
+/* line 601, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-switch.red-green.outlined:not(.filled):checked::before {
+  border-color: #2E7D32;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 601, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-switch.red-green.outlined:not(.filled):checked::before {
+    border-color: #A5D6A7;
+  }
+}
+
+/* line 604, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-switch.red-green:not(.filled):checked::after {
+  background-color: #2E7D32;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 604, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-switch.red-green:not(.filled):checked::after {
+    background-color: #A5D6A7;
+  }
+}
+
+/* line 611, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-switch::after {
+  outline-color: transparent;
+}
+
+/* line 615, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+.haptic-switch:focus-visible::after {
+  outline-color: #00000020;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 615, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  .haptic-switch:focus-visible::after {
+    outline-color: #FFFFFF20;
+  }
+}
+
+/**********************************************************************
+ * Lists
+ **********************************************************************/
+/* line 630, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-list-item .haptic-checkbox:hover, haptic-list-item .haptic-radio-button:hover {
+  background-color: #00000010;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 630, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-list-item .haptic-checkbox:hover, haptic-list-item .haptic-radio-button:hover {
+    background-color: #FFFFFF10;
+  }
+}
+
+/* line 637, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-list-item .haptic-checkbox:focus-visible, haptic-list-item .haptic-radio-button:focus-visible {
+  background-color: #00000020;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 637, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-list-item .haptic-checkbox:focus-visible, haptic-list-item .haptic-radio-button:focus-visible {
+    background-color: #FFFFFF20;
+  }
+}
+
+/* line 646, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+haptic-list.divided haptic-list-item:not(:first-of-type) {
+  border-color: #00000060;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* line 646, ../haptic-rails/vendor/assets/stylesheets/haptic/_colors.scss */
+  haptic-list.divided haptic-list-item:not(:first-of-type) {
+    border-color: #FFFFFF60;
+  }
+}
+
+/**********************************************************************
+ * Badges
+ **********************************************************************/
+/* line 7, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+.haptic-badge {
+  font-size: .75rem;
+  font-weight: bold;
+}
+
+/**********************************************************************
+ * Buttons
+ **********************************************************************/
+/* line 16, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+.haptic-button, .haptic-icon-button {
+  text-decoration: none;
+}
+
+/* line 20, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+.haptic-button {
+  font-family: sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* line 25, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+.haptic-button .icon {
+  font-size: 1.125rem;
+  font-weight: normal;
+}
+
+/* line 31, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+.haptic-icon-button {
+  font-size: 1.125rem;
+}
+
+/**********************************************************************
+ * Chips and segmented buttons
+ **********************************************************************/
+/* line 40, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+.haptic-button-segment label, .haptic-chip label {
+  font-family: sans-serif;
+  font-size: 1rem;
+}
+
+/**********************************************************************
+ * Dropdowns
+ **********************************************************************/
+/* line 50, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+haptic-dialog-dropdown > .popover > .segment > .legend {
+  font-weight: bold;
+}
+
+/**********************************************************************
+ * Fields
+ **********************************************************************/
+/* line 58, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+.haptic-field {
+  font-family: sans-serif;
+  font-size: 1rem;
+}
+
+/* line 64, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+haptic-dropdown-field .haptic-field-label, haptic-text-field .haptic-field-label {
+  font-family: sans-serif;
+  font-size: .875rem;
+  font-weight: bold;
+}
+
+/* line 70, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+haptic-dropdown-field .error-icon, haptic-dropdown-field .leading-icon, haptic-text-field .error-icon, haptic-text-field .leading-icon {
+  font-size: 1.125rem;
+}
+
+/* line 75, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+haptic-dropdown-field[with-label] .error-icon, haptic-dropdown-field[with-label] .leading-icon, haptic-text-field[with-label] .error-icon, haptic-text-field[with-label] .leading-icon {
+  font-size: 1.5rem;
+}
+
+/* line 80, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+haptic-dropdown-field .error-message, haptic-dropdown-field .supporting-text, haptic-text-field .error-message, haptic-text-field .supporting-text {
+  font-size: .875rem;
+}
+
+/* line 87, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+haptic-text-field[animated-label][empty]:not(:focus-within) .haptic-field-label {
+  font-size: 1rem;
+}
+
+/* line 92, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+haptic-text-field .clear-button {
+  font-size: 1.125rem;
+}
+
+/* line 96, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+haptic-text-field .trailing-icon {
+  font-size: 1.125rem;
+}
+
+/* line 101, ../haptic-rails/vendor/assets/stylesheets/haptic/_fonts.scss */
+haptic-text-field[with-label] .trailing-icon {
+  font-size: 1.5rem;
+}
+
+/**********************************************************************
+ * Badges
+ **********************************************************************/
+/* line 9, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-badge {
+  box-sizing: border-box;
+  height: 1rem;
+  line-height: .75rem;
+  min-width: 1rem;
+  padding: .125rem .25rem;
+}
+
+/**********************************************************************
+ * Buttons
+ **********************************************************************/
+/* line 21, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-button, .haptic-icon-button {
+  box-sizing: border-box;
+}
+
+/* line 25, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-button {
+  grid-gap: 0.25rem;
+  min-height: 1.75rem;
+}
+
+/* line 29, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-button .icon {
+  height: 1.125rem;
+  line-height: 1.125rem;
+  width: 1.125rem;
+}
+
+/* line 36, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-button.filled .icon, .haptic-button.outlined .icon {
+  margin-left: -0.25rem;
+}
+
+/* line 40, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-button.filled {
+  padding: 0.25rem 0.75rem;
+}
+
+/* line 45, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-button.outlined {
+  padding: calc(0.25rem - 1px) calc(0.75rem - 1px);
+}
+
+/* line 50, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-button.text {
+  padding: 0.25rem 0.5rem;
+}
+
+/* line 55, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-button.text .icon {
+  margin-left: -0.125rem;
+}
+
+/* line 61, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-icon-button {
+  height: 1.5rem;
+  line-height: 1.125rem;
+  padding: 0.1875rem;
+  width: 1.5rem;
+}
+
+/* line 69, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-icon-button.outlined {
+  padding: calc(0.1875rem - 1px);
+}
+
+/**********************************************************************
+ * Chips and segmented buttons
+ **********************************************************************/
+/* line 78, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-button-segment, .haptic-chip {
+  box-sizing: border-box;
+  min-height: 1.75rem;
+  min-width: 2.5rem;
+}
+
+/* line 90, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-button-segment input, .haptic-chip input {
+  height: 100%;
+  margin: 0;
+  outline: none;
+  width: 100%;
+}
+
+/* line 96, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-button-segment input::after, .haptic-chip input::after {
+  height: 1rem;
+  left: 0.5rem;
+  top: calc(50% - 0.5rem);
+  width: 1rem;
+}
+
+/* line 104, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-button-segment label, .haptic-chip label {
+  box-sizing: border-box;
+  height: 1.125rem;
+  left: 2rem;
+  line-height: 1.125rem;
+  top: calc(50% - 0.5625rem);
+  width: calc(100% - 4rem);
+}
+
+/* line 120, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-segmented-button:not(.outlined) {
+  grid-gap: 1px;
+}
+
+/**********************************************************************
+ * Dropdowns
+ **********************************************************************/
+/* line 129, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dialog-dropdown > .toggle, haptic-select-dropdown > .toggle {
+  height: 100%;
+  width: 100%;
+}
+
+/* line 134, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dialog-dropdown > .popover, haptic-select-dropdown > .popover {
+  box-sizing: border-box;
+  min-width: 100%;
+  top: 100%;
+}
+
+/* line 139, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dialog-dropdown > .popover.auto-justify-right, haptic-select-dropdown > .popover.auto-justify-right {
+  right: 0;
+}
+
+/* line 144, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dialog-dropdown > .backdrop, haptic-select-dropdown > .backdrop {
+  height: 100vh;
+  left: 0;
+  top: 0;
+  width: 100vw;
+}
+
+/* line 151, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dialog-dropdown[to-top] > .popover, haptic-select-dropdown[to-top] > .popover {
+  bottom: 100%;
+  top: unset;
+}
+
+/* line 158, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dialog-dropdown > .popover > .segment {
+  padding: calc(.5rem - 1px) calc(0.5rem - 1px);
+}
+
+/* line 163, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dialog-dropdown > .popover > .segment > .legend {
+  margin-bottom: .5rem;
+}
+
+/* line 170, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-select-dropdown > .popover {
+  box-sizing: border-box;
+  padding: .25rem 0;
+}
+
+/* line 176, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-option-list {
+  padding: 0 .25rem;
+}
+
+/* line 179, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-option-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* line 184, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-option {
+  box-sizing: border-box;
+  line-height: 1.25rem;
+  min-height: 24px;
+  padding-bottom: 0.125rem;
+  padding-left: 1.5rem;
+  padding-right: .5rem;
+  padding-top: 0.125rem;
+}
+
+/* line 197, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-option::after {
+  height: 1rem;
+  left: 0.25rem;
+  top: calc(50% - 0.5rem);
+  width: 1rem;
+}
+
+/**********************************************************************
+ * Fields
+ **********************************************************************/
+/* line 227, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-field {
+  box-sizing: border-box;
+  line-height: 1.25;
+  min-height: 1.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* line 236, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-field.outlined {
+  padding: calc(0.25rem - 1px) calc(0.5rem - 1px);
+}
+
+/* line 243, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field, haptic-text-field {
+  box-sizing: border-box;
+}
+
+/* line 246, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field .haptic-field.overflow-ellipsis, haptic-text-field .haptic-field.overflow-ellipsis {
+  height: 100%;
+  width: 100%;
+}
+
+/* line 251, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[focus-indicator] > .haptic-field-container::after, haptic-text-field[focus-indicator] > .haptic-field-container::after {
+  bottom: 0;
+  height: 3px;
+  left: 0;
+  width: 100%;
+}
+
+/* line 258, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label], haptic-text-field[with-label] {
+  min-height: 3.5rem;
+}
+
+/* line 262, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label] .haptic-field, haptic-text-field[with-label] .haptic-field {
+  padding-bottom: 0.5rem;
+  padding-top: 1.75rem;
+  vertical-align: bottom;
+}
+
+/* line 267, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label] .haptic-field.outlined, haptic-text-field[with-label] .haptic-field.outlined {
+  padding-bottom: calc(0.5rem - 1px);
+  padding-top: calc(1.75rem - 1px);
+}
+
+/* line 273, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label] .haptic-field-label, haptic-text-field[with-label] .haptic-field-label {
+  box-sizing: border-box;
+  left: 0;
+  top: 0.5rem;
+  width: 100%;
+}
+
+/* line 281, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field:not([with-label]), haptic-text-field:not([with-label]) {
+  min-height: 1.75rem;
+}
+
+/* line 285, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field .error-message, haptic-dropdown-field .supporting-text, haptic-text-field .error-message, haptic-text-field .supporting-text {
+  margin: 0.25rem 0.5rem 0 0.5rem;
+}
+
+/* line 302, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label] > .haptic-field-container::before, haptic-dropdown-field[with-label] .error-icon, haptic-dropdown-field[with-label] .leading-icon {
+  height: 1.5rem;
+  top: calc(50% - 0.75rem);
+  width: 1.5rem;
+}
+
+/* line 308, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label] > .haptic-field-container::before {
+  right: 0.5rem;
+}
+
+/* line 210, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label][with-leading-icon] .haptic-field, haptic-dropdown-field[with-label][with-leading-icon] .haptic-field-label {
+  padding-left: 2.5rem;
+}
+
+/* line 213, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label][with-leading-icon] .haptic-field.outlined {
+  padding-left: calc(2.5rem - 1px);
+}
+
+/* line 318, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label][with-leading-icon] .leading-icon {
+  left: 0.5rem;
+}
+
+/* line 210, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label]:not([with-leading-icon]) .haptic-field, haptic-dropdown-field[with-label]:not([with-leading-icon]) .haptic-field-label {
+  padding-left: 0.5rem;
+}
+
+/* line 213, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label]:not([with-leading-icon]) .haptic-field.outlined {
+  padding-left: calc(0.5rem - 1px);
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label][with-error-icon] .haptic-field, haptic-dropdown-field[with-label][with-error-icon] .haptic-field-label {
+  padding-right: 4.5rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label][with-error-icon] .haptic-field.outlined {
+  padding-right: calc(4.5rem - 1px);
+}
+
+/* line 337, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label][with-error-icon] .error-icon {
+  right: 2.5rem;
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label]:not([with-error-icon]) .haptic-field, haptic-dropdown-field[with-label]:not([with-error-icon]) .haptic-field-label {
+  padding-right: 2.5rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-label]:not([with-error-icon]) .haptic-field.outlined {
+  padding-right: calc(2.5rem - 1px);
+}
+
+/* line 302, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field:not([with-label]) > .haptic-field-container::before, haptic-dropdown-field:not([with-label]) .error-icon, haptic-dropdown-field:not([with-label]) .leading-icon {
+  height: 1.125rem;
+  top: calc(50% - 0.5625rem);
+  width: 1.125rem;
+}
+
+/* line 308, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field:not([with-label]) > .haptic-field-container::before {
+  right: 0.25rem;
+}
+
+/* line 210, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-leading-icon]:not([with-label]) .haptic-field, haptic-dropdown-field[with-leading-icon]:not([with-label]) .haptic-field-label {
+  padding-left: 1.625rem;
+}
+
+/* line 213, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-leading-icon]:not([with-label]) .haptic-field.outlined {
+  padding-left: calc(1.625rem - 1px);
+}
+
+/* line 318, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-leading-icon]:not([with-label]) .leading-icon {
+  left: 0.25rem;
+}
+
+/* line 210, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field:not([with-label]):not([with-leading-icon]) .haptic-field, haptic-dropdown-field:not([with-label]):not([with-leading-icon]) .haptic-field-label {
+  padding-left: 0.5rem;
+}
+
+/* line 213, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field:not([with-label]):not([with-leading-icon]) .haptic-field.outlined {
+  padding-left: calc(0.5rem - 1px);
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-error-icon]:not([with-label]) .haptic-field, haptic-dropdown-field[with-error-icon]:not([with-label]) .haptic-field-label {
+  padding-right: 3rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-error-icon]:not([with-label]) .haptic-field.outlined {
+  padding-right: calc(3rem - 1px);
+}
+
+/* line 337, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field[with-error-icon]:not([with-label]) .error-icon {
+  right: 1.625rem;
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field:not([with-label]):not([with-error-icon]) .haptic-field, haptic-dropdown-field:not([with-label]):not([with-error-icon]) .haptic-field-label {
+  padding-right: 1.625rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-dropdown-field:not([with-label]):not([with-error-icon]) .haptic-field.outlined {
+  padding-right: calc(1.625rem - 1px);
+}
+
+/* line 385, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label] .clear-button {
+  height: 1.5rem;
+  margin: 0rem;
+  top: 1rem;
+  width: 1.5rem;
+}
+
+/* line 392, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label] .error-icon, haptic-text-field[with-label] .leading-icon, haptic-text-field[with-label] .trailing-icon,
+haptic-text-field[with-label] ::-webkit-calendar-picker-indicator {
+  height: 1.5rem;
+  top: 1rem;
+  width: 1.5rem;
+}
+
+/* line 210, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-leading-icon] .haptic-field, haptic-text-field[with-label][with-leading-icon] .haptic-field-label {
+  padding-left: 2.5rem;
+}
+
+/* line 213, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-leading-icon] .haptic-field.outlined {
+  padding-left: calc(2.5rem - 1px);
+}
+
+/* line 405, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-leading-icon] .leading-icon {
+  left: 0.5rem;
+}
+
+/* line 210, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label]:not([with-leading-icon]) .haptic-field, haptic-text-field[with-label]:not([with-leading-icon]) .haptic-field-label {
+  padding-left: 0.5rem;
+}
+
+/* line 213, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label]:not([with-leading-icon]) .haptic-field.outlined {
+  padding-left: calc(0.5rem - 1px);
+}
+
+/* line 417, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-trailing-icon] .trailing-icon,
+haptic-text-field[with-label][with-trailing-icon] ::-webkit-calendar-picker-indicator {
+  right: 0.5rem;
+}
+
+/* line 422, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-trailing-icon][with-error-icon] .error-icon {
+  right: 2.5rem;
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-trailing-icon][with-error-icon][with-clear-button] .haptic-field, haptic-text-field[with-label][with-trailing-icon][with-error-icon][with-clear-button] .haptic-field-label {
+  padding-right: 6.5rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-trailing-icon][with-error-icon][with-clear-button] .haptic-field.outlined {
+  padding-right: calc(6.5rem - 1px);
+}
+
+/* line 435, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-trailing-icon][with-error-icon][with-clear-button] .clear-button {
+  right: 4.5rem;
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-trailing-icon][with-error-icon]:not([with-clear-button]) .haptic-field, haptic-text-field[with-label][with-trailing-icon][with-error-icon]:not([with-clear-button]) .haptic-field-label {
+  padding-right: 4.5rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-trailing-icon][with-error-icon]:not([with-clear-button]) .haptic-field.outlined {
+  padding-right: calc(4.5rem - 1px);
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-trailing-icon][with-clear-button]:not([with-error-icon]) .haptic-field, haptic-text-field[with-label][with-trailing-icon][with-clear-button]:not([with-error-icon]) .haptic-field-label {
+  padding-right: 4.5rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-trailing-icon][with-clear-button]:not([with-error-icon]) .haptic-field.outlined {
+  padding-right: calc(4.5rem - 1px);
+}
+
+/* line 458, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-trailing-icon][with-clear-button]:not([with-error-icon]) .clear-button {
+  right: 2.5rem;
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon]):not([with-clear-button]) .haptic-field, haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon]):not([with-clear-button]) .haptic-field-label {
+  padding-right: 2.5rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon]):not([with-clear-button]) .haptic-field.outlined {
+  padding-right: calc(2.5rem - 1px);
+}
+
+/* line 477, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-error-icon]:not([with-trailing-icon]) .error-icon {
+  right: 0.5rem;
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-error-icon][with-clear-button]:not([with-trailing-icon]) .haptic-field, haptic-text-field[with-label][with-error-icon][with-clear-button]:not([with-trailing-icon]) .haptic-field-label {
+  padding-right: 4.5rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-error-icon][with-clear-button]:not([with-trailing-icon]) .haptic-field.outlined {
+  padding-right: calc(4.5rem - 1px);
+}
+
+/* line 487, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-error-icon][with-clear-button]:not([with-trailing-icon]) .clear-button {
+  right: 2.5rem;
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-error-icon]:not([with-trailing-icon]):not([with-clear-button]) .haptic-field, haptic-text-field[with-label][with-error-icon]:not([with-trailing-icon]):not([with-clear-button]) .haptic-field-label {
+  padding-right: 2.5rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-error-icon]:not([with-trailing-icon]):not([with-clear-button]) .haptic-field.outlined {
+  padding-right: calc(2.5rem - 1px);
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-clear-button]:not([with-trailing-icon]):not([with-error-icon]) .haptic-field, haptic-text-field[with-label][with-clear-button]:not([with-trailing-icon]):not([with-error-icon]) .haptic-field-label {
+  padding-right: 2.5rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-clear-button]:not([with-trailing-icon]):not([with-error-icon]) .haptic-field.outlined {
+  padding-right: calc(2.5rem - 1px);
+}
+
+/* line 509, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][with-clear-button]:not([with-trailing-icon]):not([with-error-icon]) .clear-button {
+  right: 0.5rem;
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label]:not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .haptic-field, haptic-text-field[with-label]:not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .haptic-field-label {
+  padding-right: 0.5rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label]:not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .haptic-field.outlined {
+  padding-right: calc(0.5rem - 1px);
+}
+
+/* line 534, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-label][animated-label][empty]:not(:focus-within) .haptic-field-label {
+  line-height: 1.125rem;
+  top: 1.1875rem;
+}
+
+/* line 385, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field:not([with-label]) .clear-button {
+  height: 1.25rem;
+  margin: -0.0625rem;
+  top: 0.3125rem;
+  width: 1.25rem;
+}
+
+/* line 392, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field:not([with-label]) .error-icon, haptic-text-field:not([with-label]) .leading-icon, haptic-text-field:not([with-label]) .trailing-icon,
+haptic-text-field:not([with-label]) ::-webkit-calendar-picker-indicator {
+  height: 1.125rem;
+  top: 0.3125rem;
+  width: 1.125rem;
+}
+
+/* line 210, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-leading-icon]:not([with-label]) .haptic-field, haptic-text-field[with-leading-icon]:not([with-label]) .haptic-field-label {
+  padding-left: 1.625rem;
+}
+
+/* line 213, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-leading-icon]:not([with-label]) .haptic-field.outlined {
+  padding-left: calc(1.625rem - 1px);
+}
+
+/* line 405, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-leading-icon]:not([with-label]) .leading-icon {
+  left: 0.25rem;
+}
+
+/* line 210, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field:not([with-label]):not([with-leading-icon]) .haptic-field, haptic-text-field:not([with-label]):not([with-leading-icon]) .haptic-field-label {
+  padding-left: 0.5rem;
+}
+
+/* line 213, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field:not([with-label]):not([with-leading-icon]) .haptic-field.outlined {
+  padding-left: calc(0.5rem - 1px);
+}
+
+/* line 417, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-trailing-icon]:not([with-label]) .trailing-icon,
+haptic-text-field[with-trailing-icon]:not([with-label]) ::-webkit-calendar-picker-indicator {
+  right: 0.25rem;
+}
+
+/* line 422, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-trailing-icon][with-error-icon]:not([with-label]) .error-icon {
+  right: 1.625rem;
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-trailing-icon][with-error-icon][with-clear-button]:not([with-label]) .haptic-field, haptic-text-field[with-trailing-icon][with-error-icon][with-clear-button]:not([with-label]) .haptic-field-label {
+  padding-right: 4.375rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-trailing-icon][with-error-icon][with-clear-button]:not([with-label]) .haptic-field.outlined {
+  padding-right: calc(4.375rem - 1px);
+}
+
+/* line 435, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-trailing-icon][with-error-icon][with-clear-button]:not([with-label]) .clear-button {
+  right: 3rem;
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-trailing-icon][with-error-icon]:not([with-label]):not([with-clear-button]) .haptic-field, haptic-text-field[with-trailing-icon][with-error-icon]:not([with-label]):not([with-clear-button]) .haptic-field-label {
+  padding-right: 3rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-trailing-icon][with-error-icon]:not([with-label]):not([with-clear-button]) .haptic-field.outlined {
+  padding-right: calc(3rem - 1px);
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-trailing-icon][with-clear-button]:not([with-label]):not([with-error-icon]) .haptic-field, haptic-text-field[with-trailing-icon][with-clear-button]:not([with-label]):not([with-error-icon]) .haptic-field-label {
+  padding-right: 3rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-trailing-icon][with-clear-button]:not([with-label]):not([with-error-icon]) .haptic-field.outlined {
+  padding-right: calc(3rem - 1px);
+}
+
+/* line 458, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-trailing-icon][with-clear-button]:not([with-label]):not([with-error-icon]) .clear-button {
+  right: 1.625rem;
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-trailing-icon]:not([with-label]):not([with-error-icon]):not([with-clear-button]) .haptic-field, haptic-text-field[with-trailing-icon]:not([with-label]):not([with-error-icon]):not([with-clear-button]) .haptic-field-label {
+  padding-right: 1.625rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-trailing-icon]:not([with-label]):not([with-error-icon]):not([with-clear-button]) .haptic-field.outlined {
+  padding-right: calc(1.625rem - 1px);
+}
+
+/* line 477, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-error-icon]:not([with-label]):not([with-trailing-icon]) .error-icon {
+  right: 0.25rem;
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-error-icon][with-clear-button]:not([with-label]):not([with-trailing-icon]) .haptic-field, haptic-text-field[with-error-icon][with-clear-button]:not([with-label]):not([with-trailing-icon]) .haptic-field-label {
+  padding-right: 3rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-error-icon][with-clear-button]:not([with-label]):not([with-trailing-icon]) .haptic-field.outlined {
+  padding-right: calc(3rem - 1px);
+}
+
+/* line 487, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-error-icon][with-clear-button]:not([with-label]):not([with-trailing-icon]) .clear-button {
+  right: 1.625rem;
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-error-icon]:not([with-label]):not([with-trailing-icon]):not([with-clear-button]) .haptic-field, haptic-text-field[with-error-icon]:not([with-label]):not([with-trailing-icon]):not([with-clear-button]) .haptic-field-label {
+  padding-right: 1.625rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-error-icon]:not([with-label]):not([with-trailing-icon]):not([with-clear-button]) .haptic-field.outlined {
+  padding-right: calc(1.625rem - 1px);
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-clear-button]:not([with-label]):not([with-trailing-icon]):not([with-error-icon]) .haptic-field, haptic-text-field[with-clear-button]:not([with-label]):not([with-trailing-icon]):not([with-error-icon]) .haptic-field-label {
+  padding-right: 1.625rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-clear-button]:not([with-label]):not([with-trailing-icon]):not([with-error-icon]) .haptic-field.outlined {
+  padding-right: calc(1.625rem - 1px);
+}
+
+/* line 509, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field[with-clear-button]:not([with-label]):not([with-trailing-icon]):not([with-error-icon]) .clear-button {
+  right: 0.25rem;
+}
+
+/* line 219, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .haptic-field, haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .haptic-field-label {
+  padding-right: 0.5rem;
+}
+
+/* line 222, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .haptic-field.outlined {
+  padding-right: calc(0.5rem - 1px);
+}
+
+/**********************************************************************
+ * Checkboxes and radio buttons
+ **********************************************************************/
+/* line 559, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-checkbox, .haptic-radio-button {
+  margin: 0;
+}
+
+/* line 562, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-checkbox:not(.embedded), .haptic-radio-button:not(.embedded) {
+  outline-offset: 0;
+  outline-width: 0.375rem;
+}
+
+/* line 571, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-checkbox, .haptic-checkbox::before, .haptic-checkbox::after {
+  box-sizing: border-box;
+  height: 1rem;
+  width: 1rem;
+}
+
+/* line 581, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-radio-button, .haptic-radio-button::before {
+  box-sizing: border-box;
+  height: 1rem;
+  width: 1rem;
+}
+
+/* line 587, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-radio-button::after {
+  height: 0.5rem;
+  left: 0.25rem;
+  top: 0.25rem;
+  width: 0.5rem;
+}
+
+/**********************************************************************
+ * Switches
+ **********************************************************************/
+/* line 599, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-switch {
+  box-sizing: border-box;
+  height: 1rem;
+  margin: 0;
+  outline: none;
+  width: 1.75rem;
+}
+
+/* line 609, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-switch::before {
+  box-sizing: border-box;
+  height: 1rem;
+  margin: 0;
+  width: 1.75rem;
+}
+
+/* line 616, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-switch::after {
+  height: calc(1rem - 4px);
+  left: 2px;
+  top: 2px;
+  outline-offset: 0;
+  outline-width: 0.375rem;
+  width: calc(1rem - 4px);
+}
+
+/* line 625, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+.haptic-switch:checked::after {
+  left: calc(0.75rem + 2px);
+}
+
+/**********************************************************************
+ * Lists
+ **********************************************************************/
+/* line 634, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-list-item {
+  box-sizing: content-box;
+  min-height: 1.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 2.25rem;
+  padding-right: 0.5rem;
+  padding-top: 0.25rem;
+}
+
+/* line 648, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-list-item .haptic-checkbox, haptic-list-item .haptic-radio-button {
+  height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+/* line 656, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-list-item .haptic-checkbox::before, haptic-list-item .haptic-checkbox::after {
+  left: 0.5rem;
+  top: 0.375rem;
+}
+
+/* line 665, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-list-item .haptic-radio-button::before {
+  height: 1rem;
+  left: 0.5rem;
+  top: 0.375rem;
+  width: 1rem;
+}
+
+/* line 672, ../haptic-rails/vendor/assets/stylesheets/haptic/_measurements.scss */
+haptic-list-item .haptic-radio-button::after {
+  height: 0.5rem;
+  left: 0.75rem;
+  top: 0.625rem;
+  width: 0.5rem;
+}
+
+/**********************************************************************
+ * Buttons
+ **********************************************************************/
+/* line 5, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+.haptic-button, .haptic-icon-button {
+  transition: all .4s linear .1s, filter .2s linear, opacity .2s linear;
+}
+
+/* line 14, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+button.haptic-button:focus, button.haptic-button:focus-visible, button.haptic-icon-button:focus, button.haptic-icon-button:focus-visible, input.haptic-button[type="submit"]:focus, input.haptic-button[type="submit"]:focus-visible, input.haptic-icon-button[type="submit"]:focus, input.haptic-icon-button[type="submit"]:focus-visible {
+  transition-delay: 0;
+}
+
+/**********************************************************************
+ * Chips and segmented buttons
+ **********************************************************************/
+/* line 25, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+.haptic-button-segment input, .haptic-chip input {
+  transition: all .4s linear, background .1s linear, filter .2s linear, opacity .2s linear;
+}
+
+/* line 32, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+.haptic-button-segment input::after, .haptic-chip input::after {
+  transition: .1s linear;
+}
+
+/* line 36, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+.haptic-button-segment input:hover:not(:checked), .haptic-button-segment input:hover:not(:checked)::after, .haptic-chip input:hover:not(:checked), .haptic-chip input:hover:not(:checked)::after {
+  transition: .4s linear;
+}
+
+/* line 42, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+.haptic-button-segment label, .haptic-chip label {
+  transition: all .1s linear, filter .2s linear, opacity .2s linear;
+}
+
+/**********************************************************************
+ * Dropdowns
+ **********************************************************************/
+/* line 57, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+haptic-dialog-dropdown > .toggle.haptic-field:not(.filled):not(.outlined), haptic-dialog-dropdown > .toggle .haptic-field:not(.filled):not(.outlined), haptic-select-dropdown > .toggle.haptic-field:not(.filled):not(.outlined), haptic-select-dropdown > .toggle .haptic-field:not(.filled):not(.outlined) {
+  transition: background-color .4s linear;
+}
+
+/**********************************************************************
+ * Fields
+ **********************************************************************/
+/* line 69, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+button.haptic-field, input.haptic-field, select.haptic-field, textarea.haptic-field {
+  transition: filter .2s linear, opacity .2s linear;
+}
+
+/* line 77, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+haptic-dropdown-field .haptic-field, haptic-text-field .haptic-field {
+  transition: border-color .4s linear;
+}
+
+/* line 81, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+haptic-dropdown-field .error-icon, haptic-text-field .error-icon {
+  transition: opacity .4s linear;
+}
+
+/* line 85, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+haptic-dropdown-field .error-message, haptic-text-field .error-message {
+  transition: color .4s linear;
+}
+
+/* line 89, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+haptic-dropdown-field[focus-indicator] > .haptic-field-container::after, haptic-text-field[focus-indicator] > .haptic-field-container::after {
+  transition: .4s linear;
+}
+
+/* line 94, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+haptic-text-field {
+  transition: all .4s linear, filter .2s linear, opacity .2s linear;
+}
+
+/* line 100, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+haptic-text-field .haptic-field-label {
+  transition-duration: .4s;
+  transition-property: color, font-size, top;
+  transition-timing-function: linear;
+}
+
+/* line 106, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+haptic-text-field .clear-button {
+  transition: background-color .4s linear, opacity .2s linear;
+}
+
+/**********************************************************************
+ * Checkboxes and radio buttons
+ **********************************************************************/
+/* line 117, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+.haptic-checkbox, .haptic-radio-button {
+  transition: all .4s linear, filter .2s linear, opacity .2s linear;
+}
+
+/* line 123, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+.haptic-checkbox::before, .haptic-checkbox::after, .haptic-radio-button::before, .haptic-radio-button::after {
+  transition: background-color .1s linear border-color .1s linear;
+}
+
+/**********************************************************************
+ * Switches
+ **********************************************************************/
+/* line 135, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+.haptic-switch::before {
+  transition: all .4s linear, border-color .2s linear, background-color .2s linear, filter .2s linear, opacity .2s linear;
+}
+
+/* line 143, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+.haptic-switch::after {
+  transition: .2s linear;
+}
+
+/**********************************************************************
+ * Lists
+ **********************************************************************/
+/* line 153, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+haptic-list-item .haptic-checkbox, haptic-list-item .haptic-radio-button {
+  transition: background-color .1s linear, filter .2s linear, opacity .2s linear;
+}
+
+/**********************************************************************
+ * Labels
+ **********************************************************************/
+/* line 165, ../haptic-rails/vendor/assets/stylesheets/haptic/_transitions.scss */
+.haptic-label {
+  transition: opacity .2s linear, filter .2s linear;
+}
