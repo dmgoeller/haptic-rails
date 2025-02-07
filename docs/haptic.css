@@ -400,10 +400,10 @@ haptic-text-field .trailing-icon {
 
 /* line 352, ../haptic-rails/vendor/assets/stylesheets/haptic/_common.scss */
 .haptic-checkbox::after {
-  -webkit-mask-image: url(/assets/checkbox-checked-16-7a1fbbff3a6cbf4d9c79a97a950cfd8961fe321920ce74f219d377ea787f5a94.svg);
+  -webkit-mask-image: url(/assets/images/checkbox-checked-16.svg);
   -webkit-mask-position: center;
   -webkit-mask-repeat: no-repeat;
-  mask-image: url(/assets/checkbox-checked-16-7a1fbbff3a6cbf4d9c79a97a950cfd8961fe321920ce74f219d377ea787f5a94.svg);
+  mask-image: url(/assets/images/checkbox-checked-16.svg);
   mask-position: center;
   mask-repeat: no-repeat;
 }
