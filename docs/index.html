@@ -1,11 +1,5 @@
 <html>
   <head>
-    <!--
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script>hljs.highlightAll();</script>
-    -->
-
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" preload>
     <link rel="stylesheet" href="haptic.css" preload>
     <style>
@@ -42,7 +36,9 @@
       }
       pre {
         background-color: #F0F0F0;
+        border-radius: .25rem;
         font-size: .875rem;
+        padding: .5rem;
       }
       .material-symbols-rounded {
         font-size: 18px;
@@ -60,8 +56,6 @@
         }
         pre {
           background-color: #303030;
-          border-radius: .25rem;
-          padding: .5rem;
         }
       }
     </style>
@@ -74,7 +68,7 @@
       <li><a href="#buttons">Buttons</a></li>
       <li><a href="#checkboxes">Checkboxes</a></li>
       <li><a href="#chips">Chips</a></li>
-      <li><a href="#dropowns">Dropdowns</a></li>
+      <li><a href="#dropown-fields">Dropdown fields</a></li>
       <li><a href="#lists">Lists</a></li>
       <li><a href="#radio-buttons">Radio buttons</a></li>
       <li><a href="#switches">Switches</a></li>
@@ -90,19 +84,14 @@
       <span class="haptic-badge green">5</span>
     </div>
     <div style="margin-top:.5rem">
-      <span class="haptic-badge">Plain</span>
-      <span class="haptic-badge primary">Primary</span>
-      <span class="haptic-badge secondary">Secondary</span>
-      <span class="haptic-badge red">Red</span>
-      <span class="haptic-badge green">Green</span>
+      <span class="haptic-badge">Text</span>
+      <span class="haptic-badge primary">Text</span>
+      <span class="haptic-badge secondary">Text</span>
+      <span class="haptic-badge red">Text</span>
+      <span class="haptic-badge green">Text</span>
     </div>
 
-    <pre>
-&lt;span class="haptic-badge"&gt;Plain&lt;/span&gt;
-&lt;span class="haptic-badge primary"&gt;Primary&lt;/span&gt;
-&lt;span class="haptic-badge secondary"&gt;Secondary&lt;/span&gt;
-&lt;span class="haptic-badge red"&gt;Red&lt;/span&gt;
-&lt;span class="haptic-badge green"&gt;Green&lt;/span&gt;</pre>
+<pre>&lt;span class="haptic-badge {[primary|secondary|red|green]}"&gt;Plain&lt;/span&gt;</pre>
 
     <h2 id="buttons">Buttons</h2>
 
@@ -114,181 +103,188 @@
       <button type="button" class="haptic-icon-button filled red material-symbols-rounded">close</button>
       <button type="button" class="haptic-icon-button filled green material-symbols-rounded">close</button>
     </div>
-    <pre>
-&lt;button type="button" class="haptic-icon-button"&gt;close&lt;/button&gt;</pre>
+
+<pre>&lt;button type="button" class="haptic-icon-button {[outlined|filled [red|green]]}"&gt;close&lt;/button&gt;</pre>
 
     <h3>Text buttons</h3>
     <div style="display:flex;gap:.5rem">
-      <button type="button" class="haptic-button">Plain</button>
-      <button type="button" class="haptic-button secondary">Secondary</button>
-      <button type="button" class="haptic-button red">Red</button>
-      <button type="button" class="haptic-button green">Green</button>
+      <button type="button" class="haptic-button">Text</button>
+      <button type="button" class="haptic-button secondary">Text</button>
+      <button type="button" class="haptic-button red">Text</button>
+      <button type="button" class="haptic-button green">Text</button>
     </div>
-    <pre>
-&lt;button type="button" class="haptic-button"&gt;Plain&lt;/button&gt;</pre>
+
+<pre>&lt;button type="button" class="haptic-button {[secondary|red|green]}"&gt;Text&lt;/button&gt;</pre>
 
     <h4>With icon</h4>
     <div style="display:flex;gap:.5rem">
       <button type="button" class="haptic-button">
         <div class="icon material-symbols-rounded">spa</div>
-        Plain
+        Text
       </button>
       <button type="button" class="haptic-button secondary">
         <div class="icon material-symbols-rounded">spa</div>
-        Secondary
+        Text
       </button>
       <button type="button" class="haptic-button red">
         <div class="icon material-symbols-rounded">spa</div>
-        Red
+        Text
       </button>
       <button type="button" class="haptic-button green">
         <div class="icon material-symbols-rounded">spa</div>
-        Green
+        Text
       </button>
     </div>
-    <pre>
-&lt;button type="button" class="haptic-button"&gt;
+
+<pre>&lt;button type="button" class="haptic-button {[secondary|red|green]}"&gt;
   &lt;div class="icon"&gt;spa&lt;/div&gt;
-  Plain
+  Text
 &lt;/button&gt;</pre>
 
     <h3>Outlined buttons</h3>
     <div style="display:flex;gap:.5rem">
-      <button type="button" class="haptic-button outlined">Plain</button>
-      <button type="button" class="haptic-button outlined secondary">Secondary</button>
-      <button type="button" class="haptic-button outlined red">Red</button>
-      <button type="button" class="haptic-button outlined green">Green</button>
+      <button type="button" class="haptic-button outlined">Text</button>
+      <button type="button" class="haptic-button outlined secondary">Text</button>
+      <button type="button" class="haptic-button outlined red">Text</button>
+      <button type="button" class="haptic-button outlined green">Text</button>
     </div>
-    <pre>
-&lt;button type="button" class="haptic-button outlined"&gt;Plain&lt;/button&gt;</pre>
+
+<pre>&lt;button type="button" class="haptic-button outlined {[secondary|red|green]}"&gt;Text&lt;/button&gt;</pre>
 
     <h4>With icon</h4>
     <div style="display:flex;gap:.5rem">
       <button type="button" class="haptic-button outlined">
         <div class="icon material-symbols-rounded">spa</div>
-        Plain
+        Text
       </button>
       <button type="button" class="haptic-button outlined secondary">
         <div class="icon material-symbols-rounded">spa</div>
-        Secondary
+        Text
       </button>
       <button type="button" class="haptic-button outlined red">
         <div class="icon material-symbols-rounded">spa</div>
-        Red
+        Text
       </button>
       <button type="button" class="haptic-button outlined green">
         <div class="icon material-symbols-rounded">spa</div>
-        Green
+        Text
       </button>
     </div>
-    <pre>
-&lt;button type="button" class="haptic-button outlined"&gt;
+
+<pre>&lt;button type="button" class="haptic-button outlined {[secondary|red|green]}"&gt;
   &lt;div class="icon"&gt;spa&lt;/div&gt;
-  Plain
+  Text
 &lt;/button&gt;</pre>
 
     <h3>Filled buttons</h3>
     <div style="display:flex;gap:.5rem">
-      <button type="button" class="haptic-button filled">Plain</button>
-      <button type="button" class="haptic-button filled secondary">Secondary</button>
-      <button type="button" class="haptic-button filled red">Red</button>
-      <button type="button" class="haptic-button filled green">Green</button>
+      <button type="button" class="haptic-button filled">Text</button>
+      <button type="button" class="haptic-button filled secondary">Text</button>
+      <button type="button" class="haptic-button filled red">Text</button>
+      <button type="button" class="haptic-button filled green">Text</button>
     </div>
-    <pre>
-&lt;button type="button" class="haptic-button filled"&gt;Plain&lt;/button&gt;</pre>
+
+<pre>&lt;button type="button" class="haptic-button filled {[secondary|red|green]}"&gt;Text&lt;/button&gt;</pre>
 
     <h4>With icon</h4>
     <div style="display:flex;gap:.5rem">
       <button type="button" class="haptic-button filled">
         <div class="icon material-symbols-rounded">spa</div>
-        Plain
+        Text
       </button>
       <button type="button" class="haptic-button filled secondary">
         <div class="icon material-symbols-rounded">spa</div>
-        Secondary
+        Text
       </button>
       <button type="button" class="haptic-button filled red">
         <div class="icon material-symbols-rounded">spa</div>
-        Red
+        Text
       </button>
       <button type="button" class="haptic-button filled green">
         <div class="icon material-symbols-rounded">spa</div>
-        Green
+        Text
       </button>
     </div>
-    <pre>
-&lt;button type="button" class="haptic-button filled"&gt;
+
+<pre>&lt;button type="button" class="haptic-button filled {[secondary|red|green]}"&gt;
   &lt;div class="icon"&gt;spa&lt;/div&gt;
-  Plain
+  Text
 &lt;/button&gt;</pre>
 
     <h3>Segmented buttons</h3>
+
     <div style="display:grid;gap:.5rem;grid-template-columns:1fr 1fr">
-      <haptic-segmented-button class="outlined">
+      <haptic-segmented-button>
         <div class="haptic-button-segment">
-          <input type="radio" name="segmented_button1" value="one" class="outlined">
+          <input type="radio" name="outlined_segmented_button" value="one" class="outlined"/>
           <label>One</label>
         </div>
         <div class="haptic-button-segment">
-          <input type="radio" name="segmented_button1" value="one" class="outlined">
+          <input type="radio" name="outlined_segmented_button" value="one" class="outlined"/>
           <label>Two</label>
         </div>
         <div class="haptic-button-segment">
-          <input type="radio" name="segmented_button1" value="one" class="outlined">
+          <input type="radio" name="outlined_segmented_button" value="one" class="outlined"/>
           <label>Three</label>
         </div>
       </haptic-segmented-button>
 
       <haptic-segmented-button>
         <div class="haptic-button-segment">
-          <input type="radio" name="segmented_button1" value="one" class="filled">
+          <input type="radio" name="filled_segmented_button" value="one" class="filled"/>
           <label>One</label>
         </div>
         <div class="haptic-button-segment">
-          <input type="radio" name="segmented_button1" value="one" class="filled">
+          <input type="radio" name="filled_segmented_button" value="one" class="filled"/>
           <label>Two</label>
         </div>
         <div class="haptic-button-segment">
-          <input type="radio" name="segmented_button1" value="one" class="filled">
+          <input type="radio" name="filled_segmented_button" value="one" class="filled"/>
           <label>Three</label>
         </div>
       </haptic-segmented-button>
     </div>
-    <pre>
-&lt;haptic-segmented-button class="outlined"&gt;
+
+<pre>&lt;haptic-segmented-button&gt;
   &lt;div class="haptic-button-segment"&gt;
-    &lt;input type="radio" name="segmented_button1" value="one" class="outlined"&gt;
+    &lt;input type="radio" name="outlined_segmented_button" value="one" class="[outlined|filled]"/&gt;
     &lt;label&gt;One&lt;/label&gt;
   &lt;/div&gt;
   &lt;div class="haptic-button-segment"&gt;
-    &lt;input type="radio" name="segmented_button1" value="one" class="outlined"&gt;
+    &lt;input type="radio" name="outlined_segmented_button" value="one" class="[outlined|filled]"/&gt;
     &lt;label&gt;Two&lt;/label&gt;
   &lt;/div&gt;
   &lt;div class="haptic-button-segment"&gt;
-    &lt;input type="radio" name="segmented_button1" value="one" class="outlined"&gt;
+    &lt;input type="radio" name="outlined_segmented_button" value="one" class="[outlined|filled]"/&gt;
     &lt;label&gt;Three&lt;/label&gt;
   &lt;/div&gt;
 &lt;/haptic-segmented-button&gt;</pre>
 
     <h2 id="checkboxes">Checkboxes</h2>
+
     <div style="display:flex;gap:.5rem">
       <input type="checkbox" class="haptic-checkbox outlined"/>
       <input type="checkbox" class="haptic-checkbox filled"/>
     </div>
 
+<pre>&lt;input type="checkbox" class="haptic-checkbox [outlined|filled]"/&gt;</pre>
+
     <h2 id="chips">Chips</h2>
 
-    <h2 id="dropdowns">Dropdowns</h2>
+    <h2 id="dropdown-fields">Dropdown fields</h2>
 
     <h2 id="lists">Lists</h2>
 
     <h2 id="radio-buttons">Radio buttons</h2>
     <div style="display:flex;gap:.5rem">
-      <input type="radio" class="haptic-radio-button outlined"/>
-      <input type="radio" class="haptic-radio-button filled"/>
+      <input type="radio" name="radio_button" class="haptic-radio-button outlined"/>
+      <input type="radio" name="radio_button" class="haptic-radio-button filled"/>
     </div>
 
+<pre>&lt;input type="radio" class="haptic-radio-button [outlined|filled]"/&gt;</pre>
+
     <h2 id="switches">Switches</h2>
+
     <div style="display:flex;gap:.5rem">
       <input type="checkbox" class="haptic-switch outlined"/>
       <input type="checkbox" class="haptic-switch outlined red-green"/>
@@ -296,29 +292,41 @@
       <input type="checkbox" class="haptic-switch filled red-green"/>
     </div>
 
+<pre>&lt;input type="checkbox" class="haptic-switch [outlined|filled] {red-green}"/&gt;</pre>
+
     <h2 id="text-fields">Text fields</h2>
-    <div style="display:flex;gap:.5rem">
-      <input type="text" class="haptic-field outlined">
-      <input type="text" class="haptic-field filled">
+    <div style="display:grid;gap:.5rem;grid-auto-flow:column">
+      <input type="text" class="haptic-field outlined"/>
+      <input type="text" class="haptic-field filled"/>
     </div>
+
+<pre>&lt;input type="text" class="haptic-field [outlined|filled]"/&gt;</pre>
 
     <h3>With label</h3>
-    <div style="display:flex;gap:.5rem">
-      <haptic-text-field focus-indicator with-label>
+    <div style="display:grid;gap:.5rem;grid-auto-flow:column">
+      <haptic-text-field animated-label focus-indicator with-label empty>
         <div class="haptic-field-container">
-          <input type="text" class="haptic-field outlined" value="">
+          <input type="text" class="haptic-field outlined" value=""/>
           <label class="haptic-field-label">Label</label>
         </div>
         <div class="supporting-text">Supporting text</div>
       </haptic-text-field>
 
-      <haptic-text-field focus-indicator with-label>
+      <haptic-text-field animated-label focus-indicator with-label empty>
         <div class="haptic-field-container">
-          <input type="text" class="haptic-field filled" value="">
+          <input type="text" class="haptic-field filled" value=""/>
           <label class="haptic-field-label">Label</label>
         </div>
         <div class="supporting-text">Supporting text</div>
       </haptic-text-field>
     </div>
+
+<pre>&lt;haptic-text-field animated-label focus-indicator&gt;
+  &lt;div class="haptic-field-container"&gt;
+    &lt;input type="text" class="haptic-field outlined" value=""/&gt;
+    &lt;label class="haptic-field-label"&gt;Label&lt;/label&gt;
+  &lt;/div&gt;
+  &lt;div class="supporting-text"&gt;Supporting text&lt;/div&gt;
+&lt;/haptic-text-field&gt;</pre>
   </body>
 </html>
