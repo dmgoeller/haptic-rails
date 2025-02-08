@@ -42,17 +42,17 @@ class HapticChildNodesObserver extends MutationObserver {
   constructor(callbacks = {}) {
     super(mutationList => {
       for (let mutationRecord of mutationList) {
-        for (let node of mutationRecord.addedNodes) {
+        for (let node of mutationRecord.addedNodes) {
           if (callbacks.nodeAdded) {
             callbacks.nodeAdded(node);
           }
-        }
+        }
         for (let node of mutationRecord.removedNodes) {
           if (callbacks.nodeRemoved) {
             callbacks.nodeRemoved(node);
           }
-        }
-      }
+        }
+      }
     });
   }
 }
@@ -172,7 +172,7 @@ class HapticDropdownElement extends HTMLElement {
           this.#backdropElement = node;
         }
       }
-    }   
+    }
   }
 
   nodeRemoved(node) {
