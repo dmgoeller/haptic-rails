@@ -1,0 +1,133 @@
+:root {
+  color-scheme: light;
+}
+
+body {
+  color: #606060;
+  background-color: #F0F0F0;
+  font-size: 16px;
+  font-family: sans-serif;
+  padding: 1rem;
+}
+
+hr {
+  background-color: #C0C0C0;
+  border: none;
+  height: 1px;
+  margin: .5rem 0;
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 1.125rem;
+  font-weight: bold;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+code {
+  font-size: .875rem;
+}
+
+li {
+  margin-top: .25rem;
+}
+
+pre {
+  background-color: #E4E4E4;
+  border-radius: .25rem;
+  font-size: .875rem;
+  padding: .5rem;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  font-weight: bold;
+  padding: .25rem 0;
+  width: 50%;
+}
+
+td {
+  padding: .25rem 0;
+}
+
+tr:not(:first-of-type) td {
+  border-top: 1px solid #D8D8D8;
+}
+
+.example {
+  background-color: white;
+  border-radius: .25rem;
+  display: flex;
+  gap: .5rem;
+  justify-content: center;
+  padding: .5rem;
+}
+
+.example.stretch {
+  align-items: stretch;
+  justify-content: stretch;
+  flex-direction: column;
+}
+
+.material-symbols-rounded {
+  font-size: 18px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+
+  body {
+    color: #C0C0C0;
+    background-color: #242424;
+  }
+
+  hr {
+    background-color: #606060;
+  }
+
+  code.tag {
+    color: #CE93D8;
+  }
+
+  code.attribute {
+    color: #C5E1A5;
+  }
+
+  code.string {
+    color: #81D4FA
+  }
+
+  code.variable {
+    font-style: italic;
+  }
+
+  pre {
+    background-color: #303030;
+  }
+
+  tr:not(:first-of-type) td {
+    border-top-color: #484848;
+  }
+
+  .example {
+    background-color: #181818;
+  }
+}

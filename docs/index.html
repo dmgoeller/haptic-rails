@@ -1,332 +1,1065 @@
 <html>
-  <head>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" preload>
-    <link rel="stylesheet" href="haptic.css" preload>
-    <style>
-      :root {
-        color-scheme: light;
-      }
-      body {
-        color: #606060;
-        background-color: white;
-        font-size: 16px;
-        font-family: sans-serif;
-        padding: 1rem;
-      }
-      h1 {
-        font-size: 1.5rem;
-        font-weight: bold;
-      }
-      h2 {
-        border-top: 1px solid #C0C0C0;
-        font-size: 1.25rem;
-        font-weight: bold;
-        padding-top: .5rem
-      }
-      h3 {
-        font-size: 1.125rem;
-        font-weight: bold;
-      }
-      h4 {
-        font-size: 1rem;
-        font-weight: bold;
-      }
-      li {
-        margin-top: .25rem;
-      }
-      pre {
-        background-color: #F0F0F0;
-        border-radius: .25rem;
-        font-size: .875rem;
-        padding: .5rem;
-      }
-      .material-symbols-rounded {
-        font-size: 18px;
-      }
-      @media (prefers-color-scheme: dark) {
-        :root {
-          color-scheme: dark;
-        }
-        body {
-          color: #C0C0C0;
-          background-color: #242424;
-        }
-        h2 {
-          border-top-color: #606060;
-        }
-        pre {
-          background-color: #303030;
-        }
-      }
-    </style>
-    <script src="haptic.js"></script>
-  </head>
-  <body>
-    <h1>Haptic components</h1>
-    <ul>
-      <li><a href="#badges">Badges</a></li>
-      <li><a href="#buttons">Buttons</a></li>
-      <li><a href="#checkboxes">Checkboxes</a></li>
-      <li><a href="#chips">Chips</a></li>
-      <li><a href="#dropown-fields">Dropdown fields</a></li>
-      <li><a href="#lists">Lists</a></li>
-      <li><a href="#radio-buttons">Radio buttons</a></li>
-      <li><a href="#switches">Switches</a></li>
-      <li><a href="#text-fields">Text fields</a></li>
-    </ul>
+<head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" preload>
+<link rel="stylesheet" href="haptic.css" preload>
+<link rel="stylesheet" href="docs.css" preload>
+<script src="haptic.js"></script>
+</head>
+<body>
+<h1>Haptic components</h1>
+<ul>
+  <li><a href="#badges">Badges</a></li>
+  <li><a href="#buttons">Buttons</a></li>
+  <li><a href="#checkboxes">Checkboxes</a></li>
+  <li><a href="#chips">Chips</a></li>
+  <li><a href="#fields">Fields</a></li>
+  <li><a href="#lists">Lists</a></li>
+  <li><a href="#radio-buttons">Radio buttons</a></li>
+  <li><a href="#switches">Switches</a></li>
+</ul>
 
-    <h2 id="badges">Badges</h2>
-    <div>
-      <span class="haptic-badge">1</span>
-      <span class="haptic-badge primary">2</span>
-      <span class="haptic-badge secondary">3</span>
-      <span class="haptic-badge red">4</span>
-      <span class="haptic-badge green">5</span>
-    </div>
-    <div style="margin-top:.5rem">
-      <span class="haptic-badge">Text</span>
-      <span class="haptic-badge primary">Text</span>
-      <span class="haptic-badge secondary">Text</span>
-      <span class="haptic-badge red">Text</span>
-      <span class="haptic-badge green">Text</span>
-    </div>
+<hr>
+<h2 id="badges">Badges</h2>
 
-<pre>&lt;span class="haptic-badge {[primary|secondary|red|green]}"&gt;Plain&lt;/span&gt;</pre>
+<pre>&lt;<code class="tag">span</code> <code class="attribute">class</code>=<code class="string">"haptic-badge <code class="variable">{modifier}</code>"</code>&gt;Text&lt;/<code class="tag">span</code>&gt;</pre>
 
-    <h2 id="buttons">Buttons</h2>
+<table>
+  <tr>
+    <th align="left">Modifier class</th>
+    <th>Examples</th>
+  </tr>
+  <tr>
+    <td>&ndash;</td>
+    <td>
+      <div class="example">
+        <span class="haptic-badge">1</span>
+        <span class="haptic-badge">Text</span>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>primary</code></td>
+    <td>
+      <div class="example">
+        <span class="haptic-badge primary">1</span>
+        <span class="haptic-badge primary">Text</span>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>secondary</code></td>
+    <td>
+      <div class="example">
+        <span class="haptic-badge secondary">1</span>
+        <span class="haptic-badge secondary">Text</span>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>red</code></td>
+    <td>
+      <div class="example">
+        <span class="haptic-badge red">1</span>
+        <span class="haptic-badge red">Text</span>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>green</code></td>
+    <td>
+      <div class="example">
+        <span class="haptic-badge green">1</span>
+        <span class="haptic-badge green">Text</span>
+      </div>
+    </td>
+  </tr>
+</table>
 
-    <h3>Icon buttons</h3>
-    <div style="display:flex;gap:.5rem">
-      <button type="button" class="haptic-icon-button material-symbols-rounded">close</button>
-      <button type="button" class="haptic-icon-button outlined material-symbols-rounded">close</button>
-      <button type="button" class="haptic-icon-button filled material-symbols-rounded">close</button>
-      <button type="button" class="haptic-icon-button filled red material-symbols-rounded">close</button>
-      <button type="button" class="haptic-icon-button filled green material-symbols-rounded">close</button>
-    </div>
+<hr>
+<h2 id="buttons">Buttons</h2>
 
-<pre>&lt;button type="button" class="haptic-icon-button {[outlined|filled [red|green]]}"&gt;close&lt;/button&gt;</pre>
 
-    <h3>Text buttons</h3>
-    <div style="display:flex;gap:.5rem">
-      <button type="button" class="haptic-button">Text</button>
-      <button type="button" class="haptic-button secondary">Text</button>
-      <button type="button" class="haptic-button red">Text</button>
-      <button type="button" class="haptic-button green">Text</button>
-    </div>
+<h3>Icon buttons</h3>
+<pre>&lt;<code class="tag">button</code> <code class="attribute">class</code>=<code class="string">"haptic-icon-button <code class="variable">{modifiers}</code>"</code>&gt;close&lt;/<code class="tag">button</code>&gt;</pre>
 
-<pre>&lt;button type="button" class="haptic-button {[secondary|red|green]}"&gt;Text&lt;/button&gt;</pre>
+<table>
+  <tr>
+    <th align="left">Modifier classes</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td>&ndash;</td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-icon-button material-symbols-rounded">close</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-icon-button outlined material-symbols-rounded">close</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-icon-button filled material-symbols-rounded">close</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled red</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-icon-button filled red material-symbols-rounded">close</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled green</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-icon-button filled green material-symbols-rounded">close</button>
+      </div>
+    </td>
+  </tr>
+</table>
 
-    <h4>With icon</h4>
-    <div style="display:flex;gap:.5rem">
-      <button type="button" class="haptic-button">
-        <div class="icon material-symbols-rounded">spa</div>
-        Text
-      </button>
-      <button type="button" class="haptic-button secondary">
-        <div class="icon material-symbols-rounded">spa</div>
-        Text
-      </button>
-      <button type="button" class="haptic-button red">
-        <div class="icon material-symbols-rounded">spa</div>
-        Text
-      </button>
-      <button type="button" class="haptic-button green">
-        <div class="icon material-symbols-rounded">spa</div>
-        Text
-      </button>
-    </div>
+<hr>
+<h3>Text buttons</h3>
 
-<pre>&lt;button type="button" class="haptic-button {[secondary|red|green]}"&gt;
-  &lt;div class="icon"&gt;spa&lt;/div&gt;
+<pre>&lt;<code class="tag">button</code> <code class="attribute">class</code>=<code class="string">"haptic-button <code class="variable">{modifiers}</code>"</code>&gt;Text&lt;/<code class="tag">button</code>&gt;</pre>
+
+<table>
+  <tr>
+    <th align="left">Modifier classes</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td>&ndash;</td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button">Text</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>secondary</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button secondary">Text</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>red</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button red">Text</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>green</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button green">Text</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button outlined">Text</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined secondary</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button outlined secondary">Text</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined red</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button outlined red">Text</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined green</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button outlined green">Text</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button filled">Text</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled secondary</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button filled secondary">Text</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled red</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button filled red">Text</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled green</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button filled green">Text</button>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<hr>
+<h4>With icon</h4>
+
+<pre>
+&lt;<code class="tag">button</code> <code class="attribute">class</code>=<code class="string">"haptic-button <code class="variable">{modifiers}</code>"</code>&gt;
+  &lt;<code class="tag">div</code> <code class="attribute">class</code>=<code class="string">"icon"</code>&gt;spa&lt;/<code class="tag">div</code>&gt;
   Text
-&lt;/button&gt;</pre>
+&lt;/<code class="tag">button</code>&gt;</pre>
 
-    <h3>Outlined buttons</h3>
-    <div style="display:flex;gap:.5rem">
-      <button type="button" class="haptic-button outlined">Text</button>
-      <button type="button" class="haptic-button outlined secondary">Text</button>
-      <button type="button" class="haptic-button outlined red">Text</button>
-      <button type="button" class="haptic-button outlined green">Text</button>
-    </div>
+<table>
+  <tr>
+    <th align="left">Modifier class</th>
+    <th>Examples</th>
+  </tr>
+  <tr>
+    <td>&ndash;</td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button">
+          <div class="icon material-symbols-rounded">spa</div>
+          Text
+        </button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>secondary</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button secondary">
+          <div class="icon material-symbols-rounded">spa</div>
+          Text
+        </button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>red</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button red">
+          <div class="icon material-symbols-rounded">spa</div>
+          Text
+        </button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>green</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button green">
+          <div class="icon material-symbols-rounded">spa</div>
+          Text
+        </button>
+      </div>
+    </td>
+  </tr>
+  <td><code>outlined</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button outlined">
+          <div class="icon material-symbols-rounded">spa</div>
+          Text
+        </button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined secondary</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button outlined secondary">
+          <div class="icon material-symbols-rounded">spa</div>
+          Text
+        </button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined red</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button outlined red">
+          <div class="icon material-symbols-rounded">spa</div>
+          Text
+        </button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined green</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button outlined green">
+          <div class="icon material-symbols-rounded">spa</div>
+          Text
+        </button>
+      </div>
+    </td>
+  </tr>
+  <td><code>filled</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button filled">
+          <div class="icon material-symbols-rounded">spa</div>
+          Text
+        </button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled secondary</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button filled secondary">
+          <div class="icon material-symbols-rounded">spa</div>
+          Text
+        </button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled red</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button filled red">
+          <div class="icon material-symbols-rounded">spa</div>
+          Text
+        </button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled green</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-button filled green">
+          <div class="icon material-symbols-rounded">spa</div>
+          Text
+        </button>
+      </div>
+    </td>
+  </tr>
+</table>
 
-<pre>&lt;button type="button" class="haptic-button outlined {[secondary|red|green]}"&gt;Text&lt;/button&gt;</pre>
+<hr>
+<h3>Segmented buttons</h3>
 
-    <h4>With icon</h4>
-    <div style="display:flex;gap:.5rem">
-      <button type="button" class="haptic-button outlined">
-        <div class="icon material-symbols-rounded">spa</div>
-        Text
-      </button>
-      <button type="button" class="haptic-button outlined secondary">
-        <div class="icon material-symbols-rounded">spa</div>
-        Text
-      </button>
-      <button type="button" class="haptic-button outlined red">
-        <div class="icon material-symbols-rounded">spa</div>
-        Text
-      </button>
-      <button type="button" class="haptic-button outlined green">
-        <div class="icon material-symbols-rounded">spa</div>
-        Text
-      </button>
-    </div>
+<pre>&lt;<code class="tag">haptic-segmented-button</code>&gt;
+  &lt;<code class="tag">div</code> <code class="attribute">class</code>=<code class="string">"haptic-button-segment"</code>&gt;
+    &lt;<code class="tag">input</code> <code class="attribute">type</code>=<code class="string">"radio"</code> <code class="attribute">class</code>=<code class="string">"<code class="variable">{modifier}</code>"</code>/&gt;
+    &lt;<code class="tag">label</code>&gt;One&lt;/<code class="tag">label</code>&gt;
+  &lt;/<code class="tag">div</code>&gt;
+  &lt;<code class="tag">div</code> <code class="attribute">class</code>=<code class="string">"haptic-button-segment"</code>&gt;
+    &lt;<code class="tag">input</code> <code class="attribute">type</code>=<code class="string">"radio"</code> <code class="attribute">class</code>=<code class="string">"<code class="variable">{modifier}</code>"</code>/&gt;
+    &lt;<code class="tag">label</code>&gt;Two&lt;/<code class="tag">label</code>&gt;
+  &lt;/<code class="tag">div</code>&gt;
+  &lt;<code class="tag">div</code> <code class="attribute">class</code>=<code class="string">"haptic-button-segment"</code>&gt;
+    &lt;<code class="tag">input</code> <code class="attribute">type</code>=<code class="string">"radio"</code> <code class="attribute">class</code>=<code class="string">"<code class="variable">{modifier}</code>"</code>/&gt;
+    &lt;<code class="tag">label</code>&gt;Three&lt;/<code class="tag">label</code>&gt;
+  &lt;/<code class="tag">div</code>&gt;
+&lt;/<code class="tag">haptic-segmented-button</code>&gt;</pre>
 
-<pre>&lt;button type="button" class="haptic-button outlined {[secondary|red|green]}"&gt;
-  &lt;div class="icon"&gt;spa&lt;/div&gt;
-  Text
-&lt;/button&gt;</pre>
+<table>
+  <tr>
+    <th align="left">Modifier class</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-segmented-button>
+          <div class="haptic-button-segment">
+            <input type="radio" name="outlined_segmented_button" value="one" class="outlined" checked/>
+            <label>One</label>
+          </div>
+          <div class="haptic-button-segment">
+            <input type="radio" name="outlined_segmented_button" value="one" class="outlined"/>
+            <label>Two</label>
+          </div>
+          <div class="haptic-button-segment">
+            <input type="radio" name="outlined_segmented_button" value="one" class="outlined"/>
+            <label>Three</label>
+          </div>
+        </haptic-segmented-button>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-segmented-button>
+          <div class="haptic-button-segment">
+            <input type="radio" name="filled_segmented_button" value="one" class="filled" checked/>
+            <label>One</label>
+          </div>
+          <div class="haptic-button-segment">
+            <input type="radio" name="filled_segmented_button" value="one" class="filled"/>
+            <label>Two</label>
+          </div>
+          <div class="haptic-button-segment">
+            <input type="radio" name="filled_segmented_button" value="one" class="filled"/>
+            <label>Three</label>
+          </div>
+        </haptic-segmented-button>
+      </div>
+    </td>
+  </tr>
+</table>
 
-    <h3>Filled buttons</h3>
-    <div style="display:flex;gap:.5rem">
-      <button type="button" class="haptic-button filled">Text</button>
-      <button type="button" class="haptic-button filled secondary">Text</button>
-      <button type="button" class="haptic-button filled red">Text</button>
-      <button type="button" class="haptic-button filled green">Text</button>
-    </div>
+<hr>
+<h2 id="checkboxes">Checkboxes</h2>
 
-<pre>&lt;button type="button" class="haptic-button filled {[secondary|red|green]}"&gt;Text&lt;/button&gt;</pre>
+<pre>&lt;<code class="tag">input</code> <code class="attribute">type</code>=<code class="string">"checkbox"</code> <code class="attribute">class</code>=<code class="string">"haptic-checkbox <code class="variable">{modifiers}</code>"</code>/&gt;</pre>
 
-    <h4>With icon</h4>
-    <div style="display:flex;gap:.5rem">
-      <button type="button" class="haptic-button filled">
-        <div class="icon material-symbols-rounded">spa</div>
-        Text
-      </button>
-      <button type="button" class="haptic-button filled secondary">
-        <div class="icon material-symbols-rounded">spa</div>
-        Text
-      </button>
-      <button type="button" class="haptic-button filled red">
-        <div class="icon material-symbols-rounded">spa</div>
-        Text
-      </button>
-      <button type="button" class="haptic-button filled green">
-        <div class="icon material-symbols-rounded">spa</div>
-        Text
-      </button>
-    </div>
+<table>
+  <tr>
+    <th align="left">Modifier classes</th>
+    <th>Examples</th>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example">
+        <input type="checkbox" class="haptic-checkbox outlined"/>
+        <input type="checkbox" class="haptic-checkbox outlined" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined primary</code></td>
+    <td>
+      <div class="example">
+        <input type="checkbox" class="haptic-checkbox outlined primary"/>
+        <input type="checkbox" class="haptic-checkbox outlined primary" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined secondary</code></td>
+    <td>
+      <div class="example">
+        <input type="checkbox" class="haptic-checkbox outlined secondary"/>
+        <input type="checkbox" class="haptic-checkbox outlined secondary" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined red</code></td>
+    <td>
+      <div class="example">
+        <input type="checkbox" class="haptic-checkbox outlined red"/>
+        <input type="checkbox" class="haptic-checkbox outlined red" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined green</code></td>
+    <td>
+      <div class="example">
+        <input type="checkbox" class="haptic-checkbox outlined green"/>
+        <input type="checkbox" class="haptic-checkbox outlined green" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example">
+        <input type="checkbox" class="haptic-checkbox filled"/>
+        <input type="checkbox" class="haptic-checkbox filled" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled primary</code></td>
+    <td>
+      <div class="example">
+        <input type="checkbox" class="haptic-checkbox filled primary"/>
+        <input type="checkbox" class="haptic-checkbox filled primary" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled secondary</code></td>
+    <td>
+      <div class="example">
+        <input type="checkbox" class="haptic-checkbox filled secondary"/>
+        <input type="checkbox" class="haptic-checkbox filled secondary" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled red</code></td>
+    <td>
+      <div class="example">
+        <input type="checkbox" class="haptic-checkbox filled red"/>
+        <input type="checkbox" class="haptic-checkbox filled red" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined green</code></td>
+    <td>
+      <div class="example">
+        <input type="checkbox" class="haptic-checkbox filled green"/>
+        <input type="checkbox" class="haptic-checkbox filled green" checked/>
+      </div>
+    </td>
+  </tr>
+</table>
 
-<pre>&lt;button type="button" class="haptic-button filled {[secondary|red|green]}"&gt;
-  &lt;div class="icon"&gt;spa&lt;/div&gt;
-  Text
-&lt;/button&gt;</pre>
+<hr>
+<h2 id="chips">Chips</h2>
 
-    <h3>Segmented buttons</h3>
+<pre>
+&lt;<code class="tag">div</code> <code class="attribute">class</code>=<code class="string">"haptic-chip"</code>&gt;
+  &lt;<code class="tag">input</code> <code class="attribute">type</code>=<code class="string">"checkbox"</code> <code class="attribute">class</code>=<code class="string">"<code class="variable">{modifier}</code>"</code>/&gt;
+  &lt;<code class="tag">label</code>&gt;One&lt;/<code class="tag">label</code>&gt;
+&lt;/<code class="tag">div&gt;</code></pre>
 
-    <div style="display:grid;gap:.5rem;grid-template-columns:1fr 1fr">
-      <haptic-segmented-button>
-        <div class="haptic-button-segment">
-          <input type="radio" name="outlined_segmented_button" value="one" class="outlined"/>
+<table>
+  <tr>
+    <th align="left">Modifier class</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example" style="display:grid;grid-template-columns:1fr 1fr 1fr">
+        <div class="haptic-chip">
+          <input type="checkbox" class="outlined" checked/>
           <label>One</label>
         </div>
-        <div class="haptic-button-segment">
-          <input type="radio" name="outlined_segmented_button" value="one" class="outlined"/>
+        <div class="haptic-chip">
+          <input type="checkbox" class="outlined"/>
           <label>Two</label>
         </div>
-        <div class="haptic-button-segment">
-          <input type="radio" name="outlined_segmented_button" value="one" class="outlined"/>
+        <div class="haptic-chip">
+          <input type="checkbox" class="outlined"/>
           <label>Three</label>
         </div>
-      </haptic-segmented-button>
-
-      <haptic-segmented-button>
-        <div class="haptic-button-segment">
-          <input type="radio" name="filled_segmented_button" value="one" class="filled"/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example" style="display:grid;grid-template-columns:1fr 1fr 1fr">
+        <div class="haptic-chip">
+          <input type="checkbox" class="filled" checked/>
           <label>One</label>
         </div>
-        <div class="haptic-button-segment">
-          <input type="radio" name="filled_segmented_button" value="one" class="filled"/>
+        <div class="haptic-chip">
+          <input type="checkbox" class="filled"/>
           <label>Two</label>
         </div>
-        <div class="haptic-button-segment">
-          <input type="radio" name="filled_segmented_button" value="one" class="filled"/>
+        <div class="haptic-chip">
+          <input type="checkbox" class="filled"/>
           <label>Three</label>
         </div>
-      </haptic-segmented-button>
-    </div>
+      </div>
+    </td>
+  </tr>
+</table>
 
-<pre>&lt;haptic-segmented-button&gt;
-  &lt;div class="haptic-button-segment"&gt;
-    &lt;input type="radio" name="outlined_segmented_button" value="one" class="[outlined|filled]"/&gt;
-    &lt;label&gt;One&lt;/label&gt;
-  &lt;/div&gt;
-  &lt;div class="haptic-button-segment"&gt;
-    &lt;input type="radio" name="outlined_segmented_button" value="one" class="[outlined|filled]"/&gt;
-    &lt;label&gt;Two&lt;/label&gt;
-  &lt;/div&gt;
-  &lt;div class="haptic-button-segment"&gt;
-    &lt;input type="radio" name="outlined_segmented_button" value="one" class="[outlined|filled]"/&gt;
-    &lt;label&gt;Three&lt;/label&gt;
-  &lt;/div&gt;
-&lt;/haptic-segmented-button&gt;</pre>
 
-    <h2 id="checkboxes">Checkboxes</h2>
+<hr>
+<h2 id="fields">Fields</h2>
 
-    <div style="display:flex;gap:.5rem">
-      <input type="checkbox" class="haptic-checkbox outlined"/>
-      <input type="checkbox" class="haptic-checkbox filled"/>
-    </div>
 
-<pre>&lt;input type="checkbox" class="haptic-checkbox [outlined|filled]"/&gt;</pre>
+<h3>Text fields</h3>
 
-    <h2 id="chips">Chips</h2>
+<pre>&lt;<code class="tag">input</code> <code class="attribute">type</code>=<code class="string">"text"</code> <code class="attribute">class</code>=<code class="string">"haptic-field <code class="variable">{modifier}</code>"</code>/&gt;</pre>
 
-    <h2 id="dropdown-fields">Dropdown fields</h2>
+<table>
+  <tr>
+    <th align="left">Modifier class</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example stretch">
+        <input type="text" class="haptic-field outlined"/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example stretch">
+        <input type="text" class="haptic-field filled"/>
+      </div>
+    </td>
+  </tr>
+</table>
 
-    <h2 id="lists">Lists</h2>
+<hr>
+<h4>With label</h4>
 
-    <h2 id="radio-buttons">Radio buttons</h2>
-    <div style="display:flex;gap:.5rem">
-      <input type="radio" name="radio_button" class="haptic-radio-button outlined"/>
-      <input type="radio" name="radio_button" class="haptic-radio-button filled"/>
-    </div>
+<pre>
+&lt;<code class="tag">haptic-text-field</code> <code class="attribute">animated-label</code> <code class="attribute">focus-indicator</code>&gt;
+  &lt;<code class="tag">div</code> <code class="attribute">class</code>=<code class="string">"haptic-field-container"</code>&gt;
+    &lt;<code class="tag">input</code> <code class="attribute">type</code>=<code class="string">"text"</code> <code class="attribute">class</code>=<code class="string">"haptic-field <code class="variable">{modifier}</code>"</code>/&gt;
+    &lt;<code class="tag">label</code> <code class="attribute">class</code>=<code class="string">"haptic-field-label"</code>&gt;Label&lt;/<code class="tag">label</code>&gt;
+  &lt;/<code class="tag">div</code>&gt;
+  &lt;<code class="tag">div</code> <code class="attribute">class</code>=<code class="string">"supporting-text"</code>&gt;Supporting text&lt;/<code class="tag">div</code>&gt;
+&lt;/<code class="tag">haptic-text-field</code>&gt;</pre>
 
-<pre>&lt;input type="radio" class="haptic-radio-button [outlined|filled]"/&gt;</pre>
+<table>
+  <tr>
+    <th align="left">Modifier class</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-text-field animated-label focus-indicator with-label empty>
+          <div class="haptic-field-container">
+            <input type="text" class="haptic-field outlined"/>
+            <label class="haptic-field-label">Label</label>
+          </div>
+          <div class="supporting-text">Supporting text</div>
+        </haptic-text-field>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-text-field animated-label focus-indicator with-label empty>
+          <div class="haptic-field-container">
+            <input type="text" class="haptic-field filled"/>
+            <label class="haptic-field-label">Label</label>
+          </div>
+          <div class="supporting-text">Supporting text</div>
+        </haptic-text-field>
+      </div>
+    </td>
+  </tr>
+</table>
 
-    <h2 id="switches">Switches</h2>
+<hr>
+<h3>Dropdown fields</h3>
 
-    <div style="display:flex;gap:.5rem">
-      <input type="checkbox" class="haptic-switch outlined"/>
-      <input type="checkbox" class="haptic-switch outlined red-green"/>
-      <input type="checkbox" class="haptic-switch filled"/>
-      <input type="checkbox" class="haptic-switch filled red-green"/>
-    </div>
+<hr>
+<h2 id="lists">Lists</h2>
 
-<pre>&lt;input type="checkbox" class="haptic-switch [outlined|filled] {red-green}"/&gt;</pre>
+<h3>With checkboxes</h3>
 
-    <h2 id="text-fields">Text fields</h2>
-    <div style="display:grid;gap:.5rem;grid-auto-flow:column">
-      <input type="text" class="haptic-field outlined"/>
-      <input type="text" class="haptic-field filled"/>
-    </div>
+<pre>
+&lt;<code class="tag">haptic-list</code> <code class="attribute">class</code>=<code class="string">"<code class="variable">{list-modifiers}</code>"</code>&gt;
+  &lt;<code class="tag">haptic-list-item</code>&gt;
+    &lt;<code class="tag">input</code> <code class="attribute">type</code>=<code class="string">"checkbox"</code> <code class="attribute">class</code>=<code class="string">"haptic-checkbox <code class="variable">{checkbox-modifiers}</code>"</code> <code class="attribute">checked</code>/&gt;
+    &lt;<code class="tag">label</code>&gt;
+      Headline
+      &lt;<code class="tag">div</code> <code class="attribute">class</code>=<code class="string">"supporting-text"</code>&gt;Supporting text&lt;<code class="tag">div</code>&gt;
+    &lt;/<code class="tag">label</code>&gt;
+  &lt;/<code class="tag">haptic-list-item</code>&gt;
+&lt;/<code class="tag">haptic-list</code>&gt;</pre>
 
-<pre>&lt;input type="text" class="haptic-field [outlined|filled]"/&gt;</pre>
+<table>
+  <tr>
+    <th align="left">List modifier classes</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><code>-</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-list>
+          <haptic-list-item>
+            <input type="checkbox" class="haptic-checkbox embedded outlined primary" checked/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+          <haptic-list-item>
+            <input type="checkbox" class="haptic-checkbox embedded outlined primary"/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+        </haptic-list>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>divided</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-list class="divided">
+          <haptic-list-item>
+            <input type="checkbox" class="haptic-checkbox embedded outlined primary" checked/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+          <haptic-list-item>
+            <input type="checkbox" class="haptic-checkbox embedded outlined primary"/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+        </haptic-list>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>inverted</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-list class="inverted">
+          <haptic-list-item>
+            <input type="checkbox" class="haptic-checkbox embedded outlined primary" checked/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+          <haptic-list-item>
+            <input type="checkbox" class="haptic-checkbox embedded outlined primary"/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+        </haptic-list>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>inverted divided</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-list class="inverted divided">
+          <haptic-list-item>
+            <input type="checkbox" class="haptic-checkbox embedded outlined primary" checked/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+          <haptic-list-item>
+            <input type="checkbox" class="haptic-checkbox embedded outlined primary"/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+        </haptic-list>
+      </div>
+    </td>
+  </tr>
+</table>
 
-    <h3>With label</h3>
-    <div style="display:grid;gap:.5rem;grid-auto-flow:column">
-      <haptic-text-field animated-label focus-indicator with-label empty>
-        <div class="haptic-field-container">
-          <input type="text" class="haptic-field outlined" value=""/>
-          <label class="haptic-field-label">Label</label>
-        </div>
-        <div class="supporting-text">Supporting text</div>
-      </haptic-text-field>
+<hr>
+<h3>With radio buttons</h3>
 
-      <haptic-text-field animated-label focus-indicator with-label empty>
-        <div class="haptic-field-container">
-          <input type="text" class="haptic-field filled" value=""/>
-          <label class="haptic-field-label">Label</label>
-        </div>
-        <div class="supporting-text">Supporting text</div>
-      </haptic-text-field>
-    </div>
+<pre>
+  &lt;<code class="tag">haptic-list</code> <code class="attribute">class</code>=<code class="string">"<code class="variable">{list-modifiers}</code>"</code>&gt;
+    &lt;<code class="tag">haptic-list-item</code>&gt;
+      &lt;<code class="tag">input</code> <code class="attribute">type</code>=<code class="string">"radio"</code> <code class="attribute">class</code>=<code class="string">"haptic-radio-button <code class="variable">{radio-button-modifiers}</code>"</code> <code class="attribute">checked</code>/&gt;
+      &lt;<code class="tag">label</code>&gt;
+        Headline
+        &lt;<code class="tag">div</code> <code class="attribute">class</code>=<code class="string">"supporting-text"</code>&gt;Supporting text&lt;<code class="tag">div</code>&gt;
+      &lt;/<code class="tag">label</code>&gt;
+    &lt;/<code class="tag">haptic-list-item</code>&gt;
+  &lt;/<code class="tag">haptic-list</code>&gt;</pre>
 
-<pre>&lt;haptic-text-field animated-label focus-indicator&gt;
-  &lt;div class="haptic-field-container"&gt;
-    &lt;input type="text" class="haptic-field outlined" value=""/&gt;
-    &lt;label class="haptic-field-label"&gt;Label&lt;/label&gt;
-  &lt;/div&gt;
-  &lt;div class="supporting-text"&gt;Supporting text&lt;/div&gt;
-&lt;/haptic-text-field&gt;</pre>
-  </body>
+<table>
+  <tr>
+    <th align="left">List modifier classes</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><code>-</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-list>
+          <haptic-list-item>
+            <input type="radio" name="list_with_radio_buttons" value="one" class="haptic-radio-button embedded outlined primary" checked/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+          <haptic-list-item>
+            <input type="radio" name="list_with_radio_buttons" value="two" class="haptic-radio-button embedded outlined primary"/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+        </haptic-list>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>divided</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-list class="divided">
+          <haptic-list-item>
+            <input type="radio" name="list_with_radio_buttons_divided" value="one" class="haptic-radio-button embedded outlined primary" checked/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+          <haptic-list-item>
+            <input type="radio" name="list_with_radio_buttons_divided" value="two" class="haptic-radio-button embedded outlined primary"/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+        </haptic-list>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>inverted</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-list class="inverted">
+          <haptic-list-item>
+            <input type="radio" name="list_with_radio_buttons_inverted" value="one" class="haptic-radio-button embedded outlined primary" checked/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+          <haptic-list-item>
+            <input type="radio" name="list_with_radio_buttons_inverted" value="two" class="haptic-radio-button embedded outlined primary"/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+        </haptic-list>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>inverted divided</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-list class="inverted divided">
+          <haptic-list-item>
+            <input type="radio" name="list_with_radio_buttons_inverted_divided" value="one" class="haptic-radio-button embedded outlined primary" checked/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+          <haptic-list-item>
+            <input type="radio" name="list_with_radio_buttons_inverted_divided" value="two" class="haptic-radio-button embedded outlined primary"/>
+            <label>
+              Headline
+              <div class="supporting-text">Supporting text</div>
+            </label>
+          </haptic-list-item>
+        </haptic-list>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<hr>
+<h2 id="radio-buttons">Radio buttons</h2>
+
+<pre>&lt;<code class="tag">input</code> <code class="attribute">type</code>=<code class="string">"radio"</code> <code class="attribute">class</code>=<code class="string">"haptic-radio-button <code class="variable">{modifiers}</code>"</code>/&gt;</pre>
+
+<table>
+  <tr>
+    <th align="left">Modifier classes</th>
+    <th>Examples</th>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example">
+        <input type="radio" name="radio_button_outlined" class="haptic-radio-button outlined"/>
+        <input type="radio" name="radio_button_outlined" class="haptic-radio-button outlined" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined primary</code></td>
+    <td>
+      <div class="example">
+        <input type="radio" name="radio_button_outlined_primary" class="haptic-radio-button outlined primary"/>
+        <input type="radio" name="radio_button_outlined_primary" class="haptic-radio-button outlined primary" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined secondary</code></td>
+    <td>
+      <div class="example">
+        <input type="radio" name="radio_button_outlined_secondary" class="haptic-radio-button outlined secondary"/>
+        <input type="radio" name="radio_button_outlined_secondary" class="haptic-radio-button outlined secondary" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined red</code></td>
+    <td>
+      <div class="example">
+        <input type="radio" name="radio_button_outlined_red" class="haptic-radio-button outlined red"/>
+        <input type="radio" name="radio_button_outlined_red" class="haptic-radio-button outlined red" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined green</code></td>
+    <td>
+      <div class="example">
+        <input type="radio" name="radio_button_outlined_green" class="haptic-radio-button outlined green"/>
+        <input type="radio" name="radio_button_outlined_green" class="haptic-radio-button outlined green" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example">
+        <input type="radio" name="radio_button_filled" class="haptic-radio-button filled"/>
+        <input type="radio" name="radio_button_filled" class="haptic-radio-button filled" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled primary</code></td>
+    <td>
+      <div class="example">
+        <input type="radio" name="radio_button_filled_primary" class="haptic-radio-button filled primary"/>
+        <input type="radio" name="radio_button_filled_primary" class="haptic-radio-button filled primary" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled secondary</code></td>
+    <td>
+      <div class="example">
+        <input type="radio" name="radio_button_filled_secondary" class="haptic-radio-button filled secondary"/>
+        <input type="radio" name="radio_button_filled_secondary" class="haptic-radio-button filled secondary" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled red</code></td>
+    <td>
+      <div class="example">
+        <input type="radio" name="radio_button_filled_red" class="haptic-radio-button filled red"/>
+        <input type="radio" name="radio_button_filled_red" class="haptic-radio-button filled red" checked/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled green</code></td>
+    <td>
+      <div class="example">
+        <input type="radio" name="radio_button_filled_green" class="haptic-radio-button filled green"/>
+        <input type="radio" name="radio_button_filled_green" class="haptic-radio-button filled green" checked/>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<hr>
+<h2 id="switches">Switches</h2>
+
+<pre>&lt;<code class="tag">input</code> <code class="attribute">type</code>=<code class="string">"checkbox"</code> <code class="attribute">class</code>=<code class="string">"haptic-switch <code class="variable">{modifiers}</code>"</code>/&gt;</pre>
+
+<table>
+  <tr>
+    <th align="left">Modifier classes</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example">
+        <input type="checkbox" class="haptic-switch outlined"/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>outlined red-green</code></td>
+    <td>
+      <div class="example">
+        <input type="checkbox" class="haptic-switch outlined red-green"/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example">
+        <input type="checkbox" class="haptic-switch filled"/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled red-green</code></td>
+    <td>
+      <div class="example">
+        <input type="checkbox" class="haptic-switch filled red-green"/>
+      </div>
+    </td>
+  </tr>
+</table>
+</body>
 </html>

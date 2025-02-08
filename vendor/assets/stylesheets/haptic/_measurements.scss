@@ -658,17 +658,43 @@ haptic-list-item {
     $icon-top: $padding-top-bottom + ($min-content-height - $icon-size) / 2;
 
     &::before {
-      height: $icon_size;
+      height: $icon-size;
       left: $padding-left-right;
       top: $icon-top;
-      width: $icon_size;
+      width: $icon-size;
     }
 
     &::after {
-      height: #{$icon_size / 2};
-      left: #{$padding-left-right + $icon_size / 4};
-      top: #{$icon-top + $icon_size / 4};
+      height: #{$icon-size / 2};
+      left: #{$padding-left-right + $icon-size / 4};
+      top: #{$icon-top + $icon-size / 4};
       width: #{$icon_size / 2};
     }
+  }
+
+  haptic-list.inverted & {
+    padding-left: $padding-left-right;
+    padding-right: #{$padding-left-right + $icon-size + $spacing};
+
+    .haptic-checkbox {
+      &::before, &::after {
+        left: unset;
+        right: $padding-left-right;
+      }
+    }
+    .haptic-radio-button {
+      &::before {
+        left: unset;
+        right: $padding-left-right;
+      }
+      &::after {
+        left: unset;
+        right: #{$padding-left-right + $icon-size / 4};
+      }
+    }
+  }
+
+  .supporting-text {
+    margin-top: .25rem;
   }
 }

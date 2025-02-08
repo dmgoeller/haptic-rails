@@ -1026,14 +1026,6 @@ haptic-text-field .trailing-icon {
 .haptic-checkbox, .haptic-checkbox::after, .haptic-radio-button, .haptic-radio-button::after {
   background-color: transparent;
 }
-.haptic-checkbox:checked::after, .haptic-radio-button:checked::after {
-  background-color: #303030;
-}
-@media (prefers-color-scheme: dark) {
-  .haptic-checkbox:checked::after, .haptic-radio-button:checked::after {
-    background-color: #E0E0E0;
-  }
-}
 .haptic-checkbox.outlined::before, .haptic-radio-button.outlined::before {
   border-color: rgba(0, 0, 0, 0.3764705882);
 }
@@ -1048,6 +1040,46 @@ haptic-text-field .trailing-icon {
 @media (prefers-color-scheme: dark) {
   .haptic-checkbox.filled::before, .haptic-radio-button.filled::before {
     background-color: rgba(255, 255, 255, 0.1254901961);
+  }
+}
+.haptic-checkbox:checked::after, .haptic-radio-button:checked::after {
+  background-color: #303030;
+}
+@media (prefers-color-scheme: dark) {
+  .haptic-checkbox:checked::after, .haptic-radio-button:checked::after {
+    background-color: #E0E0E0;
+  }
+}
+.haptic-checkbox.primary:checked::after, .haptic-radio-button.primary:checked::after {
+  background-color: #2670D0;
+}
+@media (prefers-color-scheme: dark) {
+  .haptic-checkbox.primary:checked::after, .haptic-radio-button.primary:checked::after {
+    background-color: #7BA1D0;
+  }
+}
+.haptic-checkbox.secondary:checked::after, .haptic-radio-button.secondary:checked::after {
+  background-color: #B6581A;
+}
+@media (prefers-color-scheme: dark) {
+  .haptic-checkbox.secondary:checked::after, .haptic-radio-button.secondary:checked::after {
+    background-color: #E7C586;
+  }
+}
+.haptic-checkbox.red:checked::after, .haptic-radio-button.red:checked::after {
+  background-color: #C62828;
+}
+@media (prefers-color-scheme: dark) {
+  .haptic-checkbox.red:checked::after, .haptic-radio-button.red:checked::after {
+    background-color: #EF9A9A;
+  }
+}
+.haptic-checkbox.green:checked::after, .haptic-radio-button.green:checked::after {
+  background-color: #2E7D32;
+}
+@media (prefers-color-scheme: dark) {
+  .haptic-checkbox.green:checked::after, .haptic-radio-button.green:checked::after {
+    background-color: #A5D6A7;
   }
 }
 .haptic-checkbox:not(.embedded), .haptic-radio-button:not(.embedded) {
@@ -1073,6 +1105,39 @@ haptic-text-field .trailing-icon {
 }
 .haptic-checkbox:checked.outlined::before {
   border-color: transparent;
+}
+
+.haptic-radio-button.outlined:checked.primary::before {
+  border-color: #2670D0;
+}
+@media (prefers-color-scheme: dark) {
+  .haptic-radio-button.outlined:checked.primary::before {
+    border-color: #7BA1D0;
+  }
+}
+.haptic-radio-button.outlined:checked.secondary::before {
+  border-color: #B6581A;
+}
+@media (prefers-color-scheme: dark) {
+  .haptic-radio-button.outlined:checked.secondary::before {
+    border-color: #E7C586;
+  }
+}
+.haptic-radio-button.outlined:checked.red::before {
+  border-color: #C62828;
+}
+@media (prefers-color-scheme: dark) {
+  .haptic-radio-button.outlined:checked.red::before {
+    border-color: #EF9A9A;
+  }
+}
+.haptic-radio-button.outlined:checked.green::before {
+  border-color: #2E7D32;
+}
+@media (prefers-color-scheme: dark) {
+  .haptic-radio-button.outlined:checked.green::before {
+    border-color: #A5D6A7;
+  }
 }
 
 /**********************************************************************
@@ -1267,6 +1332,13 @@ haptic-text-field .trailing-icon {
 }
 haptic-text-field[with-label] .trailing-icon {
   font-size: 1.5rem;
+}
+
+/**********************************************************************
+ * Lists
+ **********************************************************************/
+haptic-list-item .supporting-text {
+  font-size: 0.875rem;
 }
 
 /**********************************************************************
@@ -1828,6 +1900,25 @@ haptic-list-item .haptic-radio-button::after {
   left: 1.28125rem;
   top: 0.84375rem;
   width: 0.5625rem;
+}
+haptic-list.inverted haptic-list-item {
+  padding-left: 1rem;
+  padding-right: 3.125rem;
+}
+haptic-list.inverted haptic-list-item .haptic-checkbox::before, haptic-list.inverted haptic-list-item .haptic-checkbox::after {
+  left: unset;
+  right: 1rem;
+}
+haptic-list.inverted haptic-list-item .haptic-radio-button::before {
+  left: unset;
+  right: 1rem;
+}
+haptic-list.inverted haptic-list-item .haptic-radio-button::after {
+  left: unset;
+  right: 1.28125rem;
+}
+haptic-list-item .supporting-text {
+  margin-top: 0.25rem;
 }
 
 /**********************************************************************

@@ -507,10 +507,6 @@ haptic-text-field {
     background-color: transparent;
   }
 
-  &:checked::after {
-    @include haptic-intense-foreground-color('background-color');
-  }
-
   &.outlined::before {
     @include haptic-outline-color;
   }
@@ -521,6 +517,26 @@ haptic-text-field {
       #0000002C,
       #FFFFFF20
     );
+  }
+
+  &:checked::after {
+    @include haptic-intense-foreground-color('background-color');
+  }
+
+  &.primary:checked::after {
+    @include haptic-primary-color('background-color');
+  }
+
+  &.secondary:checked::after {
+    @include haptic-secondary-color('background-color');
+  }
+
+  &.red:checked::after {
+    @include haptic-red('background-color');
+  }
+
+  &.green:checked::after {
+    @include haptic-green('background-color');
   }
 
   &:not(.embedded) {
@@ -548,6 +564,21 @@ haptic-text-field {
 
   &.outlined::before {
     border-color: transparent;
+  }
+}
+
+.haptic-radio-button.outlined:checked {
+  &.primary::before {
+    @include haptic-primary-color('border-color');
+  }
+  &.secondary::before {
+    @include haptic-secondary-color('border-color');
+  }
+  &.red::before {
+    @include haptic-red('border-color');
+  }
+  &.green::before {
+    @include haptic-green('border-color');
   }
 }
 
