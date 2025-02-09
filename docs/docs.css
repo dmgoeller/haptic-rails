@@ -52,6 +52,18 @@ pre {
   padding: .5rem;
 }
 
+code.elem-name {
+  color: #7B1FA2;
+}
+
+code.attr-name {
+  color: #689F38;
+}
+
+code.attr-value {
+  color: #0288D1;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
@@ -103,15 +115,15 @@ tr:not(:first-of-type) td {
     background-color: #606060;
   }
 
-  code.tag {
+  code.elem-name {
     color: #CE93D8;
   }
 
-  code.attribute {
+  code.attr-name {
     color: #C5E1A5;
   }
 
-  code.string {
+  code.attr-value {
     color: #81D4FA
   }
 

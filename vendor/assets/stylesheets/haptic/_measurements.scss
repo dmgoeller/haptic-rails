@@ -612,13 +612,16 @@ haptic-text-field {
     height: calc(#{$track-height} - 4px);
     left: 2px;
     top: 2px;
-    outline-offset: 0;
-    outline-width: haptic-measure(.375rem, .5rem);
     width: calc(#{$track-height} - 4px);
   }
 
   &:checked::after {
     left: calc(#{$track-width - $track-height} + 2px);
+  }
+
+  &:not(.embedded)::after {
+    outline-offset: 0;
+    outline-width: haptic-measure(.375rem, .5rem);
   }
 }
 
@@ -631,65 +634,151 @@ haptic-list-item {
   $padding-left-right: haptic-measure(.5rem, 1rem);
   $padding-top-bottom: haptic-measure(.25rem, .5rem);
   $spacing: haptic-measure(.75rem, 1rem);
-  $icon-size: haptic-measure(1rem, 1.125rem);
 
   box-sizing: content-box;
   min-height: $min-content-height;
   padding-bottom: $padding-top-bottom;
-  padding-left: #{$padding-left-right + $icon-size + $spacing};
+  padding-left: $padding-left-right;
   padding-right: $padding-left-right;
   padding-top: $padding-top-bottom;
 
-  .haptic-checkbox, .haptic-radio-button {
+  .haptic-checkbox, .haptic-radio-button, .haptic-switch {
     height: 100%;
     left: 0;
     top: 0;
     width: 100%;
   }
 
-  .haptic-checkbox {
-    &::before, &::after {
-      left: $padding-left-right;
-      top: #{$padding-top-bottom + ($min-content-height - $icon-size) / 2};
-    }
-  }
-
-  .haptic-radio-button {
-    $icon-top: $padding-top-bottom + ($min-content-height - $icon-size) / 2;
-
-    &::before {
-      height: $icon-size;
-      left: $padding-left-right;
-      top: $icon-top;
-      width: $icon-size;
-    }
-
-    &::after {
-      height: #{$icon-size / 2};
-      left: #{$padding-left-right + $icon-size / 4};
-      top: #{$icon-top + $icon-size / 4};
-      width: #{$icon_size / 2};
-    }
-  }
-
-  haptic-list.inverted & {
-    padding-left: $padding-left-right;
-    padding-right: #{$padding-left-right + $icon-size + $spacing};
+  &[control-type="checkbox"] {
+    $checkbox-size: haptic-measure(1rem, 1.125rem);
 
     .haptic-checkbox {
       &::before, &::after {
-        left: unset;
-        right: $padding-left-right;
+        top: #{$padding-top-bottom + ($min-content-height - $checkbox-size) / 2};
       }
     }
+
+    &.inverted {
+      padding-right: #{$padding-left-right + $checkbox-size + $spacing};
+
+      .haptic-checkbox {
+        &::before, &::after {
+          right: $padding-left-right;
+        }
+      }
+    }
+
+    &:not(.inverted) {
+      padding-left: #{$padding-left-right + $checkbox-size + $spacing};
+
+      .haptic-checkbox {
+        &::before, &::after {
+          left: $padding-left-right;
+        }
+      }
+    }
+  }
+
+  &[control-type="radio-button"] {
+    $radio-button-size: haptic-measure(1rem, 1.125rem);
+    $radio-button-top: $padding-top-bottom + ($min-content-height - $radio-button-size) / 2;
+
     .haptic-radio-button {
       &::before {
-        left: unset;
-        right: $padding-left-right;
+        height: $radio-button-size;
+        top: $radio-button-top;
+        width: $radio-button-size;
       }
+
       &::after {
-        left: unset;
-        right: #{$padding-left-right + $icon-size / 4};
+        height: #{$radio-button-size / 2};
+        top: #{$radio-button-top + $radio-button-size / 4};
+        width: #{$radio-button-size / 2};
+      }
+    }
+
+    &.inverted {
+      padding-right: #{$padding-left-right + $radio-button-size + $spacing};
+
+      .haptic-radio-button {
+        &::before {
+          right: $padding-left-right;
+        }
+        &::after {
+          left: unset;
+          right: #{$padding-left-right + $radio-button-size / 4};
+        }
+      }
+    }
+
+    &:not(.inverted) {
+      padding-left: #{$padding-left-right + $radio-button-size + $spacing};
+
+      .haptic-radio-button {
+        &::before {
+          left: $padding-left-right;
+        }
+
+        &::after {
+          left: #{$padding-left-right + $radio-button-size / 4};
+        }
+      }
+    }
+  }
+
+  &[control-type="switch"] {
+    $min-content-height: haptic-measure(1.25rem, 1.5rem);
+    $switch-track-height: haptic-measure(1rem, 1.5rem);
+    $switch-track-width: haptic-measure(1.75rem, 2.5rem);
+    $switch-top: $padding-top-bottom + ($min-content-height - $switch-track-height) / 2;
+
+    min-height: $min-content-height;
+
+    .haptic-switch {
+      &::before {
+        top: $switch-top;
+      }
+
+      &::after {
+        top: calc(#{$switch-top} + 2px);
+      }
+    }
+
+    &.inverted {
+      padding-right: #{$padding-left-right + $switch-track-width + $spacing};
+
+      .haptic-switch {
+        &::before {
+          left: unset;
+          right: $padding-left-right;
+        }
+
+        &::after {
+          left: unset;
+          right: calc(#{$padding-left-right + $switch-track-width - $switch-track-height} + 2px);
+        }
+
+        &:checked::after {
+          right: calc(#{$padding-left-right} + 2px);
+        }
+      }
+    }
+
+    &:not(.inverted) {
+      padding-left: #{$padding-left-right + $switch-track-width + $spacing};
+
+      .haptic-switch {
+        &::before {
+          left: $padding-left-right;
+        }
+
+        &::after {
+          left: calc(#{$padding-left-right} + 2px);
+        }
+
+        &:checked::after {
+          left: calc(#{$padding-left-right + $switch-track-width - $switch-track-height} + 2px);
+        }
       }
     }
   }

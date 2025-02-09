@@ -643,7 +643,7 @@ haptic-text-field {
     outline-color: transparent;
   }
 
-  &:focus-visible::after {
+  &:not(.embedded):focus-visible::after {
     @include haptic-light-dark(
       'outline-color',
       #00000020,
@@ -657,7 +657,7 @@ haptic-text-field {
  **********************************************************************/
 
 haptic-list-item {
-  .haptic-checkbox, .haptic-radio-button {
+  .haptic-checkbox, .haptic-radio-button, .haptic-switch {
     &:hover {
       @include haptic-light-dark(
         'background-color',

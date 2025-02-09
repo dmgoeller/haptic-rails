@@ -1095,8 +1095,8 @@ class HapticListElement extends HTMLElement {
 customElements.define('haptic-list', HapticListElement);
 
 class HapticListItemElement extends HTMLElement {
-  #inputElement = null;
-  #inputElementObserver = new HapticControlObserver(this);
+  #control = null;
+  #controlObserver = new HapticControlObserver(this);
   #eventListeners = new HapticEventListeners();
 
   constructor() {
@@ -1104,32 +1104,42 @@ class HapticListItemElement extends HTMLElement {
   }
 
   get checked() {
-    return this.#inputElement?.checked;
+    return this.#control?.checked;
   }
 
   get value() {
-    return this.#inputElement?.value;
+    return this.#control?.value;
   }
 
   connectedCallback() {
     new HapticChildNodesObserver({
       nodeAdded: node => {
-        if (node instanceof HTMLInputElement && !this.#inputElement) {
+        if (node instanceof HTMLInputElement && !this.#control) {
           node.classList.add('embedded');
 
+          if (node.classList.contains('haptic-checkbox')) {
+            this.setAttribute('control-type', 'checkbox');
+          } else
+          if (node.classList.contains('haptic-radio-button')) {
+            this.setAttribute('control-type', 'radio-button');
+          } else
+          if (node.classList.contains('haptic-switch')) {
+            this.setAttribute('control-type', 'switch');
+          }
           this.#eventListeners.add(node, 'change', () => {
             this.dispatchEvent(new Event('change'));
           });
-          this.#inputElementObserver.observe(node, { attributes: true });
-          this.#inputElement = node;
+          this.#controlObserver.observe(node, { attributes: true });
+          this.#control = node;
         }
       },
       nodeRemoved: node => {
-        if (node === this.#inputElement) {
+        if (node === this.#control) {
           node.classList.remove('embedded');
+          this.removeAttribute('control-type');
           this.#eventListeners.remove(node);
-          this.#inputElementObserver.disconnect();
-          this.#inputElement = null;
+          this.#controlObserver.disconnect();
+          this.#control = null;
         }
       }
     }).observe(this, { childList: true, subtree: true });

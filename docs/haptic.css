@@ -285,11 +285,11 @@ haptic-text-field .trailing-icon {
 /**********************************************************************
  * Checkboxes, radio buttons and switches
  **********************************************************************/
-.haptic-checkbox, .haptic-switch, .haptic-radio-button {
+.haptic-checkbox, .haptic-radio-button, .haptic-switch {
   cursor: pointer;
   position: relative;
 }
-.haptic-checkbox::before, .haptic-checkbox::after, .haptic-switch::before, .haptic-switch::after, .haptic-radio-button::before, .haptic-radio-button::after {
+.haptic-checkbox::before, .haptic-checkbox::after, .haptic-radio-button::before, .haptic-radio-button::after, .haptic-switch::before, .haptic-switch::after {
   content: "​";
   pointer-events: none;
   position: absolute;
@@ -332,7 +332,7 @@ haptic-list-item {
   position: relative;
   user-select: none;
 }
-haptic-list-item .haptic-checkbox, haptic-list-item .haptic-radio-button {
+haptic-list-item .haptic-checkbox, haptic-list-item .haptic-radio-button, haptic-list-item .haptic-switch {
   position: absolute;
 }
 haptic-list-item[disabled] {
@@ -500,10 +500,10 @@ haptic-text-field .clear-button {
 /**********************************************************************
  * Lists
  **********************************************************************/
-haptic-list-item, haptic-list-item .haptic-checkbox, haptic-list-item .haptic-radio-button {
+haptic-list-item, haptic-list-item .haptic-checkbox, haptic-list-item .haptic-radio-button, haptic-list-item .haptic-switch {
   border-radius: 0.25rem;
 }
-haptic-list.divided haptic-list-item, haptic-list.divided haptic-list-item .haptic-checkbox, haptic-list.divided haptic-list-item .haptic-radio-button {
+haptic-list.divided haptic-list-item, haptic-list.divided haptic-list-item .haptic-checkbox, haptic-list.divided haptic-list-item .haptic-radio-button, haptic-list.divided haptic-list-item .haptic-switch {
   border-radius: 0;
 }
 haptic-list.divided haptic-list-item:not(:first-of-type) {
@@ -1217,11 +1217,11 @@ haptic-text-field .trailing-icon {
 .haptic-switch::after {
   outline-color: transparent;
 }
-.haptic-switch:focus-visible::after {
+.haptic-switch:not(.embedded):focus-visible::after {
   outline-color: rgba(0, 0, 0, 0.1254901961);
 }
 @media (prefers-color-scheme: dark) {
-  .haptic-switch:focus-visible::after {
+  .haptic-switch:not(.embedded):focus-visible::after {
     outline-color: rgba(255, 255, 255, 0.1254901961);
   }
 }
@@ -1229,19 +1229,19 @@ haptic-text-field .trailing-icon {
 /**********************************************************************
  * Lists
  **********************************************************************/
-haptic-list-item .haptic-checkbox:hover, haptic-list-item .haptic-radio-button:hover {
+haptic-list-item .haptic-checkbox:hover, haptic-list-item .haptic-radio-button:hover, haptic-list-item .haptic-switch:hover {
   background-color: rgba(0, 0, 0, 0.062745098);
 }
 @media (prefers-color-scheme: dark) {
-  haptic-list-item .haptic-checkbox:hover, haptic-list-item .haptic-radio-button:hover {
+  haptic-list-item .haptic-checkbox:hover, haptic-list-item .haptic-radio-button:hover, haptic-list-item .haptic-switch:hover {
     background-color: rgba(255, 255, 255, 0.062745098);
   }
 }
-haptic-list-item .haptic-checkbox:focus-visible, haptic-list-item .haptic-radio-button:focus-visible {
+haptic-list-item .haptic-checkbox:focus-visible, haptic-list-item .haptic-radio-button:focus-visible, haptic-list-item .haptic-switch:focus-visible {
   background-color: rgba(0, 0, 0, 0.1254901961);
 }
 @media (prefers-color-scheme: dark) {
-  haptic-list-item .haptic-checkbox:focus-visible, haptic-list-item .haptic-radio-button:focus-visible {
+  haptic-list-item .haptic-checkbox:focus-visible, haptic-list-item .haptic-radio-button:focus-visible, haptic-list-item .haptic-switch:focus-visible {
     background-color: rgba(255, 255, 255, 0.1254901961);
   }
 }
@@ -1860,12 +1860,14 @@ haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-ic
   height: calc(1.5rem - 4px);
   left: 2px;
   top: 2px;
-  outline-offset: 0;
-  outline-width: 0.5rem;
   width: calc(1.5rem - 4px);
 }
 .haptic-switch:checked::after {
   left: calc(1rem + 2px);
+}
+.haptic-switch:not(.embedded)::after {
+  outline-offset: 0;
+  outline-width: 0.5rem;
 }
 
 /**********************************************************************
@@ -1875,47 +1877,94 @@ haptic-list-item {
   box-sizing: content-box;
   min-height: 1.25rem;
   padding-bottom: 0.5rem;
-  padding-left: 3.125rem;
+  padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 0.5rem;
 }
-haptic-list-item .haptic-checkbox, haptic-list-item .haptic-radio-button {
+haptic-list-item .haptic-checkbox, haptic-list-item .haptic-radio-button, haptic-list-item .haptic-switch {
   height: 100%;
   left: 0;
   top: 0;
   width: 100%;
 }
-haptic-list-item .haptic-checkbox::before, haptic-list-item .haptic-checkbox::after {
-  left: 1rem;
+haptic-list-item[control-type=checkbox] .haptic-checkbox::before, haptic-list-item[control-type=checkbox] .haptic-checkbox::after {
   top: 0.5625rem;
 }
-haptic-list-item .haptic-radio-button::before {
-  height: 1.125rem;
+haptic-list-item[control-type=checkbox].inverted {
+  padding-right: 3.125rem;
+}
+haptic-list-item[control-type=checkbox].inverted .haptic-checkbox::before, haptic-list-item[control-type=checkbox].inverted .haptic-checkbox::after {
+  right: 1rem;
+}
+haptic-list-item[control-type=checkbox]:not(.inverted) {
+  padding-left: 3.125rem;
+}
+haptic-list-item[control-type=checkbox]:not(.inverted) .haptic-checkbox::before, haptic-list-item[control-type=checkbox]:not(.inverted) .haptic-checkbox::after {
   left: 1rem;
+}
+haptic-list-item[control-type=radio-button] .haptic-radio-button::before {
+  height: 1.125rem;
   top: 0.5625rem;
   width: 1.125rem;
 }
-haptic-list-item .haptic-radio-button::after {
+haptic-list-item[control-type=radio-button] .haptic-radio-button::after {
   height: 0.5625rem;
-  left: 1.28125rem;
   top: 0.84375rem;
   width: 0.5625rem;
 }
-haptic-list.inverted haptic-list-item {
-  padding-left: 1rem;
+haptic-list-item[control-type=radio-button].inverted {
   padding-right: 3.125rem;
 }
-haptic-list.inverted haptic-list-item .haptic-checkbox::before, haptic-list.inverted haptic-list-item .haptic-checkbox::after {
-  left: unset;
+haptic-list-item[control-type=radio-button].inverted .haptic-radio-button::before {
   right: 1rem;
 }
-haptic-list.inverted haptic-list-item .haptic-radio-button::before {
-  left: unset;
-  right: 1rem;
-}
-haptic-list.inverted haptic-list-item .haptic-radio-button::after {
+haptic-list-item[control-type=radio-button].inverted .haptic-radio-button::after {
   left: unset;
   right: 1.28125rem;
+}
+haptic-list-item[control-type=radio-button]:not(.inverted) {
+  padding-left: 3.125rem;
+}
+haptic-list-item[control-type=radio-button]:not(.inverted) .haptic-radio-button::before {
+  left: 1rem;
+}
+haptic-list-item[control-type=radio-button]:not(.inverted) .haptic-radio-button::after {
+  left: 1.28125rem;
+}
+haptic-list-item[control-type=switch] {
+  min-height: 1.5rem;
+}
+haptic-list-item[control-type=switch] .haptic-switch::before {
+  top: 0.5rem;
+}
+haptic-list-item[control-type=switch] .haptic-switch::after {
+  top: calc(0.5rem + 2px);
+}
+haptic-list-item[control-type=switch].inverted {
+  padding-right: 4.5rem;
+}
+haptic-list-item[control-type=switch].inverted .haptic-switch::before {
+  left: unset;
+  right: 1rem;
+}
+haptic-list-item[control-type=switch].inverted .haptic-switch::after {
+  left: unset;
+  right: calc(2rem + 2px);
+}
+haptic-list-item[control-type=switch].inverted .haptic-switch:checked::after {
+  right: calc(1rem + 2px);
+}
+haptic-list-item[control-type=switch]:not(.inverted) {
+  padding-left: 4.5rem;
+}
+haptic-list-item[control-type=switch]:not(.inverted) .haptic-switch::before {
+  left: 1rem;
+}
+haptic-list-item[control-type=switch]:not(.inverted) .haptic-switch::after {
+  left: calc(1rem + 2px);
+}
+haptic-list-item[control-type=switch]:not(.inverted) .haptic-switch:checked::after {
+  left: calc(2rem + 2px);
 }
 haptic-list-item .supporting-text {
   margin-top: 0.25rem;
@@ -1994,7 +2043,7 @@ haptic-text-field .clear-button {
   transition: all 0.4s linear, filter 0.2s linear, opacity 0.2s linear;
 }
 .haptic-checkbox::before, .haptic-checkbox::after, .haptic-radio-button::before, .haptic-radio-button::after {
-  transition: background-color 0.1s linear border-color 0.1s linear;
+  transition: background-color 0.1s linear, border-color 0.1s linear;
 }
 
 /**********************************************************************
@@ -2010,7 +2059,7 @@ haptic-text-field .clear-button {
 /**********************************************************************
  * Lists
  **********************************************************************/
-haptic-list-item .haptic-checkbox, haptic-list-item .haptic-radio-button {
+haptic-list-item .haptic-checkbox, haptic-list-item .haptic-radio-button, haptic-list-item .haptic-switch {
   transition: background-color 0.1s linear, filter 0.2s linear, opacity 0.2s linear;
 }
 

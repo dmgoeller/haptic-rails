@@ -338,7 +338,7 @@ haptic-text-field {
  * Checkboxes, radio buttons and switches
  **********************************************************************/
 
-.haptic-checkbox, .haptic-switch, .haptic-radio-button {
+.haptic-checkbox, .haptic-radio-button, .haptic-switch {
   cursor: pointer;
   position: relative;
 
@@ -380,7 +380,7 @@ haptic-list-item {
   position: relative;
   user-select: none;
 
-  .haptic-checkbox, .haptic-radio-button {
+  .haptic-checkbox, .haptic-radio-button, .haptic-switch {
     position: absolute;
   }
 
