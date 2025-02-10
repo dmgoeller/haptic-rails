@@ -608,15 +608,19 @@ haptic-text-field {
     width: $track-width;
   }
 
+  &.outlined::before {
+    border-width: haptic-measure(1px, 2px);
+  }
+
   &::after {
-    height: calc(#{$track-height} - 4px);
-    left: 2px;
-    top: 2px;
-    width: calc(#{$track-height} - 4px);
+    height: calc(#{$track-height} - #{haptic-measure(4px, 8px)});
+    left: haptic-measure(2px, 4px);
+    top: haptic-measure(2px, 4px);
+    width: calc(#{$track-height} - #{haptic-measure(4px, 8px)});
   }
 
   &:checked::after {
-    left: calc(#{$track-width - $track-height} + 2px);
+    left: calc(#{$track-width - $track-height} + #{haptic-measure(2px, 4px)});
   }
 
   &:not(.embedded)::after {
@@ -730,17 +734,18 @@ haptic-list-item {
     $min-content-height: haptic-measure(1.25rem, 1.5rem);
     $switch-track-height: haptic-measure(1rem, 1.5rem);
     $switch-track-width: haptic-measure(1.75rem, 2.5rem);
-    $switch-top: $padding-top-bottom + ($min-content-height - $switch-track-height) / 2;
+    $switch-track-top: $padding-top-bottom + ($min-content-height - $switch-track-height) / 2;
+    $switch-handle-offset: $padding-left-right + $switch-track-width - $switch-track-height;
 
     min-height: $min-content-height;
 
     .haptic-switch {
       &::before {
-        top: $switch-top;
+        top: $switch-track-top;
       }
 
       &::after {
-        top: calc(#{$switch-top} + 2px);
+        top: calc(#{$switch-track-top} + #{haptic-measure(2px, 4px)});
       }
     }
 
@@ -755,11 +760,11 @@ haptic-list-item {
 
         &::after {
           left: unset;
-          right: calc(#{$padding-left-right + $switch-track-width - $switch-track-height} + 2px);
+          right: calc(#{$switch-handle-offset} + #{haptic-measure(2px, 4px)});
         }
 
         &:checked::after {
-          right: calc(#{$padding-left-right} + 2px);
+          right: calc(#{$padding-left-right} + #{haptic-measure(2px, 4px)});
         }
       }
     }
@@ -773,11 +778,11 @@ haptic-list-item {
         }
 
         &::after {
-          left: calc(#{$padding-left-right} + 2px);
+          left: calc(#{$padding-left-right} + haptic-measure(2px, 4px));
         }
 
         &:checked::after {
-          left: calc(#{$padding-left-right + $switch-track-width - $switch-track-height} + 2px);
+          left: calc(#{$switch-handle-offset} + haptic-measure(2px, 4px));
         }
       }
     }

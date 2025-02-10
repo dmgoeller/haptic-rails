@@ -159,7 +159,7 @@ haptic-text-field {
  **********************************************************************/
 
 .haptic-switch {
-  $track-height: haptic-measure(16px, 24px);
+  $track-height: haptic-measure(1rem, 1.5rem);
   outline: none;
 
   &, &::before {
@@ -167,12 +167,14 @@ haptic-text-field {
   }
   &::after {
     border-radius: 50%;
-    outline-style: solid;
   }
 
   &.outlined::before {
     border-style: solid;
-    border-width: 1px;
+  }
+
+  &:not(.embedded)::after {
+    outline-style: solid;
   }
 }
 

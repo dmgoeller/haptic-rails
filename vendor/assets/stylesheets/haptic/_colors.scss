@@ -589,10 +589,6 @@ haptic-text-field {
 .haptic-switch {
   background-color: transparent;
 
-  &.outlined::before {
-    @include haptic-outline-color;
-  }
-
   &.filled {
     &::before {
       @include haptic-light-dark(
@@ -617,19 +613,30 @@ haptic-text-field {
     }
   }
 
-  &:not(.filled) {
+  &.outlined {
+    &::before {
+      @include haptic-foreground-color('border-color');
+    }
     &::after {
-      @include haptic-intense-foreground-color('background-color');
+      @include haptic-foreground-color('background-color');
+    }
+    &:checked {
+      &::before {
+        @include haptic-primary-color('border-color');
+      }
+      &::after {
+        @include haptic-primary-color('background-color');
+      }
     }
     &.red-green {
-      &.outlined::before {
+      &::before {
         @include haptic-red('border-color');
       }
       &::after {
         @include haptic-red('background-color');
       }
       &:checked {
-        &.outlined::before {
+        &::before {
           @include haptic-green('border-color');
         }
         &::after {
@@ -639,16 +646,18 @@ haptic-text-field {
     }
   }
 
-  &::after {
-    outline-color: transparent;
-  }
+  &:not(.embedded) {
+    &::after {
+      outline-color: transparent;
+    }
 
-  &:not(.embedded):focus-visible::after {
-    @include haptic-light-dark(
-      'outline-color',
-      #00000020,
-      #FFFFFF20
-    );
+    &:focus-visible::after {
+      @include haptic-light-dark(
+        'outline-color',
+        #00000020,
+        #FFFFFF20
+      );
+    }
   }
 }
 

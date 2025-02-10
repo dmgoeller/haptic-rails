@@ -486,15 +486,16 @@ haptic-text-field .clear-button {
   outline: none;
 }
 .haptic-switch, .haptic-switch::before {
-  border-radius: 12px;
+  border-radius: 0.75rem;
 }
 .haptic-switch::after {
   border-radius: 50%;
-  outline-style: solid;
 }
 .haptic-switch.outlined::before {
   border-style: solid;
-  border-width: 1px;
+}
+.haptic-switch:not(.embedded)::after {
+  outline-style: solid;
 }
 
 /**********************************************************************
@@ -1146,14 +1147,6 @@ haptic-text-field .trailing-icon {
 .haptic-switch {
   background-color: transparent;
 }
-.haptic-switch.outlined::before {
-  border-color: rgba(0, 0, 0, 0.3764705882);
-}
-@media (prefers-color-scheme: dark) {
-  .haptic-switch.outlined::before {
-    border-color: rgba(255, 255, 255, 0.3764705882);
-  }
-}
 .haptic-switch.filled::before {
   background-color: rgba(0, 0, 0, 0.3764705882);
 }
@@ -1174,47 +1167,71 @@ haptic-text-field .trailing-icon {
 .haptic-switch.filled.red-green:checked::before {
   background-color: #388E3C;
 }
-.haptic-switch:not(.filled)::after {
-  background-color: #303030;
+.haptic-switch.outlined::before {
+  border-color: #606060;
 }
 @media (prefers-color-scheme: dark) {
-  .haptic-switch:not(.filled)::after {
-    background-color: #E0E0E0;
+  .haptic-switch.outlined::before {
+    border-color: #C0C0C0;
   }
 }
-.haptic-switch:not(.filled).red-green.outlined::before {
+.haptic-switch.outlined::after {
+  background-color: #606060;
+}
+@media (prefers-color-scheme: dark) {
+  .haptic-switch.outlined::after {
+    background-color: #C0C0C0;
+  }
+}
+.haptic-switch.outlined:checked::before {
+  border-color: #2670D0;
+}
+@media (prefers-color-scheme: dark) {
+  .haptic-switch.outlined:checked::before {
+    border-color: #7BA1D0;
+  }
+}
+.haptic-switch.outlined:checked::after {
+  background-color: #2670D0;
+}
+@media (prefers-color-scheme: dark) {
+  .haptic-switch.outlined:checked::after {
+    background-color: #7BA1D0;
+  }
+}
+.haptic-switch.outlined.red-green::before {
   border-color: #C62828;
 }
 @media (prefers-color-scheme: dark) {
-  .haptic-switch:not(.filled).red-green.outlined::before {
+  .haptic-switch.outlined.red-green::before {
     border-color: #EF9A9A;
   }
 }
-.haptic-switch:not(.filled).red-green::after {
+.haptic-switch.outlined.red-green::after {
   background-color: #C62828;
 }
 @media (prefers-color-scheme: dark) {
-  .haptic-switch:not(.filled).red-green::after {
+  .haptic-switch.outlined.red-green::after {
     background-color: #EF9A9A;
   }
 }
-.haptic-switch:not(.filled).red-green:checked.outlined::before {
+.haptic-switch.outlined.red-green:checked::before {
   border-color: #2E7D32;
 }
 @media (prefers-color-scheme: dark) {
-  .haptic-switch:not(.filled).red-green:checked.outlined::before {
+  .haptic-switch.outlined.red-green:checked::before {
     border-color: #A5D6A7;
   }
 }
-.haptic-switch:not(.filled).red-green:checked::after {
+.haptic-switch.outlined.red-green:checked::after {
   background-color: #2E7D32;
 }
 @media (prefers-color-scheme: dark) {
-  .haptic-switch:not(.filled).red-green:checked::after {
+  .haptic-switch.outlined.red-green:checked::after {
     background-color: #A5D6A7;
   }
 }
-.haptic-switch::after {
+.haptic-switch:not(.embedded)::after {
   outline-color: transparent;
 }
 .haptic-switch:not(.embedded):focus-visible::after {
@@ -1856,14 +1873,17 @@ haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-ic
   margin: 0;
   width: 2.5rem;
 }
+.haptic-switch.outlined::before {
+  border-width: 2px;
+}
 .haptic-switch::after {
-  height: calc(1.5rem - 4px);
-  left: 2px;
-  top: 2px;
-  width: calc(1.5rem - 4px);
+  height: calc(1.5rem - 8px);
+  left: 4px;
+  top: 4px;
+  width: calc(1.5rem - 8px);
 }
 .haptic-switch:checked::after {
-  left: calc(1rem + 2px);
+  left: calc(1rem + 4px);
 }
 .haptic-switch:not(.embedded)::after {
   outline-offset: 0;
@@ -1938,7 +1958,7 @@ haptic-list-item[control-type=switch] .haptic-switch::before {
   top: 0.5rem;
 }
 haptic-list-item[control-type=switch] .haptic-switch::after {
-  top: calc(0.5rem + 2px);
+  top: calc(0.5rem + 4px);
 }
 haptic-list-item[control-type=switch].inverted {
   padding-right: 4.5rem;
@@ -1949,10 +1969,10 @@ haptic-list-item[control-type=switch].inverted .haptic-switch::before {
 }
 haptic-list-item[control-type=switch].inverted .haptic-switch::after {
   left: unset;
-  right: calc(2rem + 2px);
+  right: calc(2rem + 4px);
 }
 haptic-list-item[control-type=switch].inverted .haptic-switch:checked::after {
-  right: calc(1rem + 2px);
+  right: calc(1rem + 4px);
 }
 haptic-list-item[control-type=switch]:not(.inverted) {
   padding-left: 4.5rem;
@@ -1961,10 +1981,10 @@ haptic-list-item[control-type=switch]:not(.inverted) .haptic-switch::before {
   left: 1rem;
 }
 haptic-list-item[control-type=switch]:not(.inverted) .haptic-switch::after {
-  left: calc(1rem + 2px);
+  left: calc(1rem + 4px);
 }
 haptic-list-item[control-type=switch]:not(.inverted) .haptic-switch:checked::after {
-  left: calc(2rem + 2px);
+  left: calc(2rem + 4px);
 }
 haptic-list-item .supporting-text {
   margin-top: 0.25rem;
