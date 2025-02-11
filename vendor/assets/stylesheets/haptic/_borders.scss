@@ -1,3 +1,5 @@
+$haptic-button-border-radius: haptic-measure(.25rem, .5rem) !default;
+$haptic-field-border-radius: .25rem !default;
 
 /**********************************************************************
  * Badges
@@ -22,7 +24,7 @@
 }
 
 .haptic-button {
-  border-radius: .25rem; // .875rem
+  border-radius: $haptic-button-border-radius;
 }
 
 .haptic-icon-button {
@@ -40,12 +42,12 @@
   }
 
   &:first-of-type input {
-    border-bottom-left-radius: .25rem;
-    border-top-left-radius: .25rem;
+    border-bottom-left-radius: $haptic-button-border-radius;
+    border-top-left-radius: $haptic-button-border-radius;
   }
   &:last-of-type input {
-    border-bottom-right-radius: .25rem;
-    border-top-right-radius: .25rem;
+    border-bottom-right-radius: $haptic-button-border-radius;
+    border-top-right-radius: $haptic-button-border-radius;
 
     &.outlined {
       border-right-width: 1px;
@@ -54,7 +56,7 @@
 }
 
 .haptic-chip input {
-  border-radius: .25rem;
+  border-radius: $haptic-button-border-radius;
 
   &.outlined {
     border-style: solid;
@@ -70,7 +72,7 @@ haptic-dialog-dropdown, haptic-select-dropdown {
   outline: none;
 
   & > .popover {
-    border-radius: .25rem;
+    border-radius: $haptic-field-border-radius;
     border-style: solid;
     border-width: 1px;
   }
@@ -98,7 +100,7 @@ haptic-option {
  **********************************************************************/
 
 .haptic-field {
-  border-radius: .25rem;
+  border-radius: $haptic-field-border-radius;
   outline-style: solid;
   border-width: 0;
   outline-width: 0;
@@ -111,8 +113,8 @@ haptic-option {
 
 haptic-dropdown-field, haptic-text-field {
   &[focus-indicator] > .haptic-field-container::after {
-    border-bottom-left-radius: .25rem 3px;
-    border-bottom-right-radius: .25rem 3px;
+    border-bottom-left-radius: #{$haptic-field-border-radius} 3px;
+    border-bottom-right-radius: #{$haptic-field-border-radius} 3px;
   }
 }
 

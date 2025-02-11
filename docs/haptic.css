@@ -370,7 +370,7 @@ haptic-list-item[disabled] {
 }
 
 .haptic-button {
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
 }
 
 .haptic-icon-button {
@@ -385,19 +385,19 @@ haptic-list-item[disabled] {
   border-width: 1px 0 1px 1px;
 }
 .haptic-button-segment:first-of-type input {
-  border-bottom-left-radius: 0.25rem;
-  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
 }
 .haptic-button-segment:last-of-type input {
-  border-bottom-right-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
 }
 .haptic-button-segment:last-of-type input.outlined {
   border-right-width: 1px;
 }
 
 .haptic-chip input {
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
 }
 .haptic-chip input.outlined {
   border-style: solid;
@@ -1044,43 +1044,11 @@ haptic-text-field .trailing-icon {
   }
 }
 .haptic-checkbox:checked::after, .haptic-radio-button:checked::after {
-  background-color: #303030;
-}
-@media (prefers-color-scheme: dark) {
-  .haptic-checkbox:checked::after, .haptic-radio-button:checked::after {
-    background-color: #E0E0E0;
-  }
-}
-.haptic-checkbox.primary:checked::after, .haptic-radio-button.primary:checked::after {
   background-color: #2670D0;
 }
 @media (prefers-color-scheme: dark) {
-  .haptic-checkbox.primary:checked::after, .haptic-radio-button.primary:checked::after {
+  .haptic-checkbox:checked::after, .haptic-radio-button:checked::after {
     background-color: #7BA1D0;
-  }
-}
-.haptic-checkbox.secondary:checked::after, .haptic-radio-button.secondary:checked::after {
-  background-color: #B6581A;
-}
-@media (prefers-color-scheme: dark) {
-  .haptic-checkbox.secondary:checked::after, .haptic-radio-button.secondary:checked::after {
-    background-color: #E7C586;
-  }
-}
-.haptic-checkbox.red:checked::after, .haptic-radio-button.red:checked::after {
-  background-color: #C62828;
-}
-@media (prefers-color-scheme: dark) {
-  .haptic-checkbox.red:checked::after, .haptic-radio-button.red:checked::after {
-    background-color: #EF9A9A;
-  }
-}
-.haptic-checkbox.green:checked::after, .haptic-radio-button.green:checked::after {
-  background-color: #2E7D32;
-}
-@media (prefers-color-scheme: dark) {
-  .haptic-checkbox.green:checked::after, .haptic-radio-button.green:checked::after {
-    background-color: #A5D6A7;
   }
 }
 .haptic-checkbox:not(.embedded), .haptic-radio-button:not(.embedded) {
@@ -1108,36 +1076,12 @@ haptic-text-field .trailing-icon {
   border-color: transparent;
 }
 
-.haptic-radio-button.outlined:checked.primary::before {
+.haptic-radio-button:checked.outlined::before {
   border-color: #2670D0;
 }
 @media (prefers-color-scheme: dark) {
-  .haptic-radio-button.outlined:checked.primary::before {
+  .haptic-radio-button:checked.outlined::before {
     border-color: #7BA1D0;
-  }
-}
-.haptic-radio-button.outlined:checked.secondary::before {
-  border-color: #B6581A;
-}
-@media (prefers-color-scheme: dark) {
-  .haptic-radio-button.outlined:checked.secondary::before {
-    border-color: #E7C586;
-  }
-}
-.haptic-radio-button.outlined:checked.red::before {
-  border-color: #C62828;
-}
-@media (prefers-color-scheme: dark) {
-  .haptic-radio-button.outlined:checked.red::before {
-    border-color: #EF9A9A;
-  }
-}
-.haptic-radio-button.outlined:checked.green::before {
-  border-color: #2E7D32;
-}
-@media (prefers-color-scheme: dark) {
-  .haptic-radio-button.outlined:checked.green::before {
-    border-color: #A5D6A7;
   }
 }
 

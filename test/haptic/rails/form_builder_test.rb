@@ -280,6 +280,27 @@ module Haptic
         )
       end
 
+      def test_list_on_inverted_items
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-list>
+              <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+              <haptic-list-item class="inverted">
+                <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
+                  id="dummy_color_blue">
+                <label is="haptic-label" for="dummy_color_blue">Blue</label>
+              </haptic-list-item>
+              <haptic-list-item class="inverted">
+                <input is="haptic-input" type="radio" value="green" name="dummy[color]"
+                  id="dummy_color_green">
+                <label is="haptic-label" for="dummy_color_green">Green</label>
+              </haptic-list-item>
+            </haptic-list>
+          HTML
+          form.list(:color, [%w[Blue blue], %w[Green green]], inverted: true)
+        )
+      end
+
       def test_list_with_block
         assert_dom_equal(
           <<~HTML,
@@ -418,6 +439,27 @@ module Haptic
             </haptic-list>
           HTML
           form.collection_list(:color, %w[Blue Green], :downcase, :itself)
+        )
+      end
+
+      def test_collection_list_on_inverted_items
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-list>
+              <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+              <haptic-list-item class="inverted">
+                <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
+                  id="dummy_color_blue">
+                <label is="haptic-label" for="dummy_color_blue">Blue</label>
+              </haptic-list-item>
+              <haptic-list-item class="inverted">
+                <input is="haptic-input" type="radio" value="green" name="dummy[color]"
+                  id="dummy_color_green">
+                <label is="haptic-label" for="dummy_color_green">Green</label>
+              </haptic-list-item>
+            </haptic-list>
+          HTML
+          form.collection_list(:color, %w[Blue Green], :downcase, :itself, inverted: true)
         )
       end
 

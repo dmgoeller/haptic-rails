@@ -121,6 +121,7 @@ module Haptic
       #
       # ==== Options
       #
+      # - <code>:inverted</code> -
       # - <code>:multiple</code> -
       # - <code>:required</code> -
       #
@@ -233,6 +234,7 @@ module Haptic
       #
       # ==== Options
       #
+      # - <code>:inverted</code> -
       # - <code>:multiple</code> -
       # - <code>:required</code> -
       #
@@ -255,15 +257,20 @@ module Haptic
       #   # </haptic-list>
       def collection_list(method, collection, value_method, text_method, options = {}, &block)
         options = options.symbolize_keys
+        list_item_class = 'inverted' if options.delete(:inverted)
 
         @template.haptic_list_tag(required: options.delete(:required) == true) do
           if options.delete(:multiple) == true
             collection_check_boxes(method, collection, value_method, text_method, options) do |b|
-              @template.haptic_list_item_tag { block ? block.call(b) : b.check_box + b.label }
+              @template.haptic_list_item_tag(class: list_item_class) do
+                block ? block.call(b) : b.check_box(options) + b.label
+              end
             end
           else
             collection_radio_buttons(method, collection, value_method, text_method, options) do |b|
-              @template.haptic_list_item_tag { block ? block.call(b) : b.radio_button + b.label }
+              @template.haptic_list_item_tag(class: list_item_class) do
+                block ? block.call(b) : b.radio_button(options) + b.label
+              end
             end
           end
         end
