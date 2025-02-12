@@ -112,6 +112,14 @@
     </td>
   </tr>
   <tr>
+    <td><code>filled secondary</code></td>
+    <td>
+      <div class="example">
+        <button type="button" class="haptic-icon-button filled secondary material-symbols-rounded">close</button>
+      </div>
+    </td>
+  </tr>
+  <tr>
     <td><code>filled red</code></td>
     <td>
       <div class="example">
@@ -249,7 +257,7 @@
 <table>
   <tr>
     <th align="left">Modifier classes</th>
-    <th>Examples</th>
+    <th>Example</th>
   </tr>
   <tr>
     <td><code>-</code></td>
@@ -453,19 +461,18 @@
 <hr>
 <h2 id="checkboxes">Checkboxes</h2>
 
-<pre>&lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"checkbox"</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-checkbox <code class="variable">{modifiers}</code>"</code>/&gt;</pre>
+<pre>&lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"checkbox"</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-checkbox <code class="variable">{modifier}</code>"</code>/&gt;</pre>
 
 <table>
   <tr>
-    <th align="left">Modifier classes</th>
-    <th>Examples</th>
+    <th align="left">Modifier class</th>
+    <th>Example</th>
   </tr>
   <tr>
     <td><code>outlined</code></td>
     <td>
       <div class="example">
         <input type="checkbox" class="haptic-checkbox outlined"/>
-        <input type="checkbox" class="haptic-checkbox outlined" checked/>
       </div>
     </td>
   </tr>
@@ -474,7 +481,6 @@
     <td>
       <div class="example">
         <input type="checkbox" class="haptic-checkbox filled"/>
-        <input type="checkbox" class="haptic-checkbox filled" checked/>
       </div>
     </td>
   </tr>
@@ -567,6 +573,138 @@
 </table>
 
 <hr>
+<h4>With clear button</h4>
+
+<pre>
+  &lt;<code class="elem-name">haptic-text-field</code>&gt;
+    &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field-container"</code>&gt;
+      &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"text"</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field <code class="variable">{modifier}</code>"</code>/&gt;
+      &lt;<code class="elem-name">button</code> <code class="attr-name">class</code>=<code class="attr-value">"clear-button"</code>&gt;close&lt;/<code class="elem-name">button</code>&gt;
+    &lt;/<code class="elem-name">div</code>&gt;
+  &lt;/<code class="elem-name">haptic-text-field</code>&gt;</pre>
+
+<table>
+  <tr>
+    <th align="left">Modifier class</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-text-field with-clear-button>
+          <div class="haptic-field-container">
+            <input type="text" class="haptic-field outlined" value="Value"/>
+            <button class="clear-button material-symbols-rounded">close</button>
+          </div>
+        </haptic-text-field>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-text-field with-clear-button>
+          <div class="haptic-field-container">
+            <input type="text" class="haptic-field filled" value="Value"/>
+            <button class="clear-button material-symbols-rounded">close</button>
+          </div>
+        </haptic-text-field>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<hr>
+<h4>With leading icon and placeholder</h4>
+
+<pre>
+  &lt;<code class="elem-name">haptic-text-field</code>&gt;
+    &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field-container"</code>&gt;
+      &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"text"</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field <code class="variable">{modifier}</code>"</code>/&gt;
+      &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"leading-icon"</code>&gt;search&lt;/<code class="elem-name">div</code>&gt;
+    &lt;/<code class="elem-name">div</code>&gt;
+  &lt;/<code class="elem-name">haptic-text-field</code>&gt;</pre>
+
+<table>
+  <tr>
+    <th align="left">Modifier class</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-text-field with-leading-icon>
+          <div class="haptic-field-container">
+            <input type="text" class="haptic-field outlined" placeholder="Search"/>
+            <div class="leading-icon material-symbols-rounded">search</div>
+          </div>
+        </haptic-text-field>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-text-field with-leading-icon>
+          <div class="haptic-field-container">
+            <input type="text" class="haptic-field filled" placeholder="Search"/>
+            <div class="leading-icon material-symbols-rounded">search</div>
+          </div>
+        </haptic-text-field>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<hr>
+<h4>With error</h4>
+
+<pre>
+  &lt;<code class="elem-name">haptic-text-field</code>&gt;
+    &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field-container"</code>&gt;
+      &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"text"</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field <code class="variable">{modifier}</code>"</code>/&gt;
+      &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"error-icon"</code>&gt;error&lt;/<code class="elem-name">div</code>&gt;
+    &lt;/<code class="elem-name">div</code>&gt;
+  &lt;/<code class="elem-name">haptic-text-field</code>&gt;</pre>
+
+<table>
+  <tr>
+    <th align="left">Modifier class</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-text-field with-error-icon invalid>
+          <div class="haptic-field-container">
+            <input type="text" class="haptic-field outlined" value="Value"/>
+            <div class="error-icon material-symbols-rounded">error</div>
+          </div>
+        </haptic-text-field>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-text-field with-error-icon invalid>
+          <div class="haptic-field-container">
+            <input type="text" class="haptic-field filled" value="Value"/>
+            <div class="error-icon material-symbols-rounded">error</div>
+          </div>
+        </haptic-text-field>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<hr>
 <h4>With label</h4>
 
 <pre>
@@ -575,7 +713,6 @@
     &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"text"</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field <code class="variable">{modifier}</code>"</code>/&gt;
     &lt;<code class="elem-name">label</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field-label"</code>&gt;Label&lt;/<code class="elem-name">label</code>&gt;
   &lt;/<code class="elem-name">div</code>&gt;
-  &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"supporting-text"</code>&gt;Supporting text&lt;/<code class="elem-name">div</code>&gt;
 &lt;/<code class="elem-name">haptic-text-field</code>&gt;</pre>
 
 <table>
@@ -592,7 +729,6 @@
             <input type="text" class="haptic-field outlined"/>
             <label class="haptic-field-label">Label</label>
           </div>
-          <div class="supporting-text">Supporting text</div>
         </haptic-text-field>
       </div>
     </td>
@@ -606,7 +742,6 @@
             <input type="text" class="haptic-field filled"/>
             <label class="haptic-field-label">Label</label>
           </div>
-          <div class="supporting-text">Supporting text</div>
         </haptic-text-field>
       </div>
     </td>
@@ -614,7 +749,243 @@
 </table>
 
 <hr>
-<h3>Dropdown fields</h3>
+<h4>With label and clear button</h4>
+
+<pre>
+&lt;<code class="elem-name">haptic-text-field</code> <code class="attr-name">animated-label</code> <code class="attr-name">focus-indicator</code>&gt;
+  &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field-container"</code>&gt;
+    &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"text"</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field <code class="variable">{modifier}</code>"</code>/&gt;
+    &lt;<code class="elem-name">label</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field-label"</code>&gt;Label&lt;/<code class="elem-name">label</code>&gt;
+    &lt;<code class="elem-name">button</code> <code class="attr-name">class</code>=<code class="attr-value">"clear-button"</code>&gt;close&lt;/<code class="elem-name">button</code>&gt;
+  &lt;/<code class="elem-name">div</code>&gt;
+&lt;/<code class="elem-name">haptic-text-field</code>&gt;</pre>
+
+<table>
+  <tr>
+    <th align="left">Modifier class</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-text-field animated-label focus-indicator with-label with-clear-button>
+          <div class="haptic-field-container">
+            <input type="text" class="haptic-field outlined" value="Value"/>
+            <label class="haptic-field-label">Label</label>
+            <button class="clear-button material-symbols-rounded">close</button>
+          </div>
+        </haptic-text-field>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-text-field animated-label focus-indicator with-label with-clear-button>
+          <div class="haptic-field-container">
+            <input type="text" class="haptic-field filled" value="Value"/>
+            <label class="haptic-field-label">Label</label>
+            <button class="clear-button material-symbols-rounded">close</button>
+          </div>
+        </haptic-text-field>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<hr>
+<h4>With label, leading icon and supporting text</h4>
+
+<pre>
+&lt;<code class="elem-name">haptic-text-field</code> <code class="attr-name">animated-label</code> <code class="attr-name">focus-indicator</code>&gt;
+  &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field-container"</code>&gt;
+    &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"text"</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field <code class="variable">{modifier}</code>"</code>/&gt;
+    &lt;<code class="elem-name">label</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field-label"</code>&gt;Label&lt;/<code class="elem-name">label</code>&gt;
+    &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"leading-icon"</code>&gt;search&lt;/<code class="elem-name">div</code>&gt;
+  &lt;/<code class="elem-name">div</code>&gt;
+  &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"supporting-text"</code>&gt;Supporting text&lt;/<code class="elem-name">div</code>&gt;
+&lt;/<code class="elem-name">haptic-text-field</code>&gt;</pre>
+
+<table>
+  <tr>
+    <th align="left">Modifier class</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-text-field animated-label focus-indicator with-label with-leading-icon empty>
+          <div class="haptic-field-container">
+            <input type="text" class="haptic-field outlined"/>
+            <label class="haptic-field-label">Label</label>
+            <div class="leading-icon material-symbols-rounded">search</div>
+          </div>
+          <div class="supporting-text">Supporting text</div>
+        </haptic-text-field>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-text-field animated-label focus-indicator with-label with-leading-icon empty>
+          <div class="haptic-field-container">
+            <input type="text" class="haptic-field filled"/>
+            <label class="haptic-field-label">Label</label>
+            <div class="leading-icon material-symbols-rounded">search</div>
+          </div>
+          <div class="supporting-text">Supporting text</div>
+        </haptic-text-field>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<h4>With label and error</h4>
+
+<pre>&lt;<code class="elem-name">haptic-text-field</code> <code class="attr-name">animated-label</code> <code class="attr-name">focus-indicator</code> <code class="attr-name">invalid</code>&gt;
+  &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field-container"</code>&gt;
+    &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"text"</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field <code class="variable">{modifier}</code>"</code>/&gt;
+    &lt;<code class="elem-name">label</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field-label"</code>&gt;Label&lt;/<code class="elem-name">label</code>&gt;
+    &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"error-icon"</code>error&lt;/<code class="elem-name">div</code>&gt;
+  &lt;/<code class="elem-name">div</code>&gt;
+  &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"error-message"</code>&gt;Error message&lt;/<code class="elem-name">div</code>&gt;
+&lt;/<code class="elem-name">haptic-text-field</code>&gt;</pre>
+
+<table>
+  <tr>
+    <th align="left">Modifier class</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-text-field animated-label focus-indicator with-label with-error-icon invalid>
+          <div class="haptic-field-container">
+            <input type="text" class="haptic-field outlined" value="Invalid value"/>
+            <label class="haptic-field-label">Label</label>
+            <div class="error-icon material-symbols-rounded">error</div>
+          </div>
+          <div class="error-message">Error message</div>
+        </haptic-text-field>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-text-field animated-label focus-indicator with-label with-error-icon invalid>
+          <div class="haptic-field-container">
+            <input type="text" class="haptic-field filled" value="Invalid value"/>
+            <label class="haptic-field-label">Label</label>
+            <div class="error-icon material-symbols-rounded">error</div>
+          </div>
+          <div class="error-message">Error message</div>
+        </haptic-text-field>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<hr>
+<h3>Select fields</h3>
+
+<table>
+  <tr>
+    <th align="left">Modifier class</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-dropdown-field>
+          <div class="haptic-field-container">
+            <select class="haptic-field outlined">
+              <option value="one" selected>One</option>
+              <option value="two">Two</option>
+              <option value="three">Three</option>
+            </select>
+          </div>
+        </haptic-dropdown-field>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-dropdown-field>
+          <div class="haptic-field-container">
+            <select class="haptic-field filled">
+              <option value="one" selected>One</option>
+              <option value="two">Two</option>
+              <option value="three">Three</option>
+            </select>
+          </div>
+        </haptic-dropdown-field>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<hr>
+<h3>Custom select fields</h3>
+
+<table>
+  <tr>
+    <th align="left">Modifier class</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td><code>outlined</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-dropdown-field>
+          <haptic-select-dropdown tabindex="0" class="embedded">
+            <input type="hidden"/>
+            <div class="toggle haptic-field outlined">One</div>
+            <div class="popover">
+              <haptic-option-list>
+                <haptic-option value="one" selected>One</haptic-option>
+                <haptic-option value="two">Two</haptic-option>
+                <haptic-option value="three">Three</haptic-option>
+              </haptic-option-list>
+            </div>
+            <div class="backdrop"/>
+          </div>
+        </haptic-dropdown-field>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example stretch">
+        <haptic-dropdown-field>
+          <haptic-select-dropdown tabindex="0" class="embedded">
+            <input type="hidden"/>
+            <div class="toggle haptic-field filled">One</div>
+            <div class="popover">
+              <haptic-option-list>
+                <haptic-option value="one" selected>One</haptic-option>
+                <haptic-option value="two">Two</haptic-option>
+                <haptic-option value="three">Three</haptic-option>
+              </haptic-option-list>
+            </div>
+            <div class="backdrop"/>
+          </div>
+        </haptic-dropdown-field>
+      </div>
+    </td>
+  </tr>
+</table>
 
 <hr>
 <h2 id="lists">Lists</h2>
@@ -685,7 +1056,7 @@
 <pre>
 &lt;<code class="elem-name">haptic-list</code> <code class="attr-name">class</code>=<code class="attr-value">"<code class="variable">{list-modifier}</code>"</code>&gt;
   &lt;<code class="elem-name">haptic-list-item</code> <code class="attr-name">class</code>=<code class="attr-value">"<code class="variable">{list-item-modifier}</code>"</code>&gt;
-    &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"checkbox"</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-checkbox <code class="variable">{checkbox-modifiers}</code>"</code>/&gt;
+    &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"checkbox"</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-checkbox <code class="variable">{checkbox-modifier}</code>"</code>/&gt;
     &lt;<code class="elem-name">label</code>&gt;
       Headline
       &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"supporting-text"</code>&gt;Supporting text&lt;<code class="elem-name">div</code>&gt;
@@ -819,7 +1190,7 @@
 <pre>
 &lt;<code class="elem-name">haptic-list</code> <code class="attr-name">class</code>=<code class="attr-value">"<code class="variable">{list-modifier}</code>"</code>&gt;
   &lt;<code class="elem-name">haptic-list-item</code> <code class="attr-name">class</code>=<code class="attr-value">"<code class="variable">{list-item-modifier}</code>"</code>&gt;
-    &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"radio"</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-radio-button <code class="variable">{radio-button-modifiers}</code>"</code>/&gt;
+    &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"radio"</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-radio-button <code class="variable">{radio-button-modifier}</code>"</code>/&gt;
     &lt;<code class="elem-name">label</code>&gt;
       Headline
       &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"supporting-text"</code>&gt;Supporting text&lt;<code class="elem-name">div</code>&gt;
@@ -883,12 +1254,12 @@
 <hr>
 <h2 id="radio-buttons">Radio buttons</h2>
 
-<pre>&lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"radio"</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-radio-button <code class="variable">{modifiers}</code>"</code>/&gt;</pre>
+<pre>&lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"radio"</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-radio-button <code class="variable">{modifier}</code>"</code>/&gt;</pre>
 
 <table>
   <tr>
-    <th align="left">Modifier classes</th>
-    <th>Examples</th>
+    <th align="left">Modifier class</th>
+    <th>Example</th>
   </tr>
   <tr>
     <td><code>outlined</code></td>

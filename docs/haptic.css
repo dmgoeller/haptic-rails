@@ -530,7 +530,7 @@ haptic-list.divided haptic-list-item:not(:first-of-type) {
   }
 }
 .haptic-badge.primary {
-  background-color: #2670D0;
+  background-color: #235FBE;
   color: white;
 }
 @media (prefers-color-scheme: dark) {
@@ -540,7 +540,7 @@ haptic-list.divided haptic-list-item:not(:first-of-type) {
 }
 @media (prefers-color-scheme: dark) {
   .haptic-badge.primary {
-    color: #2670D0;
+    color: #235FBE;
   }
 }
 .haptic-badge.secondary {
@@ -727,7 +727,7 @@ haptic-list.divided haptic-list-item:not(:first-of-type) {
   background-color: #2670D040;
 }
 .haptic-button-segment input:not(.filled):checked::after, .haptic-chip input:not(.filled):checked::after {
-  background-color: #2670D0;
+  background-color: #235FBE;
 }
 @media (prefers-color-scheme: dark) {
   .haptic-button-segment input:not(.filled):checked::after, .haptic-chip input:not(.filled):checked::after {
@@ -735,7 +735,7 @@ haptic-list.divided haptic-list-item:not(:first-of-type) {
   }
 }
 .haptic-button-segment input:not(.filled):checked ~ label, .haptic-chip input:not(.filled):checked ~ label {
-  color: #2670D0;
+  color: #235FBE;
 }
 @media (prefers-color-scheme: dark) {
   .haptic-button-segment input:not(.filled):checked ~ label, .haptic-chip input:not(.filled):checked ~ label {
@@ -911,7 +911,7 @@ haptic-option[highlighted][checked]::after {
 }
 
 haptic-dropdown-field .haptic-field-label, haptic-text-field .haptic-field-label {
-  color: #2670D0;
+  color: #235FBE;
 }
 @media (prefers-color-scheme: dark) {
   haptic-dropdown-field .haptic-field-label, haptic-text-field .haptic-field-label {
@@ -935,7 +935,7 @@ haptic-dropdown-field .error-icon, haptic-text-field .error-icon {
   }
 }
 haptic-dropdown-field[focus-indicator] > .haptic-field-container::after, haptic-text-field[focus-indicator] > .haptic-field-container::after {
-  background-color: #2670D0;
+  background-color: #235FBE;
 }
 @media (prefers-color-scheme: dark) {
   haptic-dropdown-field[focus-indicator] > .haptic-field-container::after, haptic-text-field[focus-indicator] > .haptic-field-container::after {
@@ -1044,7 +1044,7 @@ haptic-text-field .trailing-icon {
   }
 }
 .haptic-checkbox:checked::after, .haptic-radio-button:checked::after {
-  background-color: #2670D0;
+  background-color: #235FBE;
 }
 @media (prefers-color-scheme: dark) {
   .haptic-checkbox:checked::after, .haptic-radio-button:checked::after {
@@ -1077,7 +1077,7 @@ haptic-text-field .trailing-icon {
 }
 
 .haptic-radio-button:checked.outlined::before {
-  border-color: #2670D0;
+  border-color: #235FBE;
 }
 @media (prefers-color-scheme: dark) {
   .haptic-radio-button:checked.outlined::before {
@@ -1128,7 +1128,7 @@ haptic-text-field .trailing-icon {
   }
 }
 .haptic-switch.outlined:checked::before {
-  border-color: #2670D0;
+  border-color: #235FBE;
 }
 @media (prefers-color-scheme: dark) {
   .haptic-switch.outlined:checked::before {
@@ -1136,7 +1136,7 @@ haptic-text-field .trailing-icon {
   }
 }
 .haptic-switch.outlined:checked::after {
-  background-color: #2670D0;
+  background-color: #235FBE;
 }
 @media (prefers-color-scheme: dark) {
   .haptic-switch.outlined:checked::after {
