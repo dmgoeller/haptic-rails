@@ -896,6 +896,16 @@
 <hr>
 <h3>Select fields</h3>
 
+<pre>&lt;<code class="elem-name">haptic-dropdown-field</code>&gt;
+  &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field-container"</code>&gt;
+    &lt;<code class="elem-name">select</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field outlined"</code>&gt;
+      &lt;<code class="elem-name">option</code> <code class="attr-name">value</code>=<code class="attr-value">"one"</code> <code class="attr-name">selected</code>&gt;One&lt;/<code class="elem-name">option</code>&gt;
+      &lt;<code class="elem-name">option</code> <code class="attr-name">value</code>=<code class="attr-value">"two"</code>&gt;Two&lt;/<code class="elem-name">option</code>&gt;
+      &lt;<code class="elem-name">option</code> <code class="attr-name">value</code>=<code class="attr-value">"three"</code>&gt;Three&lt;/<code class="elem-name">option</code>&gt;
+    &lt;/<code class="elem-name">select</code>&gt;
+  &lt;/<code class="elem-name">div</code>&gt;
+&lt;/<code class="elem-name">haptic-dropdown-field</code>&gt;</pre>
+
 <table>
   <tr>
     <th align="left">Modifier class</th>
@@ -938,6 +948,22 @@
 <hr>
 <h3>Custom select fields</h3>
 
+<pre>&lt;<code class="elem-name">haptic-dropdown-field</code>&gt;
+  &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-field-container"</code>&gt;
+    &lt;<code class="elem-name">haptic-select-dropdown</code>&gt;
+      &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"hidden"</code>/&gt;
+      &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"toggle haptic-field outlined"</code>&gt;One&lt;/<code class="elem-name">div</code>&gt;
+      &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"popover"</code>&gt;
+        &lt;<code class="elem-name">haptic-option-list</code>&gt;
+          &lt;<code class="elem-name">haptic-option</code> <code class="attr-name">value</code>=<code class="attr-value">"one"</code> <code class="attr-name">selected</code>&gt;One&lt;/<code class="elem-name">haptic-option</code>&gt;
+          &lt;<code class="elem-name">haptic-option</code> <code class="attr-name">value</code>=<code class="attr-value">"two"</code>&gt;Two&lt;/<code class="elem-name">haptic-option</code>&gt;
+          &lt;<code class="elem-name">haptic-option</code> <code class="attr-name">value</code>=<code class="attr-value">"three"</code>&gt;Three&lt;/<code class="elem-name">haptic-option</code>&gt;
+        &lt;/<code class="elem-name">haptic-option-list</code>&gt;
+      &lt;/<code class="elem-name">div</code>&gt;
+    &lt;/<code class="elem-name">haptic-select-dropdown</code>&gt;
+  &lt;/<code class="elem-name">div</code>&gt;
+&lt;/<code class="elem-name">haptic-dropdown-field</code>&gt;</pre>
+
 <table>
   <tr>
     <th align="left">Modifier class</th>
@@ -948,17 +974,19 @@
     <td>
       <div class="example stretch">
         <haptic-dropdown-field>
-          <haptic-select-dropdown tabindex="0" class="embedded">
-            <input type="hidden"/>
-            <div class="toggle haptic-field outlined">One</div>
-            <div class="popover">
-              <haptic-option-list>
-                <haptic-option value="one" selected>One</haptic-option>
-                <haptic-option value="two">Two</haptic-option>
-                <haptic-option value="three">Three</haptic-option>
-              </haptic-option-list>
-            </div>
-            <div class="backdrop"/>
+          <div class="haptic-field-container">
+            <haptic-select-dropdown tabindex="0" class="embedded">
+              <input type="hidden"/>
+              <div class="toggle haptic-field outlined">One</div>
+              <div class="popover">
+                <haptic-option-list>
+                  <haptic-option value="one" selected>One</haptic-option>
+                  <haptic-option value="two">Two</haptic-option>
+                  <haptic-option value="three">Three</haptic-option>
+                </haptic-option-list>
+              </div>
+              <div class="backdrop"/>
+            </haptic-select-dropdown>
           </div>
         </haptic-dropdown-field>
       </div>

@@ -37,6 +37,15 @@ h4 {
   font-weight: bold;
 }
 
+a {
+  color: #2670D0;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #2670D0;
+}
+
 code {
   font-size: .875rem;
 }
@@ -110,6 +119,14 @@ tr:not(:first-of-type) td {
 
   hr {
     background-color: #606060;
+  }
+
+  a {
+    color: #7BA1D0;
+  }
+
+  a:visited {
+    color: #7BA1D0;
   }
 
   code.elem-name {
