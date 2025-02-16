@@ -243,11 +243,15 @@ haptic-dropdown-field, haptic-text-field {
     width: 100%;
   }
 
-  &[focus-indicator] > .haptic-field-container::after {
-    bottom: 0;
-    height: 3px;
-    left: 0;
-    width: 100%;
+  &[focus-indicator] {
+    &.haptic-field-container, & > .haptic-field-container {
+      &::after {
+        bottom: 0;
+        height: 3px;
+        left: 0;
+        width: 100%;
+      }
+    }
   }
 
   &[with-label] {
@@ -294,14 +298,17 @@ haptic-dropdown-field {
                                 $spacing-between-icons,
                                 $icon-size) {
 
-    & > .haptic-field-container::before, .error-icon, .leading-icon {
+    &.haptic-field-container::before, & > .haptic-field-container::before,
+    .error-icon, .leading-icon {
       height: $icon-size;
       top: calc(50% - #{$icon-size / 2});
       width: $icon-size;
     }
 
-    & > .haptic-field-container::before {
-      right: $padding-left-right-with-icons;
+    &.haptic-field-container, & > .haptic-field-container {
+      &::before {
+        right: $padding-left-right-with-icons;
+      }
     }
 
     &[with-leading-icon] {

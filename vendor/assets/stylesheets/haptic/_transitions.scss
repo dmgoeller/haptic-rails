@@ -86,8 +86,12 @@ haptic-dropdown-field, haptic-text-field {
     transition: color .4s linear;
   }
 
-  &[focus-indicator] > .haptic-field-container::after {
-    transition: .4s linear;
+  &[focus-indicator] {
+    &.haptic-field-container, & > .haptic-field-container {
+      &::after {
+        transition: .4s linear;
+      }
+    }
   }
 }
 

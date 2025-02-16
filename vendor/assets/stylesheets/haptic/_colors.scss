@@ -437,12 +437,16 @@ haptic-dropdown-field, haptic-text-field {
     @include haptic-red;
   }
 
-  &[focus-indicator] > .haptic-field-container::after {
-    @include haptic-primary-color('background-color');
+  &[focus-indicator] {
+    &.haptic-field-container, & > .haptic-field-container {
+      &::after {
+        @include haptic-primary-color('background-color');
+      }
+    }
   }
 
   &[invalid] {
-    & > .haptic-field-container {
+    &.haptic-field-container, & > .haptic-field-container {
       & > .haptic-field-label,
       & > .field_with_errors > .haptic-field-label {
         @include haptic-red;
@@ -459,14 +463,22 @@ haptic-dropdown-field, haptic-text-field {
     & > .error-message {
       @include haptic-red;
     }
-    &[focus-indicator] > .haptic-field-container::after {
-      @include haptic-red('background-color');
+    &[focus-indicator] {
+      &.haptic-field-container, & > .haptic-field-container {
+        &::after {
+          @include haptic-red('background-color');
+        }
+      }
     }
   }
 }
 
-haptic-dropdown-field > .haptic-field-container::before {
-  @include haptic-foreground-color('background-color');
+haptic-dropdown-field {
+  &.haptic-field-container, & > .haptic-field-container {
+    &::before {
+      @include haptic-foreground-color('background-color');
+    }
+  }
 }
 
 haptic-text-field {

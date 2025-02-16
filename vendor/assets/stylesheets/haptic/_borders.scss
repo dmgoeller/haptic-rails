@@ -111,18 +111,20 @@ haptic-option {
   }
 }
 
-haptic-dropdown-field, haptic-text-field {
-  &[focus-indicator] > .haptic-field-container::after {
-    border-bottom-left-radius: #{$haptic-field-border-radius} 3px;
-    border-bottom-right-radius: #{$haptic-field-border-radius} 3px;
-  }
+haptic-text-field .clear-button {
+  border-radius: 50%;
+  border: none;
+  outline: none;
 }
 
-haptic-text-field {
-  .clear-button {
-    border-radius: 50%;
-    border: none;
-    outline: none;
+haptic-dropdown-field, haptic-text-field {
+  &[focus-indicator] {
+    &.haptic-field-container, & > .haptic-field-container {
+      &::after {
+        border-bottom-left-radius: #{$haptic-field-border-radius} 3px;
+        border-bottom-right-radius: #{$haptic-field-border-radius} 3px;
+      }
+    }
   }
 }
 
