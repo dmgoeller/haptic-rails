@@ -66,9 +66,9 @@ module Haptic
       #   form.text_field :name, label: true
       #   # =>
       #   # <haptic-text-field for="dummy_name">
-      #   #   <div class="haptic-field-container">
+      #   #   <div class="field-container">
       #   #     <input is="haptic-input" type="text" name="dummy[name]" id="dummy_name">
-      #   #     <label is="haptic-label" class="haptic-field-label" for="dummy_name">Name</label>
+      #   #     <label is="haptic-label" class="field-label" for="dummy_name">Name</label>
       #   #   </div>
       #   # </haptic-text-field>
 
@@ -173,11 +173,11 @@ module Haptic
       #   # =>
       #   # <haptic-segmented-button>
       #   #   <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-      #   #   <div class="haptic-button-segment">
+      #   #   <div class="button-segment">
       #   #     <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue">
       #   #     <label for="dummy_color_blue">Blue</label>
       #   #   </div>
-      #   #   <div class="haptic-button-segment">
+      #   #   <div class="button-segment">
       #   #     <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
       #   #     <label for="dummy_color_green">Green</label>
       #   #   </div>
@@ -189,12 +189,12 @@ module Haptic
       #   # =>
       #   # <haptic-segmented-button>
       #   #   <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-      #   #   <div class="haptic-button-segment">
+      #   #   <div class="button-segment">
       #   #     <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue"
       #   #       checked="checked">
       #   #     <label for="dummy_color_blue">Blue</label>
       #   #   </div>
-      #   #   <div class="haptic-button-segment">
+      #   #   <div class="button-segment">
       #   #     <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
       #   #     <label for="dummy_color_green">Green</label>
       #   #   </div>
@@ -285,11 +285,11 @@ module Haptic
       #   # =>
       #   # <haptic-segmented-button>
       #   #   <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-      #   #   <div class="haptic-button-segment">
+      #   #   <div class="button-segment">
       #   #     <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue">
       #   #     <label for="dummy_color_blue">Blue</label>
       #   #   </div>
-      #   #   <div class="haptic-button-segment">
+      #   #   <div class="button-segment">
       #   #     <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
       #   #     <label for="dummy_color_green">Green</label>
       #   #   </div>
@@ -297,7 +297,7 @@ module Haptic
       def collection_segmented_button(method, collection, value_method, text_method, options = {}, &block)
         @template.haptic_segmented_button_tag do
           collection_radio_buttons(method, collection, value_method, text_method, options) do |b|
-            @template.content_tag('div', class: 'haptic-button-segment') do
+            @template.content_tag('div', class: 'button-segment') do
               block ? block.call(b) : b.radio_button(is: nil) + b.label(is: nil)
             end
           end
@@ -312,7 +312,7 @@ module Haptic
       #   form.collection_select :color, %w[Blue Green], :downcase, :itself
       #   # =>
       #   # <haptic-dropdown-field for="dummy_color">
-      #   #   <div class="haptic-field-container">
+      #   #   <div class="field-container">
       #   #     <select name="dummy[color]" id="dummy_color">
       #   #       <option value="blue">Blue</option>
       #   #       <option value="green">Green</option>
@@ -345,7 +345,7 @@ module Haptic
       #   form.collection_select_dropdown :color, %w[Blue Green], :downcase, :itself
       #   # =>
       #   # <haptic-dropdown-field for="dummy_color">
-      #   #   <div class="haptic-field-container">
+      #   #   <div class="field-container">
       #   #     <haptic-select-dropdown>
       #   #       <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
       #   #       <div class="toggle haptic-field"></div>
@@ -434,7 +434,7 @@ module Haptic
       #   form.select :color, [%w[Blue blue], %w[Green green]]
       #   # =>
       #   # <haptic-dropdown-field for="dummy_color">
-      #   #   <div class="haptic-field-container">
+      #   #   <div class="field-container">
       #   #     <select is="haptic-select" name="dummy[color]" id="dummy_color">
       #   #       <option value="blue">Blue</option>
       #   #       <option value="green">Green</option>
@@ -461,7 +461,7 @@ module Haptic
       #   form.select_dropdown :color, [%w[Blue blue], %w[Green green]]
       #   # =>
       #   # <haptic-dropdown-field for="dummy_color">
-      #   #   <div class="haptic-field-container">
+      #   #   <div class="field-container">
       #   #     <haptic-select-dropdown>
       #   #       <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
       #   #       <div class="toggle haptic-field"></div>
@@ -539,7 +539,7 @@ module Haptic
           if (label_option = options.delete(:label))
             args = [:label, method]
             args << label_option unless label_option == true
-            send(*args, class: 'haptic-field-label')
+            send(*args, class: 'field-label')
           end
 
         @template.haptic_field_tag(type, field, label, options)

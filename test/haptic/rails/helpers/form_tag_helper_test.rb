@@ -39,8 +39,8 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-dropdown-field>
-                <div class="haptic-field-container">
-                  <label class="haptic-field-label">Label</label>
+                <div class="field-container">
+                  <label class="field-label">Label</label>
                 </div>
               </haptic-dropdown-field>
             HTML
@@ -155,7 +155,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container"></div>
+                <div class="field-container"></div>
               </haptic-text-field>
             HTML
             haptic_text_field_tag
@@ -166,7 +166,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container">
+                <div class="field-container">
                   #{field = '<input name="name" type="text">'}
                 </div>
               </haptic-text-field>
@@ -179,9 +179,9 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container">
+                <div class="field-container">
                   #{field = '<input name="name" type="text">'}
-                  <label class="haptic-field-label">Label</label>
+                  <label class="field-label">Label</label>
                 </div>
               </haptic-text-field>
             HTML
@@ -193,7 +193,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container">
+                <div class="field-container">
                   #{field = '<input name="name" type="text">'}
                   <button type="button" tabindex="-1" class="clear-button">
                     <div class="haptic-icon">close</div>
@@ -209,7 +209,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container">
+                <div class="field-container">
                   #{field = '<input name="name" type="text">'}
                   <div class="haptic-icon leading-icon">leading_icon</div>
                 </div>
@@ -223,7 +223,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container">
+                <div class="field-container">
                   #{field = '<input name="name" type="text">'}
                   <div class="haptic-icon trailing-icon">trailing_icon</div>
                 </div>
@@ -237,7 +237,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container">
+                <div class="field-container">
                   #{field = '<input name="name" type="text">'}
                 </div>
                 <div class="error-message">Message</div>
@@ -251,7 +251,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container">
+                <div class="field-container">
                 #{field = '<input name="name" type="text">'}
                 </div>
                 <div class="supporting-text">Text</div>
@@ -265,7 +265,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container">
+                <div class="field-container">
                   <input id="name" name="name" type="text">
                 </div>
               </haptic-text-field>
@@ -278,9 +278,9 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container">
+                <div class="field-container">
                   <input id="name" name="name" type="text">
-                  <label class="haptic-field-label">Label</label>
+                  <label class="field-label">Label</label>
                 </div>
               </haptic-text-field>
             HTML
@@ -292,7 +292,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container">
+                <div class="field-container">
                   <input id="name" name="name" type="text">
                   <button type="button" tabindex="-1" class="clear-button">
                     <div class="haptic-icon">close</div>
@@ -308,7 +308,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container">
+                <div class="field-container">
                   <input id="name" name="name" type="text">
                   <div class="haptic-icon error-icon">error</div>
                 </div>
@@ -322,7 +322,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container">
+                <div class="field-container">
                   <input id="name" name="name" type="text">
                   <div class="haptic-icon leading-icon">leading_icon</div>
                 </div>
@@ -336,7 +336,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container">
+                <div class="field-container">
                   <input id="name" name="name" type="text">
                   <div class="haptic-icon trailing-icon">trailing_icon</div>
                 </div>
@@ -350,7 +350,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container">
+                <div class="field-container">
                   <input id="name" name="name" type="text">
                 </div>
                 <div class="error-message">Message</div>
@@ -366,7 +366,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
-                <div class="haptic-field-container">
+                <div class="field-container">
                   <input id="name" name="name" type="text">
                 </div>
                 <div class="supporting-text">Text</div>

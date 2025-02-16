@@ -66,10 +66,10 @@ module Haptic
           end.to_h
 
           content_tag("haptic-#{type}-field", field_options) do
-            content_tag('div', class: 'haptic-field-container') do
+            content_tag('div', class: 'field-container') do
               field +
                 if label
-                  label.html_safe? ? label : content_tag('label', label, class: 'haptic-field-label')
+                  label.html_safe? ? label : content_tag('label', label, class: 'field-label')
                 end +
                 if type == 'text' && options['clear_button']
                   content_tag('button', type: 'button', tabindex: -1, class: 'clear-button') do
@@ -179,7 +179,7 @@ module Haptic
         #   haptic_text_field_tag { text_field_tag 'name' }
         #   # =>
         #   # <haptic-text-field>
-        #   #   <div class="haptic-field-container">
+        #   #   <div class="field-container">
         #   #     <input id="name" name="name" type="text">
         #   #   </div>
         #   # </haptic-text-field>
@@ -187,16 +187,16 @@ module Haptic
         #   haptic_text_field_tag('Label') { text_field_tag 'name' }
         #   # =>
         #   # <haptic-text-field>
-        #   #   <div class="haptic-field-container">
+        #   #   <div class="field-container">
         #   #     <input id="name" name="name" type="text">
-        #   #     <label class="haptic-field-label">Label</label>
+        #   #     <label class="field-label">Label</label>
         #   #   </div>
         #   # </haptic-text-field>
         #
         #   haptic_text_field_tag(clear_button: true) { text_field_tag 'name' }
         #   # =>
         #   # <haptic-text-field>
-        #   #   <div class="haptic-field-container">
+        #   #   <div class="field-container">
         #   #     <input id="name" name="name" type="text">
         #   #     <button type="button" tabindex="-1" class="clear-button">
         #   #       <div class="haptic-icon">close</div>

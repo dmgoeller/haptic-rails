@@ -70,7 +70,7 @@ $haptic-field-with-label-min-height: 3.5rem !default;
  * Chips and segmented buttons
  **********************************************************************/
 
-.haptic-button-segment, .haptic-chip {
+haptic-segmented-button .button-segment, .haptic-chip {
   $padding-left-right: haptic-measure(.5rem, .75rem);
   $icon-size: haptic-measure(1rem, 1.125rem);
   $spacing-between-icon-and-label: .5rem;
@@ -202,7 +202,7 @@ haptic-option {
  **********************************************************************/
 
 @mixin haptic-field-padding-left($padding-left) {
-  .haptic-field, .haptic-field-label {
+  .haptic-field, .field-label {
     padding-left: $padding-left;
   }
   .haptic-field.outlined {
@@ -211,7 +211,7 @@ haptic-option {
 }
 
 @mixin haptic-field-padding-right($padding-right) {
-  .haptic-field, .haptic-field-label {
+  .haptic-field, .field-label {
     padding-right: $padding-right;
   }
   .haptic-field.outlined {
@@ -244,7 +244,7 @@ haptic-dropdown-field, haptic-text-field {
   }
 
   &[focus-indicator] {
-    &.haptic-field-container, & > .haptic-field-container {
+    &.field-container, & > .field-container {
       &::after {
         bottom: 0;
         height: 3px;
@@ -269,7 +269,7 @@ haptic-dropdown-field, haptic-text-field {
       }
     }
 
-    .haptic-field-label {
+    .field-label {
       box-sizing: border-box;
       left: 0;
       top: $padding-top-bottom;
@@ -298,14 +298,14 @@ haptic-dropdown-field {
                                 $spacing-between-icons,
                                 $icon-size) {
 
-    &.haptic-field-container::before, & > .haptic-field-container::before,
+    &.field-container::before, & > .field-container::before,
     .error-icon, .leading-icon {
       height: $icon-size;
       top: calc(50% - #{$icon-size / 2});
       width: $icon-size;
     }
 
-    &.haptic-field-container, & > .haptic-field-container {
+    &.field-container, & > .field-container {
       &::before {
         right: $padding-left-right-with-icons;
       }
@@ -533,7 +533,7 @@ haptic-text-field {
     );
 
     &[animated-label][empty]:not(:focus-within) {
-      .haptic-field-label {
+      .field-label {
         $line-height: 1.125rem;
         line-height: $line-height;
         top: #{($haptic-field-with-label-min-height - $line-height) / 2};

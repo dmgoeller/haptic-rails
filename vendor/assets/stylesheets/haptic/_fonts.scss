@@ -36,7 +36,7 @@ $haptic-font-family: sans-serif !default;
  * Chips and segmented buttons
  **********************************************************************/
 
-.haptic-button-segment, .haptic-chip {
+haptic-segmented-button .button-segment, .haptic-chip {
   label {
     font-family: $haptic-font-family;
     font-size: 1rem;
@@ -61,7 +61,7 @@ haptic-dialog-dropdown > .popover > .segment > .legend {
 }
 
 haptic-dropdown-field, haptic-text-field {
-  .haptic-field-label {
+  .field-label {
     font-family: $haptic-font-family;
     font-size: .875rem;
     font-weight: bold;
@@ -84,7 +84,7 @@ haptic-dropdown-field, haptic-text-field {
 
 haptic-text-field {
   &[animated-label][empty]:not(:focus-within) {
-    .haptic-field-label {
+    .field-label {
       font-size: 1rem;
     }
   }

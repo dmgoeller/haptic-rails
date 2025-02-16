@@ -225,7 +225,7 @@ $haptic-dark-mode: true !default;
  * Chips and segmented buttons
  **********************************************************************/
 
-.haptic-button-segment, .haptic-chip {
+haptic-segmented-button .button-segment, .haptic-chip {
   input {
     &::after {
       background-color: transparent;
@@ -425,7 +425,7 @@ haptic-option {
 }
 
 haptic-dropdown-field, haptic-text-field {
-  .haptic-field-label {
+  .field-label {
     @include haptic-primary-color;
   }
 
@@ -438,7 +438,7 @@ haptic-dropdown-field, haptic-text-field {
   }
 
   &[focus-indicator] {
-    &.haptic-field-container, & > .haptic-field-container {
+    &.field-container, & > .field-container {
       &::after {
         @include haptic-primary-color('background-color');
       }
@@ -446,9 +446,9 @@ haptic-dropdown-field, haptic-text-field {
   }
 
   &[invalid] {
-    &.haptic-field-container, & > .haptic-field-container {
-      & > .haptic-field-label,
-      & > .field_with_errors > .haptic-field-label {
+    &.field-container, & > .field-container {
+      & > .field-label,
+      & > .field_with_errors > .field-label {
         @include haptic-red;
       }
       & > .haptic-field,
@@ -464,7 +464,7 @@ haptic-dropdown-field, haptic-text-field {
       @include haptic-red;
     }
     &[focus-indicator] {
-      &.haptic-field-container, & > .haptic-field-container {
+      &.field-container, & > .field-container {
         &::after {
           @include haptic-red('background-color');
         }
@@ -474,7 +474,7 @@ haptic-dropdown-field, haptic-text-field {
 }
 
 haptic-dropdown-field {
-  &.haptic-field-container, & > .haptic-field-container {
+  &.field-container, & > .field-container {
     &::before {
       @include haptic-foreground-color('background-color');
     }
@@ -487,7 +487,7 @@ haptic-text-field {
       color: transparent;
     }
 
-    &[empty]:not(:focus-within) .haptic-field-label {
+    &[empty]:not(:focus-within) .field-label {
       @include haptic-foreground-color;
     }
   }

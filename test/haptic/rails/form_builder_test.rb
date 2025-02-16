@@ -21,9 +21,9 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field for="dummy_name" id="field-id" set-valid-on-change="dummy_bar">
-                <div class="haptic-field-container">
+                <div class="field-container">
                   <input is="haptic-input" type="#{type}" name="dummy[name]" id="dummy_name">
-                  <label is="haptic-label" class="haptic-field-label" for="dummy_name">Name</label>
+                  <label is="haptic-label" class="field-label" for="dummy_name">Name</label>
                   <button type="button" tabindex="-1" class="clear-button">
                     <div class="haptic-icon">close</div>
                   </button>
@@ -51,9 +51,9 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field for="dummy_name">
-                <div class="haptic-field-container">
+                <div class="field-container">
                   <input is="haptic-input" type="#{type}" name="dummy[name]" id="dummy_name">
-                  <label is="haptic-label" class="haptic-field-label" for="dummy_name">Label</label>
+                  <label is="haptic-label" class="field-label" for="dummy_name">Label</label>
                 </div>
               </haptic-text-field>
             HTML
@@ -68,7 +68,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field for="dummy_name" invalid="">
-                <div class="haptic-field-container">
+                <div class="field-container">
                   <div class="field_with_errors">
                     <input is="haptic-input" type="#{type}" name="dummy[name]" id="dummy_name">
                   </div>
@@ -91,9 +91,9 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field for="dummy_name">
-                <div class="haptic-field-container">
+                <div class="field-container">
                   <input is="haptic-input" type="#{type}" name="dummy[name]" id="dummy_name">
-                  <label is="haptic-label" class="haptic-field-label" for="dummy_name">Name</label>
+                  <label is="haptic-label" class="field-label" for="dummy_name">Name</label>
                 </div>
               </haptic-text-field>
             HTML
@@ -115,9 +115,9 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-text-field for="dummy_name" id="field-id" set-valid-on-change="dummy_bar">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <textarea is="haptic-textarea" name="dummy[name]" id="dummy_name"></textarea>
-                <label is="haptic-label" class="haptic-field-label" for="dummy_name">Name</label>
+                <label is="haptic-label" class="field-label" for="dummy_name">Name</label>
                 <button type="button" tabindex="-1" class="clear-button">
                   <div class="haptic-icon">close</div>
                 </button>
@@ -144,9 +144,9 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-text-field for="dummy_name">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <textarea is="haptic-textarea" name="dummy[name]" id="dummy_name"></textarea>
-                <label is="haptic-label" class="haptic-field-label" for="dummy_name">Label</label>
+                <label is="haptic-label" class="field-label" for="dummy_name">Label</label>
               </div>
             </haptic-text-field>
           HTML
@@ -161,7 +161,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-text-field for="dummy_name" invalid="">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <div class="field_with_errors">
                   <textarea is="haptic-textarea" name="dummy[name]" id="dummy_name"></textarea>
                 </div>
@@ -329,11 +329,11 @@ module Haptic
           <<~HTML,
             <haptic-segmented-button>
               <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-              <div class="haptic-button-segment">
+              <div class="button-segment">
                 <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue">
                 <label for="dummy_color_blue">Blue</label>
               </div>
-              <div class="haptic-button-segment">
+              <div class="button-segment">
                 <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
                 <label for="dummy_color_green">Green</label>
               </div>
@@ -348,11 +348,11 @@ module Haptic
           <<~HTML,
             <haptic-segmented-button>
               <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-              <div class="haptic-button-segment">
+              <div class="button-segment">
                 <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue">
                 <label for="dummy_color_blue">Blue</label>
               </div>
-              <div class="haptic-button-segment">
+              <div class="button-segment">
                 <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
                 <label for="dummy_color_green">Green</label>
               </div>
@@ -367,12 +367,12 @@ module Haptic
           <<~HTML,
             <haptic-segmented-button>
               <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-              <div class="haptic-button-segment">
+              <div class="button-segment">
                 <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue"
                   checked="checked">
                 <label for="dummy_color_blue">Blue</label>
               </div>
-              <div class="haptic-button-segment">
+              <div class="button-segment">
                 <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
                 <label for="dummy_color_green">Green</label>
               </div>
@@ -535,11 +535,11 @@ module Haptic
           <<~HTML,
             <haptic-segmented-button>
               <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-              <div class="haptic-button-segment">
+              <div class="button-segment">
                 <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue">
                 <label for="dummy_color_blue">Blue</label>
               </div>
-              <div class="haptic-button-segment">
+              <div class="button-segment">
                 <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
                 <label for="dummy_color_green">Green</label>
               </div>
@@ -554,12 +554,12 @@ module Haptic
           <<~HTML,
             <haptic-segmented-button>
               <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-              <div class="haptic-button-segment">
+              <div class="button-segment">
                 <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue"
                   checked="checked">
                 <label for="dummy_color_blue">Blue</label>
               </div>
-              <div class="haptic-button-segment">
+              <div class="button-segment">
                 <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
                 <label for="dummy_color_green">Green</label>
               </div>
@@ -575,7 +575,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <select name="dummy[color]" id="dummy_color">
                   <option value="blue">Blue</option>
                   <option value="green">Green</option>
@@ -591,12 +591,12 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color" id="field-id" set-valid-on-change="dummy_bar">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <select name="dummy[color]" id="dummy_color">
                   <option value="blue">Blue</option>
                   <option value="green">Green</option>
                 </select>
-                <label is="haptic-label" class="haptic-field-label" for="dummy_color">Color</label>
+                <label is="haptic-label" class="field-label" for="dummy_color">Color</label>
                 <div class="haptic-icon leading-icon">leading_icon</div>
               </div>
               <div class="supporting-text">Supporting text</div>
@@ -623,12 +623,12 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <select name="dummy[color]" id="dummy_color">
                   <option value="blue">Blue</option>
                   <option value="green">Green</option>
                 </select>
-                <label is="haptic-label" class="haptic-field-label" for="dummy_color">Label</label>
+                <label is="haptic-label" class="field-label" for="dummy_color">Label</label>
               </div>
             </haptic-dropdown-field>
           HTML
@@ -650,7 +650,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color" invalid="">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <div class="field_with_errors">
                   <select name="dummy[color]" id="dummy_color">
                     <option value="blue">Blue</option>
@@ -677,7 +677,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
                   <div class="toggle haptic-field"></div>
@@ -700,7 +700,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color" id="field-id" set-valid-on-change="dummy_bar">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
                   <div class="toggle haptic-field"></div>
@@ -712,7 +712,7 @@ module Haptic
                   </div>
                   <div class="backdrop"></div>
                 </haptic-select-dropdown>
-                <label is="haptic-label" class="haptic-field-label" for="dummy_color">Color</label>
+                <label is="haptic-label" class="field-label" for="dummy_color">Color</label>
                 <div class="haptic-icon leading-icon">leading_icon</div>
               </div>
               <div class="supporting-text">Supporting text</div>
@@ -739,7 +739,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
                   <div class="toggle haptic-field"></div>
@@ -751,7 +751,7 @@ module Haptic
                   </div>
                   <div class="backdrop"></div>
                 </haptic-select-dropdown>
-                <label is="haptic-label" class="haptic-field-label" for="dummy_color">Label</label>
+                <label is="haptic-label" class="field-label" for="dummy_color">Label</label>
               </div>
             </haptic-dropdown-field>
           HTML
@@ -773,7 +773,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color" invalid="">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
                   <div class="toggle haptic-field"></div>
@@ -805,7 +805,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
                   <div class="toggle haptic-field"></div>
@@ -835,7 +835,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-text-field for="dummy_date">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <input is="haptic-input" type="date" name="dummy[date]" id="dummy_date">
                 <div class="haptic-icon trailing-icon">calendar_today</div>
               </div>
@@ -849,9 +849,9 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-text-field for="dummy_date" id="field-id" set-valid-on-change="dummy_bar">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <input is="haptic-input" type="date" name="dummy[date]" id="dummy_date">
-                <label is="haptic-label" class="haptic-field-label" for="dummy_date">Date</label>
+                <label is="haptic-label" class="field-label" for="dummy_date">Date</label>
                 <div class="haptic-icon leading-icon">leading_icon</div>
                 <div class="haptic-icon trailing-icon">calendar_today</div>
               </div>
@@ -873,9 +873,9 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-text-field for="dummy_date">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <input is="haptic-input" type="date" name="dummy[date]" id="dummy_date">
-                <label is="haptic-label" class="haptic-field-label" for="dummy_date">Label</label>
+                <label is="haptic-label" class="field-label" for="dummy_date">Label</label>
                 <div class="haptic-icon trailing-icon">calendar_today</div>
               </div>
             </haptic-text-field>
@@ -891,7 +891,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-text-field for="dummy_date" invalid="">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <div class="field_with_errors">
                   <input is="haptic-input" type="date" name="dummy[date]" id="dummy_date">
                 </div>
@@ -910,7 +910,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-text-field for="dummy_date">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <input is="haptic-input" type="date" name="dummy[date]" id="dummy_date">
                 <div class="haptic-icon trailing-icon">calendar_today</div>
               </div>
@@ -924,7 +924,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field>
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <haptic-dialog-dropdown>
                   <div class="backdrop"></div>
                 </haptic-dialog-dropdown>
@@ -939,11 +939,11 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field>
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <haptic-dialog-dropdown>
                   <div class="backdrop"></div>
                 </haptic-dialog-dropdown>
-                <label class="haptic-field-label">Label</label>
+                <label class="field-label">Label</label>
               </div>
             </haptic-dropdown-field>
           HTML
@@ -955,7 +955,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field>
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <haptic-dialog-dropdown>
                   <div class="backdrop"></div>
                 </haptic-dialog-dropdown>
@@ -970,7 +970,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field>
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <haptic-dialog-dropdown>
                   <button class="toggle haptic-field" type="button">Text</button>
                   <div class="popover"></div>
@@ -1010,7 +1010,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <select is="haptic-select" name="dummy[color]" id="dummy_color">
                   <option value="blue">Blue</option>
                   <option value="green">Green</option>
@@ -1026,7 +1026,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
                   <div class="toggle haptic-field"></div>
@@ -1049,7 +1049,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
                   <div class="toggle haptic-field"></div>
@@ -1072,7 +1072,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
                   <div class="toggle haptic-field"></div>
@@ -1092,7 +1092,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
                   <div class="toggle haptic-field"></div>
@@ -1137,7 +1137,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-text-field for="dummy_name" id="field-id">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <input is="haptic-input" type="text" name="dummy[name]" id="dummy_name">
               </div>
             </haptic-text-field>
@@ -1150,7 +1150,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-text-field for="foo_dummy_name" id="field-id">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <input is="haptic-input" type="text" name="dummy[name]" id="foo_dummy_name">
               </div>
             </haptic-text-field>
@@ -1163,7 +1163,7 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-text-field for="dummy_0_name" id="field-id">
-              <div class="haptic-field-container">
+              <div class="field-container">
                 <input is="haptic-input" type="text" name="dummy[0][name]" id="dummy_0_name">
               </div>
             </haptic-text-field>
@@ -1177,7 +1177,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field for="dummy_name" id="field-id">
-                <div class="haptic-field-container">
+                <div class="field-container">
                   <input is="haptic-input" type="text" name="dummy[name]" id="dummy_name">
                 </div>
               </haptic-text-field>
@@ -1192,7 +1192,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field for="foo_dummy_name" id="field-id">
-                <div class="haptic-field-container">
+                <div class="field-container">
                   <input is="haptic-input" type="text" name="dummy[name]" id="foo_dummy_name">
                 </div>
               </haptic-text-field>
@@ -1207,7 +1207,7 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field for="dummy_0_name" id="field-id">
-                <div class="haptic-field-container">
+                <div class="field-container">
                   <input is="haptic-input" type="text" name="dummy[0][name]" id="dummy_0_name">
                 </div>
               </haptic-text-field>

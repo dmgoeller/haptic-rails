@@ -42,13 +42,18 @@ button.haptic-button:disabled, button.haptic-icon-button:disabled, input[type=re
 /**********************************************************************
  * Chips and segmented buttons
  **********************************************************************/
-.haptic-button-segment, .haptic-chip {
+haptic-segmented-button {
+  display: grid;
+  grid-auto-flow: column;
+}
+
+haptic-segmented-button .button-segment, .haptic-chip {
   align-items: stretch;
   display: flex;
   flex-direction: column;
   position: relative;
 }
-.haptic-button-segment label, .haptic-chip label {
+haptic-segmented-button .button-segment label, .haptic-chip label {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -56,13 +61,13 @@ button.haptic-button:disabled, button.haptic-icon-button:disabled, input[type=re
   position: absolute;
   text-align: center;
 }
-.haptic-button-segment input, .haptic-chip input {
+haptic-segmented-button .button-segment input, .haptic-chip input {
   appearance: none;
   background-clip: padding-box;
   cursor: pointer;
   position: absolute;
 }
-.haptic-button-segment input::after, .haptic-chip input::after {
+haptic-segmented-button .button-segment input::after, .haptic-chip input::after {
   -webkit-mask-image: url(checkmark.svg);
   -webkit-mask-position: center;
   -webkit-mask-repeat: no-repeat;
@@ -73,15 +78,10 @@ button.haptic-button:disabled, button.haptic-icon-button:disabled, input[type=re
   pointer-events: none;
   position: absolute;
 }
-.haptic-button-segment input:disabled, .haptic-button-segment input:disabled ~ label, .haptic-chip input:disabled, .haptic-chip input:disabled ~ label {
+haptic-segmented-button .button-segment input:disabled, haptic-segmented-button .button-segment input:disabled ~ label, .haptic-chip input:disabled, .haptic-chip input:disabled ~ label {
   filter: grayscale(1);
   opacity: 0.5;
   pointer-events: none;
-}
-
-haptic-segmented-button {
-  display: grid;
-  grid-auto-flow: column;
 }
 
 /**********************************************************************
@@ -167,12 +167,12 @@ textarea.haptic-field {
   resize: none;
 }
 
-haptic-dropdown-field, haptic-dropdown-field > .haptic-field-container, haptic-text-field, haptic-text-field > .haptic-field-container {
+haptic-dropdown-field, haptic-dropdown-field > .field-container, haptic-text-field, haptic-text-field > .field-container {
   align-items: stretch;
   display: flex;
   flex-direction: column;
 }
-haptic-dropdown-field.haptic-field-container, haptic-dropdown-field > .haptic-field-container, haptic-text-field.haptic-field-container, haptic-text-field > .haptic-field-container {
+haptic-dropdown-field.field-container, haptic-dropdown-field > .field-container, haptic-text-field.field-container, haptic-text-field > .field-container {
   position: relative;
 }
 haptic-dropdown-field .haptic-field.overflow-ellipsis, haptic-text-field .haptic-field.overflow-ellipsis {
@@ -181,7 +181,7 @@ haptic-dropdown-field .haptic-field.overflow-ellipsis, haptic-text-field .haptic
   white-space: nowrap;
   position: absolute;
 }
-haptic-dropdown-field .haptic-field-label, haptic-text-field .haptic-field-label {
+haptic-dropdown-field .field-label, haptic-text-field .field-label {
   pointer-events: none;
   position: absolute;
   z-index: 1;
@@ -189,17 +189,17 @@ haptic-dropdown-field .haptic-field-label, haptic-text-field .haptic-field-label
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-haptic-dropdown-field[required] .haptic-field-label::after, haptic-text-field[required] .haptic-field-label::after {
+haptic-dropdown-field[required] .field-label::after, haptic-text-field[required] .field-label::after {
   content: " *";
 }
-haptic-dropdown-field[focus-indicator].haptic-field-container::after, haptic-dropdown-field[focus-indicator] > .haptic-field-container::after, haptic-text-field[focus-indicator].haptic-field-container::after, haptic-text-field[focus-indicator] > .haptic-field-container::after {
+haptic-dropdown-field[focus-indicator].field-container::after, haptic-dropdown-field[focus-indicator] > .field-container::after, haptic-text-field[focus-indicator].field-container::after, haptic-text-field[focus-indicator] > .field-container::after {
   pointer-events: none;
   position: absolute;
   z-index: 1;
   content: "​";
   opacity: 0;
 }
-haptic-dropdown-field[focus-indicator]:focus-within.haptic-field-container::after, haptic-dropdown-field[focus-indicator]:focus-within > .haptic-field-container::after, haptic-text-field[focus-indicator]:focus-within.haptic-field-container::after, haptic-text-field[focus-indicator]:focus-within > .haptic-field-container::after {
+haptic-dropdown-field[focus-indicator]:focus-within.field-container::after, haptic-dropdown-field[focus-indicator]:focus-within > .field-container::after, haptic-text-field[focus-indicator]:focus-within.field-container::after, haptic-text-field[focus-indicator]:focus-within > .field-container::after {
   opacity: 1;
 }
 haptic-dropdown-field .field_with_errors, haptic-text-field .field_with_errors {
@@ -227,11 +227,11 @@ haptic-dropdown-field[disabled], fieldset:disabled haptic-dropdown-field, haptic
   pointer-events: none;
 }
 
-haptic-dropdown-field, haptic-dropdown-field > .haptic-field-container, haptic-dropdown-field .haptic-field,
+haptic-dropdown-field, haptic-dropdown-field > .field-container, haptic-dropdown-field .haptic-field,
 haptic-dropdown-field haptic-dialog-dropdown, haptic-dropdown-field haptic-select-dropdown {
   flex-grow: 1;
 }
-haptic-dropdown-field.haptic-field-container::before, haptic-dropdown-field > .haptic-field-container::before {
+haptic-dropdown-field.field-container::before, haptic-dropdown-field > .field-container::before {
   -webkit-mask-image: url(dropdown-arrow.svg);
   -webkit-mask-position: center;
   -webkit-mask-repeat: no-repeat;
@@ -377,19 +377,19 @@ haptic-list-item[disabled] {
 /**********************************************************************
  * Chips and segmented buttons
  **********************************************************************/
-.haptic-button-segment input.outlined {
+haptic-segmented-button .button-segment input.outlined {
   border-style: solid;
   border-width: 1px 0 1px 1px;
 }
-.haptic-button-segment:first-of-type input {
+haptic-segmented-button .button-segment:first-of-type input {
   border-bottom-left-radius: 0.5rem;
   border-top-left-radius: 0.5rem;
 }
-.haptic-button-segment:last-of-type input {
+haptic-segmented-button .button-segment:last-of-type input {
   border-bottom-right-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
 }
-.haptic-button-segment:last-of-type input.outlined {
+haptic-segmented-button .button-segment:last-of-type input.outlined {
   border-right-width: 1px;
 }
 
@@ -448,7 +448,7 @@ haptic-text-field .clear-button {
   outline: none;
 }
 
-haptic-dropdown-field[focus-indicator].haptic-field-container::after, haptic-dropdown-field[focus-indicator] > .haptic-field-container::after, haptic-text-field[focus-indicator].haptic-field-container::after, haptic-text-field[focus-indicator] > .haptic-field-container::after {
+haptic-dropdown-field[focus-indicator].field-container::after, haptic-dropdown-field[focus-indicator] > .field-container::after, haptic-text-field[focus-indicator].field-container::after, haptic-text-field[focus-indicator] > .field-container::after {
   border-bottom-left-radius: 0.25rem 3px;
   border-bottom-right-radius: 0.25rem 3px;
 }
@@ -692,74 +692,74 @@ haptic-list.divided haptic-list-item:not(:first-of-type) {
 /**********************************************************************
  * Chips and segmented buttons
  **********************************************************************/
-.haptic-button-segment input::after, .haptic-chip input::after {
+haptic-segmented-button .button-segment input::after, .haptic-chip input::after {
   background-color: transparent;
 }
-.haptic-button-segment input.filled, .haptic-chip input.filled {
+haptic-segmented-button .button-segment input.filled, .haptic-chip input.filled {
   background-color: rgba(0, 0, 0, 0.1725490196);
 }
 @media (prefers-color-scheme: dark) {
-  .haptic-button-segment input.filled, .haptic-chip input.filled {
+  haptic-segmented-button .button-segment input.filled, .haptic-chip input.filled {
     background-color: rgba(255, 255, 255, 0.1254901961);
   }
 }
-.haptic-button-segment input.filled:checked, .haptic-chip input.filled:checked {
+haptic-segmented-button .button-segment input.filled:checked, .haptic-chip input.filled:checked {
   background-color: #2670D0;
 }
-.haptic-button-segment input.filled:checked::after, .haptic-chip input.filled:checked::after {
+haptic-segmented-button .button-segment input.filled:checked::after, .haptic-chip input.filled:checked::after {
   background-color: white;
 }
-.haptic-button-segment input.filled:checked ~ label, .haptic-chip input.filled:checked ~ label {
+haptic-segmented-button .button-segment input.filled:checked ~ label, .haptic-chip input.filled:checked ~ label {
   color: white;
 }
-.haptic-button-segment input.filled:hover:not(:checked), .haptic-chip input.filled:hover:not(:checked) {
+haptic-segmented-button .button-segment input.filled:hover:not(:checked), .haptic-chip input.filled:hover:not(:checked) {
   background-color: rgba(0, 0, 0, 0.2352941176);
 }
 @media (prefers-color-scheme: dark) {
-  .haptic-button-segment input.filled:hover:not(:checked), .haptic-chip input.filled:hover:not(:checked) {
+  haptic-segmented-button .button-segment input.filled:hover:not(:checked), .haptic-chip input.filled:hover:not(:checked) {
     background-color: rgba(255, 255, 255, 0.1882352941);
   }
 }
-.haptic-button-segment input:not(.filled):checked, .haptic-chip input:not(.filled):checked {
+haptic-segmented-button .button-segment input:not(.filled):checked, .haptic-chip input:not(.filled):checked {
   background-color: #2670D040;
 }
-.haptic-button-segment input:not(.filled):checked::after, .haptic-chip input:not(.filled):checked::after {
+haptic-segmented-button .button-segment input:not(.filled):checked::after, .haptic-chip input:not(.filled):checked::after {
   background-color: #235FBE;
 }
 @media (prefers-color-scheme: dark) {
-  .haptic-button-segment input:not(.filled):checked::after, .haptic-chip input:not(.filled):checked::after {
+  haptic-segmented-button .button-segment input:not(.filled):checked::after, .haptic-chip input:not(.filled):checked::after {
     background-color: rgb(170.0111731844, 194.4776536313, 224.7388268156);
   }
 }
-.haptic-button-segment input:not(.filled):checked ~ label, .haptic-chip input:not(.filled):checked ~ label {
+haptic-segmented-button .button-segment input:not(.filled):checked ~ label, .haptic-chip input:not(.filled):checked ~ label {
   color: #235FBE;
 }
 @media (prefers-color-scheme: dark) {
-  .haptic-button-segment input:not(.filled):checked ~ label, .haptic-chip input:not(.filled):checked ~ label {
+  haptic-segmented-button .button-segment input:not(.filled):checked ~ label, .haptic-chip input:not(.filled):checked ~ label {
     color: rgb(170.0111731844, 194.4776536313, 224.7388268156);
   }
 }
-.haptic-button-segment input:not(.filled):hover:not(:checked), .haptic-chip input:not(.filled):hover:not(:checked) {
+haptic-segmented-button .button-segment input:not(.filled):hover:not(:checked), .haptic-chip input:not(.filled):hover:not(:checked) {
   background-color: #2670D020;
 }
 @media (prefers-color-scheme: dark) {
-  .haptic-button-segment input:not(.filled):hover:not(:checked), .haptic-chip input:not(.filled):hover:not(:checked) {
+  haptic-segmented-button .button-segment input:not(.filled):hover:not(:checked), .haptic-chip input:not(.filled):hover:not(:checked) {
     background-color: #7BA1D020;
   }
 }
-.haptic-button-segment input:not(.filled):focus-visible, .haptic-chip input:not(.filled):focus-visible {
+haptic-segmented-button .button-segment input:not(.filled):focus-visible, .haptic-chip input:not(.filled):focus-visible {
   background-color: #2670D060;
 }
 @media (prefers-color-scheme: dark) {
-  .haptic-button-segment input:not(.filled):focus-visible, .haptic-chip input:not(.filled):focus-visible {
+  haptic-segmented-button .button-segment input:not(.filled):focus-visible, .haptic-chip input:not(.filled):focus-visible {
     background-color: #7BA1D060;
   }
 }
-.haptic-button-segment input.outlined, .haptic-chip input.outlined {
+haptic-segmented-button .button-segment input.outlined, .haptic-chip input.outlined {
   border-color: rgba(0, 0, 0, 0.3764705882);
 }
 @media (prefers-color-scheme: dark) {
-  .haptic-button-segment input.outlined, .haptic-chip input.outlined {
+  haptic-segmented-button .button-segment input.outlined, .haptic-chip input.outlined {
     border-color: rgba(255, 255, 255, 0.3764705882);
   }
 }
@@ -907,11 +907,11 @@ haptic-option[highlighted][checked]::after {
   }
 }
 
-haptic-dropdown-field .haptic-field-label, haptic-text-field .haptic-field-label {
+haptic-dropdown-field .field-label, haptic-text-field .field-label {
   color: #235FBE;
 }
 @media (prefers-color-scheme: dark) {
-  haptic-dropdown-field .haptic-field-label, haptic-text-field .haptic-field-label {
+  haptic-dropdown-field .field-label, haptic-text-field .field-label {
     color: #7BA1D0;
   }
 }
@@ -931,27 +931,27 @@ haptic-dropdown-field .error-icon, haptic-text-field .error-icon {
     color: #EF9A9A;
   }
 }
-haptic-dropdown-field[focus-indicator].haptic-field-container::after, haptic-dropdown-field[focus-indicator] > .haptic-field-container::after, haptic-text-field[focus-indicator].haptic-field-container::after, haptic-text-field[focus-indicator] > .haptic-field-container::after {
+haptic-dropdown-field[focus-indicator].field-container::after, haptic-dropdown-field[focus-indicator] > .field-container::after, haptic-text-field[focus-indicator].field-container::after, haptic-text-field[focus-indicator] > .field-container::after {
   background-color: #235FBE;
 }
 @media (prefers-color-scheme: dark) {
-  haptic-dropdown-field[focus-indicator].haptic-field-container::after, haptic-dropdown-field[focus-indicator] > .haptic-field-container::after, haptic-text-field[focus-indicator].haptic-field-container::after, haptic-text-field[focus-indicator] > .haptic-field-container::after {
+  haptic-dropdown-field[focus-indicator].field-container::after, haptic-dropdown-field[focus-indicator] > .field-container::after, haptic-text-field[focus-indicator].field-container::after, haptic-text-field[focus-indicator] > .field-container::after {
     background-color: #7BA1D0;
   }
 }
-haptic-dropdown-field[invalid].haptic-field-container > .haptic-field-label, haptic-dropdown-field[invalid].haptic-field-container > .field_with_errors > .haptic-field-label, haptic-dropdown-field[invalid] > .haptic-field-container > .haptic-field-label, haptic-dropdown-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field-label, haptic-text-field[invalid].haptic-field-container > .haptic-field-label, haptic-text-field[invalid].haptic-field-container > .field_with_errors > .haptic-field-label, haptic-text-field[invalid] > .haptic-field-container > .haptic-field-label, haptic-text-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field-label {
+haptic-dropdown-field[invalid].field-container > .field-label, haptic-dropdown-field[invalid].field-container > .field_with_errors > .field-label, haptic-dropdown-field[invalid] > .field-container > .field-label, haptic-dropdown-field[invalid] > .field-container > .field_with_errors > .field-label, haptic-text-field[invalid].field-container > .field-label, haptic-text-field[invalid].field-container > .field_with_errors > .field-label, haptic-text-field[invalid] > .field-container > .field-label, haptic-text-field[invalid] > .field-container > .field_with_errors > .field-label {
   color: #C62828;
 }
 @media (prefers-color-scheme: dark) {
-  haptic-dropdown-field[invalid].haptic-field-container > .haptic-field-label, haptic-dropdown-field[invalid].haptic-field-container > .field_with_errors > .haptic-field-label, haptic-dropdown-field[invalid] > .haptic-field-container > .haptic-field-label, haptic-dropdown-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field-label, haptic-text-field[invalid].haptic-field-container > .haptic-field-label, haptic-text-field[invalid].haptic-field-container > .field_with_errors > .haptic-field-label, haptic-text-field[invalid] > .haptic-field-container > .haptic-field-label, haptic-text-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field-label {
+  haptic-dropdown-field[invalid].field-container > .field-label, haptic-dropdown-field[invalid].field-container > .field_with_errors > .field-label, haptic-dropdown-field[invalid] > .field-container > .field-label, haptic-dropdown-field[invalid] > .field-container > .field_with_errors > .field-label, haptic-text-field[invalid].field-container > .field-label, haptic-text-field[invalid].field-container > .field_with_errors > .field-label, haptic-text-field[invalid] > .field-container > .field-label, haptic-text-field[invalid] > .field-container > .field_with_errors > .field-label {
     color: #EF9A9A;
   }
 }
-haptic-dropdown-field[invalid].haptic-field-container > .haptic-field.outlined, haptic-dropdown-field[invalid].haptic-field-container > .field_with_errors > .haptic-field.outlined, haptic-dropdown-field[invalid].haptic-field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-dropdown-field[invalid].haptic-field-container > haptic-select-dropdown > .haptic-field.outlined, haptic-dropdown-field[invalid] > .haptic-field-container > .haptic-field.outlined, haptic-dropdown-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field.outlined, haptic-dropdown-field[invalid] > .haptic-field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-dropdown-field[invalid] > .haptic-field-container > haptic-select-dropdown > .haptic-field.outlined, haptic-text-field[invalid].haptic-field-container > .haptic-field.outlined, haptic-text-field[invalid].haptic-field-container > .field_with_errors > .haptic-field.outlined, haptic-text-field[invalid].haptic-field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-text-field[invalid].haptic-field-container > haptic-select-dropdown > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > haptic-select-dropdown > .haptic-field.outlined {
+haptic-dropdown-field[invalid].field-container > .haptic-field.outlined, haptic-dropdown-field[invalid].field-container > .field_with_errors > .haptic-field.outlined, haptic-dropdown-field[invalid].field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-dropdown-field[invalid].field-container > haptic-select-dropdown > .haptic-field.outlined, haptic-dropdown-field[invalid] > .field-container > .haptic-field.outlined, haptic-dropdown-field[invalid] > .field-container > .field_with_errors > .haptic-field.outlined, haptic-dropdown-field[invalid] > .field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-dropdown-field[invalid] > .field-container > haptic-select-dropdown > .haptic-field.outlined, haptic-text-field[invalid].field-container > .haptic-field.outlined, haptic-text-field[invalid].field-container > .field_with_errors > .haptic-field.outlined, haptic-text-field[invalid].field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-text-field[invalid].field-container > haptic-select-dropdown > .haptic-field.outlined, haptic-text-field[invalid] > .field-container > .haptic-field.outlined, haptic-text-field[invalid] > .field-container > .field_with_errors > .haptic-field.outlined, haptic-text-field[invalid] > .field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-text-field[invalid] > .field-container > haptic-select-dropdown > .haptic-field.outlined {
   border-color: #C62828;
 }
 @media (prefers-color-scheme: dark) {
-  haptic-dropdown-field[invalid].haptic-field-container > .haptic-field.outlined, haptic-dropdown-field[invalid].haptic-field-container > .field_with_errors > .haptic-field.outlined, haptic-dropdown-field[invalid].haptic-field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-dropdown-field[invalid].haptic-field-container > haptic-select-dropdown > .haptic-field.outlined, haptic-dropdown-field[invalid] > .haptic-field-container > .haptic-field.outlined, haptic-dropdown-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field.outlined, haptic-dropdown-field[invalid] > .haptic-field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-dropdown-field[invalid] > .haptic-field-container > haptic-select-dropdown > .haptic-field.outlined, haptic-text-field[invalid].haptic-field-container > .haptic-field.outlined, haptic-text-field[invalid].haptic-field-container > .field_with_errors > .haptic-field.outlined, haptic-text-field[invalid].haptic-field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-text-field[invalid].haptic-field-container > haptic-select-dropdown > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > .field_with_errors > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-text-field[invalid] > .haptic-field-container > haptic-select-dropdown > .haptic-field.outlined {
+  haptic-dropdown-field[invalid].field-container > .haptic-field.outlined, haptic-dropdown-field[invalid].field-container > .field_with_errors > .haptic-field.outlined, haptic-dropdown-field[invalid].field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-dropdown-field[invalid].field-container > haptic-select-dropdown > .haptic-field.outlined, haptic-dropdown-field[invalid] > .field-container > .haptic-field.outlined, haptic-dropdown-field[invalid] > .field-container > .field_with_errors > .haptic-field.outlined, haptic-dropdown-field[invalid] > .field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-dropdown-field[invalid] > .field-container > haptic-select-dropdown > .haptic-field.outlined, haptic-text-field[invalid].field-container > .haptic-field.outlined, haptic-text-field[invalid].field-container > .field_with_errors > .haptic-field.outlined, haptic-text-field[invalid].field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-text-field[invalid].field-container > haptic-select-dropdown > .haptic-field.outlined, haptic-text-field[invalid] > .field-container > .haptic-field.outlined, haptic-text-field[invalid] > .field-container > .field_with_errors > .haptic-field.outlined, haptic-text-field[invalid] > .field-container > haptic-dialog-dropdown > .haptic-field.outlined, haptic-text-field[invalid] > .field-container > haptic-select-dropdown > .haptic-field.outlined {
     border-color: #EF9A9A;
   }
 }
@@ -963,20 +963,20 @@ haptic-dropdown-field[invalid] > .error-message, haptic-text-field[invalid] > .e
     color: #EF9A9A;
   }
 }
-haptic-dropdown-field[invalid][focus-indicator].haptic-field-container::after, haptic-dropdown-field[invalid][focus-indicator] > .haptic-field-container::after, haptic-text-field[invalid][focus-indicator].haptic-field-container::after, haptic-text-field[invalid][focus-indicator] > .haptic-field-container::after {
+haptic-dropdown-field[invalid][focus-indicator].field-container::after, haptic-dropdown-field[invalid][focus-indicator] > .field-container::after, haptic-text-field[invalid][focus-indicator].field-container::after, haptic-text-field[invalid][focus-indicator] > .field-container::after {
   background-color: #C62828;
 }
 @media (prefers-color-scheme: dark) {
-  haptic-dropdown-field[invalid][focus-indicator].haptic-field-container::after, haptic-dropdown-field[invalid][focus-indicator] > .haptic-field-container::after, haptic-text-field[invalid][focus-indicator].haptic-field-container::after, haptic-text-field[invalid][focus-indicator] > .haptic-field-container::after {
+  haptic-dropdown-field[invalid][focus-indicator].field-container::after, haptic-dropdown-field[invalid][focus-indicator] > .field-container::after, haptic-text-field[invalid][focus-indicator].field-container::after, haptic-text-field[invalid][focus-indicator] > .field-container::after {
     background-color: #EF9A9A;
   }
 }
 
-haptic-dropdown-field.haptic-field-container::before, haptic-dropdown-field > .haptic-field-container::before {
+haptic-dropdown-field.field-container::before, haptic-dropdown-field > .field-container::before {
   background-color: #606060;
 }
 @media (prefers-color-scheme: dark) {
-  haptic-dropdown-field.haptic-field-container::before, haptic-dropdown-field > .haptic-field-container::before {
+  haptic-dropdown-field.field-container::before, haptic-dropdown-field > .field-container::before {
     background-color: #C0C0C0;
   }
 }
@@ -984,11 +984,11 @@ haptic-dropdown-field.haptic-field-container::before, haptic-dropdown-field > .h
 haptic-text-field[animated-label] ::placeholder {
   color: transparent;
 }
-haptic-text-field[animated-label][empty]:not(:focus-within) .haptic-field-label {
+haptic-text-field[animated-label][empty]:not(:focus-within) .field-label {
   color: #606060;
 }
 @media (prefers-color-scheme: dark) {
-  haptic-text-field[animated-label][empty]:not(:focus-within) .haptic-field-label {
+  haptic-text-field[animated-label][empty]:not(:focus-within) .field-label {
     color: #C0C0C0;
   }
 }
@@ -1244,7 +1244,7 @@ haptic-list.divided haptic-list-item:not(:first-of-type) {
 /**********************************************************************
  * Chips and segmented buttons
  **********************************************************************/
-.haptic-button-segment label, .haptic-chip label {
+haptic-segmented-button .button-segment label, .haptic-chip label {
   font-family: sans-serif;
   font-size: 1rem;
 }
@@ -1264,7 +1264,7 @@ haptic-dialog-dropdown > .popover > .segment > .legend {
   font-size: 1rem;
 }
 
-haptic-dropdown-field .haptic-field-label, haptic-text-field .haptic-field-label {
+haptic-dropdown-field .field-label, haptic-text-field .field-label {
   font-family: sans-serif;
   font-size: 0.875rem;
   font-weight: bold;
@@ -1279,7 +1279,7 @@ haptic-dropdown-field .error-message, haptic-dropdown-field .supporting-text, ha
   font-size: 0.875rem;
 }
 
-haptic-text-field[animated-label][empty]:not(:focus-within) .haptic-field-label {
+haptic-text-field[animated-label][empty]:not(:focus-within) .field-label {
   font-size: 1rem;
 }
 haptic-text-field .clear-button {
@@ -1351,24 +1351,24 @@ haptic-list-item .supporting-text {
 /**********************************************************************
  * Chips and segmented buttons
  **********************************************************************/
-.haptic-button-segment, .haptic-chip {
+haptic-segmented-button .button-segment, .haptic-chip {
   box-sizing: border-box;
   min-height: 2.5rem;
   min-width: 3.125rem;
 }
-.haptic-button-segment input, .haptic-chip input {
+haptic-segmented-button .button-segment input, .haptic-chip input {
   height: 100%;
   margin: 0;
   outline: none;
   width: 100%;
 }
-.haptic-button-segment input::after, .haptic-chip input::after {
+haptic-segmented-button .button-segment input::after, .haptic-chip input::after {
   height: 1.125rem;
   left: 0.75rem;
   top: calc(50% - 0.5625rem);
   width: 1.125rem;
 }
-.haptic-button-segment label, .haptic-chip label {
+haptic-segmented-button .button-segment label, .haptic-chip label {
   box-sizing: border-box;
   height: 1.125rem;
   left: 2.375rem;
@@ -1462,7 +1462,7 @@ haptic-dropdown-field .haptic-field.overflow-ellipsis, haptic-text-field .haptic
   height: 100%;
   width: 100%;
 }
-haptic-dropdown-field[focus-indicator].haptic-field-container::after, haptic-dropdown-field[focus-indicator] > .haptic-field-container::after, haptic-text-field[focus-indicator].haptic-field-container::after, haptic-text-field[focus-indicator] > .haptic-field-container::after {
+haptic-dropdown-field[focus-indicator].field-container::after, haptic-dropdown-field[focus-indicator] > .field-container::after, haptic-text-field[focus-indicator].field-container::after, haptic-text-field[focus-indicator] > .field-container::after {
   bottom: 0;
   height: 3px;
   left: 0;
@@ -1480,7 +1480,7 @@ haptic-dropdown-field[with-label] .haptic-field.outlined, haptic-text-field[with
   padding-bottom: calc(0.5rem - 1px);
   padding-top: calc(1.75rem - 1px);
 }
-haptic-dropdown-field[with-label] .haptic-field-label, haptic-text-field[with-label] .haptic-field-label {
+haptic-dropdown-field[with-label] .field-label, haptic-text-field[with-label] .field-label {
   box-sizing: border-box;
   left: 0;
   top: 0.5rem;
@@ -1493,16 +1493,16 @@ haptic-dropdown-field .error-message, haptic-dropdown-field .supporting-text, ha
   margin: 0.25rem 1rem 0 1rem;
 }
 
-haptic-dropdown-field[with-label].haptic-field-container::before, haptic-dropdown-field[with-label] > .haptic-field-container::before,
+haptic-dropdown-field[with-label].field-container::before, haptic-dropdown-field[with-label] > .field-container::before,
 haptic-dropdown-field[with-label] .error-icon, haptic-dropdown-field[with-label] .leading-icon {
   height: 1.5rem;
   top: calc(50% - 0.75rem);
   width: 1.5rem;
 }
-haptic-dropdown-field[with-label].haptic-field-container::before, haptic-dropdown-field[with-label] > .haptic-field-container::before {
+haptic-dropdown-field[with-label].field-container::before, haptic-dropdown-field[with-label] > .field-container::before {
   right: 0.75rem;
 }
-haptic-dropdown-field[with-label][with-leading-icon] .haptic-field, haptic-dropdown-field[with-label][with-leading-icon] .haptic-field-label {
+haptic-dropdown-field[with-label][with-leading-icon] .haptic-field, haptic-dropdown-field[with-label][with-leading-icon] .field-label {
   padding-left: 3.25rem;
 }
 haptic-dropdown-field[with-label][with-leading-icon] .haptic-field.outlined {
@@ -1511,13 +1511,13 @@ haptic-dropdown-field[with-label][with-leading-icon] .haptic-field.outlined {
 haptic-dropdown-field[with-label][with-leading-icon] .leading-icon {
   left: 0.75rem;
 }
-haptic-dropdown-field[with-label]:not([with-leading-icon]) .haptic-field, haptic-dropdown-field[with-label]:not([with-leading-icon]) .haptic-field-label {
+haptic-dropdown-field[with-label]:not([with-leading-icon]) .haptic-field, haptic-dropdown-field[with-label]:not([with-leading-icon]) .field-label {
   padding-left: 1rem;
 }
 haptic-dropdown-field[with-label]:not([with-leading-icon]) .haptic-field.outlined {
   padding-left: calc(1rem - 1px);
 }
-haptic-dropdown-field[with-label][with-error-icon] .haptic-field, haptic-dropdown-field[with-label][with-error-icon] .haptic-field-label {
+haptic-dropdown-field[with-label][with-error-icon] .haptic-field, haptic-dropdown-field[with-label][with-error-icon] .field-label {
   padding-right: 5.5rem;
 }
 haptic-dropdown-field[with-label][with-error-icon] .haptic-field.outlined {
@@ -1526,22 +1526,22 @@ haptic-dropdown-field[with-label][with-error-icon] .haptic-field.outlined {
 haptic-dropdown-field[with-label][with-error-icon] .error-icon {
   right: 3rem;
 }
-haptic-dropdown-field[with-label]:not([with-error-icon]) .haptic-field, haptic-dropdown-field[with-label]:not([with-error-icon]) .haptic-field-label {
+haptic-dropdown-field[with-label]:not([with-error-icon]) .haptic-field, haptic-dropdown-field[with-label]:not([with-error-icon]) .field-label {
   padding-right: 3.25rem;
 }
 haptic-dropdown-field[with-label]:not([with-error-icon]) .haptic-field.outlined {
   padding-right: calc(3.25rem - 1px);
 }
-haptic-dropdown-field:not([with-label]).haptic-field-container::before, haptic-dropdown-field:not([with-label]) > .haptic-field-container::before,
+haptic-dropdown-field:not([with-label]).field-container::before, haptic-dropdown-field:not([with-label]) > .field-container::before,
 haptic-dropdown-field:not([with-label]) .error-icon, haptic-dropdown-field:not([with-label]) .leading-icon {
   height: 1.5rem;
   top: calc(50% - 0.75rem);
   width: 1.5rem;
 }
-haptic-dropdown-field:not([with-label]).haptic-field-container::before, haptic-dropdown-field:not([with-label]) > .haptic-field-container::before {
+haptic-dropdown-field:not([with-label]).field-container::before, haptic-dropdown-field:not([with-label]) > .field-container::before {
   right: 0.75rem;
 }
-haptic-dropdown-field:not([with-label])[with-leading-icon] .haptic-field, haptic-dropdown-field:not([with-label])[with-leading-icon] .haptic-field-label {
+haptic-dropdown-field:not([with-label])[with-leading-icon] .haptic-field, haptic-dropdown-field:not([with-label])[with-leading-icon] .field-label {
   padding-left: 3.25rem;
 }
 haptic-dropdown-field:not([with-label])[with-leading-icon] .haptic-field.outlined {
@@ -1550,13 +1550,13 @@ haptic-dropdown-field:not([with-label])[with-leading-icon] .haptic-field.outline
 haptic-dropdown-field:not([with-label])[with-leading-icon] .leading-icon {
   left: 0.75rem;
 }
-haptic-dropdown-field:not([with-label]):not([with-leading-icon]) .haptic-field, haptic-dropdown-field:not([with-label]):not([with-leading-icon]) .haptic-field-label {
+haptic-dropdown-field:not([with-label]):not([with-leading-icon]) .haptic-field, haptic-dropdown-field:not([with-label]):not([with-leading-icon]) .field-label {
   padding-left: 1rem;
 }
 haptic-dropdown-field:not([with-label]):not([with-leading-icon]) .haptic-field.outlined {
   padding-left: calc(1rem - 1px);
 }
-haptic-dropdown-field:not([with-label])[with-error-icon] .haptic-field, haptic-dropdown-field:not([with-label])[with-error-icon] .haptic-field-label {
+haptic-dropdown-field:not([with-label])[with-error-icon] .haptic-field, haptic-dropdown-field:not([with-label])[with-error-icon] .field-label {
   padding-right: 5.5rem;
 }
 haptic-dropdown-field:not([with-label])[with-error-icon] .haptic-field.outlined {
@@ -1565,7 +1565,7 @@ haptic-dropdown-field:not([with-label])[with-error-icon] .haptic-field.outlined 
 haptic-dropdown-field:not([with-label])[with-error-icon] .error-icon {
   right: 3rem;
 }
-haptic-dropdown-field:not([with-label]):not([with-error-icon]) .haptic-field, haptic-dropdown-field:not([with-label]):not([with-error-icon]) .haptic-field-label {
+haptic-dropdown-field:not([with-label]):not([with-error-icon]) .haptic-field, haptic-dropdown-field:not([with-label]):not([with-error-icon]) .field-label {
   padding-right: 3.25rem;
 }
 haptic-dropdown-field:not([with-label]):not([with-error-icon]) .haptic-field.outlined {
@@ -1584,7 +1584,7 @@ haptic-text-field[with-label] ::-webkit-calendar-picker-indicator {
   top: 1rem;
   width: 1.5rem;
 }
-haptic-text-field[with-label][with-leading-icon] .haptic-field, haptic-text-field[with-label][with-leading-icon] .haptic-field-label {
+haptic-text-field[with-label][with-leading-icon] .haptic-field, haptic-text-field[with-label][with-leading-icon] .field-label {
   padding-left: 3.25rem;
 }
 haptic-text-field[with-label][with-leading-icon] .haptic-field.outlined {
@@ -1593,7 +1593,7 @@ haptic-text-field[with-label][with-leading-icon] .haptic-field.outlined {
 haptic-text-field[with-label][with-leading-icon] .leading-icon {
   left: 0.75rem;
 }
-haptic-text-field[with-label]:not([with-leading-icon]) .haptic-field, haptic-text-field[with-label]:not([with-leading-icon]) .haptic-field-label {
+haptic-text-field[with-label]:not([with-leading-icon]) .haptic-field, haptic-text-field[with-label]:not([with-leading-icon]) .field-label {
   padding-left: 1rem;
 }
 haptic-text-field[with-label]:not([with-leading-icon]) .haptic-field.outlined {
@@ -1606,7 +1606,7 @@ haptic-text-field[with-label][with-trailing-icon] ::-webkit-calendar-picker-indi
 haptic-text-field[with-label][with-trailing-icon][with-error-icon] .error-icon {
   right: 3rem;
 }
-haptic-text-field[with-label][with-trailing-icon][with-error-icon][with-clear-button] .haptic-field, haptic-text-field[with-label][with-trailing-icon][with-error-icon][with-clear-button] .haptic-field-label {
+haptic-text-field[with-label][with-trailing-icon][with-error-icon][with-clear-button] .haptic-field, haptic-text-field[with-label][with-trailing-icon][with-error-icon][with-clear-button] .field-label {
   padding-right: 7.75rem;
 }
 haptic-text-field[with-label][with-trailing-icon][with-error-icon][with-clear-button] .haptic-field.outlined {
@@ -1615,13 +1615,13 @@ haptic-text-field[with-label][with-trailing-icon][with-error-icon][with-clear-bu
 haptic-text-field[with-label][with-trailing-icon][with-error-icon][with-clear-button] .clear-button {
   right: 5.25rem;
 }
-haptic-text-field[with-label][with-trailing-icon][with-error-icon]:not([with-clear-button]) .haptic-field, haptic-text-field[with-label][with-trailing-icon][with-error-icon]:not([with-clear-button]) .haptic-field-label {
+haptic-text-field[with-label][with-trailing-icon][with-error-icon]:not([with-clear-button]) .haptic-field, haptic-text-field[with-label][with-trailing-icon][with-error-icon]:not([with-clear-button]) .field-label {
   padding-right: 5.5rem;
 }
 haptic-text-field[with-label][with-trailing-icon][with-error-icon]:not([with-clear-button]) .haptic-field.outlined {
   padding-right: calc(5.5rem - 1px);
 }
-haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon])[with-clear-button] .haptic-field, haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon])[with-clear-button] .haptic-field-label {
+haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon])[with-clear-button] .haptic-field, haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon])[with-clear-button] .field-label {
   padding-right: 5.5rem;
 }
 haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon])[with-clear-button] .haptic-field.outlined {
@@ -1630,7 +1630,7 @@ haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon])[with-cl
 haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon])[with-clear-button] .clear-button {
   right: 3rem;
 }
-haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon]):not([with-clear-button]) .haptic-field, haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon]):not([with-clear-button]) .haptic-field-label {
+haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon]):not([with-clear-button]) .haptic-field, haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon]):not([with-clear-button]) .field-label {
   padding-right: 3.25rem;
 }
 haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon]):not([with-clear-button]) .haptic-field.outlined {
@@ -1639,7 +1639,7 @@ haptic-text-field[with-label][with-trailing-icon]:not([with-error-icon]):not([wi
 haptic-text-field[with-label]:not([with-trailing-icon])[with-error-icon] .error-icon {
   right: 0.75rem;
 }
-haptic-text-field[with-label]:not([with-trailing-icon])[with-error-icon][with-clear-button] .haptic-field, haptic-text-field[with-label]:not([with-trailing-icon])[with-error-icon][with-clear-button] .haptic-field-label {
+haptic-text-field[with-label]:not([with-trailing-icon])[with-error-icon][with-clear-button] .haptic-field, haptic-text-field[with-label]:not([with-trailing-icon])[with-error-icon][with-clear-button] .field-label {
   padding-right: 5.5rem;
 }
 haptic-text-field[with-label]:not([with-trailing-icon])[with-error-icon][with-clear-button] .haptic-field.outlined {
@@ -1648,13 +1648,13 @@ haptic-text-field[with-label]:not([with-trailing-icon])[with-error-icon][with-cl
 haptic-text-field[with-label]:not([with-trailing-icon])[with-error-icon][with-clear-button] .clear-button {
   right: 3rem;
 }
-haptic-text-field[with-label]:not([with-trailing-icon])[with-error-icon]:not([with-clear-button]) .haptic-field, haptic-text-field[with-label]:not([with-trailing-icon])[with-error-icon]:not([with-clear-button]) .haptic-field-label {
+haptic-text-field[with-label]:not([with-trailing-icon])[with-error-icon]:not([with-clear-button]) .haptic-field, haptic-text-field[with-label]:not([with-trailing-icon])[with-error-icon]:not([with-clear-button]) .field-label {
   padding-right: 3.25rem;
 }
 haptic-text-field[with-label]:not([with-trailing-icon])[with-error-icon]:not([with-clear-button]) .haptic-field.outlined {
   padding-right: calc(3.25rem - 1px);
 }
-haptic-text-field[with-label]:not([with-trailing-icon]):not([with-error-icon])[with-clear-button] .haptic-field, haptic-text-field[with-label]:not([with-trailing-icon]):not([with-error-icon])[with-clear-button] .haptic-field-label {
+haptic-text-field[with-label]:not([with-trailing-icon]):not([with-error-icon])[with-clear-button] .haptic-field, haptic-text-field[with-label]:not([with-trailing-icon]):not([with-error-icon])[with-clear-button] .field-label {
   padding-right: 3.25rem;
 }
 haptic-text-field[with-label]:not([with-trailing-icon]):not([with-error-icon])[with-clear-button] .haptic-field.outlined {
@@ -1663,13 +1663,13 @@ haptic-text-field[with-label]:not([with-trailing-icon]):not([with-error-icon])[w
 haptic-text-field[with-label]:not([with-trailing-icon]):not([with-error-icon])[with-clear-button] .clear-button {
   right: 0.75rem;
 }
-haptic-text-field[with-label]:not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .haptic-field, haptic-text-field[with-label]:not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .haptic-field-label {
+haptic-text-field[with-label]:not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .haptic-field, haptic-text-field[with-label]:not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .field-label {
   padding-right: 1rem;
 }
 haptic-text-field[with-label]:not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .haptic-field.outlined {
   padding-right: calc(1rem - 1px);
 }
-haptic-text-field[with-label][animated-label][empty]:not(:focus-within) .haptic-field-label {
+haptic-text-field[with-label][animated-label][empty]:not(:focus-within) .field-label {
   line-height: 1.125rem;
   top: 1.1875rem;
 }
@@ -1685,7 +1685,7 @@ haptic-text-field:not([with-label]) ::-webkit-calendar-picker-indicator {
   top: 0.5rem;
   width: 1.5rem;
 }
-haptic-text-field:not([with-label])[with-leading-icon] .haptic-field, haptic-text-field:not([with-label])[with-leading-icon] .haptic-field-label {
+haptic-text-field:not([with-label])[with-leading-icon] .haptic-field, haptic-text-field:not([with-label])[with-leading-icon] .field-label {
   padding-left: 3.25rem;
 }
 haptic-text-field:not([with-label])[with-leading-icon] .haptic-field.outlined {
@@ -1694,7 +1694,7 @@ haptic-text-field:not([with-label])[with-leading-icon] .haptic-field.outlined {
 haptic-text-field:not([with-label])[with-leading-icon] .leading-icon {
   left: 0.75rem;
 }
-haptic-text-field:not([with-label]):not([with-leading-icon]) .haptic-field, haptic-text-field:not([with-label]):not([with-leading-icon]) .haptic-field-label {
+haptic-text-field:not([with-label]):not([with-leading-icon]) .haptic-field, haptic-text-field:not([with-label]):not([with-leading-icon]) .field-label {
   padding-left: 1rem;
 }
 haptic-text-field:not([with-label]):not([with-leading-icon]) .haptic-field.outlined {
@@ -1707,7 +1707,7 @@ haptic-text-field:not([with-label])[with-trailing-icon] ::-webkit-calendar-picke
 haptic-text-field:not([with-label])[with-trailing-icon][with-error-icon] .error-icon {
   right: 3rem;
 }
-haptic-text-field:not([with-label])[with-trailing-icon][with-error-icon][with-clear-button] .haptic-field, haptic-text-field:not([with-label])[with-trailing-icon][with-error-icon][with-clear-button] .haptic-field-label {
+haptic-text-field:not([with-label])[with-trailing-icon][with-error-icon][with-clear-button] .haptic-field, haptic-text-field:not([with-label])[with-trailing-icon][with-error-icon][with-clear-button] .field-label {
   padding-right: 7.75rem;
 }
 haptic-text-field:not([with-label])[with-trailing-icon][with-error-icon][with-clear-button] .haptic-field.outlined {
@@ -1716,13 +1716,13 @@ haptic-text-field:not([with-label])[with-trailing-icon][with-error-icon][with-cl
 haptic-text-field:not([with-label])[with-trailing-icon][with-error-icon][with-clear-button] .clear-button {
   right: 5.25rem;
 }
-haptic-text-field:not([with-label])[with-trailing-icon][with-error-icon]:not([with-clear-button]) .haptic-field, haptic-text-field:not([with-label])[with-trailing-icon][with-error-icon]:not([with-clear-button]) .haptic-field-label {
+haptic-text-field:not([with-label])[with-trailing-icon][with-error-icon]:not([with-clear-button]) .haptic-field, haptic-text-field:not([with-label])[with-trailing-icon][with-error-icon]:not([with-clear-button]) .field-label {
   padding-right: 5.5rem;
 }
 haptic-text-field:not([with-label])[with-trailing-icon][with-error-icon]:not([with-clear-button]) .haptic-field.outlined {
   padding-right: calc(5.5rem - 1px);
 }
-haptic-text-field:not([with-label])[with-trailing-icon]:not([with-error-icon])[with-clear-button] .haptic-field, haptic-text-field:not([with-label])[with-trailing-icon]:not([with-error-icon])[with-clear-button] .haptic-field-label {
+haptic-text-field:not([with-label])[with-trailing-icon]:not([with-error-icon])[with-clear-button] .haptic-field, haptic-text-field:not([with-label])[with-trailing-icon]:not([with-error-icon])[with-clear-button] .field-label {
   padding-right: 5.5rem;
 }
 haptic-text-field:not([with-label])[with-trailing-icon]:not([with-error-icon])[with-clear-button] .haptic-field.outlined {
@@ -1731,7 +1731,7 @@ haptic-text-field:not([with-label])[with-trailing-icon]:not([with-error-icon])[w
 haptic-text-field:not([with-label])[with-trailing-icon]:not([with-error-icon])[with-clear-button] .clear-button {
   right: 3rem;
 }
-haptic-text-field:not([with-label])[with-trailing-icon]:not([with-error-icon]):not([with-clear-button]) .haptic-field, haptic-text-field:not([with-label])[with-trailing-icon]:not([with-error-icon]):not([with-clear-button]) .haptic-field-label {
+haptic-text-field:not([with-label])[with-trailing-icon]:not([with-error-icon]):not([with-clear-button]) .haptic-field, haptic-text-field:not([with-label])[with-trailing-icon]:not([with-error-icon]):not([with-clear-button]) .field-label {
   padding-right: 3.25rem;
 }
 haptic-text-field:not([with-label])[with-trailing-icon]:not([with-error-icon]):not([with-clear-button]) .haptic-field.outlined {
@@ -1740,7 +1740,7 @@ haptic-text-field:not([with-label])[with-trailing-icon]:not([with-error-icon]):n
 haptic-text-field:not([with-label]):not([with-trailing-icon])[with-error-icon] .error-icon {
   right: 0.75rem;
 }
-haptic-text-field:not([with-label]):not([with-trailing-icon])[with-error-icon][with-clear-button] .haptic-field, haptic-text-field:not([with-label]):not([with-trailing-icon])[with-error-icon][with-clear-button] .haptic-field-label {
+haptic-text-field:not([with-label]):not([with-trailing-icon])[with-error-icon][with-clear-button] .haptic-field, haptic-text-field:not([with-label]):not([with-trailing-icon])[with-error-icon][with-clear-button] .field-label {
   padding-right: 5.5rem;
 }
 haptic-text-field:not([with-label]):not([with-trailing-icon])[with-error-icon][with-clear-button] .haptic-field.outlined {
@@ -1749,13 +1749,13 @@ haptic-text-field:not([with-label]):not([with-trailing-icon])[with-error-icon][w
 haptic-text-field:not([with-label]):not([with-trailing-icon])[with-error-icon][with-clear-button] .clear-button {
   right: 3rem;
 }
-haptic-text-field:not([with-label]):not([with-trailing-icon])[with-error-icon]:not([with-clear-button]) .haptic-field, haptic-text-field:not([with-label]):not([with-trailing-icon])[with-error-icon]:not([with-clear-button]) .haptic-field-label {
+haptic-text-field:not([with-label]):not([with-trailing-icon])[with-error-icon]:not([with-clear-button]) .haptic-field, haptic-text-field:not([with-label]):not([with-trailing-icon])[with-error-icon]:not([with-clear-button]) .field-label {
   padding-right: 3.25rem;
 }
 haptic-text-field:not([with-label]):not([with-trailing-icon])[with-error-icon]:not([with-clear-button]) .haptic-field.outlined {
   padding-right: calc(3.25rem - 1px);
 }
-haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-icon])[with-clear-button] .haptic-field, haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-icon])[with-clear-button] .haptic-field-label {
+haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-icon])[with-clear-button] .haptic-field, haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-icon])[with-clear-button] .field-label {
   padding-right: 3.25rem;
 }
 haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-icon])[with-clear-button] .haptic-field.outlined {
@@ -1764,7 +1764,7 @@ haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-ic
 haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-icon])[with-clear-button] .clear-button {
   right: 0.75rem;
 }
-haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .haptic-field, haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .haptic-field-label {
+haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .haptic-field, haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .field-label {
   padding-right: 1rem;
 }
 haptic-text-field:not([with-label]):not([with-trailing-icon]):not([with-error-icon]):not([with-clear-button]) .haptic-field.outlined {
@@ -1947,16 +1947,16 @@ button.haptic-button:focus, button.haptic-button:focus-visible, button.haptic-ic
 /**********************************************************************
  * Chips and segmented buttons
  **********************************************************************/
-.haptic-button-segment input, .haptic-chip input {
+haptic-segmented-button .button-segment input, .haptic-chip input {
   transition: all 0.4s linear, background 0.1s linear, filter 0.2s linear, opacity 0.2s linear;
 }
-.haptic-button-segment input::after, .haptic-chip input::after {
+haptic-segmented-button .button-segment input::after, .haptic-chip input::after {
   transition: 0.1s linear;
 }
-.haptic-button-segment input:hover:not(:checked), .haptic-button-segment input:hover:not(:checked)::after, .haptic-chip input:hover:not(:checked), .haptic-chip input:hover:not(:checked)::after {
+haptic-segmented-button .button-segment input:hover:not(:checked), haptic-segmented-button .button-segment input:hover:not(:checked)::after, .haptic-chip input:hover:not(:checked), .haptic-chip input:hover:not(:checked)::after {
   transition: 0.4s linear;
 }
-.haptic-button-segment label, .haptic-chip label {
+haptic-segmented-button .button-segment label, .haptic-chip label {
   transition: all 0.1s linear, filter 0.2s linear, opacity 0.2s linear;
 }
 
@@ -1983,14 +1983,14 @@ haptic-dropdown-field .error-icon, haptic-text-field .error-icon {
 haptic-dropdown-field .error-message, haptic-text-field .error-message {
   transition: color 0.4s linear;
 }
-haptic-dropdown-field[focus-indicator].haptic-field-container::after, haptic-dropdown-field[focus-indicator] > .haptic-field-container::after, haptic-text-field[focus-indicator].haptic-field-container::after, haptic-text-field[focus-indicator] > .haptic-field-container::after {
+haptic-dropdown-field[focus-indicator].field-container::after, haptic-dropdown-field[focus-indicator] > .field-container::after, haptic-text-field[focus-indicator].field-container::after, haptic-text-field[focus-indicator] > .field-container::after {
   transition: 0.4s linear;
 }
 
 haptic-text-field {
   transition: all 0.4s linear, filter 0.2s linear, opacity 0.2s linear;
 }
-haptic-text-field .haptic-field-label {
+haptic-text-field .field-label {
   transition-duration: 0.4s;
   transition-property: color, font-size, top;
   transition-timing-function: linear;

@@ -21,7 +21,7 @@ button, input[type="submit"] {
  * Chips and segmented buttons
  **********************************************************************/
 
-.haptic-button-segment, .haptic-chip {
+haptic-segmented-button .button-segment, .haptic-chip {
   input {
     transition:
       all .4s linear,
@@ -87,7 +87,7 @@ haptic-dropdown-field, haptic-text-field {
   }
 
   &[focus-indicator] {
-    &.haptic-field-container, & > .haptic-field-container {
+    &.field-container, & > .field-container {
       &::after {
         transition: .4s linear;
       }
@@ -101,7 +101,7 @@ haptic-text-field {
     filter .2s linear,
     opacity .2s linear;
 
-  .haptic-field-label {
+  .field-label {
     transition-duration: .4s;
     transition-property: color, font-size, top;
     transition-timing-function: linear;

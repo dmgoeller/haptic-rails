@@ -782,7 +782,7 @@ class HapticFieldElement extends HTMLElement {
           this.#control = node;
         }
       } else
-      if (node.classList.contains('haptic-field-label')) {
+      if (node.classList.contains('field-label')) {
         if (!this.#label) {
           this.setAttribute('with-label', '');
           this.#label = node;
@@ -1041,7 +1041,7 @@ class HapticLabelElement extends HTMLLabelElement {
   }
 
   connectedCallback() {
-    if (!this.classList.contains('haptic-field-label')) {
+    if (!this.classList.contains('field-label')) {
       this.classList.add('haptic-label');
     }
   }
