@@ -1,4 +1,3 @@
-$haptic-font-family: sans-serif !default;
 
 /**********************************************************************
  * Badges
@@ -18,7 +17,7 @@ $haptic-font-family: sans-serif !default;
 }
 
 .haptic-button {
-  font-family: $haptic-font-family;
+  font-family: inherit;
   font-size: 1rem;
   font-weight: bold;
 
@@ -38,7 +37,7 @@ $haptic-font-family: sans-serif !default;
 
 haptic-segmented-button .button-segment, .haptic-chip {
   label {
-    font-family: $haptic-font-family;
+    font-family: inherit;
     font-size: 1rem;
   }
 }
@@ -56,13 +55,13 @@ haptic-dialog-dropdown > .popover > .segment > .legend {
  **********************************************************************/
 
 .haptic-field {
-  font-family: $haptic-font-family;
+  font-family: inherit;
   font-size: 1rem;
 }
 
 haptic-dropdown-field, haptic-text-field {
   .field-label {
-    font-family: $haptic-font-family;
+    font-family: inherit;
     font-size: .875rem;
     font-weight: bold;
   }
