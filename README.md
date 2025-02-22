@@ -39,5 +39,5 @@ gem 'haptic-rails', git: 'https://github.com.dmgoeller/haptic-rails', branch: 'm
 
 #### Borders
 
-- `$haptic-button-border-radius``
+- `$haptic-button-border-radius`
 - `$haptic-field-border-radius`

@@ -91,7 +91,9 @@ haptic-dialog-dropdown, haptic-select-dropdown {
   position: relative;
 }
 haptic-dialog-dropdown > .toggle, haptic-select-dropdown > .toggle {
+  align-items: center;
   cursor: default;
+  display: flex;
 }
 haptic-dialog-dropdown > .popover, haptic-select-dropdown > .popover {
   display: none;
@@ -1228,7 +1230,7 @@ haptic-list.divided haptic-list-item:not(:first-of-type) {
 }
 
 .haptic-button {
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 1rem;
   font-weight: bold;
 }
@@ -1245,7 +1247,7 @@ haptic-list.divided haptic-list-item:not(:first-of-type) {
  * Chips and segmented buttons
  **********************************************************************/
 haptic-segmented-button .button-segment label, .haptic-chip label {
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 1rem;
 }
 
@@ -1260,12 +1262,12 @@ haptic-dialog-dropdown > .popover > .segment > .legend {
  * Fields
  **********************************************************************/
 .haptic-field {
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 1rem;
 }
 
 haptic-dropdown-field .field-label, haptic-text-field .field-label {
-  font-family: sans-serif;
+  font-family: inherit;
   font-size: 0.875rem;
   font-weight: bold;
 }
