@@ -18,7 +18,9 @@ $haptic-black:                 #303030   !default;
 $haptic-dark-mode: true !default;
 
 @mixin haptic-light-dark($property, $light, $dark) {
-  #{$property}: $light;
+  & {
+    #{$property}: $light;
+  }
 
   @if $haptic-dark-mode == true {
     @media(prefers-color-scheme: dark) {
@@ -362,12 +364,13 @@ haptic-option-list {
   }
 
   &::-webkit-scrollbar-thumb {
+    border-color: transparent;
+
     @include haptic-light-dark(
       'background-color',
       #00000040,
       #FFFFFF40
     );
-    border-color: transparent;
   }
 }
 
@@ -493,8 +496,8 @@ haptic-text-field {
   }
 
   .clear-button {
-    @include haptic-foreground-color;
     background-color: transparent;
+    @include haptic-foreground-color;
 
     &:hover {
       @include haptic-light-dark(

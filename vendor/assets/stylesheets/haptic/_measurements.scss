@@ -91,7 +91,7 @@ haptic-segmented-button .button-segment, .haptic-chip {
     &::after {
       height: $icon-size;
       left: $padding-left-right;
-      top: calc(50% - #{$icon-size / 2});
+      top: calc(50% - #{$icon-size} / 2);
       width: $icon-size;
     }
   }
@@ -107,8 +107,8 @@ haptic-segmented-button .button-segment, .haptic-chip {
     height: $label-height;
     left: $label-padding-left-right;
     line-height: $label-height;
-    top: calc(50% - #{$label-height / 2});
-    width: calc(100% - #{$label-padding-left-right * 2});
+    top: calc(50% - #{$label-height} / 2);
+    width: calc(100% - #{$label-padding-left-right} * 2);
   }
 }
 
@@ -192,7 +192,7 @@ haptic-option {
   &::after {
     height: $checkmark-size;
     left: $padding-left;
-    top: calc(50% - #{$checkmark-size / 2});
+    top: calc(50% - #{$checkmark-size} / 2);
     width: $checkmark-size;
   }
 }
@@ -301,7 +301,7 @@ haptic-dropdown-field {
     &.field-container::before, & > .field-container::before,
     .error-icon, .leading-icon {
       height: $icon-size;
-      top: calc(50% - #{$icon-size / 2});
+      top: calc(50% - #{$icon-size} / 2);
       width: $icon-size;
     }
 
@@ -386,15 +386,15 @@ haptic-text-field {
                             $icon-size) {
     .clear-button {
       height: $clear-button-size;
-      margin: ($icon-size - $clear-button-size) / 2;
-      top: ($default-container-height - $icon-size) / 2;
+      margin: calc(#{$icon-size - $clear-button-size} / 2);
+      top: calc(#{$default-container-height - $icon-size} / 2);
       width: $clear-button-size;
     }
 
     .error-icon, .leading-icon, .trailing-icon,
     ::-webkit-calendar-picker-indicator {
       height: $icon-size;
-      top: ($default-container-height - $icon-size) / 2;
+      top: calc(#{$default-container-height - $icon-size} / 2);
       width: $icon-size;
     }
 
@@ -536,7 +536,7 @@ haptic-text-field {
       .field-label {
         $line-height: 1.125rem;
         line-height: $line-height;
-        top: #{($haptic-field-with-label-min-height - $line-height) / 2};
+        top: calc(#{$haptic-field-with-label-min-height - $line-height} / 2);
       }
     }
   }
@@ -587,10 +587,10 @@ haptic-text-field {
   }
 
   &::after {
-    height: #{$size / 2};
-    left: #{$size / 4};
-    top: #{$size / 4};
-    width: #{$size / 2};
+    height: calc(#{$size} / 2);
+    left: calc(#{$size} / 4);
+    top: calc(#{$size} / 4);
+    width: calc(#{$size} / 2);
   }
 }
 
@@ -665,7 +665,7 @@ haptic-list-item {
 
     .haptic-checkbox {
       &::before, &::after {
-        top: #{$padding-top-bottom + ($min-content-height - $checkbox-size) / 2};
+        top: calc(#{$padding-top-bottom} + #{$min-content-height - $checkbox-size} / 2);
       }
     }
 
@@ -692,7 +692,7 @@ haptic-list-item {
 
   &[control-type="radio-button"] {
     $radio-button-size: haptic-measure(1rem, 1.125rem);
-    $radio-button-top: $padding-top-bottom + ($min-content-height - $radio-button-size) / 2;
+    $radio-button-top: $padding-top-bottom + haptic-measure(.125rem, .0625rem);
 
     .haptic-radio-button {
       &::before {
@@ -702,9 +702,9 @@ haptic-list-item {
       }
 
       &::after {
-        height: #{$radio-button-size / 2};
-        top: #{$radio-button-top + $radio-button-size / 4};
-        width: #{$radio-button-size / 2};
+        height: calc(#{$radio-button-size} / 2);
+        top: calc(#{$radio-button-top} + #{$radio-button-size} / 4);
+        width: calc(#{$radio-button-size} / 2);
       }
     }
 
@@ -717,7 +717,7 @@ haptic-list-item {
         }
         &::after {
           left: unset;
-          right: #{$padding-left-right + $radio-button-size / 4};
+          right: calc(#{$padding-left-right} + #{$radio-button-size} / 4);
         }
       }
     }
@@ -731,7 +731,7 @@ haptic-list-item {
         }
 
         &::after {
-          left: #{$padding-left-right + $radio-button-size / 4};
+          left: calc(#{$padding-left-right} + #{$radio-button-size} / 4);
         }
       }
     }
@@ -741,7 +741,7 @@ haptic-list-item {
     $min-content-height: haptic-measure(1.25rem, 1.5rem);
     $switch-track-height: haptic-measure(1rem, 1.5rem);
     $switch-track-width: haptic-measure(1.75rem, 2.5rem);
-    $switch-track-top: $padding-top-bottom + ($min-content-height - $switch-track-height) / 2;
+    $switch-track-top: $padding-top-bottom + haptic-measure(.125rem, 0rem);
     $switch-handle-offset: $padding-left-right + $switch-track-width - $switch-track-height;
 
     min-height: $min-content-height;

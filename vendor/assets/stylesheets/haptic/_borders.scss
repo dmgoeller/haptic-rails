@@ -167,7 +167,7 @@ haptic-dropdown-field, haptic-text-field {
   outline: none;
 
   &, &::before {
-    border-radius: #{$track-height / 2};
+    border-radius: calc(#{$track-height} / 2);
   }
   &::after {
     border-radius: 50%;
