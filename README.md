@@ -10,6 +10,9 @@ Add the following line to `Gemfile` and run `bundle install`.
 gem 'haptic-rails', git: 'https://github.com.dmgoeller/haptic-rails', branch: 'main'
 ```
 
+Add a polyfill for the Web Components API covering customized built-in elements, for example
+[ungap/custom-elements](https://github.com/ungap/custom-elements).
+
 ## Configuration
 
 ### Sass variables
