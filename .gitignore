@@ -1,5 +1,8 @@
 *.gem
 *.rbc
+/_build
+/_site
+/_config.yml
 /.config
 /coverage/
 /InstalledFiles
