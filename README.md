@@ -58,6 +58,6 @@ elements have to be added to the application, for example
 Haptic::Rails.configuration.icon_builder = lambda do |name, options = {}|
   builder = options[:builder]
 
-  builder.content_tag 'div', name, class: ['custom-icon-class', options[:class]
+  builder.content_tag 'div', name, class: ['custom-icon-class', options[:class]]
 end
 ```
