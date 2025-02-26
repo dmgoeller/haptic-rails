@@ -785,11 +785,11 @@ haptic-list-item {
         }
 
         &::after {
-          left: calc(#{$padding-left-right} + haptic-measure(2px, 4px));
+          left: calc(#{$padding-left-right} + #{haptic-measure(2px, 4px)});
         }
 
         &:checked::after {
-          left: calc(#{$switch-handle-offset} + haptic-measure(2px, 4px));
+          left: calc(#{$switch-handle-offset} + #{haptic-measure(2px, 4px)});
         }
       }
     }
