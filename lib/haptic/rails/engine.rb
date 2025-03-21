@@ -2,6 +2,6 @@
 
 module Haptic
   module Rails
-    class Engine < ::Rails::Engine; end
+    class Engine < ::Rails::Engine; end # :nodoc:
   end
 end

@@ -3,7 +3,7 @@
 module Haptic
   module Rails
     class DropdownBuilder
-      def initialize(builder, field_options)
+      def initialize(builder, field_options) # :nodoc:
         @builder = builder
         @field_options = field_options
       end

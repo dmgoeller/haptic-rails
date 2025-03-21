@@ -3,7 +3,7 @@
 module Haptic
   module Rails
     class PopoverBuilder
-      def initialize(builder)
+      def initialize(builder) # :nodoc:
         @builder = builder
       end
 

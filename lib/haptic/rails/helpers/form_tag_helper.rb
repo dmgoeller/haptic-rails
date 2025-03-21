@@ -33,7 +33,7 @@ module Haptic
           end
         end
 
-        # Creates a <code><haptic-dropdown-field></code> tag that wraps the given field.
+        # Creates a <code><haptic-dropdown-field></code> tag wrapping the given field.
         #
         # ==== Options
         #
@@ -109,9 +109,9 @@ module Haptic
         #
         # ==== Options
         #
-        # - <code>:size</code> - The number of options to be visible at one time. If the
-        #   list contains more options than <code>:size</code> the list is presented as
-        #   a scrolling box.
+        # - <code>:size</code> - The maximum number of options to be visible at once. If the
+        #   list contains more options than <code>:size</code>, the list is presented as a
+        #   scrolling box.
         def haptic_option_list_tag(content = nil, options = nil, &block)
           content_tag('haptic-option-list', content, options, &block)
         end
@@ -120,7 +120,7 @@ module Haptic
         #
         # ==== Options
         #
-        # - <code>:checked</code> - Specifies whether or not the option is checked.
+        # - <code>:checked</code> - If is <code>true</code>, the option is checked initially.
         def haptic_option_tag(content = nil, options = nil, &block)
           content_tag('haptic-option', content, options, &block)
         end
@@ -134,7 +134,8 @@ module Haptic
         #
         # ==== Options
         #
-        # - <code>:to_top</code>
+        # - <code>:to_top</code> - If is <code>true</code>, the option list pops up to top
+        #   instead of to bottom.
         #
         # ==== Examples
         #
@@ -159,7 +160,7 @@ module Haptic
           end
         end
 
-        # Creates a <code><haptic-text-field></code> tag that wraps the given field.
+        # Creates a <code><haptic-text-field></code> tag wrapping the given field.
         #
         # ==== Options
         #

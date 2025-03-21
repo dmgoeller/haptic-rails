@@ -2,7 +2,7 @@
 
 module Haptic
   module Rails
-    class Builder < SimpleDelegator
+    class Builder < SimpleDelegator # :nodoc:
       def initialize(template, field_options)
         super(template)
         @field_options = field_options

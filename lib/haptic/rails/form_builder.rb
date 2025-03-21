@@ -2,21 +2,29 @@
 
 module Haptic
   module Rails
-    # Builds a form containing haptic components.
+    # Builds a form with haptic components.
     #
     # ==== \Haptic field options
     #
-    # - <code>animated_label</code>
-    # - <code>clear_button</code>
-    # - <code>field_id</code>
-    # - <code>focus_indicator</code>
-    # - <code>label</code>
-    # - <code>leading_icon</code>
-    # - <code>set_valid_on_change</code>
-    # - <code>show_error_icon</code>
-    # - <code>show_error_message</code>
-    # - <code>supporting_text</code>
-    # - <code>trailing_icon</code>
+    # The <code>*_field</code> and <code>text_area</code> methods take the following options:
+    #
+    # - <code>:animated_label</code>
+    # - <code>:clear_button</code> - If is <code>true</code>, a button to clear the field
+    #   is provided.
+    # - <code>:field_id</code> - The <code>id</code> of the field tag.
+    # - <code>:focus_indicator</code> If is <code>true</code>, a focus indicator is shown.
+    # - <code>:label</code> - The label of the field. The value can be a <code>String</code>
+    #   or <code>true</code>. If the value is <code>true</code>, the label is created by
+    #   calling the <code>label</code> method.
+    # - <code>:leading_icon</code> - The name of the icon to be shown on the left side.
+    # - <code>:set_valid_on_change</code> - The fields assumed not to be invalid when the
+    #   value of the field has been changed.
+    # - <code>:show_error_icon</code> - If is <code>true</code>, an error icon is shown when
+    #   the value of the field is invalid.
+    # - <code>:show_error_message</code> - If is <code>true</code>, the error message is shown
+    #   below the field when the value of the field is invalid.
+    # - <code>:supporting_text</code> - The helper text to be shown below the field.
+    # - <code>:trailing_icon</code> - The name of the icon to be shown on the right side.
     class FormBuilder < ActionView::Helpers::FormBuilder
       HAPTIC_FIELD_OPTIONS = %i[
         animated_label
@@ -41,22 +49,22 @@ module Haptic
       # :method: number_field
       # :call-seq: number_field(method, options = {})
       #
-      # Creates a number field. The number field is wrapped by a <code>haptic-text-field</code>
-      # tag if any of the haptic field options are specified.
+      # Creates a number field. If any of the haptic field options are specified, the number
+      # field is wrapped by a <code>haptic-text-field</code> tag.
 
       ##
       # :method: text_area
       # :call-seq: text_area(method, options = {})
       #
-      # Creates a text area. The text area is wrapped by a <code>haptic-text-field</code>
-      # tag if any of the haptic field options are specified.
+      # Creates a text area. If any of the haptic field options are specified, the text area
+      # is wrapped by a <code>haptic-text-field</code> tag.
 
       ##
       # :method: text_field
       # :call-seq: text_field(method, options = {})
       #
-      # Creates a text field. The text field is wrapped by a <code>haptic-text-field</code>
-      # tag if any of the haptic field options are specified.
+      # Creates a text field. If any of the haptic field options are specified, the text field
+      # is wrapped by a <code>haptic-text-field</code> tag.
       #
       # ==== Examples
       #
@@ -121,9 +129,11 @@ module Haptic
       #
       # ==== Options
       #
-      # - <code>:inverted</code> -
-      # - <code>:multiple</code> -
-      # - <code>:required</code> -
+      # - <code>:inverted</code> - If is <code>true</code>, checkboxes, switches or radio
+      #   buttons are shown on the right side instead of the left side.
+      # - <code>:multiple</code> - If is <code>true</code>, multiple items can be selected
+      #   at once.
+      # - <code>:required</code> - If is <code>true</code>, at least one item must be selected.
       #
       # ==== Examples
       #
@@ -230,13 +240,15 @@ module Haptic
 
       # Creates a <code><haptic-list></code> tag. The list items are built by calling
       # <code>collection_radio_buttons</code> or <code>collection_check_boxes</code>
-      # with the given arguments.
+      # with the passed arguments except the options described below.
       #
       # ==== Options
       #
-      # - <code>:inverted</code> -
-      # - <code>:multiple</code> -
-      # - <code>:required</code> -
+      # - <code>:inverted</code> - If is <code>true</code>, checkboxes, switches or radio
+      #   buttons are shown on the right side instead of the left side.
+      # - <code>:multiple</code> - If is <code>true</code>, multiple items can be selected
+      #   at once.
+      # - <code>:required</code> - If is <code>true</code>, at least one item must be selected.
       #
       # ==== Example
       #
@@ -337,8 +349,10 @@ module Haptic
       #
       # ==== Options
       #
-      # - <code>:include_blank</code>
-      # - <code>:prompt</code>
+      # - <code>:include_blank</code> - If is <code>true</code>, an option whose value is
+      #   an empty <code>String</code> is prepended.
+      # - <code>:prompt</code> - The label of the option prepended when
+      #   <code>:include_blank</code> is <code>true</code>.
       #
       # ==== Example
       #
@@ -450,11 +464,15 @@ module Haptic
       #
       # ==== Options
       #
-      # - <code>:disabled</code>
-      # - <code>:onchange</code>
-      # - <code>:required</code>
-      # - <code>:size</code>
-      # - <code>:to_top</code>
+      # - <code>:disabled</code> - If is <code>true</code>, the selected option can't
+      #   be changed.
+      # - <code>:onchange</code> - The Javascript to be executed when the selected option
+      #   has been changed.
+      # - <code>:required</code> - If is <code>true</code>, an option with a non-empty value
+      #   must be selected.
+      # - <code>:size</code> - The maximum number of options to be visible at once.
+      # - <code>:to_top</code> - If is <code>true</code>, the option list pops up to top
+      #   instead of to bottom.
       #
       # ==== Example
       #
@@ -499,6 +517,10 @@ module Haptic
         haptic_select_dropdown_field(method, haptic_options, options)
       end
 
+      ##
+      # :call-seq: with_field_options(options = {}, &block)
+      #
+      # Calls <code>block</code> with the given field options as defaults.
       def with_field_options(options = {})
         @field_options.push(options)
         begin

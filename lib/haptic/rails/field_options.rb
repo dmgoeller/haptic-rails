@@ -2,7 +2,7 @@
 
 module Haptic
   module Rails
-    class FieldOptions
+    class FieldOptions # :nodoc:
       delegate_missing_to :options
 
       %i[merge merge! reverse_merge reverse_merge!].each do |name|
