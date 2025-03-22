@@ -368,7 +368,11 @@ input[type="checkbox"].haptic-switch,
 input[type="radio"].haptic-radio-button {
   appearance: none;
 
-  &:not(.embedded):disabled {
+  &.async:disabled {
+    cursor: wait;
+  }
+
+  &:not(.async):not(.embedded):disabled {
     @include haptic-grayed;
   }
 }

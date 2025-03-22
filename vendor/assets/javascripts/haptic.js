@@ -974,6 +974,94 @@ class HapticFormElement extends HTMLFormElement {
 }
 customElements.define('haptic-form', HapticFormElement, { extends: 'form' });
 
+class HapticAsyncFormElement extends HapticFormElement {
+  #fieldValues = new Map();
+
+  constructor() {
+    super();   
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    new HapticChildNodesObserver({
+      nodeAdded: node => {
+        if (node instanceof HTMLInputElement) {
+          switch (node.type) {
+            case 'checkbox':
+            case 'radio':
+              this.#fieldValues.set(node, node.checked);
+              break;
+            default:
+              this.#fieldValues.set(node, node.value);
+          }
+        }
+      },
+      nodeRemoved: node => {
+        this.#fieldValues.delete(node);
+      }
+    }).observe(this, { childList: true, subtree: true });
+
+    this.addEventListener('submit', event => {
+      event.preventDefault();
+
+      const formData = new FormData(this);
+      this.#setFieldsLocked(true);
+
+      fetch(this.action, {
+        method: this.method,
+        headers: { Accept: 'application/json' },
+        body: formData
+      }).then(response => {
+        if (response.ok) {
+          this.#refreshFieldValues();
+          this.#setFieldsLocked(false);
+        } else {
+          throw new Error(); // TODO: error message
+        }
+      }).catch(error => {
+        this.#resetFieldValues();
+        this.#setFieldsLocked(false);
+      });
+    });
+  }
+
+  #refreshFieldValues() {
+    for (let field of this.#fieldValues.keys()) {
+      switch (field.type) {
+        case 'checkbox':
+        case 'radio':
+          this.#fieldValues.set(field, field.checked);
+          break;
+        default:
+          this.#fieldValues.set(field, field.value);
+      }
+    }
+  }
+
+  #resetFieldValues() {
+    for (let [field, value] of this.#fieldValues) {
+      switch (field.type) {
+        case 'checkbox':
+        case 'radio':
+          field.checked = value
+          break;
+        default:
+          field.value = value;
+      }
+    }
+  }
+
+  #setFieldsLocked(locked) {
+    for (let field of this.#fieldValues.keys()) {
+      if (field.type != 'hidden') {
+        field.disabled = locked;
+      }
+    }
+  }
+}
+customElements.define('haptic-async-form', HapticAsyncFormElement, { extends: 'form' });
+
 class HapticInputElement extends HTMLInputElement {
   static observedAttributes = ['disabled'];
 
