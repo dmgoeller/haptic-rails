@@ -288,6 +288,15 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     return this.hasAttribute('disabled');
   }
 
+  set disabled(value) {
+    if (value) {
+      this.setAttribute('disabled', 'disabled');
+    } else {
+      this.removeAttribute('disabled');
+    }
+    return value;
+  }
+
   get required() {
     return this.hasAttribute('required');
   }
@@ -548,6 +557,7 @@ class HapticOptionListElement extends HTMLElement {
       this.optionElements[i].highlighted = (i === index);
     }
     this.scrollTo(index);
+    return index;
   }
 
   get scrollOffset() {
@@ -556,6 +566,7 @@ class HapticOptionListElement extends HTMLElement {
 
   set scrollOffset(index) {
     this.scrollTop = 24 * index;
+    return index;
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -636,6 +647,7 @@ class HapticOptionElement extends HTMLElement {
     } else {
       this.removeAttribute('checked');
     }
+    return value;
   }
 
   get highlighted() {
@@ -648,6 +660,7 @@ class HapticOptionElement extends HTMLElement {
     } else {
       this.removeAttribute('highlighted');
     }
+    return value;
   }
 
   get value() {
@@ -660,6 +673,7 @@ class HapticOptionElement extends HTMLElement {
     } else {
       this.removeAttribute('value');
     }
+    return value
   }
 }
 customElements.define('haptic-option', HapticOptionElement);
@@ -918,6 +932,8 @@ class HapticFormElement extends HTMLFormElement {
   }
 
   connectedCallback() {
+    const requestSubmitOnChange =  this.hasAttribute('request-submit-on-change');
+
     new HapticChildNodesObserver({
       nodeAdded: node => {
         if ((node instanceof HTMLButtonElement ||
@@ -926,15 +942,26 @@ class HapticFormElement extends HTMLFormElement {
           this.#submitButtons.add(node);
           this.#refresh();
         } else
-        if ((node instanceof HapticListElement ||
-             node instanceof HTMLInputElement ||
-             node instanceof HTMLTextAreaElement ||
-             node instanceof HTMLSelectElement) &&
-            node.required) {
-          this.#eventListeners.add(node, 'change', this);
-          this.#eventListeners.add(node, 'input', this);
-          this.#requiredFields.add(node);
-          this.#refresh();
+        if (node instanceof HapticListElement ||
+            node instanceof HapticSelectDropdownElement ||
+            node instanceof HTMLInputElement ||
+            node instanceof HTMLTextAreaElement ||
+            node instanceof HTMLSelectElement) {
+          if (node.required) {
+            this.#eventListeners.add(node, 'change', () => {
+              this.#refresh();
+            });
+            this.#eventListeners.add(node, 'input', () => {
+              this.#refresh();
+            });
+            this.#requiredFields.add(node);
+            this.#refresh();
+          }
+          if (node.type !== 'hidden' && requestSubmitOnChange) {
+            this.#eventListeners.add(node, 'change', () => {
+              this.requestSubmit();
+            });
+          }
         }
       },
       nodeRemoved: node => {
@@ -951,10 +978,6 @@ class HapticFormElement extends HTMLFormElement {
 
   disconnectedCallback() {
     this.#eventListeners.removeAll();
-  }
-
-  handleEvent() {
-    this.#refresh();
   }
 
   #refresh() {
@@ -975,6 +998,7 @@ class HapticFormElement extends HTMLFormElement {
 customElements.define('haptic-form', HapticFormElement, { extends: 'form' });
 
 class HapticAsyncFormElement extends HapticFormElement {
+  #controls = new Set();
   #fieldValues = new Map();
 
   constructor() {
@@ -990,43 +1014,50 @@ class HapticAsyncFormElement extends HapticFormElement {
           switch (node.type) {
             case 'checkbox':
             case 'radio':
+              this.#controls.add(node);
               this.#fieldValues.set(node, node.checked);
               break;
             default:
               this.#fieldValues.set(node, node.value);
           }
+        } else
+        if (node instanceof HapticSelectDropdownElement) {
+          this.#controls.add(node);
         }
       },
       nodeRemoved: node => {
+        this.#controls.delete(node);
         this.#fieldValues.delete(node);
       }
     }).observe(this, { childList: true, subtree: true });
 
     this.addEventListener('submit', event => {
-      event.preventDefault();
-
       const formData = new FormData(this);
-      this.#setFieldsLocked(true);
+      this.#setBusy(true);
 
       fetch(this.action, {
         method: this.method,
         headers: { Accept: 'application/json' },
         body: formData
-      }).then(response => {
+      })
+      .then(response => {
         if (response.ok) {
-          this.#refreshFieldValues();
-          this.#setFieldsLocked(false);
+          this.#refresh();
         } else {
-          throw new Error(); // TODO: error message
+          this.#reset();
         }
-      }).catch(error => {
-        this.#resetFieldValues();
-        this.#setFieldsLocked(false);
+      })
+      .catch(error => {
+        this.#reset();
+      })
+      .finally(() => {
+        this.#setBusy(false);
       });
+      event.preventDefault();
     });
   }
 
-  #refreshFieldValues() {
+  #refresh() {
     for (let field of this.#fieldValues.keys()) {
       switch (field.type) {
         case 'checkbox':
@@ -1039,7 +1070,7 @@ class HapticAsyncFormElement extends HapticFormElement {
     }
   }
 
-  #resetFieldValues() {
+  #reset() {
     for (let [field, value] of this.#fieldValues) {
       switch (field.type) {
         case 'checkbox':
@@ -1052,10 +1083,13 @@ class HapticAsyncFormElement extends HapticFormElement {
     }
   }
 
-  #setFieldsLocked(locked) {
-    for (let field of this.#fieldValues.keys()) {
-      if (field.type != 'hidden') {
-        field.disabled = locked;
+  #setBusy(busy) {
+    for (let element of this.#controls) {
+      element.disabled = busy;
+      if (busy) {
+        element.classList.add('busy');
+      } else {
+        element.classList.remove('busy');
       }
     }
   }

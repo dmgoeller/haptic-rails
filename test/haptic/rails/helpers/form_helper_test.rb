@@ -20,20 +20,6 @@ module Haptic
           end
         end
 
-        def test_haptic_async_checkbox_for
-          assert_dom_equal(
-            <<~HTML,
-              <form is="haptic-async-form">
-                <input name="dummy[color]" type="hidden" value="0" autocomplete="off" />
-                <input type="checkbox" is="haptic-input" class="async"
-                  id="dummy_color" name="dummy[color]" value="red"
-                  onchange="this.form.requestSubmit()" />
-              </form>
-            HTML
-            haptic_async_checkbox_for(Dummy.new, :color, {}, 'red', 'green')
-          )
-        end
-
         def test_haptic_async_form_for
           assert_dom_equal(
             <<~HTML,
