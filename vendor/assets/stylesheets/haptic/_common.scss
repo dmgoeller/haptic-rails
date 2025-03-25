@@ -39,6 +39,14 @@ $haptic-popover-z-index: 10000 !default;
 }
 
 /**********************************************************************
+ * Forms
+ **********************************************************************/
+
+.haptic-async-form.busy {
+  cursor: wait;
+}
+
+/**********************************************************************
  * Buttons
  **********************************************************************/
 
@@ -368,11 +376,7 @@ input[type="checkbox"].haptic-switch,
 input[type="radio"].haptic-radio-button {
   appearance: none;
 
-  &.busy:disabled {
-    cursor: wait;
-  }
-
-  &:not(.busy):not(.embedded):disabled {
+  &:not(.embedded):disabled {
     @include haptic-grayed;
   }
 }

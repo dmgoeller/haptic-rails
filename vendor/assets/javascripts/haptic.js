@@ -923,9 +923,9 @@ class HapticTextFieldElement extends HapticFieldElement {
 customElements.define('haptic-text-field', HapticTextFieldElement);
 
 class HapticFormElement extends HTMLFormElement {
-  #requiredFields = new Set();
-  #submitButtons = new Set();
   #eventListeners = new HapticEventListeners();
+  #requiredElements = new Set();
+  #submitButtons = new Set();
 
   constructor() {
     super();   
@@ -952,14 +952,14 @@ class HapticFormElement extends HTMLFormElement {
           this.#eventListeners.add(node, 'input', () => {
             this.#refresh();
           });
-          this.#requiredFields.add(node);
+          this.#requiredElements.add(node);
           this.#refresh();
         }
       },
       nodeRemoved: node => {
-        if (this.#requiredFields.has(node)) {
+        if (this.#requiredElements.has(node)) {
           this.#eventListeners.remove(node)
-          this.#requiredFields.delete(node);
+          this.#requiredElements.delete(node);
         } else
         if (this.#submitButtons.has(node)) {
           this.#submitButtons.delete(node);
@@ -975,7 +975,8 @@ class HapticFormElement extends HTMLFormElement {
   #refresh() {
     if (this.#submitButtons.size > 0) {
       let submittable = true;
-      for (let field of this.#requiredFields) {
+
+      for (let field of this.#requiredElements) {
         if (!field.value) {
           submittable = false;
           break;
@@ -1003,8 +1004,7 @@ class HapticAsyncErrorEvent extends Event {
 }
 
 class HapticAsyncFormElement extends HapticFormElement {
-  #controls = new Set();
-  #fieldValues = new Map();
+  #elements = new Set();
 
   constructor() {
     super();   
@@ -1013,26 +1013,16 @@ class HapticAsyncFormElement extends HapticFormElement {
   connectedCallback() {
     super.connectedCallback();
 
+    this.classList.add('haptic-async-form');
+
     new HapticChildNodesObserver({
       nodeAdded: node => {
-        if (node instanceof HTMLInputElement) {
-          switch (node.type) {
-            case 'checkbox':
-            case 'radio':
-              this.#controls.add(node);
-              this.#fieldValues.set(node, node.checked);
-              break;
-            default:
-              this.#fieldValues.set(node, node.value);
-          }
-        } else
-        if (node instanceof HapticSelectDropdownElement) {
-          this.#controls.add(node);
+        if (node instanceof HapticInputElement) {
+          this.#elements.add(node);
         }
       },
       nodeRemoved: node => {
-        this.#controls.delete(node);
-        this.#fieldValues.delete(node);
+        this.#elements.remove(node);
       }
     }).observe(this, { childList: true, subtree: true });
 
@@ -1042,7 +1032,10 @@ class HapticAsyncFormElement extends HapticFormElement {
 
       fetch(this.action, {
         method: this.method,
-        headers: { Accept: 'application/json' },
+        headers: {
+          //'Content-Type': this.enctype,
+          'Accept': 'application/json'
+        },
         body: formData
       })
       .then(response => {
@@ -1075,39 +1068,25 @@ class HapticAsyncFormElement extends HapticFormElement {
   }
 
   #refresh() {
-    for (let field of this.#fieldValues.keys()) {
-      switch (field.type) {
-        case 'checkbox':
-        case 'radio':
-          this.#fieldValues.set(field, field.checked);
-          break;
-        default:
-          this.#fieldValues.set(field, field.value);
-      }
+    for (let element of this.#elements) {
+      element.refreshInitialValue();
     }
   }
 
   #reset() {
-    for (let [field, value] of this.#fieldValues) {
-      switch (field.type) {
-        case 'checkbox':
-        case 'radio':
-          field.checked = value
-          break;
-        default:
-          field.value = value;
-      }
+    for (let element of this.#elements) {
+      element.resetValue({ silent: true });
     }
   }
 
-  #setBusy(busy) {
-    for (let element of this.#controls) {
-      element.disabled = busy;
-      if (busy) {
-        element.classList.add('busy');
-      } else {
-        element.classList.remove('busy');
-      }
+  #setBusy(value) {
+    if (value) {
+      this.classList.add('busy');
+    } else {
+      this.classList.remove('busy');
+    }
+    for (let element of this.#elements) {
+      element.disabled = value;
     }
   }
 }
@@ -1123,12 +1102,14 @@ class HapticInputElement extends HTMLInputElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (!this.classList.contains('embedded')) {
-      for (let label of this.labels) {
-        if (this.disabled) {
-          label.classList.add('grayed');
-        } else {
-          label.classList.remove('grayed');
+    if (name === 'disabled') {
+      if (!this.classList.contains('embedded')) {
+        for (let label of this.labels) {
+          if (this.disabled) {
+            label.classList.add('grayed');
+          } else {
+            label.classList.remove('grayed');
+          }
         }
       }
     }
@@ -1136,6 +1117,9 @@ class HapticInputElement extends HTMLInputElement {
 
   connectedCallback() {
     switch (this.type) {
+      case 'submit':
+        this.classList.add('haptic-button');
+        break;
       case 'checkbox':
         if (!this.classList.contains('haptic-switch')) {
           this.classList.add('haptic-checkbox');
@@ -1146,28 +1130,44 @@ class HapticInputElement extends HTMLInputElement {
         this.classList.add('haptic-radio-button');
         this.#initialValue = this.checked;
         break;
-      case 'submit':
-        this.classList.add('haptic-button');
-        break;
       default:
         this.classList.add('haptic-field');
         this.#initialValue = this.value;
     }
   }
 
-  resetValue() {
+  refreshInitialValue() {
     switch (this.type) {
+      case 'submit':
+        break;
+      case 'checkbox':
+      case 'radio':
+        this.#initialValue = this.checked;
+        break;
+      default:
+        this.#initialValue = this.value;
+    }
+  }
+
+  resetValue(options = {}) {
+    switch (this.type) {
+      case 'submit':
+        break;
       case 'checkbox':
       case 'radio':
         if (this.checked != this.#initialValue) {
           this.checked = this.#initialValue;
-          this.dispatchEvent(new Event('change'));
+          if (!options.silent) {
+            this.dispatchEvent(new Event('change'));
+          }
         }
         break;
       default:
         if (this.value != this.#initialValue) {
           this.value = this.#initialValue;
-          this.dispatchEvent(new Event('change'));
+          if (!options.silent) {
+            this.dispatchEvent(new Event('change'));
+          }
         }
     }
   }

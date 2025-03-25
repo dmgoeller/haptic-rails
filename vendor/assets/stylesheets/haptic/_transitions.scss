@@ -136,13 +136,15 @@ haptic-text-field {
  **********************************************************************/
 
 .haptic-switch {
+  transition:
+    filter .2s linear,
+    opacity .2s linear;
+
   &::before {
     transition:
       all .4s linear,
       border-color .2s linear,
       background-color .2s linear,
-      filter .2s linear,
-      opacity .2s linear;
   }
   &::after {
     transition: .2s linear;
