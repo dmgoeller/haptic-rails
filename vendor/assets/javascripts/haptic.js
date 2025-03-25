@@ -932,8 +932,6 @@ class HapticFormElement extends HTMLFormElement {
   }
 
   connectedCallback() {
-    const requestSubmitOnChange =  this.hasAttribute('request-submit-on-change');
-
     new HapticChildNodesObserver({
       nodeAdded: node => {
         if ((node instanceof HTMLButtonElement ||
@@ -942,26 +940,20 @@ class HapticFormElement extends HTMLFormElement {
           this.#submitButtons.add(node);
           this.#refresh();
         } else
-        if (node instanceof HapticListElement ||
-            node instanceof HapticSelectDropdownElement ||
-            node instanceof HTMLInputElement ||
-            node instanceof HTMLTextAreaElement ||
-            node instanceof HTMLSelectElement) {
-          if (node.required) {
-            this.#eventListeners.add(node, 'change', () => {
-              this.#refresh();
-            });
-            this.#eventListeners.add(node, 'input', () => {
-              this.#refresh();
-            });
-            this.#requiredFields.add(node);
+        if ((node instanceof HapticListElement ||
+             node instanceof HapticSelectDropdownElement ||
+             node instanceof HTMLInputElement ||
+             node instanceof HTMLTextAreaElement ||
+             node instanceof HTMLSelectElement) &&
+            node.required) {
+          this.#eventListeners.add(node, 'change', () => {
             this.#refresh();
-          }
-          if (node.type !== 'hidden' && requestSubmitOnChange) {
-            this.#eventListeners.add(node, 'change', () => {
-              this.requestSubmit();
-            });
-          }
+          });
+          this.#eventListeners.add(node, 'input', () => {
+            this.#refresh();
+          });
+          this.#requiredFields.add(node);
+          this.#refresh();
         }
       },
       nodeRemoved: node => {
@@ -996,6 +988,19 @@ class HapticFormElement extends HTMLFormElement {
   }
 }
 customElements.define('haptic-form', HapticFormElement, { extends: 'form' });
+
+class HapticAsyncErrorEvent extends Event {
+  #message;
+
+  constructor(message) {
+    super('error');
+    this.#message = message;
+  }
+
+  get message() {
+    return this.#message;
+  }
+}
 
 class HapticAsyncFormElement extends HapticFormElement {
   #controls = new Set();
@@ -1044,10 +1049,14 @@ class HapticAsyncFormElement extends HapticFormElement {
         if (response.ok) {
           this.#refresh();
         } else {
-          this.#reset();
+          response.text().then(text => {
+            this.#dispatchErrorEvent(text);
+            this.#reset();
+          });
         }
       })
       .catch(error => {
+        this.#dispatchErrorEvent(error.message);
         this.#reset();
       })
       .finally(() => {
@@ -1055,6 +1064,14 @@ class HapticAsyncFormElement extends HapticFormElement {
       });
       event.preventDefault();
     });
+  }
+
+  #dispatchErrorEvent(message) {
+    try {
+      this.dispatchEvent(new HapticAsyncErrorEvent(message));
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   #refresh() {
