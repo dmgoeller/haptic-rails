@@ -10,6 +10,8 @@ module Haptic
         def haptic_async_form_for(record, options = {}, &block)
           html_options = options[:html] || {}
           html_options[:is] = 'haptic-async-form'
+          html_options[:'data-accept'] = options.delete(:accept)
+          html_options[:'data-submit-on-change'] = '' if options.delete(:submit_on_change)
 
           options = options.merge(html: html_options)
 
