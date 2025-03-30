@@ -467,15 +467,29 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       } else
       if (node instanceof HapticOptionListElement) {
         if (!this.#optionListElement) {
-          this.#eventListeners.add(node, 'change', () => {
-            if (this.#refresh()) {
-              this.dispatchEvent(new Event('change'));
-            }
-            this.focus();
-            this.hidePopover();
-          });
           this.#optionListElement = node;
         }
+      } else
+      if (node instanceof HapticOptionElement) {
+        this.#eventListeners.add(node, 'click', event => {
+          this.#optionListElement?.optionElements?.forEach(optionElement => {
+            optionElement.checked = optionElement === event.target;
+          });
+          this.focus();
+          this.hidePopover();
+
+          if (this.#refresh()) {
+            this.dispatchEvent(new Event('change'));
+          }
+        });
+        this.#eventListeners.add(node, 'mouseover', event => {
+          this.#optionListElement?.optionElements?.forEach(optionElement => {
+            optionElement.highlighted = optionElement === event.target;
+          });
+        });
+        this.#eventListeners.add(node, 'mouseout', event => {
+          event.target.highlighted = false;
+        });
       }
     }
   }
@@ -487,8 +501,10 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         this.#inputElement = null;
         break;
       case this.#optionListElement:
-        this.#eventListeners.remove(node);
         this.#optionListElement = null;
+        break;
+      default:
+        this.#eventListeners.remove(node);
     }
     super.nodeRemoved(node);
   }
@@ -509,18 +525,22 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   cancel() {
-    const optionElements = this.#optionListElement?.optionElements;
-
-    if (optionElements) {
-      for (let optionElement of optionElements) {
-        optionElement.highlighted = false;
-      }
-    }
+    this.#optionListElement?.optionElements?.forEach(optionElement => {
+      optionElement.highlighted = false;
+    });
   }
 
   reset() {
-    this.#optionListElement.reset();
+    this.#optionListElement?.optionElements?.forEach(optionElement => {
+      optionElement.reset();
+    });
     this.#refresh();
+  }
+
+  refreshInitialValue() {
+    this.#optionListElement?.optionElements?.forEach(optionElement => {
+      optionElement.refreshInitiallyChecked();
+    });
   }
 
   #refresh() {
@@ -602,20 +622,6 @@ class HapticOptionListElement extends HTMLElement {
     new HapticChildNodesObserver({
       nodeAdded: node => {
         if (node instanceof HapticOptionElement) {
-          this.#eventListeners.add(node, 'click', event => {
-            for (let optionElement of this.optionElements) {
-              optionElement.checked = optionElement === event.target;
-            }
-            this.dispatchEvent(new Event('change'));
-          });
-          this.#eventListeners.add(node, 'mouseover', event => {
-            for (let optionElement of this.optionElements) {
-              optionElement.highlighted = optionElement === event.target;
-            }
-          });
-          this.#eventListeners.add(node, 'mouseout', event => {
-            event.target.highlighted = false;
-          });
           this.optionElements.push(node);
         }
       },
@@ -632,12 +638,6 @@ class HapticOptionListElement extends HTMLElement {
 
   disconnectedCallback() {
     this.#eventListeners.removeAll();
-  }
-
-  reset() {
-    for (let optionElement of this.optionElements) {
-      optionElement.reset();
-    }
   }
 
   scrollTo(index) {
@@ -709,6 +709,10 @@ class HapticOptionElement extends HTMLElement {
 
   reset() {
     this.checked = (this.#initiallyChecked === true);
+  }
+
+  refreshInitiallyChecked() {
+    this.#initiallyChecked = this.checked;
   }
 
   setInitiallyChecked() {
@@ -1055,12 +1059,39 @@ class HapticAsyncFormElement extends HapticFormElement {
     return this.getAttribute('data-accept');
   }
 
+  set accept(value) {
+    if (value) {
+      this.setAttribute('data-accept', '');
+    } else {
+      this.removeAttribute('data-accept');
+    }
+    return value;
+  }
+
   get redirect() {
     return this.getAttribute('data-redirect');
   }
 
+  set redirect(value) {
+    if (value) {
+      this.setAttribute('data-redirect', '');
+    } else {
+      this.removeAttribute('data-redirect');
+    }
+    return value;
+  }
+
   get submitOnChange() {
     return this.hasAttribute('data-submit-on-change');
+  }
+
+  set submitOnChange(value) {
+    if (value) {
+      this.setAttribute('data-submit-on-change', '');
+    } else {
+      this.removeAttribute('data-submit-on-change');
+    }
+    return value;
   }
 
   connectedCallback() {

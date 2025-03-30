@@ -29,6 +29,15 @@ module Haptic
           )
         end
 
+        def test_haptic_async_form_for_with_submit_on_change
+          assert_dom_equal(
+            <<~HTML,
+              <form is="haptic-async-form" data-submit-on-change=""></form>
+            HTML
+            haptic_async_form_for(Dummy.new, submit_on_change: true) {}
+          )
+        end
+
         def test_haptic_form_for
           assert_dom_equal(
             <<~HTML,
