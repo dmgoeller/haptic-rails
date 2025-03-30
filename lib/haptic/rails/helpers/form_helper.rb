@@ -11,6 +11,7 @@ module Haptic
           html_options = options[:html] || {}
           html_options[:is] = 'haptic-async-form'
           html_options[:'data-accept'] = options.delete(:accept)
+          html_options[:'data-redirect'] = options.delete(:redirect)
           html_options[:'data-submit-on-change'] = '' if options.delete(:submit_on_change)
 
           options = options.merge(html: html_options)

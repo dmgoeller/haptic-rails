@@ -2,7 +2,7 @@
 class HapticEventListeners {
   #listeners = new Map();
 
-  add(eventTarget, type, listener) {
+  add(eventTarget, type, listener, options = {}) {
     let listenersForEventTarget = this.#listeners.get(eventTarget);
     if (typeof listenersForEventTarget === 'undefined') {
       listenersForEventTarget = new Map();
@@ -13,14 +13,14 @@ class HapticEventListeners {
       listeners = new Set();
       listenersForEventTarget.set(type, listeners);
     }
-    listeners.add(listener);
-    eventTarget.addEventListener(type, listener, true);
+    listeners.add({ listener: listener, options: options });
+    eventTarget.addEventListener(type, listener, options);
   }
 
   remove(eventTarget) {
     this.#listeners.get(eventTarget)?.forEach((listeners, type) => {
-      for (let listener of listeners) {
-        eventTarget.removeEventListener(type, listener, true);
+      for (let l of listeners) {
+        eventTarget.removeEventListener(type, l.listener, l.options);
       }
     });
     this.#listeners.delete(eventTarget);
@@ -1046,14 +1046,17 @@ class HapticAsyncErrorEvent extends Event {
 class HapticAsyncFormElement extends HapticFormElement {
   #eventListeners = new HapticEventListeners();
   #elements = new Set();
-  #changeEvent = null;
 
   constructor() {
     super();   
   }
 
   get accept() {
-    return this.getAttribute('data-accept') || 'application/json';
+    return this.getAttribute('data-accept');
+  }
+
+  get redirect() {
+    return this.getAttribute('data-redirect');
   }
 
   get submitOnChange() {
@@ -1076,14 +1079,16 @@ class HapticAsyncFormElement extends HapticFormElement {
             node instanceof HapticSelectDropdownElement ||
             node instanceof HapticTextAreaElement) {
           this.#eventListeners.add(node, 'change', event => {
-            if (this.submitOnChange && this.#changeEvent === null) {
-              this.submit();
-              this.#changeEvent = event;
-
+            if (event.intercepted) {
+              delete event.intercepted;
+            } else
+            if (this.submitOnChange) {
               event.preventDefault();
               event.stopPropagation();
+              event.intercepted = true;
+              this.submit(event);
             }
-          });
+          }, { capture: true });
           this.#elements.add(node);
         }
       },
@@ -1094,25 +1099,24 @@ class HapticAsyncFormElement extends HapticFormElement {
     }).observe(this, { childList: true, subtree: true });
   }
 
-  submit() {
+  submit(changeEvent = null) {
     const formData = new FormData(this);
     this.#setBusy(true);
 
     fetch(this.action, {
       method: this.method,
       headers: {
-        // 'Content-Type': this.enctype,
-        'Accept': this.accept
+        'Accept': this.accept || 'application/json'
       },
-      body: formData
+      body: formData,
+      redirect: this.redirect || 'follow'
     })
     .then(response => {
       if (response.ok) {
         this.#refresh();
 
-        if (this.#changeEvent) {
-          this.#changeEvent.target?.dispatchEvent(this.#changeEvent);
-          this.#changeEvent = null;
+        if (changeEvent) {
+          changeEvent.target?.dispatchEvent(changeEvent);
         }
       } else {
         response.text().then(text => {
