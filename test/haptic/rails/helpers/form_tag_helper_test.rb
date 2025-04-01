@@ -8,6 +8,24 @@ module Haptic
       class FormTagHelperTest < ActionView::TestCase
         include FormTagHelper
 
+        def test_haptic_button_segment_tag
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-button-segment></haptic-button-segment>
+            HTML
+            haptic_button_segment_tag
+          )
+        end
+
+        def test_haptic_chip_tag
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-chip></haptic-chip>
+            HTML
+            haptic_chip_tag
+          )
+        end
+
         def test_haptic_dialog_dropdown_tag
           assert_dom_equal(
             <<~HTML,

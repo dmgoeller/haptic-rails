@@ -8,6 +8,16 @@ module Haptic
       module FormTagHelper
         include IconHelper
 
+        # Creates a <code><haptic-button-segment></code> tag.
+        def haptic_button_segment_tag(content = nil, options = nil, &block)
+          content_tag('haptic-button-segment', content, options, &block)
+        end
+
+        # Creates a <code><haptic-chip></code> tag.
+        def haptic_chip_tag(content = nil, options = nil, &block)
+          content_tag('haptic-chip', content, options, &block)
+        end
+
         # Creates a <code><haptic-dialog-dropdown></code> tag.
         #
         # ==== Example

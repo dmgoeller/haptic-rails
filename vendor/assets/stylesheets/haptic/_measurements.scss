@@ -67,10 +67,10 @@ $haptic-field-with-label-min-height: 3.5rem !default;
 }
 
 /**********************************************************************
- * Chips and segmented buttons
+ * Segmented buttons and chips
  **********************************************************************/
 
-haptic-segmented-button .button-segment, .haptic-chip {
+haptic-button-segment, haptic-chip {
   $padding-left-right: haptic-measure(.5rem, .75rem);
   $icon-size: haptic-measure(1rem, 1.125rem);
   $spacing-between-icon-and-label: .5rem;

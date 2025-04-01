@@ -88,6 +88,65 @@ class HapticButtonElement extends HTMLButtonElement {
 }
 customElements.define('haptic-button', HapticButtonElement, { extends: 'button' });
 
+class HapticSegmentedButtonElement extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    new HapticChildNodesObserver({
+      nodeAdded: node => {
+        if (node instanceof HapticInputElement) {
+          if (node.classList.contains('outlined')) {
+            this.classList.add('outlined');
+          }
+        }
+      }
+    }).observe(this, { childList: true, subtree: true });
+  }
+}
+customElements.define('haptic-segmented-button', HapticSegmentedButtonElement);
+
+class HapticButtonSegmentElement extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    new HapticChildNodesObserver({
+      nodeAdded: node => {
+        if (node instanceof HapticInputElement) {
+          node.classList.remove('haptic-radio-button');
+        } else
+        if (node instanceof HapticLabelElement) {
+          node.classList.remove('haptic-label');
+        }
+      }
+    }).observe(this, { childList: true, subtree: true });
+  }
+}
+customElements.define('haptic-button-segment', HapticButtonSegmentElement);
+
+class HapticChipElement extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    new HapticChildNodesObserver({
+      nodeAdded: node => {
+        if (node instanceof HapticInputElement) {
+          node.classList.remove('haptic-checkbox');
+        } else
+        if (node instanceof HapticLabelElement) {
+          node.classList.remove('haptic-label');
+        }
+      }
+    }).observe(this, { childList: true, subtree: true });
+  }
+}
+customElements.define('haptic-chip', HapticChipElement);
+
 class HapticDropdownElement extends HTMLElement {
   static observedAttributes = ['disabled'];
 
@@ -434,7 +493,10 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
 
       if (optionElements && optionElements.length > 0) {
         if (!this.#optionListElement.checkedOptionElement) {
-          optionElements[0].setInitiallyChecked();
+          const optionElement = optionElements[0];
+
+          optionElement.checked = true;
+          optionElement.initiallyChecked = true;
         }
         this.#refresh();
       }
@@ -539,7 +601,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
 
   refreshInitialValue() {
     this.#optionListElement?.optionElements?.forEach(optionElement => {
-      optionElement.refreshInitiallyChecked();
+      optionElement.initiallyChecked = optionElement.checked;
     });
   }
 
@@ -675,6 +737,14 @@ class HapticOptionElement extends HTMLElement {
     return value;
   }
 
+  get initiallyChecked() {
+    return this.#initiallyChecked;
+  }
+
+  set initiallyChecked(value) {
+    return this.#initiallyChecked = value;
+  }
+
   get highlighted() {
     return this.hasAttribute('highlighted');
   }
@@ -703,21 +773,12 @@ class HapticOptionElement extends HTMLElement {
 
   connectedCallback() {
     if (this.checked) {
-      this.#initiallyChecked = true;
+      this.initiallyChecked = true;
     }
   }
 
   reset() {
-    this.checked = (this.#initiallyChecked === true);
-  }
-
-  refreshInitiallyChecked() {
-    this.#initiallyChecked = this.checked;
-  }
-
-  setInitiallyChecked() {
-    this.checked = true;
-    this.#initiallyChecked = true;
+    this.checked = (this.initiallyChecked === true);
   }
 }
 customElements.define('haptic-option', HapticOptionElement);
@@ -1094,6 +1155,22 @@ class HapticAsyncFormElement extends HapticFormElement {
     return value;
   }
 
+  get #busy() {
+    return this.classList.contains('busy');
+  }
+
+  set #busy(value) {
+    if (value) {
+      this.classList.add('busy');
+    } else {
+      this.classList.remove('busy');
+    }
+    for (let element of this.#elements) {
+      element.disabled = value;
+    }
+    return value;
+  }
+
   connectedCallback() {
     super.connectedCallback();
     this.classList.add('haptic-async-form');
@@ -1106,7 +1183,7 @@ class HapticAsyncFormElement extends HapticFormElement {
     new HapticChildNodesObserver({
       nodeAdded: node => {
         if (node instanceof HapticInputElement ||
-            node instanceof HapticSelectElement ||
+            // TODO: node instanceof HapticSelectElement ||
             node instanceof HapticSelectDropdownElement ||
             node instanceof HapticTextAreaElement) {
           this.#eventListeners.add(node, 'change', event => {
@@ -1132,7 +1209,7 @@ class HapticAsyncFormElement extends HapticFormElement {
 
   submit(changeEvent = null) {
     const formData = new FormData(this);
-    this.#setBusy(true);
+    this.#busy = true;
 
     fetch(this.action, {
       method: this.method,
@@ -1161,7 +1238,7 @@ class HapticAsyncFormElement extends HapticFormElement {
       this.reset();
     })
     .finally(() => {
-      this.#setBusy(false);
+      this.#busy = false;
     });
   }
 
@@ -1182,17 +1259,6 @@ class HapticAsyncFormElement extends HapticFormElement {
   #refresh() {
     for (let element of this.#elements) {
       element.refreshInitialValue();
-    }
-  }
-
-  #setBusy(value) {
-    if (value) {
-      this.classList.add('busy');
-    } else {
-      this.classList.remove('busy');
-    }
-    for (let element of this.#elements) {
-      element.disabled = value;
     }
   }
 }
@@ -1395,23 +1461,6 @@ class HapticListItemElement extends HTMLElement {
   }
 }
 customElements.define('haptic-list-item', HapticListItemElement);
-
-class HapticSegmentedButtonElement extends HTMLElement {
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
-    new HapticChildNodesObserver({
-      nodeAdded: node => {
-        if (node instanceof HTMLInputElement && node.classList.contains('outlined')) {
-          this.classList.add('outlined');
-        }
-      }
-    }).observe(this, { childList: true, subtree: true });
-  }
-}
-customElements.define('haptic-segmented-button', HapticSegmentedButtonElement);
 
 class HapticSelectElement extends HTMLSelectElement {
   #initialValue = null;

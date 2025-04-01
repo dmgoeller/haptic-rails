@@ -99,29 +99,29 @@ module Haptic
       #   form.chips :color, [%w[Blue blue], %w[Green green]]
       #   # =>
       #   # <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
-      #   # <div class="haptic-chip">
+      #   # <haptic-chip>
       #   #   <input type="checkbox" value="blue" name="dummy[color][]" id="dummy_color_blue">
       #   #   <label for="dummy_color_blue">Blue</label>
-      #   # </div>
-      #   # <div class="haptic-chip">
+      #   # </haptic-chip>
+      #   # <haptic-chip>
       #   #   <input type="checkbox" value="green" name="dummy[color][]" id="dummy_color_green">
       #   #   <label for="dummy_color_green">Green</label>
-      #   # </div>
+      #   # </haptic-chip>
       #
       #   form.chips :color, [%w[Blue blue], %w[Green green]] do |b|
       #     b.check_box(is: nil, checked: b.value == 'blue') + b.label(is: nil)
       #   end
       #   # =>
       #   # <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
-      #   # <div class="haptic-chip">
+      #   # <haptic-chip>
       #   #   <input type="checkbox" value="blue" name="dummy[color][]" id="dummy_color_blue"
       #   #     checked="checked">
       #   #   <label for="dummy_color_blue">Blue</label>
-      #   # </div>
-      #   # <div class="haptic-chip">
+      #   # </haptic-chip>
+      #   # <haptic-chip>
       #   #   <input type="checkbox" value="green" name="dummy[color][]" id="dummy_color_green">
       #   #   <label for="dummy_color_green">Green</label>
-      #   # </div>
+      #   # </haptic-chip>
 
       ##
       # :method: list
@@ -183,14 +183,14 @@ module Haptic
       #   # =>
       #   # <haptic-segmented-button>
       #   #   <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-      #   #   <div class="button-segment">
+      #   #   <haptic-button-segment>
       #   #     <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue">
       #   #     <label for="dummy_color_blue">Blue</label>
-      #   #   </div>
-      #   #   <div class="button-segment">
+      #   #   </haptic-button-segment>
+      #   #   <haptic-button-segment>
       #   #     <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
       #   #     <label for="dummy_color_green">Green</label>
-      #   #   </div>
+      #   #   </haptic-button-segment>
       #   # </haptic-segmented-button>
       #
       #   form_builder.segmented_button(:color, [%w[Blue blue], %w[Green green]]) do |b|
@@ -199,15 +199,15 @@ module Haptic
       #   # =>
       #   # <haptic-segmented-button>
       #   #   <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-      #   #   <div class="button-segment">
+      #   #   <haptic-button-segment>
       #   #     <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue"
       #   #       checked="checked">
       #   #     <label for="dummy_color_blue">Blue</label>
-      #   #   </div>
-      #   #   <div class="button-segment">
+      #   #   </haptic-button-segment>
+      #   #   <haptic-button-segment>
       #   #     <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
       #   #     <label for="dummy_color_green">Green</label>
-      #   #   </div>
+      #   #   </haptic-button-segment>
       #   # </haptic-segmented-button>
 
       %i[chips list segmented_button].each do |name|
@@ -222,18 +222,18 @@ module Haptic
       #   form.collection_chips :color, %w[Blue Green], :downcase, :itself
       #   # =>
       #   # <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
-      #   # <div class="haptic-chip">
+      #   # <haptic-chip>
       #   #   <input type="checkbox" value="blue" name="dummy[color][]" id="dummy_color_blue">
       #   #   <label for="dummy_color_blue">Blue</label>
-      #   # </div>
-      #   # <div class="haptic-chip">
+      #   # </haptic-chip>
+      #   # <haptic-chip>
       #   #   <input type="checkbox" value="green" name="dummy[color][]" id="dummy_color_green">
       #   #   <label for="dummy_color_green">Green</label>
-      #   # </div>
+      #   # </haptic-chip>
       def collection_chips(method, collection, value_method, text_method, options = {}, &block)
         collection_check_boxes(method, collection, value_method, text_method, options) do |b|
-          @template.content_tag('div', class: 'haptic-chip') do
-            block ? block.call(b) : b.check_box(is: nil) + b.label(is: nil)
+          @template.haptic_chip_tag do
+            block ? block.call(b) : b.check_box + b.label
           end
         end
       end
@@ -297,20 +297,20 @@ module Haptic
       #   # =>
       #   # <haptic-segmented-button>
       #   #   <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-      #   #   <div class="button-segment">
+      #   #   <haptic-button-segment>
       #   #     <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue">
       #   #     <label for="dummy_color_blue">Blue</label>
-      #   #   </div>
-      #   #   <div class="button-segment">
+      #   #   </haptic-button-segment>
+      #   #   <haptic-button-segment>
       #   #     <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
       #   #     <label for="dummy_color_green">Green</label>
-      #   #   </div>
+      #   #   </haptic-button-segment>
       #   # </haptic-segmented-button>
       def collection_segmented_button(method, collection, value_method, text_method, options = {}, &block)
         @template.haptic_segmented_button_tag do
           collection_radio_buttons(method, collection, value_method, text_method, options) do |b|
-            @template.content_tag('div', class: 'button-segment') do
-              block ? block.call(b) : b.radio_button(is: nil) + b.label(is: nil)
+            @template.haptic_button_segment_tag do
+              block ? block.call(b) : b.radio_button + b.label
             end
           end
         end

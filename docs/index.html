@@ -394,18 +394,18 @@
 <h3>Segmented buttons</h3>
 
 <pre>&lt;<code class="elem-name">haptic-segmented-button</code>&gt;
-  &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"button-segment"</code>&gt;
+  &lt;<code class="elem-name">haptic-button-segment</code>&gt;
     &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"radio"</code> <code class="attr-name">class</code>=<code class="attr-value">"<code class="variable">{modifier}</code>"</code>/&gt;
     &lt;<code class="elem-name">label</code>&gt;One&lt;/<code class="elem-name">label</code>&gt;
-  &lt;/<code class="elem-name">div</code>&gt;
-  &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"button-segment"</code>&gt;
+  &lt;/<code class="elem-name">haptic-button-segment</code>&gt;
+  &lt;<code class="elem-name">haptic-button-segment</code>&gt;
     &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"radio"</code> <code class="attr-name">class</code>=<code class="attr-value">"<code class="variable">{modifier}</code>"</code>/&gt;
     &lt;<code class="elem-name">label</code>&gt;Two&lt;/<code class="elem-name">label</code>&gt;
-  &lt;/<code class="elem-name">div</code>&gt;
-  &lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"button-segment"</code>&gt;
+  &lt;/<code class="elem-name">haptic-button-segment</code>&gt;
+  &lt;<code class="elem-name">haptic-button-segment</code>&gt;
     &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"radio"</code> <code class="attr-name">class</code>=<code class="attr-value">"<code class="variable">{modifier}</code>"</code>/&gt;
     &lt;<code class="elem-name">label</code>&gt;Three&lt;/<code class="elem-name">label</code>&gt;
-  &lt;/<code class="elem-name">div</code>&gt;
+  &lt;/<code class="elem-name">haptic-button-segment</code>&gt;
 &lt;/<code class="elem-name">haptic-segmented-button</code>&gt;</pre>
 
 <table>
@@ -418,18 +418,18 @@
     <td>
       <div class="example stretch">
         <haptic-segmented-button>
-          <div class="button-segment">
+          <haptic-button-segment>
             <input type="radio" name="outlined_segmented_button" value="one" class="outlined" checked/>
             <label>One</label>
-          </div>
-          <div class="button-segment">
+          </haptic-button-segment>
+          <haptic-button-segment">
             <input type="radio" name="outlined_segmented_button" value="one" class="outlined"/>
             <label>Two</label>
-          </div>
-          <div class="button-segment">
+          </haptic-button-segment>
+          <haptic-button-segment>
             <input type="radio" name="outlined_segmented_button" value="one" class="outlined"/>
             <label>Three</label>
-          </div>
+          </haptic-button-segment>
         </haptic-segmented-button>
       </div>
     </td>
@@ -439,18 +439,18 @@
     <td>
       <div class="example stretch">
         <haptic-segmented-button>
-          <div class="button-segment">
+          <haptic-button-segment>
             <input type="radio" name="filled_segmented_button" value="one" class="filled" checked/>
             <label>One</label>
-          </div>
-          <div class="button-segment">
+          </haptic-button-segment>
+          <haptic-button-segment>
             <input type="radio" name="filled_segmented_button" value="one" class="filled"/>
             <label>Two</label>
-          </div>
-          <div class="button-segment">
+          </haptic-button-segment>
+          <haptic-button-segment>
             <input type="radio" name="filled_segmented_button" value="one" class="filled"/>
             <label>Three</label>
-          </div>
+          </haptic-button-segment>
         </haptic-segmented-button>
       </div>
     </td>
@@ -489,10 +489,10 @@
 <h2 id="chips">Chips</h2>
 
 <pre>
-&lt;<code class="elem-name">div</code> <code class="attr-name">class</code>=<code class="attr-value">"haptic-chip"</code>&gt;
+&lt;<code class="elem-name">haptic-chip</code>&gt;
   &lt;<code class="elem-name">input</code> <code class="attr-name">type</code>=<code class="attr-value">"checkbox"</code> <code class="attr-name">class</code>=<code class="attr-value">"<code class="variable">{modifier}</code>"</code>/&gt;
   &lt;<code class="elem-name">label</code>&gt;One&lt;/<code class="elem-name">label</code>&gt;
-&lt;/<code class="elem-name">div&gt;</code></pre>
+&lt;/<code class="elem-name">haptic-chip&gt;</code></pre>
 
 <table>
   <tr>
@@ -503,18 +503,18 @@
     <td><code>outlined</code></td>
     <td>
       <div class="example" style="display:grid;grid-template-columns:1fr 1fr 1fr">
-        <div class="haptic-chip">
+        <haptic-chip>
           <input type="checkbox" class="outlined" checked/>
           <label>One</label>
-        </div>
-        <div class="haptic-chip">
+        </haptic-chip>
+        <haptic-chip>
           <input type="checkbox" class="outlined"/>
           <label>Two</label>
-        </div>
-        <div class="haptic-chip">
+        </haptic-chip>
+        <haptic-chip>
           <input type="checkbox" class="outlined"/>
           <label>Three</label>
-        </div>
+        </haptic-chip>
       </div>
     </td>
   </tr>

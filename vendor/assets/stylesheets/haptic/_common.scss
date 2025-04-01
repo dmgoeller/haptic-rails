@@ -77,7 +77,7 @@ button, input[type="reset"], input[type="submit"] {
 }
 
 /**********************************************************************
- * Chips and segmented buttons
+ * Segmented buttons and chips
  **********************************************************************/
 
 haptic-segmented-button {
@@ -85,7 +85,7 @@ haptic-segmented-button {
   grid-auto-flow: column;
 }
 
-haptic-segmented-button .button-segment, .haptic-chip {
+haptic-button-segment, haptic-chip {
   @include haptic-container;
   position: relative;
 

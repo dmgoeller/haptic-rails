@@ -224,10 +224,10 @@ $haptic-dark-mode: true !default;
 }
 
 /**********************************************************************
- * Chips and segmented buttons
+ * Segmented buttons and chips
  **********************************************************************/
 
-haptic-segmented-button .button-segment, .haptic-chip {
+haptic-button-segment, haptic-chip {
   input {
     &::after {
       background-color: transparent;

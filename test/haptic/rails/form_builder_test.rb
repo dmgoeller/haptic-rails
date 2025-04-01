@@ -188,14 +188,16 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
-            <div class="haptic-chip">
-              <input type="checkbox" value="blue" name="dummy[color][]" id="dummy_color_blue">
-              <label for="dummy_color_blue">Blue</label>
-            </div>
-            <div class="haptic-chip">
-              <input type="checkbox" value="green" name="dummy[color][]" id="dummy_color_green">
-              <label for="dummy_color_green">Green</label>
-            </div>
+            <haptic-chip>
+              <input is="haptic-input" type="checkbox" value="blue" name="dummy[color][]"
+                id="dummy_color_blue">
+              <label is="haptic-label" for="dummy_color_blue">Blue</label>
+            </haptic-chip>
+            <haptic-chip>
+              <input is="haptic-input" type="checkbox" value="green" name="dummy[color][]"
+                id="dummy_color_green">
+              <label is="haptic-label" for="dummy_color_green">Green</label>
+            </haptic-chip>
           HTML
           form.chips(:color, [%w[Blue blue], %w[Green green]])
         )
@@ -205,14 +207,16 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
-            <div class="haptic-chip">
-              <input type="checkbox" value="blue" name="dummy[color][]" id="dummy_color_blue">
-              <label for="dummy_color_blue">Blue</label>
-            </div>
-            <div class="haptic-chip">
-              <input type="checkbox" value="green" name="dummy[color][]" id="dummy_color_green">
-              <label for="dummy_color_green">Green</label>
-            </div>
+            <haptic-chip>
+              <input is="haptic-input" type="checkbox" value="blue" name="dummy[color][]"
+                id="dummy_color_blue">
+              <label is="haptic-label" for="dummy_color_blue">Blue</label>
+            </haptic-chip>
+            <haptic-chip>
+              <input is="haptic-input" type="checkbox" value="green" name="dummy[color][]"
+                id="dummy_color_green">
+              <label is="haptic-label" for="dummy_color_green">Green</label>
+            </haptic-chip>
           HTML
           form.chips(:color, { 'Blue' => 'blue', 'Green' => 'green' })
         )
@@ -222,15 +226,15 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
-            <div class="haptic-chip">
+            <haptic-chip>
               <input type="checkbox" value="blue" name="dummy[color][]" id="dummy_color_blue"
                 checked="checked">
               <label for="dummy_color_blue">Blue</label>
-            </div>
-            <div class="haptic-chip">
+            </haptic-chip>
+            <haptic-chip>
               <input type="checkbox" value="green" name="dummy[color][]" id="dummy_color_green">
               <label for="dummy_color_green">Green</label>
-            </div>
+            </haptic-chip>
           HTML
           form.chips(:color, [%w[Blue blue], %w[Green green]]) do |b|
             b.check_box(is: nil, checked: b.value == 'blue') + b.label(is: nil)
@@ -329,14 +333,16 @@ module Haptic
           <<~HTML,
             <haptic-segmented-button>
               <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-              <div class="button-segment">
-                <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue">
-                <label for="dummy_color_blue">Blue</label>
-              </div>
-              <div class="button-segment">
-                <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
-                <label for="dummy_color_green">Green</label>
-              </div>
+              <haptic-button-segment>
+                <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
+                  id="dummy_color_blue">
+                <label is="haptic-label" for="dummy_color_blue">Blue</label>
+              </haptic-button-segment>
+              <haptic-button-segment>
+                <input is="haptic-input" type="radio" value="green" name="dummy[color]"
+                  id="dummy_color_green">
+                <label is="haptic-label" for="dummy_color_green">Green</label>
+              </haptic-button-segment>
             </haptic-segmented-button>
           HTML
           form.segmented_button(:color, [%w[Blue blue], %w[Green green]])
@@ -348,14 +354,16 @@ module Haptic
           <<~HTML,
             <haptic-segmented-button>
               <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-              <div class="button-segment">
-                <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue">
-                <label for="dummy_color_blue">Blue</label>
-              </div>
-              <div class="button-segment">
-                <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
-                <label for="dummy_color_green">Green</label>
-              </div>
+              <haptic-button-segment>
+                <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
+                  id="dummy_color_blue">
+                <label is="haptic-label" for="dummy_color_blue">Blue</label>
+              </haptic-button-segment>
+              <haptic-button-segment>
+                <input is="haptic-input" type="radio" value="green" name="dummy[color]"
+                  id="dummy_color_green">
+                <label is="haptic-label" for="dummy_color_green">Green</label>
+              </haptic-button-segment>
             </haptic-segmented-button>
           HTML
           form.segmented_button(:color, { 'Blue' => 'blue', 'Green' => 'green' })
@@ -367,15 +375,15 @@ module Haptic
           <<~HTML,
             <haptic-segmented-button>
               <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-              <div class="button-segment">
+              <haptic-button-segment>
                 <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue"
                   checked="checked">
                 <label for="dummy_color_blue">Blue</label>
-              </div>
-              <div class="button-segment">
+              </haptic-button-segment>
+              <haptic-button-segment>
                 <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
                 <label for="dummy_color_green">Green</label>
-              </div>
+              </haptic-button-segment>
             </haptic-segmented-button>
           HTML
           form.segmented_button(:color, [%w[Blue blue], %w[Green green]]) do |b|
@@ -388,14 +396,16 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
-            <div class="haptic-chip">
-              <input type="checkbox" value="blue" name="dummy[color][]" id="dummy_color_blue">
-              <label for="dummy_color_blue">Blue</label>
-            </div>
-            <div class="haptic-chip">
-              <input type="checkbox" value="green" name="dummy[color][]" id="dummy_color_green">
-              <label for="dummy_color_green">Green</label>
-            </div>
+            <haptic-chip>
+              <input is="haptic-input" type="checkbox" value="blue" name="dummy[color][]"
+                id="dummy_color_blue">
+              <label is="haptic-label" for="dummy_color_blue">Blue</label>
+            </haptic-chip>
+            <haptic-chip>
+              <input is="haptic-input" type="checkbox" value="green" name="dummy[color][]"
+                id="dummy_color_green">
+              <label is="haptic-label" for="dummy_color_green">Green</label>
+            </haptic-chip>
           HTML
           form.collection_chips(:color, %w[Blue Green], :downcase, :itself)
         )
@@ -405,15 +415,15 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
-            <div class="haptic-chip">
+            <haptic-chip>
               <input type="checkbox" value="blue" name="dummy[color][]" id="dummy_color_blue"
                 checked="checked">
               <label for="dummy_color_blue">Blue</label>
-            </div>
-            <div class="haptic-chip">
+            </haptic-chip>
+            <haptic-chip>
               <input type="checkbox" value="green" name="dummy[color][]" id="dummy_color_green">
               <label for="dummy_color_green">Green</label>
-            </div>
+            </haptic-chip>
           HTML
           form.collection_chips(:color, %w[Blue Green], :downcase, :itself) do |b|
             b.check_box(is: nil, checked: b.value == 'blue') + b.label(is: nil)
@@ -535,14 +545,16 @@ module Haptic
           <<~HTML,
             <haptic-segmented-button>
               <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-              <div class="button-segment">
-                <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue">
-                <label for="dummy_color_blue">Blue</label>
-              </div>
-              <div class="button-segment">
-                <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
-                <label for="dummy_color_green">Green</label>
-              </div>
+              <haptic-button-segment>
+                <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
+                  id="dummy_color_blue">
+                <label is="haptic-label" for="dummy_color_blue">Blue</label>
+              </haptic-button-segment>
+              <haptic-button-segment>
+                <input is="haptic-input" type="radio" value="green" name="dummy[color]"
+                  id="dummy_color_green">
+                <label is="haptic-label" for="dummy_color_green">Green</label>
+              </haptic-button-segment>
             </haptic-segmented-button>
           HTML
           form.collection_segmented_button(:color, %w[Blue Green], :downcase, :itself)
@@ -554,19 +566,20 @@ module Haptic
           <<~HTML,
             <haptic-segmented-button>
               <input type="hidden" name="dummy[color]" value="" autocomplete="off">
-              <div class="button-segment">
-                <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue"
-                  checked="checked">
-                <label for="dummy_color_blue">Blue</label>
-              </div>
-              <div class="button-segment">
-                <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
-                <label for="dummy_color_green">Green</label>
-              </div>
+              <haptic-button-segment>
+                <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
+                  id="dummy_color_blue" checked="checked">
+                <label is="haptic-label" for="dummy_color_blue">Blue</label>
+              </haptic-button-segment>
+              <haptic-button-segment>
+                <input is="haptic-input" type="radio" value="green" name="dummy[color]"
+                  id="dummy_color_green">
+                <label is="haptic-label" for="dummy_color_green">Green</label>
+              </haptic-button-segment>
             </haptic-segmented-button>
           HTML
           form.collection_segmented_button(:color, %w[Blue Green], :downcase, :itself) do |b|
-            b.radio_button(is: nil, checked: b.value == 'blue') + b.label(is: nil)
+            b.radio_button(checked: b.value == 'blue') + b.label
           end
         )
       end
