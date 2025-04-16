@@ -124,9 +124,7 @@ haptic-dialog-dropdown, haptic-select-dropdown {
   position: relative;
 
   & > .toggle {
-    align-items: center;
     cursor: default;
-    display: flex;
   }
 
   & > .popover {
@@ -153,6 +151,11 @@ haptic-dialog-dropdown, haptic-select-dropdown {
       display: initial;
     }
   }
+}
+
+haptic-select-dropdown > .toggle {
+  align-items: center;
+  display: flex;
 }
 
 haptic-option-list {
