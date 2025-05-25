@@ -597,6 +597,8 @@ haptic-text-field {
       &::before {
         background-color: $haptic-red;
       }
+    }
+    &.red-green, &.green {
       &:checked::before {
         background-color: $haptic-green;
       }
@@ -625,6 +627,8 @@ haptic-text-field {
       &::after {
         @include haptic-red('background-color');
       }
+    }
+    &.red-green, &.green {
       &:checked {
         &::before {
           @include haptic-green('border-color');
