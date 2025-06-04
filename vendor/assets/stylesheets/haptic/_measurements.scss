@@ -120,7 +120,7 @@ haptic-segmented-button:not(.outlined) {
  * Dropdowns
  **********************************************************************/
 
-haptic-dialog-dropdown, haptic-select-dropdown {
+haptic-dropdown, haptic-dialog-dropdown, haptic-select-dropdown {
   & > .toggle {
     height: 100%;
     width: 100%;

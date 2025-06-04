@@ -5,8 +5,8 @@ require 'test_helper'
 module Haptic
   module Rails
     module Helpers
-      class FormTagHelperTest < ActionView::TestCase
-        include FormTagHelper
+      class TagHelperTest < ActionView::TestCase
+        include TagHelper
 
         def test_haptic_button_segment_tag
           assert_dom_equal(
@@ -47,6 +47,33 @@ module Haptic
               </haptic-dialog-dropdown>
             HTML
             haptic_dialog_dropdown_tag do
+              content_tag('div', '', class: 'toggle') +
+                content_tag('div', '', class: 'popover')
+            end
+          )
+        end
+
+        def test_haptic_dropdown_tag
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-dropdown>
+                <div class="backdrop"></div>
+              </haptic-dropdown>
+            HTML
+            haptic_dropdown_tag
+          )
+        end
+
+        def test_haptic_dropdown_tag_with_block
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-dropdown>
+                <div class="toggle"></div>
+                <div class="popover"></div>
+                <div class="backdrop"></div>
+              </haptic-dropdown>
+            HTML
+            haptic_dropdown_tag do
               content_tag('div', '', class: 'toggle') +
                 content_tag('div', '', class: 'popover')
             end

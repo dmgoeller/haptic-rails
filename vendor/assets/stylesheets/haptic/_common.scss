@@ -120,7 +120,7 @@ haptic-button-segment, haptic-chip {
  * Dropdowns
  **********************************************************************/
 
-haptic-dialog-dropdown, haptic-select-dropdown {
+haptic-dropdown, haptic-dialog-dropdown, haptic-select-dropdown {
   position: relative;
 
   & > .toggle {

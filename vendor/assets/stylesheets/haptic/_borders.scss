@@ -68,7 +68,7 @@ haptic-chip input {
  * Dropdowns
  **********************************************************************/
 
-haptic-dialog-dropdown, haptic-select-dropdown {
+haptic-dropdown, haptic-dialog-dropdown, haptic-select-dropdown {
   outline: none;
 
   & > .popover {

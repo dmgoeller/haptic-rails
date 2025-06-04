@@ -5,7 +5,7 @@ require 'test_helper'
 module Haptic
   module Rails
     class FormBuilderTest < ActionView::TestCase
-      include Haptic::Rails::Helpers::FormTagHelper
+      include Haptic::Rails::Helpers::TagHelper
 
       %i[file number text].each do |type|
         define_method("test_#{type}_field") do

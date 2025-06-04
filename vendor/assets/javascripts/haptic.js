@@ -308,6 +308,7 @@ class HapticDropdownElement extends HTMLElement {
   cancel() {
   }
 }
+customElements.define('haptic-dropdown', HapticDropdownElement);
 
 class HapticDialogDropdownElement extends HapticDropdownElement {
   #fields = new Set();

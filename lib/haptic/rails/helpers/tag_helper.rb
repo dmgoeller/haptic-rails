@@ -5,7 +5,7 @@ require_relative 'icon_helper'
 module Haptic
   module Rails
     module Helpers
-      module FormTagHelper
+      module TagHelper
         include IconHelper
 
         # Creates a <code><haptic-button-segment></code> tag.
@@ -20,9 +20,25 @@ module Haptic
 
         # Creates a <code><haptic-dialog-dropdown></code> tag.
         #
+        # Same as <code>haptic_dropdown('dialog', options, &block)</code>.
+        def haptic_dialog_dropdown_tag(options = {}, &block)
+          haptic_dropdown_tag('dialog', options, &block)
+        end
+
+        # Creates a <code>haptic-dropdown</code>, <code>haptic-dialog-dropdown</code> or
+        # <code>haptic-select-dropdown</code> tag.
+        #
+        # <code>type</code> can be <code>'dialog'</code>, <code>'select'</code> or
+        # <code>nil</code>.
+        #
+        # ==== Options
+        #
+        # - <code>:to_top</code> - If is <code>true</code>, the popover pops up to top
+        #   instead of to bottom.
+        #
         # ==== Example
         #
-        #   haptic_dialog_dropdown_tag do
+        #   haptic_dropdown_tag do
         #     content_tag 'div', class: 'toggle' do
         #       # ...
         #     end +
@@ -31,13 +47,19 @@ module Haptic
         #     end
         #   end
         #   # =>
-        #   # <haptic-dialog-dropdown>
+        #   # <haptic-dropdown>
         #   #   <div class="toggle"></div>
         #   #   <div class="popover"></div>
         #   #   <div class="backdrop"></div>
-        #   # </haptic-dialog-dropdown>
-        def haptic_dialog_dropdown_tag(options = {}, &block)
-          content_tag('haptic-dialog-dropdown', options) do
+        #   # </haptic-dropdown>
+        def haptic_dropdown_tag(type = nil, options = {}, &block)
+          type, options = nil, type if type.is_a?(Hash)
+          name = type ? "haptic-#{type}-dropdown" : 'haptic-dropdown'
+
+          options = options.stringify_keys
+          options['to-top'] = '' if options.delete('to_top')
+
+          content_tag(name, options) do
             concat capture(&block) if block
             concat content_tag('div', nil, class: 'backdrop')
           end
@@ -45,9 +67,20 @@ module Haptic
 
         # Creates a <code><haptic-dropdown-field></code> tag wrapping the given field.
         #
+        # Same as <code>haptic_field_tag('dropdown', field, label, options, &block)</code>.
+        def haptic_dropdown_field_tag(field = nil, label = nil, options = nil, &block)
+          haptic_field_tag('dropdown', field, label, options, &block)
+        end
+
+        # Creates a <code><haptic-text-field></code> or <code>haptic-dropdown-field</code> tag
+        # wrapping the given field.
+        #
+        # <code>type</code> can be <code>'text'</code> or <code>'dropdown'</code>.
+        #
         # ==== Options
         #
         # - <code>:animated_label</code>
+        # - <code>:clear_button</code>
         # - <code>:error_message</code>
         # - <code>:focus_indicator</code>
         # - <code>:leading_icon</code>
@@ -56,11 +89,37 @@ module Haptic
         # - <code>:show_error_message</code>
         # - <code>:supporting_text</code>
         # - <code>:trailing_icon</code>
-        def haptic_dropdown_field_tag(field = nil, label = nil, options = nil, &block)
-          haptic_field_tag('dropdown', field, label, options, &block)
-        end
-
-        def haptic_field_tag(type, field = nil, label = nil, options = nil, &block) # :nodoc:
+        #
+        # ==== Examples
+        #
+        #   haptic_field_tag('text') { text_field_tag 'name' }
+        #   # =>
+        #   # <haptic-text-field>
+        #   #   <div class="field-container">
+        #   #     <input id="name" name="name" type="text">
+        #   #   </div>
+        #   # </haptic-text-field>
+        #
+        #   haptic_field_tag('text', 'Label') { text_field_tag 'name' }
+        #   # =>
+        #   # <haptic-text-field>
+        #   #   <div class="field-container">
+        #   #     <input id="name" name="name" type="text">
+        #   #     <label class="field-label">Label</label>
+        #   #   </div>
+        #   # </haptic-text-field>
+        #
+        #   haptic_field_tag('text', clear_button: true) { text_field_tag 'name' }
+        #   # =>
+        #   # <haptic-text-field>
+        #   #   <div class="field-container">
+        #   #     <input id="name" name="name" type="text">
+        #   #     <button type="button" tabindex="-1" class="clear-button">
+        #   #       <div class="haptic-icon">close</div>
+        #   #     </button>
+        #   #   </div>
+        #   # </haptic-text-field>
+        def haptic_field_tag(type = 'text', field = nil, label = nil, options = nil, &block)
           field, label, options = capture(&block), field, label if block
           field = '' if field.nil?
           field = field.html_safe unless field.html_safe?
@@ -142,78 +201,14 @@ module Haptic
 
         # Creates a <code><haptic-select-dropdown></code> tag.
         #
-        # ==== Options
-        #
-        # - <code>:to_top</code> - If is <code>true</code>, the option list pops up to top
-        #   instead of to bottom.
-        #
-        # ==== Examples
-        #
-        #   haptic_select_dropdown_tag
-        #   # =>
-        #   # <haptic-select-dropdown>
-        #   #   <div class="backdrop"></div>
-        #   # </haptic-select-dropdown>
-        #
-        #   haptic_select_dropdown_tag to_top: true
-        #   # =>
-        #   # <haptic-select-dropdown to-top="">
-        #   #   <div class="backdrop"></div>
-        #   # </haptic-select-dropdown>
+        # Same as <code>haptic_dropdown('select', options, &block)</code>.
         def haptic_select_dropdown_tag(options = {}, &block)
-          options = options.stringify_keys
-          options['to-top'] = '' if options.delete('to_top')
-
-          content_tag('haptic-select-dropdown', options) do
-            concat capture(&block) if block
-            concat content_tag('div', nil, class: 'backdrop')
-          end
+          haptic_dropdown_tag('select', options, &block)
         end
 
         # Creates a <code><haptic-text-field></code> tag wrapping the given field.
         #
-        # ==== Options
-        #
-        # - <code>:animated_label</code>
-        # - <code>:clear_button</code>
-        # - <code>:error_message</code>
-        # - <code>:focus_indicator</code>
-        # - <code>:leading_icon</code>
-        # - <code>:set_valid_on_change</code>
-        # - <code>:show_error_icon</code>
-        # - <code>:show_error_message</code>
-        # - <code>:supporting_text</code>
-        # - <code>:trailing_icon</code>
-        #
-        # ==== Examples
-        #
-        #   haptic_text_field_tag { text_field_tag 'name' }
-        #   # =>
-        #   # <haptic-text-field>
-        #   #   <div class="field-container">
-        #   #     <input id="name" name="name" type="text">
-        #   #   </div>
-        #   # </haptic-text-field>
-        #
-        #   haptic_text_field_tag('Label') { text_field_tag 'name' }
-        #   # =>
-        #   # <haptic-text-field>
-        #   #   <div class="field-container">
-        #   #     <input id="name" name="name" type="text">
-        #   #     <label class="field-label">Label</label>
-        #   #   </div>
-        #   # </haptic-text-field>
-        #
-        #   haptic_text_field_tag(clear_button: true) { text_field_tag 'name' }
-        #   # =>
-        #   # <haptic-text-field>
-        #   #   <div class="field-container">
-        #   #     <input id="name" name="name" type="text">
-        #   #     <button type="button" tabindex="-1" class="clear-button">
-        #   #       <div class="haptic-icon">close</div>
-        #   #     </button>
-        #   #   </div>
-        #   # </haptic-text-field>
+        # Same as <code>haptic_field_tag('text', field, label, options, &block)</code>.
         def haptic_text_field_tag(field = nil, label = nil, options = nil, &block)
           haptic_field_tag('text', field, label, options, &block)
         end
