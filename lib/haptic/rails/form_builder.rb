@@ -41,7 +41,8 @@ module Haptic
       ].freeze # :nodoc:
 
       def initialize(object_name, object, template, options) # :nodoc:
-        @field_options = FieldOptions.new
+        @field_options = options[:haptic_field_options] || FieldOptions.new
+        options = options.except(:haptic_field_options)
         super(object_name, object, Builder.new(template, @field_options), options)
       end
 
@@ -433,11 +434,18 @@ module Haptic
         error_message = error_message_for(method)
         return if error_message.blank?
 
-        @template.content_tag(
-          'div',
-          error_message,
-          options.merge(class: [options[:class], 'error'])
-        )
+        options = options.merge(class: [options[:class], 'error'])
+        @template.content_tag('div', error_message, options)
+      end
+
+      def fields(scope = nil, model: nil, **options, &block) # :nodoc:
+        options = options.reverse_merge(haptic_field_options: @field_options)
+        super(scope, model: model, **options, &block)
+      end
+
+      def fields_for(record_name, record_object = nil, options = {}, &block) # :nodoc:
+        options = options.reverse_merge(haptic_field_options: @field_options)
+        super(record_name, record_object, options, &block)
       end
 
       # Creates a <code><select></code> tag wrapped by a <code><haptic-dropdown-field></code>

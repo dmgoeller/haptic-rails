@@ -1134,7 +1134,7 @@ module Haptic
             assert_dom_equal(
               <<~HTML,
                 <input is="haptic-input" type="text" name="dummy[name]" id="dummy_name"
-                      data-foo="bar">
+                  data-foo="bar">
               HTML
               form.text_field(:name)
             )
@@ -1144,6 +1144,36 @@ module Haptic
 
       def test_with_field_options_without_block
         assert_nil(form.with_field_options(data: { foo: 'bar' }))
+      end
+
+      def test_fields
+        form = self.form
+        form.with_field_options(data: { foo: 'bar' }) do
+          form.fields(:nested, builder: FormBuilder) do |nested_fields|
+            assert_dom_equal(
+              <<~HTML,
+                <input is="haptic-input", type="text" name="dummy[nested][name]"
+                  data-foo="bar"/>
+              HTML
+              nested_fields.text_field(:name)
+            )
+          end
+        end
+      end
+
+      def test_fields_for
+        form = self.form
+        form.with_field_options(data: { foo: 'bar' }) do
+          form.fields_for(:nested, nil, builder: FormBuilder) do |nested_fields|
+            assert_dom_equal(
+              <<~HTML,
+                <input is="haptic-input", type="text" name="dummy[nested][name]"
+                  id="dummy_nested_name" data-foo="bar"/>
+              HTML
+              nested_fields.text_field(:name)
+            )
+          end
+        end
       end
 
       def test_haptic_text_field_for
