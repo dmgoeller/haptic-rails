@@ -86,7 +86,7 @@ module Haptic
           )
         end
 
-        define_method("test_#{type}_on_nil_object") do
+        define_method("test_#{type}_field_on_nil_object") do
           form = FormBuilder.new(:dummy, nil, self, {})
           assert_dom_equal(
             <<~HTML,
@@ -182,6 +182,102 @@ module Haptic
           HTML
           form.text_area(:name)
         )
+      end
+
+      {
+        date_field: 'date',
+        datetime_field: 'datetime-local',
+        datetime_local_field: 'datetime-local'
+      }.each do |method, type|
+        define_method("test_#{method}") do
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-text-field for="dummy_date">
+                <div class="field-container">
+                  <input is="haptic-input" type="#{type}" name="dummy[date]" id="dummy_date">
+                  <div class="haptic-icon trailing-icon">calendar_today</div>
+                </div>
+              </haptic-text-field>
+            HTML
+            form.send(method, :date)
+          )
+        end
+
+        define_method("test_#{method}_with_field_options") do
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-text-field for="dummy_date" id="field-id" set-valid-on-change="dummy_bar">
+                <div class="field-container">
+                  <input is="haptic-input" type="#{type}" name="dummy[date]" id="dummy_date">
+                  <label is="haptic-label" class="field-label" for="dummy_date">Date</label>
+                  <div class="haptic-icon leading-icon">leading_icon</div>
+                  <div class="haptic-icon trailing-icon">calendar_today</div>
+                </div>
+                <div class="supporting-text">Supporting text</div>
+              </haptic-text-field>
+            HTML
+            form.send(
+              method,
+              :date,
+              field_id: 'field-id',
+              label: true,
+              leading_icon: 'leading_icon',
+              supporting_text: 'Supporting text',
+              set_valid_on_change: :bar
+            )
+          )
+        end
+
+        define_method("test_#{method}_with_custom_label") do
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-text-field for="dummy_date">
+                <div class="field-container">
+                  <input is="haptic-input" type="#{type}" name="dummy[date]" id="dummy_date">
+                  <label is="haptic-label" class="field-label" for="dummy_date">Label</label>
+                  <div class="haptic-icon trailing-icon">calendar_today</div>
+                </div>
+              </haptic-text-field>
+            HTML
+            form.send(method, :date, label: 'Label')
+          )
+        end
+
+        define_method("test_#{method}_with_errors") do
+          dummy = Dummy.new
+          dummy.errors.add(:date, :invalid)
+
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-text-field for="dummy_date" invalid="">
+                <div class="field-container">
+                  <div class="field_with_errors">
+                    <input is="haptic-input" type="#{type}" name="dummy[date]" id="dummy_date">
+                  </div>
+                  <div class="haptic-icon error-icon">error</div>
+                  <div class="haptic-icon trailing-icon">calendar_today</div>
+                </div>
+                <div class="error-message">Date is invalid.</div>
+              </haptic-text-field>
+            HTML
+            form(dummy).send(method, :date, show_error_icon: true, show_error_message: true)
+          )
+        end
+
+        define_method("test_#{method}_on_nil_object") do
+          form = FormBuilder.new(:dummy, nil, self, {})
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-text-field for="dummy_date">
+                <div class="field-container">
+                  <input is="haptic-input" type="#{type}" name="dummy[date]" id="dummy_date">
+                  <div class="haptic-icon trailing-icon">calendar_today</div>
+                </div>
+              </haptic-text-field>
+            HTML
+            form.send(method, :date)
+          )
+        end
       end
 
       def test_chips
@@ -841,95 +937,6 @@ module Haptic
             :itself,
             { include_blank: true }
           )
-        )
-      end
-
-      def test_date_field
-        assert_dom_equal(
-          <<~HTML,
-            <haptic-text-field for="dummy_date">
-              <div class="field-container">
-                <input is="haptic-input" type="date" name="dummy[date]" id="dummy_date">
-                <div class="haptic-icon trailing-icon">calendar_today</div>
-              </div>
-            </haptic-text-field>
-          HTML
-          form.date_field(:date)
-        )
-      end
-
-      def test_date_field_with_field_options
-        assert_dom_equal(
-          <<~HTML,
-            <haptic-text-field for="dummy_date" id="field-id" set-valid-on-change="dummy_bar">
-              <div class="field-container">
-                <input is="haptic-input" type="date" name="dummy[date]" id="dummy_date">
-                <label is="haptic-label" class="field-label" for="dummy_date">Date</label>
-                <div class="haptic-icon leading-icon">leading_icon</div>
-                <div class="haptic-icon trailing-icon">calendar_today</div>
-              </div>
-              <div class="supporting-text">Supporting text</div>
-            </haptic-text-field>
-          HTML
-          form.date_field(
-            :date,
-            field_id: 'field-id',
-            label: true,
-            leading_icon: 'leading_icon',
-            supporting_text: 'Supporting text',
-            set_valid_on_change: :bar
-          )
-        )
-      end
-
-      def test_date_field_with_custom_label
-        assert_dom_equal(
-          <<~HTML,
-            <haptic-text-field for="dummy_date">
-              <div class="field-container">
-                <input is="haptic-input" type="date" name="dummy[date]" id="dummy_date">
-                <label is="haptic-label" class="field-label" for="dummy_date">Label</label>
-                <div class="haptic-icon trailing-icon">calendar_today</div>
-              </div>
-            </haptic-text-field>
-          HTML
-          form.date_field(:date, label: 'Label')
-        )
-      end
-
-      def test_date_field_with_errors
-        dummy = Dummy.new
-        dummy.errors.add(:date, :invalid)
-
-        assert_dom_equal(
-          <<~HTML,
-            <haptic-text-field for="dummy_date" invalid="">
-              <div class="field-container">
-                <div class="field_with_errors">
-                  <input is="haptic-input" type="date" name="dummy[date]" id="dummy_date">
-                </div>
-                <div class="haptic-icon error-icon">error</div>
-                <div class="haptic-icon trailing-icon">calendar_today</div>
-              </div>
-              <div class="error-message">Date is invalid.</div>
-            </haptic-text-field>
-          HTML
-          form(dummy).date_field(:date, show_error_icon: true, show_error_message: true)
-        )
-      end
-
-      def test_date_field_on_nil_object
-        form = FormBuilder.new(:dummy, nil, self, {})
-        assert_dom_equal(
-          <<~HTML,
-            <haptic-text-field for="dummy_date">
-              <div class="field-container">
-                <input is="haptic-input" type="date" name="dummy[date]" id="dummy_date">
-                <div class="haptic-icon trailing-icon">calendar_today</div>
-              </div>
-            </haptic-text-field>
-          HTML
-          form.date_field(:date)
         )
       end
 

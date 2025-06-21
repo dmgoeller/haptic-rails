@@ -92,6 +92,34 @@ module Haptic
       end
 
       ##
+      # :method: date_field
+      # :call-seq: date_field(method, options = {})
+      #
+      # Creates a date field wrapped by a <code><haptic-text-field></code> tag.
+
+      ##
+      # :method: datetime_field
+      # :call-seq: datetime_field(method, options = {})
+      #
+      # Creates a datetime field wrapped by a <code><haptic-text-field></code> tag.
+
+      ##
+      # :method: datetime_local_field
+      # :call-seq: datetime_local_field(method, options = {})
+      #
+      # Creates a datetime field wrapped by a <code><haptic-text-field></code> tag.
+
+      %i[date_field datetime_field datetime_local_field].each do |name|
+        define_method(name) do |method, options = {}|
+          options = @field_options.merge(options)
+          options[:trailing_icon] ||= 'calendar'
+          field = super(method, options.except(*HAPTIC_FIELD_OPTIONS))
+
+          haptic_field('text', method, field, options.except(:animated_label))
+        end
+      end
+
+      ##
       # :method: chips
       # :call-seq: chips(method, choices, options = {}, &block)
       #
@@ -398,18 +426,6 @@ module Haptic
         end
 
         haptic_select_dropdown_field(method, haptic_options.reduce(:+), html_options)
-      end
-
-      # Creates a date field wrapped by a <code><haptic-text-field></code> tag.
-      def date_field(method, options = {})
-        options = @field_options.merge(options)
-
-        haptic_field(
-          'text',
-          method,
-          super(method, options.except(*HAPTIC_FIELD_OPTIONS)),
-          options.reverse_merge(trailing_icon: 'calendar').except(:animated_label)
-        )
       end
 
       # Creates a <code>haptic-dialog-dropdown</code> tag wrapped by a
