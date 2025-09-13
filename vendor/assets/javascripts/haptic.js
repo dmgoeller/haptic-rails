@@ -1,4 +1,36 @@
 
+const HapticLock = {
+  _wasDisabled: false,
+  disabledChangedCallback(newValue) {
+    if (!this.isLocked()) {
+      if (newValue !== null) {
+        this.classList.add('grayed');
+      } else {
+        this.classList.remove('grayed');
+      }
+    }
+  },
+  isLocked() {
+    return this.hasAttribute('locked');
+  },
+  lock() {
+    this.setAttribute('locked', 'locked');
+    if (this.disabled) {
+      this._wasDisabled = true;
+    } else {
+      this.disabled = true;
+    }
+  },
+  unlock() {
+    if (this._wasDisabled) {
+      this._wasDisabled = false;
+    } else {
+      this.disabled = false;
+    }
+    this.removeAttribute('locked');
+  }
+}
+
 class HapticEventListeners {
   #listeners = new Map();
 
@@ -61,7 +93,7 @@ class HapticControlObserver extends MutationObserver {
   constructor(owner) {
     super(mutationList => {
       for (let mutationRecord of mutationList) {
-        for (let name of ['disabled', 'required']) {
+        for (let name of ['disabled', 'locked', 'required']) {
           if (mutationRecord.attributeName == name) {
             if (mutationRecord.target.hasAttribute(name)) {
               owner.setAttribute(name, '');
@@ -76,8 +108,16 @@ class HapticControlObserver extends MutationObserver {
 }
 
 class HapticButtonElement extends HTMLButtonElement {
+  static observedAttributes = ['disabled'];
+
   constructor() {
     super();
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'disabled') {
+      this.disabledChangedCallback(newValue);
+    }
   }
 
   connectedCallback() {
@@ -85,16 +125,17 @@ class HapticButtonElement extends HTMLButtonElement {
       this.classList.add('haptic-button');
     }
     if (this.form instanceof HapticFormElement) {
-      this.form.elementAdded(this);
+      this.form.controlAdded(this);
     }
   }
 
   disconnectedCallback() {
     if (this.form instanceof HapticFormElement) {
-      this.form.elementRemoved(this);
+      this.form.controlRemoved(this);
     }
   }
 }
+Object.assign(HapticButtonElement.prototype, HapticLock);
 customElements.define('haptic-button', HapticButtonElement, { extends: 'button' });
 
 class HapticSegmentedButtonElement extends HTMLElement {
@@ -175,6 +216,7 @@ class HapticDropdownElement extends HTMLElement {
 
   set disabled(value) {
     if (value) {
+      this.hidePopover();
       this.setAttribute('disabled', 'disabled');
     } else {
       this.removeAttribute('disabled');
@@ -192,6 +234,7 @@ class HapticDropdownElement extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'disabled') {
+      this.disabledChangedCallback(newValue);
       this.tabIndex = (newValue === null ? 0 : -1);
     }
   }
@@ -237,10 +280,12 @@ class HapticDropdownElement extends HTMLElement {
           node.tabIndex = -1;
 
           this.#eventListeners.add(node, 'click', event => {
-            if (this.isOpen()) {
-              this.hidePopover({ cancel: true });
-            } else {
-              this.showPopover();
+            if (!this.disabled) {
+              if (this.isOpen()) {
+                this.hidePopover({ cancel: true });
+              } else {
+                this.showPopover();
+              }
             }
             event.preventDefault();
           });
@@ -285,18 +330,18 @@ class HapticDropdownElement extends HTMLElement {
   }
 
   showPopover() {
-    if (this.popoverElement) {
+    if (!this.disabled && this.popoverElement) {
       if (this.getBoundingClientRect().x > (window.innerWidth / 2)) {
         this.#popoverElement.classList.add('auto-justify-right');
       } else {
         this.#popoverElement.classList.remove('auto-justify-right');
       }
-      this.setAttribute('popover-open', '');
+      this.setAttribute('popover-open', 'popover-open');
     }
   }
 
   hidePopover(options = {}) {
-    if (this.hasAttribute('popover-open')) {
+    if (!this.disabled && this.hasAttribute('popover-open')) {
       this.removeAttribute('popover-open');
 
       if (options.cancel) {
@@ -308,6 +353,7 @@ class HapticDropdownElement extends HTMLElement {
   cancel() {
   }
 }
+Object.assign(HapticDropdownElement.prototype, HapticLock);
 customElements.define('haptic-dropdown', HapticDropdownElement);
 
 class HapticDialogDropdownElement extends HapticDropdownElement {
@@ -333,8 +379,10 @@ class HapticDialogDropdownElement extends HapticDropdownElement {
       } else
       if (node.type === 'reset') {
         this.#eventListeners.add(node, 'click', event => {
-          this.hidePopover({ reset: true });
-          event.preventDefault();
+          if (!this.disabled) {
+            this.hidePopover({ reset: true });
+            event.preventDefault();
+          }
         });
         this.#resetButtons.add(node);
       }
@@ -512,7 +560,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       }
     });
     if (this.form instanceof HapticFormElement) {
-      this.form.elementAdded(this);
+      this.form.controlAdded(this);
     }
     super.connectedCallback();
   }
@@ -522,7 +570,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     super.disconnectedCallback();
 
     if (this.form instanceof HapticFormElement) {
-      this.form.elementRemoved(this);
+      this.form.controlRemoved(this);
     }
   }
 
@@ -802,6 +850,7 @@ customElements.define('haptic-option', HapticOptionElement);
 
 class HapticFieldElement extends HTMLElement {
   static ICON_NAMES = ['error', 'leading', 'trailing'];
+  static observedAttributes = ['disabled'];
 
   #setValidOnChange = null;
   #control = null;
@@ -846,6 +895,12 @@ class HapticFieldElement extends HTMLElement {
           );
         }
         return false;
+    }
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'disabled') {
+      this.disabledChangedCallback(newValue);
     }
   }
 
@@ -988,6 +1043,7 @@ class HapticFieldElement extends HTMLElement {
     return false;
   }
 }
+Object.assign(HapticFieldElement.prototype, HapticLock);
 
 class HapticDropdownFieldElement extends HapticFieldElement {
   constructor() {
@@ -1046,51 +1102,116 @@ customElements.define('haptic-text-field', HapticTextFieldElement);
 
 class HapticFormElement extends HTMLFormElement {
   #eventListeners = new HapticEventListeners();
-  #requiredElements = new Set();
+  #controls = new Set();
+  #requiredFields = new Set();
   #submitButtons = new Set();
+  #isSubmitting = false;
 
   constructor() {
     super();   
   }
 
+  get busy() {
+    this.classList.contains('busy');
+  }
+
+  set busy(value) {
+    if (value) {
+      this.classList.add('busy')
+    } else {
+      this.classList.remove('busy');
+    }
+    return value;
+  }
+
+  get controls() {
+    return this.#controls.values();
+  }
+
   connectedCallback() {
+    this.classList.add('haptic-form');
+
+    this.addEventListener('submit', event => {
+      this.submit();
+      event.preventDefault();
+    });
   }
 
   disconnectedCallback() {
     this.#eventListeners.removeAll();
+    super.disconnectedCallback();
   }
 
-  elementAdded(element) {
-    if ((element instanceof HapticButtonElement ||
-         element instanceof HapticInputElement) &&
-        element.type === 'submit') {
-    this.#submitButtons.add(element);
+  controlAdded(control) {
+    this.#controls.add(control);
+
+    if ((control instanceof HapticButtonElement ||
+         control instanceof HapticInputElement) &&
+        control.type === 'submit') {
+    this.#submitButtons.add(control);
     this.#refresh();
     } else
-    if ((element instanceof HapticListElement ||
-         element instanceof HapticSelectDropdownElement ||
-         element instanceof HapticInputElement ||
-         element instanceof HapticTextAreaElement ||
-         element instanceof HapticSelectElement) &&
-        element.required) {
-      this.#eventListeners.add(element, 'change', () => {
+    if ((control instanceof HapticListElement ||
+         control instanceof HapticSelectDropdownElement ||
+         control instanceof HapticInputElement ||
+         control instanceof HapticTextAreaElement ||
+         control instanceof HapticSelectElement) &&
+        control.required) {
+      this.#eventListeners.add(control, 'change', () => {
         this.#refresh();
       });
-      this.#eventListeners.add(element, 'input', () => {
+      this.#eventListeners.add(control, 'input', () => {
         this.#refresh();
       });
-      this.#requiredElements.add(element);
+      this.#requiredFields.add(control);
       this.#refresh();
     }
   }
 
-  elementRemoved(element) {
-    if (this.#requiredElements.has(element)) {
-      this.#eventListeners.remove(element)
-      this.#requiredElements.delete(element);
+  controlRemoved(control) {
+    this.#controls.delete(control);
+
+    if (this.#requiredFields.has(control)) {
+      this.#eventListeners.remove(control)
+      this.#requiredFields.delete(control);
     } else
-    if (this.#submitButtons.has(element)) {
-      this.#submitButtons.delete(element);
+    if (this.#submitButtons.has(control)) {
+      this.#submitButtons.delete(control);
+    }
+  }
+
+  reset() {
+    for (let control of this.#controls) {
+      if ('reset' in control) {
+        control.reset({ silent: true });
+      }
+    }
+  }
+
+  submit() {
+    this.trySubmit(() => {
+      setTimeout(() => { this.busy = true }, 400);
+      super.submit();
+    });
+  }
+
+  trySubmit(func) {
+    if (!this.#isSubmitting) {
+      this.#isSubmitting = true;
+
+      for (let control of this.#controls) {
+        if ('lock' in control) {
+          control.lock();
+        }
+      }
+      func(() => {
+        for (let control of this.#controls) {
+          if ('unlock' in control) {
+             control.unlock();
+          }
+        }
+        this.#isSubmitting = false;
+      });
     }
   }
 
@@ -1098,7 +1219,7 @@ class HapticFormElement extends HTMLFormElement {
     if (this.#submitButtons.size > 0) {
       let submittable = true;
 
-      for (let field of this.#requiredElements) {
+      for (let field of this.#requiredFields) {
         if (!field.value) {
           submittable = false;
           break;
@@ -1127,7 +1248,6 @@ class HapticAsyncErrorEvent extends Event {
 
 class HapticAsyncFormElement extends HapticFormElement {
   #eventListeners = new HapticEventListeners();
-  #elements = new Set();
 
   constructor() {
     super();   
@@ -1172,40 +1292,15 @@ class HapticAsyncFormElement extends HapticFormElement {
     return value;
   }
 
-  get #busy() {
-    return this.classList.contains('busy');
-  }
-
-  set #busy(value) {
-    if (value) {
-      this.classList.add('busy');
-    } else {
-      this.classList.remove('busy');
-    }
-    for (let element of this.#elements) {
-      element.disabled = value;
-    }
-    return value;
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.classList.add('haptic-async-form');
-
-    this.addEventListener('submit', event => {
-      this.submit();
-      event.preventDefault();
-    });
-  }
-
   disconnectedCallback() {
     this.#eventListeners.removeAll();
+    super.disconnectedCallback();
   }
 
-  elementAdded(element) {
-    super.elementAdded(element);
+  controlAdded(control) {
+    super.controlAdded(control);
 
-    this.#eventListeners.add(element, 'change', event => {
+    this.#eventListeners.add(control, 'change', event => {
       if (event.intercepted) {
         delete event.intercepted;
       } else
@@ -1216,53 +1311,50 @@ class HapticAsyncFormElement extends HapticFormElement {
         this.submit(event);
       }
     }, { capture: true });
-    this.#elements.add(element);
   }
 
-  elementRemoved(element) {
-    this.#elements.delete(element);
-    this.#eventListeners.remove(element);
+  controlRemoved(control) {
+    this.#eventListeners.remove(control);
+    super.controlRemoved(control);
   }
 
   submit(changeEvent = null) {
-    const formData = new FormData(this);
-    this.#busy = true;
+    this.trySubmit(submittingFinished => {
+      this.busy = true;
 
-    fetch(this.action, {
-      method: this.method,
-      headers: {
-        'Accept': this.accept || 'application/json'
-      },
-      body: formData,
-      redirect: this.redirect || 'follow'
-    })
-    .then(response => {
-      if (response.ok) {
-        this.#refresh();
+      const formData = new FormData(this);
 
-        if (changeEvent) {
-          changeEvent.target?.dispatchEvent(changeEvent);
+      fetch(this.action, {
+        method: this.method,
+        headers: {
+          'Accept': this.accept || 'application/json'
+        },
+        body: formData,
+        redirect: this.redirect || 'follow'
+      })
+      .then(response => {
+        if (response.ok) {
+          this.#refresh();
+
+          if (changeEvent) {
+            changeEvent.target?.dispatchEvent(changeEvent);
+          }
+        } else {
+          response.text().then(text => {
+            this.#dispatchErrorEvent(text);
+            this.reset();
+          });
         }
-      } else {
-        response.text().then(text => {
-          this.#dispatchErrorEvent(text);
-          this.reset();
-        });
-      }
-    })
-    .catch(error => {
-      this.#dispatchErrorEvent(error.message);
-      this.reset();
-    })
-    .finally(() => {
-      this.#busy = false;
+      })
+      .catch(error => {
+        this.#dispatchErrorEvent(error.message);
+        this.reset();
+      })
+      .finally(() => {
+        this.busy = false;
+        submittingFinished();
+      });
     });
-  }
-
-  reset() {
-    for (let element of this.#elements) {
-      element.reset({ silent: true });
-    }
   }
 
   #dispatchErrorEvent(message) {
@@ -1274,8 +1366,10 @@ class HapticAsyncFormElement extends HapticFormElement {
   }
 
   #refresh() {
-    for (let element of this.#elements) {
-      element.refreshInitialValue();
+    for (let control of this.controls) {
+      if ('refreshInitialValue' in control) {
+        control.refreshInitialValue();
+      }
     }
   }
 }
@@ -1293,6 +1387,8 @@ class HapticInputElement extends HTMLInputElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'disabled') {
       if (!this.classList.contains('embedded')) {
+        this.disabledChangedCallback(newValue);
+
         for (let label of this.labels) {
           if (this.disabled) {
             label.classList.add('grayed');
@@ -1324,13 +1420,13 @@ class HapticInputElement extends HTMLInputElement {
         this.#initialValue = this.value;
     }
     if (this.form instanceof HapticFormElement) {
-      this.form.elementAdded(this);
+      this.form.controlAdded(this);
     }
   }
 
   disconnectedCallback() {
     if (this.form instanceof HapticFormElement) {
-      this.form.elementRemoved(this);
+      this.form.controlRemoved(this);
     }
   }
 
@@ -1370,6 +1466,7 @@ class HapticInputElement extends HTMLInputElement {
     }
   }
 }
+Object.assign(HapticInputElement.prototype, HapticLock);
 customElements.define('haptic-input', HapticInputElement, { extends: 'input' });
 
 class HapticLabelElement extends HTMLLabelElement {
@@ -1429,7 +1526,7 @@ class HapticListElement extends HTMLElement {
     }).observe(this, { childList: true, subtree: true });
 
     if (this.form instanceof HapticFormElement) {
-      this.form.elementAdded(this);
+      this.form.controlAdded(this);
     }
   }
 
@@ -1437,13 +1534,15 @@ class HapticListElement extends HTMLElement {
     this.#eventListeners.removeAll();
 
     if (this.form instanceof HapticFormElement) {
-      this.form.elementRemoved(this);
+      this.form.controlRemoved(this);
     }
   }
 }
 customElements.define('haptic-list', HapticListElement);
 
 class HapticListItemElement extends HTMLElement {
+  static observedAttributes = ['disabled'];
+
   #control = null;
   #controlObserver = new HapticControlObserver(this);
   #eventListeners = new HapticEventListeners();
@@ -1458,6 +1557,16 @@ class HapticListItemElement extends HTMLElement {
 
   get value() {
     return this.#control?.value;
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'disabled' && !this.isLocked()) {
+      if (newValue !== null) {
+        this.classList.add('grayed');
+      } else {
+        this.classList.remove('grayed');
+      }
+    }
   }
 
   connectedCallback() {
@@ -1497,14 +1606,26 @@ class HapticListItemElement extends HTMLElement {
   disconnectedCallback() {
     this.#eventListeners.removeAll();
   }
+
+  isLocked() {
+    return this.hasAttribute('locked');
+  }
 }
 customElements.define('haptic-list-item', HapticListItemElement);
 
 class HapticSelectElement extends HTMLSelectElement {
+  static observedAttributes = ['disabled'];
+
   #initialValue = null;
 
   constructor() {
     super();
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'disabled') {
+      this.disabledChangedCallback(newValue);
+    }
   }
 
   connectedCallback() {
@@ -1512,13 +1633,13 @@ class HapticSelectElement extends HTMLSelectElement {
     this.refreshInitialValue();
 
     if (this.form instanceof HapticFormElement) {
-      this.form.elementAdded(this);
+      this.form.controlAdded(this);
     }
   }
 
   disconnectedCallback() {
     if (this.form instanceof HapticFormElement) {
-      this.form.elementRemoved(this);
+      this.form.controlRemoved(this);
     }
   }
 
@@ -1535,14 +1656,23 @@ class HapticSelectElement extends HTMLSelectElement {
     }
   }
 }
+Object.assign(HapticSelectElement.prototype, HapticLock);
 customElements.define('haptic-select', HapticSelectElement, { extends: 'select' });
 
 class HapticTextAreaElement extends HTMLTextAreaElement {
+  static observedAttributes = ['disabled'];
+
   #eventListeners = new HapticEventListeners();
   #initialValue = null;
 
   constructor() {
     super();
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'disabled') {
+      this.disabledChangedCallback(newValue);
+    }
   }
 
   connectedCallback() {
@@ -1556,7 +1686,7 @@ class HapticTextAreaElement extends HTMLTextAreaElement {
       this.resize();
     });
     if (this.form instanceof HapticFormElement) {
-      this.form.elementAdded(this);
+      this.form.controlAdded(this);
     }
   }
 
@@ -1564,7 +1694,7 @@ class HapticTextAreaElement extends HTMLTextAreaElement {
     this.#eventListeners.removeAll();
 
     if (this.form instanceof HapticFormElement) {
-      this.form.elementRemoved(this);
+      this.form.controlRemoved(this);
     }
   }
 
@@ -1586,4 +1716,5 @@ class HapticTextAreaElement extends HTMLTextAreaElement {
     this.style.height = `${this.scrollHeight}px`;
   }
 }
+Object.assign(HapticSelectElement.prototype, HapticLock);
 customElements.define('haptic-textarea', HapticTextAreaElement, { extends: 'textarea' });
