@@ -309,9 +309,11 @@ haptic-dropdown-field {
 }
 
 haptic-text-field {
-  ::-webkit-inner-spin-button {
+  ::-webkit-inner-spin-button,
+  ::-webkit-search-cancel-button {
     appearance: none;
   }
+
 
   // TODO ::file-selector-button
 
