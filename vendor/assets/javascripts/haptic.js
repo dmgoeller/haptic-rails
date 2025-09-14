@@ -1,36 +1,3 @@
-
-const HapticLock = {
-  _wasDisabled: false,
-  disabledChangedCallback(newValue) {
-    if (!this.isLocked()) {
-      if (newValue !== null) {
-        this.classList.add('grayed');
-      } else {
-        this.classList.remove('grayed');
-      }
-    }
-  },
-  isLocked() {
-    return this.hasAttribute('locked');
-  },
-  lock() {
-    this.setAttribute('locked', 'locked');
-    if (this.disabled) {
-      this._wasDisabled = true;
-    } else {
-      this.disabled = true;
-    }
-  },
-  unlock() {
-    if (this._wasDisabled) {
-      this._wasDisabled = false;
-    } else {
-      this.disabled = false;
-    }
-    this.removeAttribute('locked');
-  }
-}
-
 class HapticEventListeners {
   #listeners = new Map();
 
@@ -107,17 +74,54 @@ class HapticControlObserver extends MutationObserver {
   }
 }
 
+class HapticLock {
+  static EVENT_TYPES_TO_BLOCK = ['keydown', 'keyup'];
+
+  #control;
+  #eventListener;
+
+  constructor(control) {
+    this.#control = control;
+    this.#eventListener = event => event.preventDefault();
+  }
+
+  get activated() {
+    return this.hasAttribute('locked');
+  }
+
+  set activated(value) {
+    if (value) {
+      if (!this.#control.hasAttribute('locked')) {
+        for (let eventType of HapticLock.EVENT_TYPES_TO_BLOCK) {
+          this.#control.addEventListener(eventType, this.#eventListener);
+        }
+        this.#control.setAttribute('locked', 'locked');
+      }
+    } else {
+      if (this.#control.hasAttribute('locked')) {
+        for (let eventType of HapticLock.EVENT_TYPES_TO_BLOCK) {
+          this.#control.removeEventListener(eventType, this.#eventListener);
+        }
+        this.#control.removeAttribute('locked');
+      }
+    }
+    return value;
+  }
+}
+
 class HapticButtonElement extends HTMLButtonElement {
-  static observedAttributes = ['disabled'];
+  #lock = new HapticLock(this);
 
   constructor() {
     super();
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'disabled') {
-      this.disabledChangedCallback(newValue);
-    }
+  get locked() {
+    return this.#lock.activated;
+  }
+
+  set locked(value) {
+    return this.#lock.activated = value;
   }
 
   connectedCallback() {
@@ -135,7 +139,6 @@ class HapticButtonElement extends HTMLButtonElement {
     }
   }
 }
-Object.assign(HapticButtonElement.prototype, HapticLock);
 customElements.define('haptic-button', HapticButtonElement, { extends: 'button' });
 
 class HapticSegmentedButtonElement extends HTMLElement {
@@ -200,11 +203,12 @@ customElements.define('haptic-chip', HapticChipElement);
 class HapticDropdownElement extends HTMLElement {
   static observedAttributes = ['disabled'];
 
+  #tabIndex = null;
   #toggleElement = null;
-  #toggleElementTabIndex = null;
   #popoverElement = null;
   #backdropElement = null;
   #eventListeners = new HapticEventListeners();
+  #lock = new HapticLock(this);
 
   constructor() {
     super();
@@ -216,12 +220,19 @@ class HapticDropdownElement extends HTMLElement {
 
   set disabled(value) {
     if (value) {
-      this.hidePopover();
       this.setAttribute('disabled', 'disabled');
     } else {
       this.removeAttribute('disabled');
     }
     return value;
+  }
+
+  get locked() {
+    return this.#lock.activated;
+  }
+
+  set locked(value) {
+    return this.#lock.activated = value;
   }
 
   get toggleElement() {
@@ -234,8 +245,12 @@ class HapticDropdownElement extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'disabled') {
-      this.disabledChangedCallback(newValue);
-      this.tabIndex = (newValue === null ? 0 : -1);
+      if (newValue !== null) {
+        this.hidePopover();
+        this.tabIndex = -1;
+      } else {
+        this.tabIndex = this.#tabIndex;
+      }
     }
   }
 
@@ -276,11 +291,11 @@ class HapticDropdownElement extends HTMLElement {
 
       if (classList.contains('toggle')) {
         if (!this.#toggleElement) {
-          this.#toggleElementTabIndex = node.tabIndex;
+          this.#tabIndex = node.tabIndex;
           node.tabIndex = -1;
 
           this.#eventListeners.add(node, 'click', event => {
-            if (!this.disabled) {
+            if (!this.disabled && !this.locked) {
               if (this.isOpen()) {
                 this.hidePopover({ cancel: true });
               } else {
@@ -312,7 +327,7 @@ class HapticDropdownElement extends HTMLElement {
   nodeRemoved(node) {
     switch (node) {
       case this.#toggleElement:
-        node.tabIndex = this.#toggleElementTabIndex;
+        node.tabIndex = this.#tabIndex;
         this.#eventListeners.remove(node);
         this.#toggleElement = null;
         break;
@@ -353,7 +368,6 @@ class HapticDropdownElement extends HTMLElement {
   cancel() {
   }
 }
-Object.assign(HapticDropdownElement.prototype, HapticLock);
 customElements.define('haptic-dropdown', HapticDropdownElement);
 
 class HapticDialogDropdownElement extends HapticDropdownElement {
@@ -379,7 +393,7 @@ class HapticDialogDropdownElement extends HapticDropdownElement {
       } else
       if (node.type === 'reset') {
         this.#eventListeners.add(node, 'click', event => {
-          if (!this.disabled) {
+          if (!this.disabled && !this.locked) {
             this.hidePopover({ reset: true });
             event.preventDefault();
           }
@@ -432,7 +446,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
 
   connectedCallback() {
     this.#eventListeners.add(this, 'keydown', event => {
-      if (!this.disabled) {
+      if (!this.disabled && !this.locked) {
         if (this.#optionListElement.optionElements.length > 0) {
           switch (event.key) {
             case ' ':
@@ -508,7 +522,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       }
     });
     this.#eventListeners.add(this, 'keyup', event => {
-      if (!this.disabled) {
+      if (!this.disabled && !this.locked) {
         const optionElements = this.#optionListElement?.optionElements;
 
         if (optionElements && optionElements.length > 0) {
@@ -850,12 +864,11 @@ customElements.define('haptic-option', HapticOptionElement);
 
 class HapticFieldElement extends HTMLElement {
   static ICON_NAMES = ['error', 'leading', 'trailing'];
-  static observedAttributes = ['disabled'];
 
   #setValidOnChange = null;
   #control = null;
-  #controlObserver = new HapticControlObserver(this);
   #label = null;
+  #controlObserver = new HapticControlObserver(this);
   #eventListeners = new HapticEventListeners();
 
   constructor() {
@@ -895,12 +908,6 @@ class HapticFieldElement extends HTMLElement {
           );
         }
         return false;
-    }
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'disabled') {
-      this.disabledChangedCallback(newValue);
     }
   }
 
@@ -1043,7 +1050,6 @@ class HapticFieldElement extends HTMLElement {
     return false;
   }
 }
-Object.assign(HapticFieldElement.prototype, HapticLock);
 
 class HapticDropdownFieldElement extends HapticFieldElement {
   constructor() {
@@ -1200,14 +1206,14 @@ class HapticFormElement extends HTMLFormElement {
       this.#isSubmitting = true;
 
       for (let control of this.#controls) {
-        if ('lock' in control) {
-          control.lock();
+        if ('locked' in control) {
+          control.locked = true;
         }
       }
       func(() => {
         for (let control of this.#controls) {
-          if ('unlock' in control) {
-             control.unlock();
+          if ('locked' in control) {
+            control.locked = false;
           }
         }
         this.#isSubmitting = false;
@@ -1378,17 +1384,24 @@ customElements.define('haptic-async-form', HapticAsyncFormElement, { extends: 'f
 class HapticInputElement extends HTMLInputElement {
   static observedAttributes = ['disabled'];
 
+  #lock = new HapticLock(this);
   #initialValue = null;
 
   constructor() {
     super();
   }
 
+  get locked() {
+    return this.#lock.activated;
+  }
+
+  set locked(value) {
+    return this.#lock.activated = value;
+  }
+
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'disabled') {
       if (!this.classList.contains('embedded')) {
-        this.disabledChangedCallback(newValue);
-
         for (let label of this.labels) {
           if (this.disabled) {
             label.classList.add('grayed');
@@ -1466,7 +1479,6 @@ class HapticInputElement extends HTMLInputElement {
     }
   }
 }
-Object.assign(HapticInputElement.prototype, HapticLock);
 customElements.define('haptic-input', HapticInputElement, { extends: 'input' });
 
 class HapticLabelElement extends HTMLLabelElement {
@@ -1541,8 +1553,6 @@ class HapticListElement extends HTMLElement {
 customElements.define('haptic-list', HapticListElement);
 
 class HapticListItemElement extends HTMLElement {
-  static observedAttributes = ['disabled'];
-
   #control = null;
   #controlObserver = new HapticControlObserver(this);
   #eventListeners = new HapticEventListeners();
@@ -1557,16 +1567,6 @@ class HapticListItemElement extends HTMLElement {
 
   get value() {
     return this.#control?.value;
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'disabled' && !this.isLocked()) {
-      if (newValue !== null) {
-        this.classList.add('grayed');
-      } else {
-        this.classList.remove('grayed');
-      }
-    }
   }
 
   connectedCallback() {
@@ -1606,26 +1606,25 @@ class HapticListItemElement extends HTMLElement {
   disconnectedCallback() {
     this.#eventListeners.removeAll();
   }
-
-  isLocked() {
-    return this.hasAttribute('locked');
-  }
 }
 customElements.define('haptic-list-item', HapticListItemElement);
 
 class HapticSelectElement extends HTMLSelectElement {
   static observedAttributes = ['disabled'];
 
+  #lock = new HapticLock(this);
   #initialValue = null;
 
   constructor() {
     super();
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'disabled') {
-      this.disabledChangedCallback(newValue);
-    }
+  get locked() {
+    return this.#lock.activated;
+  }
+
+  set locked(value) {
+    return this.#lock.activated = value;
   }
 
   connectedCallback() {
@@ -1656,23 +1655,23 @@ class HapticSelectElement extends HTMLSelectElement {
     }
   }
 }
-Object.assign(HapticSelectElement.prototype, HapticLock);
 customElements.define('haptic-select', HapticSelectElement, { extends: 'select' });
 
 class HapticTextAreaElement extends HTMLTextAreaElement {
-  static observedAttributes = ['disabled'];
-
   #eventListeners = new HapticEventListeners();
+  #lock = new HapticLock(this);
   #initialValue = null;
 
   constructor() {
     super();
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'disabled') {
-      this.disabledChangedCallback(newValue);
-    }
+  get locked() {
+    return this.#lock.activated;
+  }
+
+  set locked(value) {
+    return this.#lock.activated = value;
   }
 
   connectedCallback() {
@@ -1716,5 +1715,4 @@ class HapticTextAreaElement extends HTMLTextAreaElement {
     this.style.height = `${this.scrollHeight}px`;
   }
 }
-Object.assign(HapticSelectElement.prototype, HapticLock);
 customElements.define('haptic-textarea', HapticTextAreaElement, { extends: 'textarea' });

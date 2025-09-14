@@ -53,10 +53,6 @@ $haptic-popover-z-index: 10000 !default;
   align-items: center;
   cursor: pointer;
   justify-content: center;
-
-  &.grayed {
-    @include haptic-grayed;
-  }
 }
 
 .haptic-button {
@@ -73,8 +69,12 @@ button, input[type="reset"], input[type="submit"] {
   &.haptic-button, &.haptic-icon-button {
     appearance: none;
 
-    &:disabled {
+    &:disabled, &[locked] {
       pointer-events: none;
+    }
+
+    &:disabled {
+      @include haptic-grayed;
     }
   }
 }
@@ -105,10 +105,6 @@ haptic-button-segment, haptic-chip {
     cursor: pointer;
     position: absolute;
 
-    &.grayed, &.grayed ~label {
-      @include haptic-grayed;
-    }
-
     &::after {
       @include haptic-mask-image('checkmark.svg');
       content: '\200b';
@@ -116,8 +112,14 @@ haptic-button-segment, haptic-chip {
       position: absolute;
     }
 
-    &:disabled {
+    &:disabled, &[locked] {
       pointer-events: none;
+    }
+
+    &:disabled {
+      &, & ~label {
+        @include haptic-grayed;
+      }
     }
   }
 }
@@ -207,12 +209,12 @@ button, input, select, textarea {
   &.haptic-field {
     appearance: none;
 
-    &.grayed:not(.embedded) {
-      @include haptic-grayed;
+    &:disabled, &[locked] {
+      pointer-events: none;
     }
 
-    &:disabled {
-      pointer-events: none;
+    &:disabled:not(.embedded) {
+      @include haptic-grayed;
     }
   }
 }
@@ -286,7 +288,7 @@ haptic-dropdown-field, haptic-text-field {
     opacity: 1;
   }
 
-  &.grayed, fieldset:disabled & {
+  &[disabled], fieldset:disabled & {
     @include haptic-grayed;
   }
 }
@@ -348,7 +350,7 @@ haptic-text-field {
     pointer-events: none;
   }
 
-  &[disabled], fieldset:disabled & {
+  &[disabled], &[locked], fieldset:disabled & {
     .clear-button {
       pointer-events: none
     }
@@ -367,10 +369,6 @@ haptic-text-field {
   cursor: pointer;
   position: relative;
 
-  &.grayed:not(.embedded) {
-    @include haptic-grayed;
-  }
-
   &::before, &::after {
     content: '\200b';
     pointer-events: none;
@@ -388,8 +386,12 @@ input[type="checkbox"].haptic-switch,
 input[type="radio"].haptic-radio-button {
   appearance: none;
 
-  &:disabled {
+  &:disabled, &[locked] {
     pointer-events: none;
+  }
+
+  &:disabled:not(.embedded) {
+    @include haptic-grayed;
   }
 }
 
