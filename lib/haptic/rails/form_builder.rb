@@ -54,6 +54,13 @@ module Haptic
       # field is wrapped by a <code>haptic-text-field</code> tag.
 
       ##
+      # :method: password_field
+      # :call-seq: password_field(method, options = {})
+      #
+      # Creates a password field. If any of the haptic field options are specified, the password
+      # field is wrapped by a <code>haptic-text-field</code> tag.
+
+      ##
       # :method: text_area
       # :call-seq: text_area(method, options = {})
       #
@@ -81,7 +88,7 @@ module Haptic
       #   #   </div>
       #   # </haptic-text-field>
 
-      %i[file_field number_field text_area text_field].each do |name|
+      %i[file_field number_field text_area password_field text_field].each do |name|
         define_method(name) do |method, options = {}|
           options = @field_options.merge(options)
           field = super(method, options.except(*HAPTIC_FIELD_OPTIONS))
@@ -109,7 +116,19 @@ module Haptic
       #
       # Creates a datetime field wrapped by a <code><haptic-text-field></code> tag.
 
-      %i[date_field datetime_field datetime_local_field].each do |name|
+      ##
+      # :method: month_field
+      # :call-seq: month_field(method, options = {})
+      #
+      # Creates a month field wrapped by a <code><haptic-text-field></code> tag.
+
+      ##
+      # :method: week_field
+      # :call-seq: week_field(method, options = {})
+      #
+      # Creates a week field wrapped by a <code><haptic-text-field></code> tag.
+
+      %i[date_field datetime_field datetime_local_field month_field week_field].each do |name|
         define_method(name) do |method, options = {}|
           options = @field_options.merge(options)
           options[:trailing_icon] ||= 'calendar'
