@@ -982,6 +982,7 @@ class HapticFieldElement extends HTMLElement {
       } else
       if (node.classList.contains('field-label')) {
         if (!this.#label) {
+          node.classList.add('embedded');
           this.setAttribute('with-label', '');
           this.#label = node;
         }
@@ -1011,6 +1012,7 @@ class HapticFieldElement extends HTMLElement {
           this.#control = null;
           break;
         case this.#label:
+          node.classList.remove('embedded');
           this.removeAttribute('with-label');
           this.#label = null;
           break;
@@ -1401,13 +1403,11 @@ class HapticInputElement extends HTMLInputElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'disabled') {
-      if (!this.classList.contains('embedded')) {
-        for (let label of this.labels) {
-          if (this.disabled) {
-            label.classList.add('grayed');
-          } else {
-            label.classList.remove('grayed');
-          }
+      for (let label of this.labels) {
+        if (this.disabled) {
+          label.classList.add('grayed');
+        } else {
+          label.classList.remove('grayed');
         }
       }
     }
@@ -1482,8 +1482,20 @@ class HapticInputElement extends HTMLInputElement {
 customElements.define('haptic-input', HapticInputElement, { extends: 'input' });
 
 class HapticLabelElement extends HTMLLabelElement {
+  static observedAttributes = ['for'];
+
   constructor() {
     super();
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'for') {
+      if (this.control?.disabled) {
+        this.classList.add('grayed');
+      } else {
+        this.classList.remove('grayed');
+      }
+    }
   }
 
   connectedCallback() {

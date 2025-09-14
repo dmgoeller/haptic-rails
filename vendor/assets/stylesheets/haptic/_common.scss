@@ -429,7 +429,9 @@ haptic-list-item {
  **********************************************************************/
 
 .haptic-label {
-  &.grayed, fieldset:disabled & {
-    @include haptic-grayed;
+  &:not(.embedded) {
+    &.grayed, fieldset:disabled & {
+      @include haptic-grayed;
+    }
   }
 }
