@@ -8,6 +8,7 @@ module Haptic
       include Haptic::Rails::Helpers::TagHelper
 
       {
+        email_field: 'email',
         file_field: 'file',
         number_field: 'number',
         password_field: 'password',

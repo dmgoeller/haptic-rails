@@ -47,6 +47,20 @@ module Haptic
       end
 
       ##
+      # :method: email_field
+      # :call-seq: email_field(method, options = {})
+      #
+      # Creates an email field. If any of the haptic field options are specified, the email
+      # field is wrapped by a <code>haptic-text-field</code> tag.
+
+      ##
+      # :method: file_field
+      # :call-seq: file_field(method, options = {})
+      #
+      # Creates a file field. If any of the haptic field options are specified, the file
+      # field is wrapped by a <code>haptic-text-field</code> tag.
+
+      ##
       # :method: number_field
       # :call-seq: number_field(method, options = {})
       #
@@ -109,8 +123,8 @@ module Haptic
       #   #   </div>
       #   # </haptic-text-field>
 
-      %i[file_field number_field text_area password_field phone_field search_field
-         telephone_field text_field].each do |name|
+      %i[email_field file_field number_field text_area password_field phone_field
+         search_field telephone_field text_field].each do |name|
         define_method(name) do |method, options = {}|
           options = @field_options.merge(options)
           field = super(method, options.except(*HAPTIC_FIELD_OPTIONS))
