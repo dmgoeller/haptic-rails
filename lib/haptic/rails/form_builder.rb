@@ -61,10 +61,24 @@ module Haptic
       # field is wrapped by a <code>haptic-text-field</code> tag.
 
       ##
+      # :method: phone_field
+      # :call-seq: phone_field(method, options = {})
+      #
+      # Creates a phone field. If any of the haptic field options are specified, the phone
+      # field is wrapped by a <code>haptic-text-field</code> tag.
+
+      ##
       # :method: search_field
       # :call-seq: search_field(method, options = {})
       #
       # Creates a search field. If any of the haptic field options are specified, the search
+      # field is wrapped by a <code>haptic-text-field</code> tag.
+
+      ##
+      # :method: telephone_field
+      # :call-seq: telephone_field(method, options = {})
+      #
+      # Creates a phone field. If any of the haptic field options are specified, the phone
       # field is wrapped by a <code>haptic-text-field</code> tag.
 
       ##
@@ -95,7 +109,8 @@ module Haptic
       #   #   </div>
       #   # </haptic-text-field>
 
-      %i[file_field number_field text_area password_field search_field text_field].each do |name|
+      %i[file_field number_field text_area password_field phone_field search_field
+         telephone_field text_field].each do |name|
         define_method(name) do |method, options = {}|
           options = @field_options.merge(options)
           field = super(method, options.except(*HAPTIC_FIELD_OPTIONS))

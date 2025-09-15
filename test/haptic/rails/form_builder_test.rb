@@ -7,17 +7,25 @@ module Haptic
     class FormBuilderTest < ActionView::TestCase
       include Haptic::Rails::Helpers::TagHelper
 
-      %i[file number text].each do |type|
-        define_method("test_#{type}_field") do
+      {
+        file_field: 'file',
+        number_field: 'number',
+        password_field: 'password',
+        phone_field: 'tel',
+        search_field: 'search',
+        telephone_field: 'tel',
+        text_field: 'text'
+      }.each do |method, type|
+        define_method("test_#{method}") do
           assert_dom_equal(
             <<~HTML,
               <input is="haptic-input" type="#{type}" name="dummy[name]" id="dummy_name">
             HTML
-            form.send(:"#{type}_field", :name)
+            form.send(method, :name)
           )
         end
 
-        define_method("test_#{type}_field_with_field_options") do
+        define_method("test_#{method}_with_field_options") do
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field for="dummy_name" id="field-id" set-valid-on-change="dummy_bar">
@@ -34,7 +42,7 @@ module Haptic
               </haptic-text-field>
             HTML
             form.send(
-              :"#{type}_field",
+              method,
               :name,
               clear_button: true,
               field_id: 'field-id',
@@ -47,7 +55,7 @@ module Haptic
           )
         end
 
-        define_method("test_#{type}_field_with_custom_label") do
+        define_method("test_#{method}_with_custom_label") do
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field for="dummy_name">
@@ -57,11 +65,11 @@ module Haptic
                 </div>
               </haptic-text-field>
             HTML
-            form.send(:"#{type}_field", :name, label: 'Label')
+            form.send(method, :name, label: 'Label')
           )
         end
 
-        define_method("test_#{type}_field_with_errors") do
+        define_method("test_#{method}_with_errors") do
           dummy = Dummy.new
           dummy.errors.add(:name, :invalid)
 
@@ -78,7 +86,7 @@ module Haptic
               </haptic-text-field>
             HTML
             form(dummy).send(
-              :"#{type}_field",
+              method,
               :name,
               show_error_icon: true,
               show_error_message: true
@@ -86,7 +94,7 @@ module Haptic
           )
         end
 
-        define_method("test_#{type}_field_on_nil_object") do
+        define_method("test_#{method}_on_nil_object") do
           form = FormBuilder.new(:dummy, nil, self, {})
           assert_dom_equal(
             <<~HTML,
@@ -97,7 +105,7 @@ module Haptic
                 </div>
               </haptic-text-field>
             HTML
-            form.send(:"#{type}_field", :name, label: true)
+            form.send(method, :name, label: true)
           )
         end
       end
@@ -187,7 +195,9 @@ module Haptic
       {
         date_field: 'date',
         datetime_field: 'datetime-local',
-        datetime_local_field: 'datetime-local'
+        datetime_local_field: 'datetime-local',
+        month_field: 'month',
+        week_field: 'week'
       }.each do |method, type|
         define_method("test_#{method}") do
           assert_dom_equal(
