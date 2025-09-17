@@ -8,7 +8,7 @@ module Haptic
         @field_options = field_options
       end
 
-      %i[date_field datetime_field datetime_local_field email_field file_field month_field number_field
+      %i[color_field date_field datetime_field datetime_local_field email_field file_field month_field number_field
          password_field phone_field search_field telephone_field text_field week_field].each do |name|
         define_method name do |object_name, method, options = {}|
           super(object_name, method, field_options(options, is: 'haptic-input'))

@@ -238,9 +238,15 @@ haptic-option {
 haptic-dropdown-field, haptic-text-field {
   box-sizing: border-box;
 
-  .haptic-field.overflow-ellipsis {
-    height: 100%;
-    width: 100%;
+  .haptic-field {
+    &.overflow-ellipsis {
+      height: 100%;
+      width: 100%;
+    }
+
+    &[type="color"] {
+      width: 100%;
+    }
   }
 
   &[focus-indicator] {
@@ -259,6 +265,7 @@ haptic-dropdown-field, haptic-text-field {
     min-height: $haptic-field-with-label-min-height;
 
     .haptic-field {
+      min-height: $haptic-field-with-label-min-height;
       padding-bottom: $padding-top-bottom;
       padding-top: $padding-top-bottom + 1.25rem;
       vertical-align: bottom;

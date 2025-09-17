@@ -111,6 +111,102 @@ module Haptic
         end
       end
 
+      def test_color_field
+        assert_dom_equal(
+          <<~HTML,
+            <input is="haptic-input" type="color" name="dummy[color]" value="#000000"
+              id="dummy_color">
+          HTML
+          form.color_field(:color)
+        )
+      end
+
+      def test_color_field_with_field_options
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-text-field for="dummy_color" id="field-id" set-valid-on-change="dummy_bar">
+              <div class="field-container">
+                <input is="haptic-input" type="color" name="dummy[color]" value="#000000"
+                  id="dummy_color">
+                <label is="haptic-label" class="field-label" for="dummy_color">Color</label>
+                <button type="button" tabindex="-1" class="clear-button">
+                  <div class="haptic-icon">close</div>
+                </button>
+                <div class="haptic-icon leading-icon">leading_icon</div>
+                <div class="haptic-icon trailing-icon">trailing_icon</div>
+              </div>
+              <div class="supporting-text">Supporting text</div>
+            </haptic-text-field>
+          HTML
+          form.color_field(
+            :color,
+            clear_button: true,
+            field_id: 'field-id',
+            label: true,
+            leading_icon: 'leading_icon',
+            supporting_text: 'Supporting text',
+            set_valid_on_change: :bar,
+            trailing_icon: 'trailing_icon'
+          )
+        )
+      end
+
+      def test_color_field_with_custom_label
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-text-field for="dummy_color">
+              <div class="field-container">
+                <input is="haptic-input" type="color" name="dummy[color]" value="#000000"
+                  id="dummy_color">
+                <label is="haptic-label" class="field-label" for="dummy_color">Label</label>
+              </div>
+            </haptic-text-field>
+          HTML
+          form.color_field(:color, label: 'Label')
+        )
+      end
+
+      def test_color_field_with_errors
+        dummy = Dummy.new
+        dummy.errors.add(:color, :invalid)
+
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-text-field for="dummy_color" invalid="">
+              <div class="field-container">
+                <div class="field_with_errors">
+                  <input is="haptic-input" type="color" name="dummy[color]" value="#000000"
+                    id="dummy_color">
+                </div>
+                <div class="haptic-icon error-icon">error</div>
+              </div>
+              <div class="error-message">Color is invalid.</div>
+            </haptic-text-field>
+          HTML
+          form(dummy).color_field(
+            :color,
+            show_error_icon: true,
+            show_error_message: true
+          )
+        )
+      end
+
+      def test_color_field_on_nil_object
+        form = FormBuilder.new(:dummy, nil, self, {})
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-text-field for="dummy_color">
+              <div class="field-container">
+                <input is="haptic-input" type="color" name="dummy[color]" value="#000000"
+                  id="dummy_color">
+                <label is="haptic-label" class="field-label" for="dummy_color">Color</label>
+              </div>
+            </haptic-text-field>
+          HTML
+          form.color_field(:color, label: true)
+        )
+      end
+
       def test_text_area
         assert_dom_equal(
           <<~HTML,

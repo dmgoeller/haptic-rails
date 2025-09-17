@@ -47,6 +47,13 @@ module Haptic
       end
 
       ##
+      # :method: color_field
+      # :call-seq: color_field(method, options = {})
+      #
+      # Creates a color field. If any of the haptic field options are specified, the color
+      # field is wrapped by a <code>haptic-text-field</code> tag.
+
+      ##
       # :method: email_field
       # :call-seq: email_field(method, options = {})
       #
@@ -101,6 +108,21 @@ module Haptic
       #
       # Creates a text area. If any of the haptic field options are specified, the text area
       # is wrapped by a <code>haptic-text-field</code> tag.
+      #
+      # ==== Examples
+      #
+      #   form.text_area :name
+      #   # =>
+      #   # <textarea is="haptic-textarea" name="dummy[name]" id="dummy_name"></textarea>
+      #
+      #   form.text_area :name, label: true
+      #   # =>
+      #   # <haptic-text-field for="dummy_name">
+      #   #   <div class="field-container">
+      #   #     <textarea is="haptic-textarea" name="dummy[name]" id="dummy_name"></textarea>
+      #   #     <label is="haptic-label" class="field-label" for="dummy_name">Name</label>
+      #   #   </div>
+      #   # </haptic-text-field>
 
       ##
       # :method: text_field
@@ -112,7 +134,8 @@ module Haptic
       # ==== Examples
       #
       #   form.text_field :name
-      #   # => <input is="haptic-input" type="text" name="dummy[name]" id="dummy_name">
+      #   # =>
+      #   # <input is="haptic-input" type="text" name="dummy[name]" id="dummy_name">
       #
       #   form.text_field :name, label: true
       #   # =>
@@ -123,8 +146,8 @@ module Haptic
       #   #   </div>
       #   # </haptic-text-field>
 
-      %i[email_field file_field number_field text_area password_field phone_field
-         search_field telephone_field text_field].each do |name|
+      %i[color_field email_field file_field number_field password_field phone_field
+         search_field telephone_field text_area text_field].each do |name|
         define_method(name) do |method, options = {}|
           options = @field_options.merge(options)
           field = super(method, options.except(*HAPTIC_FIELD_OPTIONS))
