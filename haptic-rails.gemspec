@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'haptic-rails'
-  s.version = '0.1'
+  s.version = '0.1.1'
   s.summary = 'Haptic Rails'
   s.license = 'MIT'
   s.authors = ['Denis Göller']
