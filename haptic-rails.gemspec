@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+require_relative 'lib/haptic/rails/version'
+
 Gem::Specification.new do |s|
   s.name = 'haptic-rails'
-  s.version = '0.1.1'
+  s.version = Haptic::Rails::Version::VERSION
   s.summary = 'Haptic Rails'
   s.license = 'MIT'
   s.authors = ['Denis Göller']
