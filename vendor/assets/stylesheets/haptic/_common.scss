@@ -92,6 +92,10 @@ haptic-button-segment, haptic-chip {
   @include haptic-container;
   position: relative;
 
+  &[disabled] {
+    @include haptic-grayed;
+  }
+
   label {
     @include haptic-overflow-ellipsis;
     pointer-events: none;
@@ -114,12 +118,6 @@ haptic-button-segment, haptic-chip {
 
     &:disabled, &[locked] {
       pointer-events: none;
-    }
-
-    &:disabled {
-      &, & ~label {
-        @include haptic-grayed;
-      }
     }
   }
 }
@@ -420,15 +418,12 @@ haptic-list-item {
   position: relative;
   user-select: none;
 
-  &.grayed {
-    @include haptic-grayed;
-  }
-
   .haptic-checkbox, .haptic-radio-button, .haptic-switch {
     position: absolute;
   }
 
   &[disabled] {
+    @include haptic-grayed;
     pointer-events: none;
   }
 }

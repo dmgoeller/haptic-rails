@@ -57,10 +57,13 @@ class HapticChildNodesObserver extends MutationObserver {
 }
 
 class HapticControlObserver extends MutationObserver {
-  constructor(owner) {
+  #owner = null;
+  #observedAttributes = null;
+
+  constructor(owner, observedAttributes = []) {
     super(mutationList => {
       for (let mutationRecord of mutationList) {
-        for (let name of ['disabled', 'locked', 'required']) {
+        for (let name of observedAttributes) {
           if (mutationRecord.attributeName == name) {
             if (mutationRecord.target.hasAttribute(name)) {
               owner.setAttribute(name, '');
@@ -71,6 +74,19 @@ class HapticControlObserver extends MutationObserver {
         }
       }
     });
+    this.#owner = owner;
+    this.#observedAttributes = observedAttributes;
+  }
+
+  observeAttributes(control) {
+    for (let name of this.#observedAttributes) {
+      if (control.hasAttribute(name)) {
+        this.#owner.setAttribute(name, '');
+      } else {
+        this.#owner.removeAttribute(name);
+      }
+    }
+    this.observe(control, { attributes: true });
   }
 }
 
@@ -86,7 +102,7 @@ class HapticLock {
   }
 
   get activated() {
-    return this.hasAttribute('locked');
+    return this.#control.hasAttribute('locked');
   }
 
   set activated(value) {
@@ -161,6 +177,9 @@ class HapticSegmentedButtonElement extends HTMLElement {
 customElements.define('haptic-segmented-button', HapticSegmentedButtonElement);
 
 class HapticButtonSegmentElement extends HTMLElement {
+  #control = null;
+  #controlObserver = new HapticControlObserver(this, ['disabled']);
+
   constructor() {
     super();
   }
@@ -170,9 +189,16 @@ class HapticButtonSegmentElement extends HTMLElement {
       nodeAdded: node => {
         if (node instanceof HapticInputElement) {
           node.classList.remove('haptic-radio-button');
+          this.#control = node;
+          this.#controlObserver.observeAttributes(node);
         } else
         if (node instanceof HapticLabelElement) {
           node.classList.remove('haptic-label');
+        }
+      },
+      nodeRemoved: node => {
+        if (node === this.#control) {
+          this.#controlObserver.disconnect();
         }
       }
     }).observe(this, { childList: true, subtree: true });
@@ -181,6 +207,9 @@ class HapticButtonSegmentElement extends HTMLElement {
 customElements.define('haptic-button-segment', HapticButtonSegmentElement);
 
 class HapticChipElement extends HTMLElement {
+  #control = null;
+  #controlObserver = new HapticControlObserver(this, ['disabled']);
+
   constructor() {
     super();
   }
@@ -190,9 +219,16 @@ class HapticChipElement extends HTMLElement {
       nodeAdded: node => {
         if (node instanceof HapticInputElement) {
           node.classList.remove('haptic-checkbox');
+          this.#control = node;
+          this.#controlObserver.observeAttributes(node);
         } else
         if (node instanceof HapticLabelElement) {
           node.classList.remove('haptic-label');
+        }
+      },
+      nodeRemoved: node => {
+        if (node === this.#control) {
+          this.#controlObserver.disconnect();
         }
       }
     }).observe(this, { childList: true, subtree: true });
@@ -424,7 +460,7 @@ customElements.define('haptic-dialog-dropdown', HapticDialogDropdownElement);
 
 class HapticSelectDropdownElement extends HapticDropdownElement {
   #inputElement = null;
-  #inputElementObserver = new HapticControlObserver(this);
+  #inputElementObserver = new HapticControlObserver(this, ['disabled', 'locked', 'required']);
   #optionListElement = null;
   #eventListeners = new HapticEventListeners();
 
@@ -595,14 +631,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       if (node instanceof HTMLInputElement) {
         if (!this.#inputElement) {
           node.classList.add('embedded');
-
-          if (node.required) {
-            this.setAttribute('required', '');
-          }
-          if (node.disabled) {
-            this.setAttribute('disabled', '');
-          }
-          this.#inputElementObserver.observe(node, { attributes: true });
+          this.#inputElementObserver.observeAttributes(node);
           this.#inputElement = node;
         }
       } else
@@ -868,7 +897,7 @@ class HapticFieldElement extends HTMLElement {
   #setValidOnChange = null;
   #control = null;
   #label = null;
-  #controlObserver = new HapticControlObserver(this);
+  #controlObserver = new HapticControlObserver(this, ['disabled', 'locked', 'required']);
   #eventListeners = new HapticEventListeners();
 
   constructor() {
@@ -947,12 +976,6 @@ class HapticFieldElement extends HTMLElement {
         if (!this.#control) {
           node.classList.add('embedded');
 
-          if (node.required) {
-            this.setAttribute('required', '');
-          }
-          if (node.disabled) {
-            this.setAttribute('disabled', '');
-          }
           /*if (!node.validity.valid) {
             this.setAttribute('invalid', '');
           }*/
@@ -961,7 +984,7 @@ class HapticFieldElement extends HTMLElement {
               node.setAttribute('rows', 1);
             }
           }
-          this.#controlObserver.observe(node, { attributes: true });
+          this.#controlObserver.observeAttributes(node);
 
           this.#eventListeners.add(node, 'change', () => {
             this.#setValidOnChange?.forEach(fieldId => {
@@ -1566,7 +1589,7 @@ customElements.define('haptic-list', HapticListElement);
 
 class HapticListItemElement extends HTMLElement {
   #control = null;
-  #controlObserver = new HapticControlObserver(this);
+  #controlObserver = new HapticControlObserver(this, ['disabled']);
   #eventListeners = new HapticEventListeners();
 
   constructor() {
@@ -1599,7 +1622,7 @@ class HapticListItemElement extends HTMLElement {
           this.#eventListeners.add(node, 'change', () => {
             this.dispatchEvent(new Event('change'));
           });
-          this.#controlObserver.observe(node, { attributes: true });
+          this.#controlObserver.observeAttributes(node);
           this.#control = node;
         }
       },
