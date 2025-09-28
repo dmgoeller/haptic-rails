@@ -432,7 +432,7 @@ module Haptic
       #   # =>
       #   # <haptic-dropdown-field for="dummy_color">
       #   #   <div class="field-container">
-      #   #     <select name="dummy[color]" id="dummy_color">
+      #   #     <select is="haptic-select" name="dummy[color]" id="dummy_color">
       #   #       <option value="blue">Blue</option>
       #   #       <option value="green">Green</option>
       #   #     </select>
@@ -440,14 +440,12 @@ module Haptic
       #   # </haptic-dropdown-field>
       def collection_select(method, collection, value_method, text_method, options = {}, html_options = {})
         html_options = @field_options.merge(html_options)
-        field = super(
-          method,
-          collection,
-          value_method,
-          text_method,
-          options,
-          html_options.except(*HAPTIC_FIELD_OPTIONS)
-        )
+
+        # The :is option must be set here because the select tag is not rendered by @template.
+        field_html_options = html_options.except(*HAPTIC_FIELD_OPTIONS)
+        field_html_options[:is] = 'haptic-select' unless field_html_options.key?(:is)
+
+        field = super(method, collection, value_method, text_method, options, field_html_options)
         haptic_field('dropdown', method, field, html_options)
       end
 
@@ -456,6 +454,8 @@ module Haptic
       #
       # ==== Options
       #
+      # - <code>:disabled</code> - The options to be disabled. Can be a single value, an array
+      #   of values or a <code>Proc</code>.
       # - <code>:include_blank</code> - If is <code>true</code>, an option whose value is
       #   an empty <code>String</code> is prepended.
       # - <code>:prompt</code> - The label of the option prepended when
@@ -484,23 +484,28 @@ module Haptic
         html_options = @field_options.merge(html_options)
         current_value = object.send(method)
 
+        disabled = options[:disabled]
+        disabled = Array.wrap(disabled) unless disabled.respond_to?(:call)
+
         haptic_options = collection.map do |object|
           value = object.public_send(value_method)
           @template.haptic_option_tag(
             object.public_send(text_method),
             value: value,
-            checked: value == current_value
+            checked: value == current_value,
+            disabled: disabled.respond_to?(:call) ? disabled.call(object) : disabled.include?(value)
           )
         end
 
         if options[:include_blank] == true
-          haptic_options = [
+          haptic_options.prepend(
             @template.haptic_option_tag(
               options[:prompt] || '',
               value: '',
-              checked: current_value.blank?
+              checked: current_value.blank?,
+              disabled: disabled.respond_to?(:call) ? disabled.call('') : disabled.include?('')
             )
-          ] + haptic_options
+          )
         end
 
         haptic_select_dropdown_field(method, haptic_options.reduce(:+), html_options)

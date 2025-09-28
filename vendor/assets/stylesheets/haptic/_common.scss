@@ -181,6 +181,10 @@ haptic-option {
   scroll-snap-align: start;
   white-space: nowrap;
 
+  &[disabled] {
+    @include haptic-grayed;
+  }
+
   &::after {
     @include haptic-mask-image('checkmark.svg');
     content: '\200b';

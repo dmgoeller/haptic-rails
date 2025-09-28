@@ -792,7 +792,7 @@ module Haptic
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
               <div class="field-container">
-                <select name="dummy[color]" id="dummy_color">
+                <select is="haptic-select" name="dummy[color]" id="dummy_color">
                   <option value="blue">Blue</option>
                   <option value="green">Green</option>
                 </select>
@@ -808,7 +808,7 @@ module Haptic
           <<~HTML,
             <haptic-dropdown-field for="dummy_color" id="field-id" set-valid-on-change="dummy_bar">
               <div class="field-container">
-                <select name="dummy[color]" id="dummy_color">
+                <select is="haptic-select" name="dummy[color]" id="dummy_color">
                   <option value="blue">Blue</option>
                   <option value="green">Green</option>
                 </select>
@@ -840,7 +840,7 @@ module Haptic
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
               <div class="field-container">
-                <select name="dummy[color]" id="dummy_color">
+                <select is="haptic-select" name="dummy[color]" id="dummy_color">
                   <option value="blue">Blue</option>
                   <option value="green">Green</option>
                 </select>
@@ -868,7 +868,7 @@ module Haptic
             <haptic-dropdown-field for="dummy_color" invalid="">
               <div class="field-container">
                 <div class="field_with_errors">
-                  <select name="dummy[color]" id="dummy_color">
+                  <select is="haptic-select" name="dummy[color]" id="dummy_color">
                     <option value="blue">Blue</option>
                     <option value="green">Green</option>
                   </select>
