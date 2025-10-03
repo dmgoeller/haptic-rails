@@ -452,14 +452,26 @@ module Haptic
       # Creates a <code><haptic-select-dropdown</code> tag wrapped by a
       # <code>haptic-dropdown-field</code> tag.
       #
+      # The options are built by calling <code>value_method</code> and <code>text_method</code>
+      # on each element of the given collection.
+      #
       # ==== Options
       #
-      # - <code>:disabled</code> - The options to be disabled. Can be a single value, an array
-      #   of values or a <code>Proc</code>.
-      # - <code>:include_blank</code> - If is <code>true</code>, an option whose value is
-      #   an empty <code>String</code> is prepended.
-      # - <code>:prompt</code> - The label of the option prepended when
-      #   <code>:include_blank</code> is <code>true</code>.
+      # - <code>:disabled</code> - The options to be disabled.
+      # - <code>:include_blank</code> - If is <code>true</code>, an option with an empty value
+      #   is prepended.
+      # - <code>:prompt</code> - The text of the blank option prepended.
+      #
+      # ==== HTML options
+      #
+      # - <code>:disabled</code> - If is <code>true</code>, the field is disabled as a whole.
+      # - <code>:onchange</code> - The Javascript to be executed when the selected option
+      #   has been changed.
+      # - <code>:required</code> - If is <code>true</code>, an option with a non-empty value
+      #   must be selected.
+      # - <code>:size</code> - The maximum number of options to be visible at once.
+      # - <code>:to_top</code> - If is <code>true</code>, the option list pops up to top
+      #   instead of to bottom.
       #
       # ==== Example
       #
@@ -481,34 +493,17 @@ module Haptic
       #   #   </div>
       #   #  </haptic-dropdown-field>
       def collection_select_dropdown(method, collection, value_method, text_method, options = {}, html_options = {})
-        html_options = @field_options.merge(html_options)
-        current_value = object.send(method)
-
-        disabled = options[:disabled]
-        disabled = Array.wrap(disabled) unless disabled.respond_to?(:call)
-
-        haptic_options = collection.map do |object|
-          value = object.public_send(value_method)
-          @template.haptic_option_tag(
-            object.public_send(text_method),
-            value: value,
-            checked: value == current_value,
-            disabled: disabled.respond_to?(:call) ? disabled.call(object) : disabled.include?(value)
-          )
-        end
-
-        if options[:include_blank] == true
-          haptic_options.prepend(
-            @template.haptic_option_tag(
-              options[:prompt] || '',
-              value: '',
-              checked: current_value.blank?,
-              disabled: disabled.respond_to?(:call) ? disabled.call('') : disabled.include?('')
-            )
-          )
-        end
-
-        haptic_select_dropdown_field(method, haptic_options.reduce(:+), html_options)
+        haptic_select_dropdown_field(
+          method,
+          @template.haptic_options_from_collection(
+            collection,
+            value_method,
+            text_method,
+            object.send(method) || '',
+            options
+          ),
+          @field_options.merge(html_options)
+        )
       end
 
       # Creates a <code>haptic-dialog-dropdown</code> tag wrapped by a
@@ -571,8 +566,8 @@ module Haptic
       #
       # ==== Options
       #
-      # - <code>:disabled</code> - If is <code>true</code>, the selected option can't
-      #   be changed.
+      # - <code>:disabled</code> - The options to be disabled. If is <code>true</code>, the
+      #   field is disabled as a whole.
       # - <code>:onchange</code> - The Javascript to be executed when the selected option
       #   has been changed.
       # - <code>:required</code> - If is <code>true</code>, an option with a non-empty value
@@ -602,26 +597,20 @@ module Haptic
       #   # </haptic-dropdown-field>
       def select_dropdown(method, choices = nil, options = {}, &block)
         choices, options = nil, choices || {} if block
-        choices = choices.to_a if choices.is_a?(Hash)
-        options = @field_options.merge(options)
 
-        haptic_options =
+        disabled = options.fetch(:disabled, false)
+        disabled = nil if [true, false].include?(disabled)
+        options = options.except(:disabled) if disabled.present?
+
+        haptic_select_dropdown_field(
+          method,
           if block
             @template.capture(&block)
           else
-            current_value = object.send(method)
-
-            choices&.map do |choice|
-              value = choice.last
-              @template.haptic_option_tag(
-                choice.first,
-                value: value,
-                checked: value == current_value
-              )
-            end&.reduce(:+)
-          end
-
-        haptic_select_dropdown_field(method, haptic_options, options)
+            @template.haptic_options(choices, object.send(method), disabled: disabled)
+          end,
+          @field_options.merge(options)
+        )
       end
 
       ##

@@ -5,6 +5,7 @@ require 'test_helper'
 module Haptic
   module Rails
     class FormBuilderTest < ActionView::TestCase
+      include Haptic::Rails::Helpers::FormOptionsHelper
       include Haptic::Rails::Helpers::TagHelper
 
       {
@@ -803,6 +804,29 @@ module Haptic
         )
       end
 
+      def test_collection_select_with_custom_class
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-dropdown-field for="dummy_color">
+              <div class="field-container">
+                <select is="custom-select" name="dummy[color]" id="dummy_color">
+                  <option value="blue">Blue</option>
+                  <option value="green">Green</option>
+                </select>
+              </div>
+            </haptic-dropdown-field>
+          HTML
+          form.collection_select(
+            :color,
+            %w[Blue Green],
+            :downcase,
+            :itself,
+            {},
+            { is: 'custom-select' }
+          )
+        )
+      end
+
       def test_collection_select_with_field_options
         assert_dom_equal(
           <<~HTML,
@@ -1017,7 +1041,7 @@ module Haptic
         )
       end
 
-      def test_collection_select_dropdown_including_blank
+      def test_collection_select_dropdown_with_include_blank
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
@@ -1043,6 +1067,95 @@ module Haptic
             :downcase,
             :itself,
             { include_blank: true }
+          )
+        )
+      end
+
+      def test_collection_select_dropdown_with_disabled_option
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-dropdown-field for="dummy_color">
+              <div class="field-container">
+                <haptic-select-dropdown>
+                  <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
+                  <div class="toggle haptic-field"></div>
+                  <div class="popover">
+                    <haptic-option-list>
+                      <haptic-option value="blue" disabled="disabled">Blue</haptic-option>
+                      <haptic-option value="green">Green</haptic-option>
+                    </haptic-option-list>
+                  </div>
+                  <div class="backdrop"></div>
+                </haptic-select-dropdown>
+              </div>
+            </haptic-dropdown-field>
+          HTML
+          form.collection_select_dropdown(
+            :color,
+            %w[Blue Green],
+            :downcase,
+            :itself,
+            { disabled: 'blue' }
+          )
+        )
+      end
+
+      def test_collection_select_dropdown_with_multiple_disabled_options
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-dropdown-field for="dummy_color">
+              <div class="field-container">
+                <haptic-select-dropdown>
+                  <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
+                  <div class="toggle haptic-field"></div>
+                  <div class="popover">
+                    <haptic-option-list>
+                      <haptic-option value="blue" disabled="disabled">Blue</haptic-option>
+                      <haptic-option value="green" disabled="disabled">Green</haptic-option>
+                    </haptic-option-list>
+                  </div>
+                  <div class="backdrop"></div>
+                </haptic-select-dropdown>
+              </div>
+            </haptic-dropdown-field>
+          HTML
+          form.collection_select_dropdown(
+            :color,
+            %w[Blue Green],
+            :downcase,
+            :itself,
+            { disabled: %w[blue green] }
+          )
+        )
+      end
+
+      def test_disabled_collection_select_dropdown
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-dropdown-field for="dummy_color">
+              <div class="field-container">
+                <haptic-select-dropdown>
+                  <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color"
+                    disabled="disabled">
+                  <div class="toggle haptic-field"></div>
+                  <div class="popover">
+                    <haptic-option-list>
+                      <haptic-option value="blue">Blue</haptic-option>
+                      <haptic-option value="green">Green</haptic-option>
+                    </haptic-option-list>
+                  </div>
+                  <div class="backdrop"></div>
+                </haptic-select-dropdown>
+              </div>
+            </haptic-dropdown-field>
+          HTML
+          form.collection_select_dropdown(
+            :color,
+            %w[Blue Green],
+            :downcase,
+            :itself,
+            {},
+            { disabled: true }
           )
         )
       end
@@ -1172,7 +1285,7 @@ module Haptic
         )
       end
 
-      def test_select_dropdown_on_choices_as_hash
+      def test_select_dropdown_with_choices_as_hash
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
@@ -1195,7 +1308,7 @@ module Haptic
         )
       end
 
-      def test_select_dropdown_on_nil_choices
+      def test_select_dropdown_without_choices
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
@@ -1238,6 +1351,80 @@ module Haptic
             haptic_option_tag('Blue', value: 'blue', checked: true) +
               haptic_option_tag('Green', value: 'green')
           end
+        )
+      end
+
+      def test_select_dropdown_with_disabled_value
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-dropdown-field for="dummy_color">
+              <div class="field-container">
+                <haptic-select-dropdown>
+                  <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
+                  <div class="toggle haptic-field"></div>
+                  <div class="popover">
+                    <haptic-option-list>
+                      <haptic-option value="blue" disabled="disabled">Blue</haptic-option>
+                      <haptic-option value="green">Green</haptic-option>
+                    </haptic-option-list>
+                  </div>
+                  <div class="backdrop"></div>
+                </haptic-select-dropdown>
+              </div>
+            </haptic-dropdown-field>
+          HTML
+          form.select_dropdown(:color, [%w[Blue blue], %w[Green green]], disabled: 'blue')
+        )
+      end
+
+      def test_select_dropdown_with_multiple_disabled_values
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-dropdown-field for="dummy_color">
+              <div class="field-container">
+                <haptic-select-dropdown>
+                  <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
+                  <div class="toggle haptic-field"></div>
+                  <div class="popover">
+                    <haptic-option-list>
+                      <haptic-option value="blue" disabled="disabled">Blue</haptic-option>
+                      <haptic-option value="green" disabled="disabled">Green</haptic-option>
+                    </haptic-option-list>
+                  </div>
+                  <div class="backdrop"></div>
+                </haptic-select-dropdown>
+              </div>
+            </haptic-dropdown-field>
+          HTML
+          form.select_dropdown(
+            :color,
+            [%w[Blue blue], %w[Green green]],
+            disabled: %w[blue green]
+          )
+        )
+      end
+
+      def test_disabled_select_dropdown
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-dropdown-field for="dummy_color">
+              <div class="field-container">
+                <haptic-select-dropdown>
+                  <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color"
+                   disabled="disabled">
+                  <div class="toggle haptic-field"></div>
+                  <div class="popover">
+                    <haptic-option-list>
+                      <haptic-option value="blue">Blue</haptic-option>
+                      <haptic-option value="green">Green</haptic-option>
+                    </haptic-option-list>
+                  </div>
+                  <div class="backdrop"></div>
+                </haptic-select-dropdown>
+              </div>
+            </haptic-dropdown-field>
+          HTML
+          form.select_dropdown(:color, [%w[Blue blue], %w[Green green]], disabled: true)
         )
       end
 

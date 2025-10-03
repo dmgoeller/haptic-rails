@@ -80,6 +80,17 @@ module Haptic
           )
         end
 
+        def test_haptic_dropdown_tag_with_options
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-dropdown to-top="">
+                <div class="backdrop"></div>
+              </haptic-dropdown>
+            HTML
+            haptic_dropdown_tag(to_top: true)
+          )
+        end
+
         def test_haptic_dropdown_field_tag
           assert_dom_equal(
             <<~HTML,
