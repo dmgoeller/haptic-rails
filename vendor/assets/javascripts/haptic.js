@@ -463,6 +463,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   #inputElementObserver = new HapticControlObserver(this, ['disabled', 'locked', 'required']);
   #optionListElement = null;
   #eventListeners = new HapticEventListeners();
+  #preventMousover = false;
 
   constructor() {
     super();
@@ -492,6 +493,8 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
           const optionElements = optionListElement.optionElements;
 
           if (optionElements.length > 0) {
+            const size = optionListElement.size;
+
             let newHighlightedIndex = null;
             let backward = false;
 
@@ -505,7 +508,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
                   this.showPopover();
                 }
                 if (newHighlightedIndex === null) {
-                  if (optionListElement.size) {
+                  if (size) {
                     newHighlightedIndex = optionListElement.scrollOffset;
                   } else {
                     newHighlightedIndex = 0;
@@ -522,9 +525,9 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
                   this.showPopover();
                 }
                 if (newHighlightedIndex === null) {
-                  if (optionListElement.size) {
+                  if (size) {
                     newHighlightedIndex = Math.min(
-                      optionListElement.scrollOffset + optionListElement.size,
+                      optionListElement.scrollOffset + size,
                       optionElements.length
                     ) - 1;
                   } else {
@@ -547,13 +550,52 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
                   event.preventDefault();
                 }
                 break;
-            }
-            while (newHighlightedIndex >= 0 && newHighlightedIndex < optionElements.length) {
-              if (optionElements[newHighlightedIndex]?.disabled) {
-                newHighlightedIndex = newHighlightedIndex + (backward ? -1 : 1);
-              } else {
-                optionListElement.highlightedIndex = newHighlightedIndex;
+              case 'PageDown':
+                if (size && this.isOpen()) {
+                  if (optionListElement.highlightedIndex >= 0 &&
+                      optionListElement.scrollOffset + size >= optionElements.length) {
+                    newHighlightedIndex = optionElements.length - 1;
+                    backward = true;
+                  } else {
+                    const highlightedOffset = optionListElement.highlightedOffset;
+
+                    optionListElement.scrollBy(size);
+
+                    if (highlightedOffset >= 0) {
+                      newHighlightedIndex = optionListElement.scrollOffset + highlightedOffset;
+                    }
+                    this.#preventMousover = true;
+                  }
+                  event.preventDefault();
+                }
                 break;
+              case 'PageUp':
+                if (size && this.isOpen()) {
+                  if (optionListElement.highlightedIndex >= 0 &&
+                      optionListElement.scrollOffset === 0) {
+                    newHighlightedIndex = 0;
+                  } else {
+                    const highlightedOffset = optionListElement.highlightedOffset;
+
+                    optionListElement.scrollBy(size * -1);
+
+                    if (highlightedOffset >= 0) {
+                      newHighlightedIndex = optionListElement.scrollOffset + highlightedOffset;
+                    }
+                    this.#preventMousover = true;
+                  }
+                  event.preventDefault();
+                }
+                break;
+            }
+            if (newHighlightedIndex !== null) {
+              while (newHighlightedIndex >= 0 && newHighlightedIndex < optionElements.length) {
+                if (optionElements[newHighlightedIndex]?.disabled) {
+                  newHighlightedIndex = newHighlightedIndex + (backward ? -1 : 1);
+                } else {
+                  optionListElement.highlightedIndex = newHighlightedIndex;
+                  break;
+                }
               }
             }
           }
@@ -666,9 +708,13 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         });
         this.#eventListeners.add(node, 'mouseover', event => {
           if (!event.target.disabled) {
-            this.#optionListElement?.optionElements?.forEach(optionElement => {
-              optionElement.highlighted = optionElement === event.target;
-            });
+            if (this.#preventMousover) {
+              this.#preventMousover = false;
+            } else {
+              this.#optionListElement?.optionElements?.forEach(optionElement => {
+                optionElement.highlighted = optionElement === event.target;
+              });
+            }
           }
         });
         this.#eventListeners.add(node, 'mouseout', event => {
@@ -777,10 +823,16 @@ class HapticOptionListElement extends HTMLElement {
 
   set highlightedIndex(index) {
     for (let i = 0; i < this.optionElements.length; i++) {
-      this.optionElements[i].highlighted = (i === index);
+      if (!this.optionElements[i].disabled) {
+        this.optionElements[i].highlighted = (i === index);
+      }
     }
     this.scrollTo(index);
     return index;
+  }
+
+  get highlightedOffset() {
+    return Math.max(this.highlightedIndex - this.scrollOffset, -1);
   }
 
   get scrollOffset() {
@@ -826,8 +878,14 @@ class HapticOptionListElement extends HTMLElement {
     this.#eventListeners.removeAll();
   }
 
+  scrollBy(delta) {
+    if (delta !== null && this.size) {
+      this.scrollOffset = this.scrollOffset + delta;
+    }
+  }
+
   scrollTo(index) {
-    if (this.size) {
+    if (index !== null && this.size) {
       const offset = this.scrollOffset;
 
       if (index < offset) {
