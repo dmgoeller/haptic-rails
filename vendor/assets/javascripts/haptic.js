@@ -464,6 +464,8 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   #optionListElement = null;
   #eventListeners = new HapticEventListeners();
   #preventMousover = false;
+  #keyboardInput = '';
+  #keyboardInputTimeoutId = null;
 
   constructor() {
     super();
@@ -483,13 +485,14 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
 
   connectedCallback() {
     this.#eventListeners.add(this, 'keydown', event => {
-      if (!this.disabled && !this.locked) {
+      const optionListElement = this.#optionListElement;
+
+      if (optionListElement && !this.disabled && !this.locked) {
         if (event.key === 'Enter' || event.key === ' ') {
           if (this.isOpen()) {
             event.preventDefault();
           }
         } else {
-          const optionListElement = this.#optionListElement;
           const optionElements = optionListElement.optionElements;
 
           if (optionElements.length > 0) {
@@ -603,45 +606,54 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       }
     });
     this.#eventListeners.add(this, 'keyup', event => {
-      if (!this.disabled && !this.locked) {
-        const optionElements = this.#optionListElement?.optionElements;
+      const optionListElement = this.#optionListElement;
 
-        if (optionElements && optionElements.length > 0) {
-          switch (event.key) {
-            case ' ':
-            case 'Enter':
-              if (this.isOpen()) {
-                for (let optionElement of optionElements) {
-                  optionElement.checked = optionElement.highlighted;
-                }
-                if (this.#refresh()) {
-                  this.dispatchEvent(new Event('change'));
-                }
-                this.focus();
-                this.hidePopover();
-              } else {
-                this.showPopover();
+      if (optionListElement && !this.disabled && !this.locked) {
+        switch (event.key) {
+          case ' ':
+          case 'Enter':
+            if (this.isOpen()) {
+              for (let optionElement of optionListElement.optionElements) {
+                optionElement.checked = optionElement.highlighted;
               }
-              event.preventDefault();
-              break;
-            default:
-              if (event.key.length === 1) {
-                const lowerCaseKey = event.key.toLowerCase();
+              if (this.#refresh()) {
+                this.dispatchEvent(new Event('change'));
+              }
+              this.focus();
+              this.hidePopover();
+            } else
+            if (optionListElement.optionElements.length() > 0) {
+              this.showPopover();
+            }
+            event.preventDefault();
+            break;
+          default:
+            if (this.isOpen() && event.key.length === 1) {
+              if (this.#keyboardInputTimeoutId) {
+                clearTimeout(this.#keyboardInputTimeoutId);
+                this.#keyboardInputTimeoutId = null;
+              }
+              this.#keyboardInput = this.#keyboardInput + event.key;
+              const searchString = this.#keyboardInput.toLowerCase();
 
-                for (let i = 0; i < optionElements.length; i++) {
+              if (!optionListElement.highlightedOptionElement?.textStartsWith(searchString)) {
+                const optionElements = optionListElement.optionElements;
+
+                for (let i = 0; i <optionElements.length; i++) {
                   const optionElement = optionElements[i];
 
-                  if (!optionElement.disabled) {
-                    const text = optionElements[i].innerText;
-
-                    if (text.length > 0 && text[0].toLowerCase() === lowerCaseKey) {
-                      this.#optionListElement.highlightedIndex = i;
-                      break;
-                    }
+                  if (!optionElement.disabled && optionElement.textStartsWith(searchString)) {
+                    optionListElement.highlightedIndex = i;
+                    break;
                   }
                 }
               }
-          }
+              this.#keyboardInputTimeoutId = setTimeout(() => {
+                this.#keyboardInput = '';
+                this.#keyboardInputTimeoutId = null;
+              }, 1000);
+              event.preventDefault();
+            }
         }
       }
     });
@@ -812,6 +824,15 @@ class HapticOptionListElement extends HTMLElement {
     return null;
   }
 
+  get highlightedOptionElement() {
+    for (let optionElement of this.optionElements) {
+      if (optionElement.highlighted) {
+        return optionElement;
+      }
+    }
+    return null;
+  }
+
   get highlightedIndex() {
     for (let i = 0; i < this.optionElements.length; i++) {
       if (this.optionElements[i].highlighted) {
@@ -974,6 +995,10 @@ class HapticOptionElement extends HTMLElement {
 
   reset() {
     this.checked = (this.initiallyChecked === true);
+  }
+
+  textStartsWith(searchString) {
+    return this.innerText.toLowerCase().startsWith(searchString);
   }
 }
 customElements.define('haptic-option', HapticOptionElement);
