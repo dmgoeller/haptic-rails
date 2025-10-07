@@ -59,16 +59,27 @@ class HapticChildNodesObserver extends MutationObserver {
 class HapticControlObserver extends MutationObserver {
   #owner = null;
   #observedAttributes = null;
+  #observedClassNames = null;
 
-  constructor(owner, observedAttributes = []) {
+  constructor(owner, observedAttributes = [], observedClassNames = []) {
     super(mutationList => {
       for (let mutationRecord of mutationList) {
-        for (let name of observedAttributes) {
-          if (mutationRecord.attributeName == name) {
-            if (mutationRecord.target.hasAttribute(name)) {
-              owner.setAttribute(name, '');
+        if (mutationRecord.attributeName == 'class') {
+          for (let className of observedClassNames) {
+            if (mutationRecord.target.classList.contains(className)) {
+              owner.classList.add(className);
             } else {
-              owner.removeAttribute(name);
+              owner.classList.remove(className);
+            }
+          }
+        } else {
+          for (let name of observedAttributes) {
+            if (mutationRecord.attributeName == name) {
+              if (mutationRecord.target.hasAttribute(name)) {
+                owner.setAttribute(name, '');
+              } else {
+                owner.removeAttribute(name);
+              }
             }
           }
         }
@@ -76,9 +87,17 @@ class HapticControlObserver extends MutationObserver {
     });
     this.#owner = owner;
     this.#observedAttributes = observedAttributes;
+    this.#observedClassNames = observedClassNames;
   }
 
   observeAttributes(control) {
+    for (let className of this.#observedClassNames) {
+      if (control.classList.contains(className)) {
+        this.#owner.classList.add(className);
+      } else {
+        this.#owner.classList.remove(className);
+      }
+    }
     for (let name of this.#observedAttributes) {
       if (control.hasAttribute(name)) {
         this.#owner.setAttribute(name, '');
@@ -246,6 +265,8 @@ class HapticDropdownElement extends HTMLElement {
   #eventListeners = new HapticEventListeners();
   #lock = new HapticLock(this);
 
+  #toggleObserver = new HapticControlObserver(this, [], ['inline']);
+
   constructor() {
     super();
   }
@@ -340,6 +361,7 @@ class HapticDropdownElement extends HTMLElement {
             }
             event.preventDefault();
           });
+          this.#toggleObserver.observeAttributes(node);
           this.#toggleElement = node;
         }
       } else
@@ -1009,8 +1031,13 @@ class HapticFieldElement extends HTMLElement {
   #setValidOnChange = null;
   #control = null;
   #label = null;
-  #controlObserver = new HapticControlObserver(this, ['disabled', 'locked', 'required']);
   #eventListeners = new HapticEventListeners();
+
+  #controlObserver = new HapticControlObserver(
+    this,
+    ['disabled', 'locked', 'required'],
+    ['inline']
+  );
 
   constructor() {
     super();

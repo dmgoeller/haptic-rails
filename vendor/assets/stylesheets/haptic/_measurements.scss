@@ -2,6 +2,9 @@
 $haptic-field-min-height: haptic-measure(1.75rem, 2.5rem) !default;
 $haptic-field-with-label-min-height: 3.5rem !default;
 
+$haptic-inline-field-min-height: 1.25rem !default;
+$haptic-inline-field-with-label-min-height: 3rem !default;
+
 /**********************************************************************
  * Badges
  **********************************************************************/
@@ -233,20 +236,26 @@ haptic-option {
       calc(#{$padding-top-bottom} - 1px)
       calc(#{$padding-left-right} - 1px);
   }
+
+  &.inline {
+    line-height: 1.125;
+    min-height: $haptic-inline-field-min-height;
+    padding-bottom: 1px;
+    padding-top: 1px;
+
+    &.outlined {
+      padding-bottom: 0;
+      padding-top: 0;
+    }
+  }
 }
 
 haptic-dropdown-field, haptic-text-field {
   box-sizing: border-box;
 
-  .haptic-field {
-    &.overflow-ellipsis {
-      height: 100%;
-      width: 100%;
-    }
-
-    &[type="color"] {
-      width: 100%;
-    }
+  .haptic-field.overflow-ellipsis {
+    height: 100%;
+    width: 100%;
   }
 
   &[focus-indicator] {
@@ -282,10 +291,33 @@ haptic-dropdown-field, haptic-text-field {
       top: $padding-top-bottom;
       width: 100%
     }
+
+    &.inline {
+      min-height: $haptic-inline-field-with-label-min-height;
+
+      .haptic-field.inline {
+        min-height: $haptic-inline-field-with-label-min-height;
+        padding-bottom: 1px;
+        padding-top: calc(1px + 1.25rem);
+
+        &.outlined {
+          padding-bottom: 0;
+          padding-top: 1.25rem;
+        }
+      }
+
+      .field-label {
+        top: 1px;
+      }
+    }
   }
 
   &:not([with-label]) {
     min-height: $haptic-field-min-height;
+
+    &.inline {
+      min-height: $haptic-inline-field-min-height;
+    }
   }
 
   .error-message, .supporting-text {
@@ -298,8 +330,7 @@ haptic-dropdown-field, haptic-text-field {
 }
 
 haptic-dropdown-field {
-  @mixin dropdown-field-spacing($default-container-height,
-                                $padding-left-right-without-icons,
+  @mixin dropdown-field-spacing($padding-left-right-without-icons,
                                 $padding-left-right-with-icons,
                                 $spacing-between-content-and-icons,
                                 $spacing-between-icons,
@@ -362,7 +393,6 @@ haptic-dropdown-field {
 
   &[with-label] {
     @include dropdown-field-spacing(
-      $default-container-height: $haptic-field-with-label-min-height,
       $padding-left-right-without-icons: haptic-measure(.5rem, 1rem),
       $padding-left-right-with-icons: haptic-measure(.5rem, .75rem),
       $spacing-between-content-and-icons: haptic-measure(.5rem, 1rem),
@@ -373,7 +403,6 @@ haptic-dropdown-field {
 
   &:not([with-label]) {
     @include dropdown-field-spacing(
-      $default-container-height: $haptic-field-min-height,
       $padding-left-right-without-icons: haptic-measure(.5rem, 1rem),
       $padding-left-right-with-icons: haptic-measure(.25rem, .75rem),
       $spacing-between-content-and-icons: haptic-measure(.25rem, 1rem),
@@ -384,25 +413,38 @@ haptic-dropdown-field {
 }
 
 haptic-text-field {
-  @mixin text-field-spacing($default-container-height,
+  @mixin text-field-spacing($field-height,
+                            $inline-field-height,
                             $padding-left-right-without-icons,
                             $padding-left-right-with-icons,
                             $spacing-between-content-and-icons,
                             $spacing-between-icons,
                             $clear-button-size,
                             $icon-size) {
+
+    .haptic-field[type="color"] {
+      width: 100%;
+    }
+
     .clear-button {
       height: $clear-button-size;
       margin: calc(#{$icon-size - $clear-button-size} / 2);
-      top: calc(#{$default-container-height - $icon-size} / 2);
+      top: calc(#{$field-height - $icon-size} / 2);
       width: $clear-button-size;
     }
 
     .error-icon, .leading-icon, .trailing-icon,
     ::-webkit-calendar-picker-indicator {
       height: $icon-size;
-      top: calc(#{$default-container-height - $icon-size} / 2);
+      top: calc(#{$field-height - $icon-size} / 2);
       width: $icon-size;
+    }
+
+    &.inline {
+      .clear-button, .error-icon, .leading-icon, .trailing-icon,
+      ::-webkit-calendar-picker-indicator {
+        top: calc(#{$inline-field-height - $icon-size} / 2);
+      }
     }
 
     &[with-leading-icon] {
@@ -530,7 +572,8 @@ haptic-text-field {
 
   &[with-label] {
     @include text-field-spacing(
-      $default-container-height: $haptic-field-with-label-min-height,
+      $field-height: $haptic-field-with-label-min-height,
+      $inline-field-height: $haptic-inline-field-with-label-min-height,
       $padding-left-right-without-icons: haptic-measure(.5rem, 1rem),
       $padding-left-right-with-icons: haptic-measure(.5rem, .75rem),
       $spacing-between-content-and-icons: haptic-measure(.5rem, 1rem),
@@ -550,7 +593,8 @@ haptic-text-field {
 
   &:not([with-label]) {
     @include text-field-spacing(
-      $default-container-height: $haptic-field-min-height,
+      $field-height: $haptic-field-min-height,
+      $inline-field-height: $haptic-inline-field-min-height,
       $padding-left-right-without-icons: haptic-measure(.5rem, 1rem),
       $padding-left-right-with-icons: haptic-measure(.25rem, .75rem),
       $spacing-between-content-and-icons: haptic-measure(.25rem, 1rem),

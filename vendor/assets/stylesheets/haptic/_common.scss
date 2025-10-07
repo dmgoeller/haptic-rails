@@ -4,6 +4,10 @@ $haptic-popover-z-index: 10000 !default;
   align-items: stretch;
   display: flex;
   flex-direction: column;
+
+  &.inline {
+    display: inline-flex;
+  }
 }
 
 @mixin haptic-grayed {
