@@ -572,7 +572,7 @@
   <tr>
     <td><code>inline</code></td>
     <td>
-      <div class="example stretch">
+      <div class="example">
         <input type="text" class="haptic-field inline" placeholder="Placeholder"/>
       </div>
     </td>
@@ -1215,6 +1215,20 @@
       </div>
     </td>
   </tr>
+  <tr>
+    <td><code>inline</code></td>
+    <td>
+      <div class="example">
+        <haptic-dropdown-field class="field-container inline">
+          <select class="haptic-field inline">
+            <option value="one" selected>One</option>
+            <option value="two">Two</option>
+            <option value="three">Three</option>
+          </select>
+        </haptic-dropdown-field>
+      </div>
+    </td>
+  </tr>
 </table>
 
 <hr>
@@ -1317,6 +1331,26 @@
           <haptic-select-dropdown tabindex="0" class="embedded">
             <input type="hidden"/>
             <div class="toggle haptic-field filled">One</div>
+            <div class="popover">
+              <haptic-option-list>
+                <haptic-option value="one" checked>One</haptic-option>
+                <haptic-option value="two">Two</haptic-option>
+                <haptic-option value="three">Three</haptic-option>
+              </haptic-option-list>
+            </div>
+          </haptic-select-dropdown>
+        </haptic-dropdown-field>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><code>filled</code></td>
+    <td>
+      <div class="example">
+        <haptic-dropdown-field class="field-container inline">
+          <haptic-select-dropdown tabindex="0" class="embedded inline">
+            <input type="hidden"/>
+            <div class="toggle haptic-field inline">One</div>
             <div class="popover">
               <haptic-option-list>
                 <haptic-option value="one" checked>One</haptic-option>
