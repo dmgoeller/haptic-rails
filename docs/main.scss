@@ -106,6 +106,10 @@ tr:not(:first-of-type) td {
     justify-content: stretch;
     flex-direction: column;
   }
+
+  &.start {
+    justify-content: start;
+  }
 }
 
 .material-symbols-rounded {
