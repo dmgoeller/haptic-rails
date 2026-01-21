@@ -666,14 +666,13 @@ module Haptic
       def haptic_select_dropdown_field(method, haptic_options, options = {})
         options = options.dup
         hidden_field_options = options.extract!(:disabled, :required)
-        option_list_options = options.extract!(:size)
         toggle_class = ['toggle', 'haptic-field', options.delete(:class)]
 
         field = @template.haptic_select_dropdown_tag(options.except(*HAPTIC_FIELD_OPTIONS)) do
           hidden_field(method, hidden_field_options) +
             @template.content_tag('div', '', class: toggle_class) +
             @template.content_tag('div', class: 'popover') do
-              @template.haptic_option_list_tag(haptic_options, option_list_options)
+              @template.haptic_option_list_tag(haptic_options)
             end
         end
         haptic_field('dropdown', method, field, options)

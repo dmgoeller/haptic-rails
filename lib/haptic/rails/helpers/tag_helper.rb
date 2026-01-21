@@ -175,12 +175,6 @@ module Haptic
         end
 
         # Creates a <code><haptic-option-list></code> tag.
-        #
-        # ==== Options
-        #
-        # - <code>:size</code> - The maximum number of options to be visible at once. If the
-        #   list contains more options than <code>:size</code>, the list is presented as a
-        #   scrolling box.
         def haptic_option_list_tag(content = nil, options = nil, &block)
           content_tag('haptic-option-list', content, options, &block)
         end
@@ -202,6 +196,10 @@ module Haptic
         # Creates a <code><haptic-select-dropdown></code> tag.
         #
         # Same as <code>haptic_dropdown('select', options, &block)</code>.
+        #
+        # ==== Options
+        #
+        # - <code>:size</code> - The maximum number of options to be visible at once.
         def haptic_select_dropdown_tag(options = {}, &block)
           haptic_dropdown_tag('select', options, &block)
         end
