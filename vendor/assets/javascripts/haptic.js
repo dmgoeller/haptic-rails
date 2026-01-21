@@ -293,6 +293,9 @@ class HapticDropdownElement extends HTMLElement {
 
   set disabled(value) {
     if (value) {
+      if (this.isOpen()) {
+        this.hidePopover();
+      }
       this.setAttribute('disabled', 'disabled');
     } else {
       this.removeAttribute('disabled');
@@ -314,6 +317,19 @@ class HapticDropdownElement extends HTMLElement {
 
   get popoverElement() {
     return this.#popoverElement;
+  }
+
+  get toTop() {
+    return this.hasAttribute('to-top');
+  }
+
+  set toTop(value) {
+    if (value) {
+      this.setAttribute('to-top', 'to-top');
+    } else {
+      this.removeAttribute('to-top');
+    }
+    return value;
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -523,6 +539,13 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     return this.#inputElement?.value;
   }
 
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'to-top' && this.isOpen()) {
+      this.#optionListElement?.refreshMaxSize();
+    }
+    super.attributeChangedCallback(name, oldValue, newValue);
+  }
+
   connectedCallback() {
     this.#eventListeners.add(this, 'keydown', event => {
       const optionListElement = this.#optionListElement;
@@ -536,7 +559,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
           const optionElements = optionListElement.optionElements;
 
           if (optionElements.length > 0) {
-            const size = optionListElement.size;
+            const size = optionListElement.actualSize;
 
             let newHighlightedIndex = null;
             let backward = false;
@@ -741,6 +764,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       } else
       if (node instanceof HapticOptionListElement) {
         if (!this.#optionListElement) {
+          node.dropdownElement = this;
           this.#optionListElement = node;
         }
       } else
@@ -785,6 +809,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         this.#inputElement = null;
         break;
       case this.#optionListElement:
+        node.dropdownElement = null;
         this.#optionListElement = null;
         break;
       default:
@@ -798,6 +823,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
 
     if (optionElements && optionElements.length > 0) {
       super.showPopover();
+      this.#optionListElement.refreshMaxSize();
 
       for (let i = 0; i < optionElements.length; i++) {
         if (optionElements[i].checked) {
@@ -846,13 +872,21 @@ customElements.define('haptic-select-dropdown', HapticSelectDropdownElement);
 class HapticOptionListElement extends HTMLElement {
   static observedAttributes = ['size'];
 
+  dropdownElement = null;
   optionElements = [];
-  size = null;
 
   #eventListeners = new HapticEventListeners();
+  #anchorElement = null;
+  #size = null;
+  #maxSize = null;
+  #actualSize = null;
 
   constructor() {
     super();
+  }
+
+  get actualSize() {
+    return this.#actualSize;
   }
 
   get checkedOptionElement() {
@@ -905,19 +939,33 @@ class HapticOptionListElement extends HTMLElement {
     return index;
   }
 
+  get size() {
+    return this.#size;
+  }
+
+  set size(value) {
+    this.#size = value;
+    this.#refreshActualSize();
+    return value
+  }
+
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'size') {
-      if (newValue === null) {
-        this.size = null;
-        this.style.maxHeight = null;
-      } else {
-        this.size = parseInt(newValue);
-        this.style.maxHeight = `${24 * this.size}px`
-      }
+      this.size = newValue !== null ? parseInt(newValue) : null;
     }
   }
 
   connectedCallback() {
+    this.#anchorElement = this.closest('.haptic-anchor') ||
+      document.querySelector('body');
+
+    if (this.#anchorElement) {
+      new ResizeObserver((entries) => {
+        if (this.dropdownElement.isOpen()) {
+          this.refreshMaxSize();
+        }
+      }).observe(this.#anchorElement);
+    }
     new HapticChildNodesObserver({
       nodeAdded: node => {
         if (node instanceof HapticOptionElement) {
@@ -939,23 +987,53 @@ class HapticOptionListElement extends HTMLElement {
     this.#eventListeners.removeAll();
   }
 
+  refreshMaxSize() {
+    if (this.#anchorElement) {
+      const anchorRect = this.#anchorElement.getBoundingClientRect();
+      let maxHeight = null;
+
+      if (this.dropdownElement.toTop) {
+        const dropdownRect = this.dropdownElement.getBoundingClientRect();
+        maxHeight = dropdownRect.top - anchorRect.top;
+      } else {
+        const rect = this.getBoundingClientRect();
+        maxHeight = anchorRect.height - (rect.top - anchorRect.top);
+      }
+      this.#maxSize = Math.max(Math.floor((maxHeight - 12) / 24), 0);
+    } else {
+      this.#maxSize = null;
+    }
+    this.#refreshActualSize();
+  }
+
   scrollBy(delta) {
-    if (delta !== null && this.size) {
+    if (delta !== null && this.actualSize) {
       this.scrollOffset = this.scrollOffset + delta;
     }
   }
 
   scrollTo(index) {
-    if (index !== null && this.size) {
+    if (index !== null && this.actualSize) {
       const offset = this.scrollOffset;
 
       if (index < offset) {
         this.scrollOffset = index;
       } else
-      if (index > offset + this.size - 1) {
-        this.scrollOffset = index - this.size + 1;
+      if (index > offset + this.actualSize - 1) {
+        this.scrollOffset = index - this.actualSize + 1;
       }
     }
+  }
+
+  #refreshActualSize() {
+    let actualSize = this.size;
+    let maxSize = this.#maxSize;
+
+    if (maxSize !== null && (actualSize === null || maxSize < actualSize)) {
+      actualSize = maxSize;
+    }
+    this.#actualSize = actualSize;
+    this.style.maxHeight = actualSize !== null ? `${24 * actualSize}px` : null;
   }
 }
 customElements.define('haptic-option-list', HapticOptionListElement);

@@ -183,6 +183,7 @@ haptic-option {
   cursor: default;
   position: relative;
   scroll-snap-align: start;
+  user-select: none;
   white-space: nowrap;
 
   &[disabled] {
