@@ -33,8 +33,8 @@ module Haptic
         #
         # ==== Options
         #
-        # - <code>:to_top</code> - If is <code>true</code>, the popover pops up to top
-        #   instead of to bottom.
+        # - <code>:to_top</code> - If is <code>true</code>, the popover always pops
+        #   up to top.
         #
         # ==== Example
         #
@@ -199,8 +199,11 @@ module Haptic
         #
         # ==== Options
         #
-        # - <code>:size</code> - The maximum number of options to be visible at once.
+        # - <code>:max_size</code> - The maximum number of options to be visible at once.
         def haptic_select_dropdown_tag(options = {}, &block)
+          options = options.stringify_keys
+          options['max-size'] = options.delete('max_size')
+
           haptic_dropdown_tag('select', options, &block)
         end
 
