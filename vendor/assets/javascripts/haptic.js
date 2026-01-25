@@ -515,6 +515,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   static observedAttributes = ['disabled', 'max-size', 'to-top'];
 
   #anchorElement = null;
+  #anchorElementObserver = null;
   #inputElement = null;
   #inputElementObserver = new HapticAttributesObserver(
     this, ['disabled', 'locked', 'required']
@@ -573,16 +574,25 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   connectedCallback() {
-    this.#anchorElement = this.closest('.haptic-anchor') ||
-      document.querySelector('body');
-
-    if (this.#anchorElement) {
-      new ResizeObserver((entries) => {
-        if (this.isOpen()) {
-          this.#adjustOpeningDirection();
+    let element = this;
+    do {
+      if (element = element.parentElement) {
+        if (element.tagName === 'BODY' ||
+            getComputedStyle(element).overflowY !== 'visible') {
+          this.#anchorElement = element;
+          this.#anchorElementObserver = new ResizeObserver(
+            (entries) => {
+              if (this.isOpen()) {
+                this.#adjustOpeningDirection();
+              }
+            }
+          );
+          this.#anchorElementObserver.observe(element);
+          break;
         }
-      }).observe(this.#anchorElement);
-    }
+      }
+    } while (element)
+
     this.#eventListeners.add(this, 'keydown', event => {
       const optionListElement = this.#optionListElement;
 
@@ -779,6 +789,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   disconnectedCallback() {
+    this.#anchorElementObserver?.disconnect();
     this.#eventListeners.removeAll();
     super.disconnectedCallback();
 
