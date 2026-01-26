@@ -688,51 +688,32 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       const optionListElement = this.#optionListElement;
 
       if (optionListElement && !this.disabled && !this.locked) {
-        switch (event.key) {
-          case ' ':
-          case 'Enter':
-            if (this.isOpen()) {
-              for (let optionElement of optionListElement.optionElements) {
-                optionElement.checked = optionElement.highlighted;
-              }
-              if (this.#refresh()) {
-                this.dispatchEvent(new Event('change'));
+        if (event.key === 'Enter' || event.key === ' ') {
+          if (this.isOpen()) {
+            if (event.key === ' ' && this.#keyboardInput.length >= 1) {
+              this.#appendToKeyboardInput(event.key);
+            } else {
+              if (optionListElement.highlightedOptionElement) {
+                for (let optionElement of optionListElement.optionElements) {
+                  optionElement.checked = optionElement.highlighted;
+                }
+                if (this.#refresh()) {
+                  this.dispatchEvent(new Event('change'));
+                }
               }
               this.focus();
               this.hidePopover();
-            } else
-            if (optionListElement.optionElements.length() > 0) {
-              this.showPopover();
             }
+          } else
+          if (optionListElement.optionElements.length > 0) {
+            this.showPopover();
+          }
+          event.preventDefault();
+        } else {
+          if (this.isOpen() && event.key.length === 1) {
+            this.#appendToKeyboardInput(event.key);
             event.preventDefault();
-            break;
-          default:
-            if (this.isOpen() && event.key.length === 1) {
-              if (this.#keyboardInputTimeoutId) {
-                clearTimeout(this.#keyboardInputTimeoutId);
-                this.#keyboardInputTimeoutId = null;
-              }
-              this.#keyboardInput = this.#keyboardInput + event.key;
-              const searchString = this.#keyboardInput.toLowerCase();
-
-              if (!optionListElement.highlightedOptionElement?.textStartsWith(searchString)) {
-                const optionElements = optionListElement.optionElements;
-
-                for (let i = 0; i <optionElements.length; i++) {
-                  const optionElement = optionElements[i];
-
-                  if (!optionElement.disabled && optionElement.textStartsWith(searchString)) {
-                    optionListElement.highlightedIndex = i;
-                    break;
-                  }
-                }
-              }
-              this.#keyboardInputTimeoutId = setTimeout(() => {
-                this.#keyboardInput = '';
-                this.#keyboardInputTimeoutId = null;
-              }, 1000);
-              event.preventDefault();
-            }
+          }
         }
       }
     });
@@ -882,6 +863,39 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       this.toTop = false;
     }
     this.#recalculateMaxSize();
+  }
+
+  #appendToKeyboardInput(char) {
+    const optionListElement = this.#optionListElement;
+
+    if (optionListElement) {
+      if (this.#keyboardInputTimeoutId) {
+        clearTimeout(this.#keyboardInputTimeoutId);
+        this.#keyboardInputTimeoutId = null;
+      }
+      this.#keyboardInput = this.#keyboardInput + char.toLowerCase();
+      const input = this.#keyboardInput;
+
+      if (!optionListElement.highlightedOptionElement?.textStartsWith(input)) {
+        const optionElements = this.#optionListElement.optionElements;
+
+        for (let i = 0; i <optionElements.length; i++) {
+          const optionElement = optionElements[i];
+
+          if (!optionElement.disabled && optionElement.textStartsWith(input)) {
+            optionListElement.highlightedIndex = i;
+            break;
+          }
+        }
+      }
+      this.#keyboardInputTimeoutId = setTimeout(
+        () => {
+          this.#keyboardInput = '';
+          this.#keyboardInputTimeoutId = null;
+        },
+        1000
+      );
+    }
   }
 
   #recalculateMaxSize() {
