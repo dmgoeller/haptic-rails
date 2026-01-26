@@ -469,7 +469,6 @@ module Haptic
       #   has been changed.
       # - <code>:required</code> - If is <code>true</code>, an option with a non-empty value
       #   must be selected.
-      # - <code>:max_size</code> - The maximum number of options to be visible at once.
       # - <code>:to_top</code> - If is <code>true</code>, the option list always pops
       #   up to top.
       #
@@ -572,7 +571,6 @@ module Haptic
       #   has been changed.
       # - <code>:required</code> - If is <code>true</code>, an option with a non-empty value
       #   must be selected.
-      # - <code>:max_size</code> - The maximum number of options to be visible at once.
       # - <code>:to_top</code> - If is <code>true</code>, the option list pops up to top
       #   instead of to bottom.
       #

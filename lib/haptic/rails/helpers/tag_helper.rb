@@ -196,14 +196,7 @@ module Haptic
         # Creates a <code><haptic-select-dropdown></code> tag.
         #
         # Same as <code>haptic_dropdown('select', options, &block)</code>.
-        #
-        # ==== Options
-        #
-        # - <code>:max_size</code> - The maximum number of options to be visible at once.
         def haptic_select_dropdown_tag(options = {}, &block)
-          options = options.stringify_keys
-          options['max-size'] = options.delete('max_size')
-
           haptic_dropdown_tag('select', options, &block)
         end
 
