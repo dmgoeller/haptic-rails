@@ -550,6 +550,9 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
           this.#anchorElementObserver = new ResizeObserver(
             (entries) => {
               if (this.isOpen()) {
+                if (this.#optionListElement) {
+                  this.#optionListElement.highlightedIndex = -1;
+                }
                 this.#adjustOpeningDirection();
               }
             }
