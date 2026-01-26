@@ -21,7 +21,15 @@ module Haptic
         # Creates a <code><haptic-dialog-dropdown></code> tag.
         #
         # Same as <code>haptic_dropdown('dialog', options, &block)</code>.
+        #
+        # # ==== Options
+        #
+        # - <code>:to_top</code> - If is <code>true</code>, the popover pops up to top
+        #   instead of to bottom.
         def haptic_dialog_dropdown_tag(options = {}, &block)
+          options = options.stringify_keys
+          options['to-top'] = '' if options.delete('to_top')
+
           haptic_dropdown_tag('dialog', options, &block)
         end
 
@@ -30,11 +38,6 @@ module Haptic
         #
         # <code>type</code> can be <code>'dialog'</code>, <code>'select'</code> or
         # <code>nil</code>.
-        #
-        # ==== Options
-        #
-        # - <code>:to_top</code> - If is <code>true</code>, the popover always pops
-        #   up to top.
         #
         # ==== Example
         #
@@ -55,9 +58,6 @@ module Haptic
         def haptic_dropdown_tag(type = nil, options = {}, &block)
           type, options = nil, type if type.is_a?(Hash)
           name = type ? "haptic-#{type}-dropdown" : 'haptic-dropdown'
-
-          options = options.stringify_keys
-          options['to-top'] = '' if options.delete('to_top')
 
           content_tag(name, options) do
             concat capture(&block) if block

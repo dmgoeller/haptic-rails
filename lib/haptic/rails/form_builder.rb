@@ -469,8 +469,6 @@ module Haptic
       #   has been changed.
       # - <code>:required</code> - If is <code>true</code>, an option with a non-empty value
       #   must be selected.
-      # - <code>:to_top</code> - If is <code>true</code>, the option list always pops
-      #   up to top.
       #
       # ==== Example
       #
@@ -571,8 +569,6 @@ module Haptic
       #   has been changed.
       # - <code>:required</code> - If is <code>true</code>, an option with a non-empty value
       #   must be selected.
-      # - <code>:to_top</code> - If is <code>true</code>, the option list pops up to top
-      #   instead of to bottom.
       #
       # ==== Example
       #

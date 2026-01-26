@@ -53,6 +53,17 @@ module Haptic
           )
         end
 
+        def test_haptic_dialog_dropdown_tag_with_options
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-dialog-dropdown to-top="">
+                <div class="backdrop"></div>
+              </haptic-dialog-dropdown>
+            HTML
+            haptic_dialog_dropdown_tag(to_top: true)
+          )
+        end
+
         def test_haptic_dropdown_tag
           assert_dom_equal(
             <<~HTML,
@@ -77,17 +88,6 @@ module Haptic
               content_tag('div', '', class: 'toggle') +
                 content_tag('div', '', class: 'popover')
             end
-          )
-        end
-
-        def test_haptic_dropdown_tag_with_options
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-dropdown to-top="">
-                <div class="backdrop"></div>
-              </haptic-dropdown>
-            HTML
-            haptic_dropdown_tag(to_top: true)
           )
         end
 
@@ -182,28 +182,6 @@ module Haptic
               content_tag('div', '', class: 'toggle') +
                 content_tag('div', '', class: 'popover')
             end
-          )
-        end
-
-        def test_haptic_select_dropdown_tag_on_to_top_true
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-select-dropdown to-top="">
-                <div class="backdrop"></div>
-              </haptic-select-dropdown>
-            HTML
-            haptic_select_dropdown_tag(to_top: true)
-          )
-        end
-
-        def test_haptic_select_dropdown_tag_on_to_top_false
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-select-dropdown>
-                <div class="backdrop"></div>
-              </haptic-select-dropdown>
-            HTML
-            haptic_select_dropdown_tag(to_top: false)
           )
         end
 

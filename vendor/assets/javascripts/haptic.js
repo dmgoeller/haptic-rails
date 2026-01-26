@@ -512,8 +512,6 @@ class HapticDialogDropdownElement extends HapticDropdownElement {
 customElements.define('haptic-dialog-dropdown', HapticDialogDropdownElement);
 
 class HapticSelectDropdownElement extends HapticDropdownElement {
-  static observedAttributes = ['disabled', 'to-top'];
-
   #anchorElement = null;
   #anchorElementObserver = null;
   #inputElement = null;
@@ -540,25 +538,6 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
 
   get value() {
     return this.#inputElement?.value;
-  }
-
-  get #openToTop() {
-    return this.hasAttribute('open-to-top');
-  }
-
-  set #openToTop(value) {
-    if (value) {
-      this.setAttribute('open-to-top', 'open-to-top');
-    } else {
-      this.removeAttribute('open-to-top');
-    }
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (this.isOpen() && name === 'to-top') {
-        this.#recalculateMaxSize();
-    }
-    super.attributeChangedCallback(name, oldValue, newValue);
   }
 
   connectedCallback() {
@@ -894,11 +873,10 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       const spaceBefore = toggleRect.top - anchorRect.top;
       const spaceAfter = anchorRect.bottom - toggleRect.bottom;
 
-      const maxPopoverHeight = this.#optionListElement.optionElements.length * 24 + 12;
-
-      this.#openToTop = spaceBefore > spaceAfter && maxPopoverHeight > spaceAfter;
+      this.toTop = spaceBefore > spaceAfter &&
+        this.#optionListElement.optionElements.length * 24 + 12 > spaceAfter;
     } else {
-      this.#openToTop = false;
+      this.toTop = false;
     }
     this.#recalculateMaxSize();
   }
@@ -911,7 +889,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
 
         let space = null;
 
-        if (this.toTop || this.#openToTop) {
+        if (this.toTop) {
           space = toggleRect.top - anchorRect.top;
         } else {
           space = anchorRect.bottom - toggleRect.bottom;
