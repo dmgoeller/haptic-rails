@@ -24,11 +24,11 @@ module Haptic
         #
         # # ==== Options
         #
-        # - <code>:to_top</code> - If is <code>true</code>, the popover pops up to top
-        #   instead of to bottom.
+        # - <code>:open_to_top</code> - If is <code>true</code>, the popover pops up
+        #   to top instead of to bottom.
         def haptic_dialog_dropdown_tag(options = {}, &block)
           options = options.stringify_keys
-          options['to-top'] = '' if options.delete('to_top')
+          options['open-to-top'] = '' if options.delete('open_to_top')
 
           haptic_dropdown_tag('dialog', options, &block)
         end

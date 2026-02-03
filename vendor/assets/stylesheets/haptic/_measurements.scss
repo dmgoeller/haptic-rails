@@ -145,8 +145,10 @@ haptic-dropdown, haptic-dialog-dropdown, haptic-select-dropdown {
     top: 0;
     width: 100vw;
   }
+}
 
-  &[to-top] > .popover {
+haptic-dialog-dropdown, haptic-select-dropdown {
+  &[open-to-top] > .popover {
     bottom: 100%;
     top: unset;
   }

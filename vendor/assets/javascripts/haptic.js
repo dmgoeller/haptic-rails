@@ -325,18 +325,6 @@ class HapticDropdownElement extends HTMLElement {
     return this.#scrollContainer;
   }
 
-  get toTop() {
-    return this.hasAttribute('to-top');
-  }
-
-  set toTop(value) {
-    if (value) {
-      this.setAttribute('to-top', 'to-top');
-    } else {
-      this.removeAttribute('to-top');
-    }
-  }
-
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'disabled') {
       if (newValue !== null) {
@@ -496,6 +484,19 @@ class HapticDialogDropdownElement extends HapticDropdownElement {
 
   constructor() {
     super();
+  }
+
+  get openToTop() {
+    return this.hasAttribute('open-to-top');
+  }
+
+  set openToTop(value) {
+    if (value) {
+      this.setAttribute('open-to-top', 'open-to-top');
+    } else {
+      this.removeAttribute('open-to-top');
+    }
+    return value;
   }
 
   disconnectedCallback() {
@@ -833,14 +834,14 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         const spaceBefore = toggleRect.top - scrollRect.top;
         const spaceAfter = scrollRect.bottom - toggleRect.bottom;
 
-        const toTop = this.toTop = spaceBefore > spaceAfter &&
+        const openToTop = this.#openToTop = spaceBefore > spaceAfter &&
           optionElements.length * 24 + 12 > spaceAfter;
 
         optionListElement.maxSize = Math.max(
-          Math.floor(((toTop ? spaceBefore : spaceAfter) - 12) / 24), 0
+          Math.floor(((openToTop ? spaceBefore : spaceAfter) - 12) / 24), 0
         );
       } else {
-        this.toTop = false;
+        this.#openToTop = false;
         optionListElement.maxSize = null;
       }
 
@@ -870,6 +871,19 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     this.#optionListElement?.optionElements?.forEach(optionElement => {
       optionElement.initiallyChecked = optionElement.checked;
     });
+  }
+
+  get #openToTop() {
+    return this.hasAttribute('open-to-top');
+  }
+
+  set #openToTop(value) {
+    if (value) {
+      this.setAttribute('open-to-top', 'open-to-top');
+    } else {
+      this.removeAttribute('open-to-top');
+    }
+    return value;
   }
 
   #appendToKeyboardInput(str) {
