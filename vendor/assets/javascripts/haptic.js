@@ -213,6 +213,7 @@ customElements.define('haptic-segmented-button', HapticSegmentedButtonElement);
 
 class HapticButtonSegmentElement extends HTMLElement {
   #control = null;
+
   #controlObserver = new HapticAttributesObserver(this, ['disabled']);
 
   constructor() {
@@ -243,6 +244,7 @@ customElements.define('haptic-button-segment', HapticButtonSegmentElement);
 
 class HapticChipElement extends HTMLElement {
   #control = null;
+
   #controlObserver = new HapticAttributesObserver(this, ['disabled']);
 
   constructor() {
@@ -279,11 +281,21 @@ class HapticDropdownElement extends HTMLElement {
   #popoverElement = null;
   #backdropElement = null;
   #scrollContainer = null;
-  #scrollContainerObserver = null;
-  #eventListeners = new HapticEventListeners();
-  #lock = new HapticLock(this);
 
-  #toggleObserver = new HapticAttributesObserver(this, [], ['inline']);
+  #lock = new HapticLock(this);
+  #eventListeners = new HapticEventListeners();
+
+  #toggleElementObserver = new HapticAttributesObserver(
+    this, [], ['inline']
+  );
+
+  #scrollContainerObserver = new ResizeObserver(
+    (entries) => {
+      if (this.isOpen()) {
+        this.hidePopover({ cancel: true });
+      }
+    }
+  )
 
   constructor() {
     super();
@@ -341,13 +353,7 @@ class HapticDropdownElement extends HTMLElement {
       this.tabIndex = 0;
     }
     if (this.#scrollContainer = this.#closestScrollContainer()) {
-      (this.#scrollContainerObserver = new ResizeObserver(
-        (entries) => {
-          if (this.isOpen()) {
-            this.hidePopover({ cancel: true });
-          }
-        }
-      )).observe(this.#scrollContainer);
+      this.#scrollContainerObserver.observe(this.#scrollContainer);
     }
     this.#eventListeners.add(this, 'focusout', event => {
       const relatedTarget = event.relatedTarget;
@@ -373,7 +379,7 @@ class HapticDropdownElement extends HTMLElement {
   }
 
   disconnectedCallback() {
-    this.#scrollContainerObserver?.disconnect();
+    this.#scrollContainerObserver.disconnect();
     this.#eventListeners.removeAll();
   }
 
@@ -396,7 +402,7 @@ class HapticDropdownElement extends HTMLElement {
             }
             event.preventDefault();
           });
-          this.#toggleObserver.observe(node);
+          this.#toggleElementObserver.observe(node);
           this.#toggleElement = node;
         }
       } else
@@ -422,6 +428,7 @@ class HapticDropdownElement extends HTMLElement {
       case this.#toggleElement:
         node.tabIndex = this.#tabIndex;
         this.#eventListeners.remove(node);
+        this.#toggleElementObserver.disconnect();
         this.#toggleElement = null;
         break;
       case this.#popoverElement:
@@ -544,14 +551,15 @@ customElements.define('haptic-dialog-dropdown', HapticDialogDropdownElement);
 
 class HapticSelectDropdownElement extends HapticDropdownElement {
   #inputElement = null;
-  #inputElementObserver = new HapticAttributesObserver(
-    this, ['disabled', 'locked', 'required']
-  );
   #optionListElement = null;
-  #eventListeners = new HapticEventListeners();
   #preventMousover = false;
   #keyboardInput = '';
   #keyboardInputTimeoutId = null;
+  #eventListeners = new HapticEventListeners();
+
+  #inputElementObserver = new HapticAttributesObserver(
+    this, ['disabled', 'locked', 'required']
+  );
 
   constructor() {
     super();
@@ -936,9 +944,8 @@ customElements.define('haptic-select-dropdown', HapticSelectDropdownElement);
 
 class HapticOptionListElement extends HTMLElement {
   optionElements = [];
-
-  #eventListeners = new HapticEventListeners();
   #maxSize = null;
+  #eventListeners = new HapticEventListeners();
 
   constructor() {
     super();
@@ -1376,11 +1383,11 @@ class HapticTextFieldElement extends HapticFieldElement {
 customElements.define('haptic-text-field', HapticTextFieldElement);
 
 class HapticFormElement extends HTMLFormElement {
-  #eventListeners = new HapticEventListeners();
   #controls = new Set();
-  #requiredFields = new Set();
-  #submitButtons = new Set();
+  #requiredFields = new Set();
+  #submitButtons = new Set();
   #isSubmitting = false;
+  #eventListeners = new HapticEventListeners();
 
   constructor() {
     super();   
@@ -1833,8 +1840,9 @@ customElements.define('haptic-list', HapticListElement);
 
 class HapticListItemElement extends HTMLElement {
   #control = null;
-  #controlObserver = new HapticAttributesObserver(this, ['disabled']);
   #eventListeners = new HapticEventListeners();
+
+  #controlObserver = new HapticAttributesObserver(this, ['disabled']);
 
   constructor() {
     super();
@@ -1937,9 +1945,9 @@ class HapticSelectElement extends HTMLSelectElement {
 customElements.define('haptic-select', HapticSelectElement, { extends: 'select' });
 
 class HapticTextAreaElement extends HTMLTextAreaElement {
-  #eventListeners = new HapticEventListeners();
-  #lock = new HapticLock(this);
   #initialValue = null;
+  #lock = new HapticLock(this);
+  #eventListeners = new HapticEventListeners();
 
   constructor() {
     super();
