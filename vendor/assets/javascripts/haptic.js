@@ -850,7 +850,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         this.#maxSize = Math.max(Math.floor(space / this.#optionHeight, 0));
       } else {
         this.#openToTop = false;
-        this.maxSize = null;
+        this.#maxSize = null;
       }
       optionListElement.style.maxHeight = this.#maxSize !== null ?
         `${this.#maxSize * this.#optionHeight}px` : null;
