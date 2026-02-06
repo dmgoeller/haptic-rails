@@ -844,7 +844,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         const spaceAfter = scrollRect.bottom - toggleRect.bottom;
 
         this.#openToTop = spaceBefore > spaceAfter &&
-          optionElements.length * optionHeight + 12 > spaceAfter;
+          optionElements.length * this.#optionHeight + 12 > spaceAfter;
 
         const space = (this.#openToTop ? spaceBefore : spaceAfter) - 12;
         this.#maxSize = Math.max(Math.floor(space / this.#optionHeight, 0));
