@@ -223,6 +223,7 @@ customElements.define('haptic-segmented-button', HapticSegmentedButtonElement);
 
 class HapticButtonSegmentElement extends HTMLElement {
   #control = null;
+  #label = null;
 
   #controlObserver = new HapticAttributesObserver(this, ['disabled']);
 
@@ -233,21 +234,26 @@ class HapticButtonSegmentElement extends HTMLElement {
   connectedCallback() {
     new HapticChildNodesObserver({
       nodeAdded: node => {
-        if (node instanceof HapticInputElement) {
+        if (node instanceof HapticInputElement && !this.#control) {
           node.classList.remove('haptic-radio-button');
           node.classList.add('button-segment-radio-button');
           this.#control = node;
           this.#controlObserver.observe(node);
         } else
-        if (node instanceof HapticLabelElement) {
+        if (node instanceof HapticLabelElement && !this.#label) {
           node.classList.remove('haptic-label');
           node.classList.add('button-segment-label');
+          this.#label = node;
         }
       },
       nodeRemoved: node => {
-        if (node === this.#control) {
-          this.#controlObserver.disconnect();
-          this.#control = null;
+        switch (node) {
+          case this.#control:
+            this.#controlObserver.disconnect();
+            this.#control = null;
+            break;
+          case this.#label:
+            this.#label = null;
         }
       }
     }).observe(this);
@@ -257,6 +263,7 @@ customElements.define('haptic-button-segment', HapticButtonSegmentElement);
 
 class HapticChipElement extends HTMLElement {
   #control = null;
+  #label = null;
 
   #controlObserver = new HapticAttributesObserver(this, ['disabled']);
 
@@ -267,20 +274,26 @@ class HapticChipElement extends HTMLElement {
   connectedCallback() {
     new HapticChildNodesObserver({
       nodeAdded: node => {
-        if (node instanceof HapticInputElement) {
+        if (node instanceof HapticInputElement && !this.control) {
           node.classList.remove('haptic-checkbox');
           node.classList.add('chip-checkbox');
           this.#control = node;
           this.#controlObserver.observe(node);
         } else
-        if (node instanceof HapticLabelElement) {
+        if (node instanceof HapticLabelElement && !this.label) {
           node.classList.remove('haptic-label');
           node.classList.add('chip-label');
+          this.#label = node;
         }
       },
       nodeRemoved: node => {
-        if (node === this.#control) {
-          this.#controlObserver.disconnect();
+        switch (node) {
+          case this.#control:
+            this.#controlObserver.disconnect();
+            this.#control = null;
+            break;
+          case this.#label:
+            this.#label = null;
         }
       }
     }).observe(this);
