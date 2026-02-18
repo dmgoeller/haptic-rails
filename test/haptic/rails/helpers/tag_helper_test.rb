@@ -122,15 +122,6 @@ module Haptic
           )
         end
 
-        def test_haptic_option_list_tag
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-option-list></haptic-option-list>
-            HTML
-            haptic_option_list_tag
-          )
-        end
-
         def test_haptic_option_tag
           assert_dom_equal(
             <<~HTML,

@@ -579,7 +579,7 @@ customElements.define('haptic-dialog-dropdown', HapticDialogDropdownElement);
 class HapticSelectDropdownElement extends HapticDropdownElement {
   #eventListeners = new HapticEventListeners();
   #inputElement = null;
-  #optionListElement = null;
+  #popoverScrollContainer = null;
   #optionElements = [];
   #preventMousover = false;
   #keyboardInput = '';
@@ -666,7 +666,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
               }
               break;
             case 'PageDown':
-              if (this.#optionListElement && this.isOpen()) {
+              if (this.#popoverScrollContainer && this.isOpen()) {
                 let scrollOffset = this.#scrollOffset;
 
                 if (scrollOffset + this.#maxSize >= this.#optionElements.length) {
@@ -688,7 +688,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
               }
               break;
             case 'PageUp':
-              if (this.#optionListElement && this.isOpen()) {
+              if (this.#popoverScrollContainer && this.isOpen()) {
                 let scrollOffset = this.#scrollOffset;
 
                 if (scrollOffset === 0) {
@@ -780,11 +780,6 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
           this.#inputElement = node;
         }
       } else
-      if (node instanceof HapticOptionListElement) {
-        if (!this.#optionListElement) {
-          this.#optionListElement = node;
-        }
-      } else
       if (node instanceof HapticOptionElement) {
         this.#eventListeners.add(node, 'click', event => {
           if (!event.target.disabled) {
@@ -817,6 +812,11 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         });
         this.#optionElements.push(node);
       } else
+      if (node.classList.contains('scroll-container')) {
+        if (!this.#popoverScrollContainer) {
+          this.#popoverScrollContainer = node;
+        }
+      } else
       if (node.classList.contains('backdrop')) {
         if (this.#optionElements.length > 0) {
           if (!this.#checkedOptionElement) {
@@ -839,8 +839,8 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       this.#inputElementObserver.disconnect();
       this.#inputElement = null;
     } else
-    if (node === this.#optionListElement) {
-      this.#optionListElement = null;
+    if (node === this.#popoverScrollContainer) {
+      this.#popoverScrollContainer = null;
     } else
     if (node instanceof HapticOptionElement) {
       const index = this.#optionElements.indexOf(node);
@@ -876,8 +876,8 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         this.#openToTop = false;
         this.#maxSize = null;
       }
-      if (this.#optionListElement) {
-        this.#optionListElement.style.maxHeight = this.#maxSize !== null ?
+      if (this.#popoverScrollContainer) {
+        this.#popoverScrollContainer.style.maxHeight = this.#maxSize !== null ?
           `${this.#maxSize * this.#optionHeight}px` : null;
       }
       for (let i = 0; i < this.#optionElements.length; i++) {
@@ -958,19 +958,19 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   get #scrollOffset() {
-    if (this.#optionListElement) {
-      return Math.floor(this.#optionListElement.scrollTop / this.#optionHeight);
+    if (this.#popoverScrollContainer) {
+      return Math.floor(this.#popoverScrollContainer.scrollTop / this.#optionHeight);
     } else {
       return 0;
     }
   }
 
   set #scrollOffset(value) {
-    if (this.#optionListElement) {
+    if (this.#popoverScrollContainer) {
       value = Math.min(value, this.#optionElements.length - this.#maxSize);
       value = Math.max(value, 0);
 
-      this.#optionListElement.scrollTop = value * this.#optionHeight;
+      this.#popoverScrollContainer.scrollTop = value * this.#optionHeight;
       return value;
     } else {
       return 0;
@@ -1021,7 +1021,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   #scrollTo(index) {
-    if (this.#optionListElement) {
+    if (this.#popoverScrollContainer) {
       const scrollOffset = this.#scrollOffset;
       let newScrollOffset = null;
 
@@ -1041,13 +1041,6 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 }
 customElements.define('haptic-select-dropdown', HapticSelectDropdownElement);
-
-class HapticOptionListElement extends HTMLElement {
-  constructor() {
-    super();
-  }
-}
-customElements.define('haptic-option-list', HapticOptionListElement);
 
 class HapticOptionElement extends HTMLElement {
   #initiallyChecked = false;

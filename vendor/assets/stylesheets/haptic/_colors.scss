@@ -358,7 +358,7 @@ haptic-dialog-dropdown > .popover > .segment {
   );
 }
 
-haptic-option-list {
+haptic-select-dropdown > .popover > .scroll-container {
   &::-webkit-scrollbar {
     background-color: transparent;
   }

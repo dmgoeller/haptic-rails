@@ -174,11 +174,6 @@ module Haptic
           content_tag('haptic-list-item', content, options, &block)
         end
 
-        # Creates a <code><haptic-option-list></code> tag.
-        def haptic_option_list_tag(content = nil, options = nil, &block)
-          content_tag('haptic-option-list', content, options, &block)
-        end
-
         # Creates a <code><haptic-option></code> tag.
         #
         # ==== Options

@@ -170,14 +170,14 @@ haptic-select-dropdown {
   & > .popover {
     box-sizing: border-box;
     padding: .25rem 0;
-  }
-}
 
-haptic-option-list {
-  padding: 0 .25rem;
+    & > .scroll-container {
+      padding: 0 .25rem;
 
-  &::-webkit-scrollbar {
-    width: 10px;
+      &::-webkit-scrollbar {
+        width: 10px;
+      }
+    }
   }
 }
 

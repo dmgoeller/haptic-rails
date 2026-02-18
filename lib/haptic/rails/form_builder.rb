@@ -480,10 +480,10 @@ module Haptic
       #   #       <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
       #   #       <div class="toggle haptic-field"></div>
       #   #       <div class="popover">
-      #   #         <haptic-option-list>
+      #   #         <div class="scroll-container">
       #   #           <haptic-option value="blue">Blue</haptic-option>
       #   #           <haptic-option value="green">Green</haptic-option>
-      #   #         </haptic-option-list>
+      #   #         </div>
       #   #       </div>
       #   #       <div class="backdrop"></div>
       #   #     </haptic-select-dropdown>
@@ -580,10 +580,10 @@ module Haptic
       #   #       <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
       #   #       <div class="toggle haptic-field"></div>
       #   #         <div class="popover">
-      #   #           <haptic-option-list>
+      #   #           <div class="scroll-container">
       #   #             <haptic-option value="blue">Blue</haptic-option>
       #   #             <haptic-option value="green">Green</haptic-option>
-      #   #           </haptic-option-list>
+      #   #           </div>
       #   #         </div>
       #   #       <div class="backdrop"></div>
       #   #     </haptic-select-dropdown>
@@ -666,7 +666,7 @@ module Haptic
           hidden_field(method, hidden_field_options) +
             @template.content_tag('div', '', class: toggle_class) +
             @template.content_tag('div', class: 'popover') do
-              @template.haptic_option_list_tag(haptic_options)
+              @template.content_tag('div', haptic_options, class: 'scroll-container')
             end
         end
         haptic_field('dropdown', method, field, options)
