@@ -173,3 +173,18 @@ haptic-list-item {
     opacity .2s linear,
     filter .2s linear;
 }
+
+/**********************************************************************
+ * Tabs
+ **********************************************************************/
+
+.haptic-tab {
+  transition:
+    background-color .2s linear,
+    outline-color .2s linear;
+
+  &::after {
+    transition:
+      opacity .2s linear;
+  }
+}

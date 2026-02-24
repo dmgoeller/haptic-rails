@@ -110,3 +110,16 @@ haptic-text-field {
 haptic-list-item .supporting-text {
   font-size: .875rem;
 }
+
+/**********************************************************************
+ * Tabs
+ **********************************************************************/
+
+.haptic-tab {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+a.haptic-tab {
+  text-decoration: none;
+}

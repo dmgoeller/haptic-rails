@@ -450,3 +450,61 @@ haptic-list-item {
     }
   }
 }
+
+/**********************************************************************
+ * Tabs
+ **********************************************************************/
+
+.haptic-tab-bar {
+  display: grid;
+  grid-auto-flow: column;
+
+  &.scrollable {
+    overflow-x: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+.haptic-tab {
+  align-content: center;
+  display: flex;
+  cursor: pointer;
+  flex-wrap: nowrap;
+  justify-content: center;
+  position: relative;
+  user-select: none;
+  white-space: nowrap;
+
+  &::after {
+    content: '\200b';
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  &.active::after {
+    opacity: 1;
+  }
+}
+
+@media screen {
+  haptic-tabs .haptic-tab-content:not(.active) {
+    display: none;
+  }
+}
+
+@media print {
+  haptic-tabs {
+    .haptic-tab-bar {
+      display: none;
+    }
+
+    .haptic-tab-content::before {
+      content: attr(data-tab-label);
+      display: block;
+    }
+  }
+}

@@ -202,3 +202,26 @@ haptic-list-item {
     }
   }
 }
+
+/**********************************************************************
+ * Tabs
+ **********************************************************************/
+
+.haptic-tab-bar {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  outline-style: none;
+}
+
+.haptic-tab {
+  border: none;
+  outline-style: none;
+}
+
+haptic-tab-bar:focus-visible {
+  .haptic-tab.highlighted {
+    outline-offset: -1px;
+    outline-style: solid;
+    outline-width: 1px;
+  }
+}

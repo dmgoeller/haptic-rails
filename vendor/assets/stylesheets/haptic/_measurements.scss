@@ -852,3 +852,25 @@ haptic-list-item {
     margin-top: .25rem;
   }
 }
+
+/**********************************************************************
+ * Tabs
+ **********************************************************************/
+
+.haptic-tab-bar.scrollable {
+  padding-left: 3.125rem; /* 52dp */
+}
+
+.haptic-tab {
+  column-gap: .25rem;
+  line-height: 1.125rem;
+  min-height: haptic-measure(1.125rem, 2rem);
+  padding: .5rem;
+
+  &::after {
+    bottom: 0;
+    height: 2px;
+    left: 0;
+    width: 100%
+  }
+}

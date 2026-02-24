@@ -176,6 +176,42 @@ module Haptic
           )
         end
 
+        def test_haptic_tab_tag
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-tab></haptic-tab>
+            HTML
+            haptic_tab_tag
+          )
+        end
+
+        def test_haptic_tab_content_tag
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-tab-content></haptic-tab-content>
+            HTML
+            haptic_tab_content_tag
+          )
+        end
+
+        def test_haptic_tab_bar_tag
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-tab-bar></haptic-tab-bar>
+            HTML
+            haptic_tab_bar_tag
+          )
+        end
+
+        def test_haptic_tabs_tag
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-tabs></haptic-tabs>
+            HTML
+            haptic_tabs_tag
+          )
+        end
+
         def test_haptic_text_field_tag
           assert_dom_equal(
             <<~HTML,

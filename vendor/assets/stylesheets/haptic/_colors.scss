@@ -679,3 +679,51 @@ haptic-list-item {
     @include haptic-outline-color;
   }
 }
+
+/**********************************************************************
+ * Tabs
+ **********************************************************************/
+
+.haptic-tab-bar {
+  @include haptic-light-dark(
+    'border-color',
+    #00000030,
+    #FFFFFF30
+  );
+}
+
+.haptic-tab {
+  @include haptic-foreground-color;
+  outline-color: #00000000;
+
+  &.active {
+    @include haptic-intense-foreground-color;
+
+    &::after {
+      @include haptic-primary-color('background-color');
+    }
+  }
+
+  &:hover, &:focus, &:focus-visible {
+    @include haptic-light-dark(
+      'background-color',
+      #00000010,
+      #FFFFFF10
+    );
+  }
+}
+
+haptic-tab-bar:focus-visible {
+  .haptic-tab.highlighted {
+    @include haptic-light-dark(
+      'background-color',
+      #00000010,
+      #FFFFFF10
+    );
+    @include haptic-light-dark(
+      'outline-color',
+      #00000020,
+      #FFFFFF20
+    );
+  }
+}
