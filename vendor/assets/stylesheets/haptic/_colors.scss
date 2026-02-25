@@ -704,11 +704,19 @@ haptic-list-item {
     }
   }
 
-  &:hover, &:focus, &:focus-visible {
+  &:hover, &:focus-visible {
     @include haptic-light-dark(
       'background-color',
       #00000010,
       #FFFFFF10
+    );
+  }
+
+  &:focus-visible {
+    @include haptic-light-dark(
+      'outline-color',
+      #{$haptic-primary-color}60,
+      #{$haptic-light-primary-color}60
     );
   }
 }
@@ -722,8 +730,8 @@ haptic-tab-bar:focus-visible {
     );
     @include haptic-light-dark(
       'outline-color',
-      #00000020,
-      #FFFFFF20
+      #{$haptic-primary-color}80,
+      #{$haptic-light-primary-color}80
     );
   }
 }
