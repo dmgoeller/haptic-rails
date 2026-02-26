@@ -171,20 +171,23 @@ class HapticLock {
 }
 
 class HapticKeyboardNavigationController {
+  vertical = false;
+
   #eventListeners = new HapticEventListeners();
-  #initialTabIndices = new Map();
   #elements = [];
+  #initialTabIndices = new Map();
   #focused = false;
 
-  constructor(target) {
+  constructor(target, options = {}) {
     target.tabIndex = Math.max(target.tabIndex, 0);
+    this.vertical = options.vertical === true;
 
     this.#eventListeners.add(target, 'focusin', () => {
       for (let i = this.#elements.length - 1; i >= 0; i--) {
         const element = this.#elements[i];
 
         if (element.classList.contains('active') || i === 0) {
-          this.#setHighlighted(element, true);
+          this.#setFocused(element, true);
           break;
         }
       }
@@ -194,43 +197,45 @@ class HapticKeyboardNavigationController {
       this.#focused = false;
 
       for (let element of this.#elements) {
-        this.#setHighlighted(element, false);
+        this.#setFocused(element, false);
       }
     });
     this.#eventListeners.add(target, 'keydown', event => {
       const elements = this.#elements;
 
       if (elements.length > 0 && this.#focused) {
-        switch(event.key) {
-          case 'ArrowLeft':
-            for (let i = elements.length - 1; i > 0; i--) {
-              if (this.#isHighlighted(elements[i])) {
-                this.#setHighlighted(elements[i], false);
-                this.#setHighlighted(elements[i - 1], true);
-                break;
-              }
-            }
-            event.preventDefault();
-            break;
-          case 'ArrowRight':
-            for (let i = 0; i < elements.length - 1; i++) {
-              if (this.#isHighlighted(elements[i])) {
-                this.#setHighlighted(elements[i], false);
-                this.#setHighlighted(elements[i + 1], true);
-                break;
-              }
-            }
-            event.preventDefault();
-            break;
-          case 'Enter':
-          case ' ':
-            for (let element of elements) {
-              if (this.#isHighlighted(element)) {
+        const key = event.key;
+
+        if (key === 'Enter' || key === ' ') {
+          for (let element of elements) {
+              if (this.#isFocused(element)) {
                 element.click();
                 break;
               }
             }
             event.preventDefault();
+        } else
+        if ((this.vertical && key === 'ArrowUp') ||
+           (!this.vertical && key === 'ArrowLeft')) {
+          for (let i = elements.length - 1; i > 0; i--) {
+            if (this.#isFocused(elements[i])) {
+              this.#setFocused(elements[i], false);
+              this.#setFocused(elements[i - 1], true);
+              break;
+            }
+          }
+          event.preventDefault();
+        } else
+        if ((this.vertical && key === 'ArrowDown') ||
+           (!this.vertical && key === 'ArrowRight')) {
+          for (let i = 0; i < elements.length - 1; i++) {
+            if (this.#isFocused(elements[i])) {
+              this.#setFocused(elements[i], false);
+              this.#setFocused(elements[i + 1], true);
+              break;
+            }
+          }
+          event.preventDefault();
         }
       }
     });
@@ -243,7 +248,7 @@ class HapticKeyboardNavigationController {
     }
     this.#eventListeners.add(element, 'click', event => {
       for (let element of this.#elements) {
-        this.#setHighlighted(element, element === event.target);
+        this.#setFocused(element, element === event.target);
       }
     });
     this.#elements.push(element);
@@ -269,18 +274,18 @@ class HapticKeyboardNavigationController {
     this.#elements = [];
   }
 
-  #isHighlighted(element) {
-    return element.classList.contains('highlighted');
+  #isFocused(element) {
+    return element.classList.contains('focused');
   }
 
-  #setHighlighted(element, value) {
+  #setFocused(element, value) {
     const classList = element.classList;
 
-    if (value && !classList.contains('highlighted')) {
-      classList.add('highlighted');
+    if (value && !classList.contains('focused')) {
+      classList.add('focused');
     } else
-    if (!value && classList.contains('highlighted')) {
-      classList.remove('highlighted');
+    if (!value && classList.contains('focused')) {
+      classList.remove('focused');
     }
   }
 }
@@ -2029,6 +2034,55 @@ class HapticListItemElement extends HTMLElement {
   }
 }
 customElements.define('haptic-list-item', HapticListItemElement);
+
+class HapticNavElement extends HTMLElement {
+  #keyboardNavigationController = null;
+
+  #childNodesObserver = new HapticChildNodesObserver({
+    nodeAdded: node => {
+      if (node instanceof HTMLElement && node.classList.contains('nav-item')) {
+        this.#keyboardNavigationController.add(node);
+
+        if (node instanceof HTMLAnchorElement && node.hasAttribute('data-active-on')) {
+          let activeOn = node.getAttribute('data-active-on');
+
+          if (activeOn === '_pathname') {
+            activeOn = node.pathname;
+          }
+          if (window.location.pathname.startsWith(activeOn)) {
+            node.classList.add('active');
+          } else {
+            node.classList.remove('active');
+          }
+        }
+      }
+    },
+    nodeRemoved: node => {
+      if (node instanceof HTMLElement) {
+        this.#keyboardNavigationController.remove(node)
+      }
+    }
+  });
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.classList.add('haptic-nav');
+
+    this.#keyboardNavigationController =
+      new HapticKeyboardNavigationController(this, { vertical: true });
+
+    this.#childNodesObserver.observe(this);
+  }
+
+  disconnectedCallback() {
+    this.#keyboardNavigationController.disconnect();
+    this.#childNodesObserver.disconnect();
+  }
+}
+customElements.define('haptic-nav', HapticNavElement);
 
 class HapticSelectElement extends HTMLSelectElement {
   static observedAttributes = ['disabled'];

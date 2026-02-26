@@ -175,13 +175,21 @@ haptic-list-item {
 }
 
 /**********************************************************************
+ * Navigation
+ **********************************************************************/
+
+.haptic-nav .nav-item {
+  transition:
+    background-color .2s linear;
+}
+
+/**********************************************************************
  * Tabs
  **********************************************************************/
 
 .haptic-tab {
   transition:
-    background-color .2s linear,
-    outline-color .2s linear;
+    background-color .2s linear;
 
   &::after {
     transition:

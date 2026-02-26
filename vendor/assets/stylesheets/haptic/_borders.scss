@@ -1,6 +1,12 @@
 $haptic-button-border-radius: haptic-measure(.25rem, .5rem) !default;
 $haptic-field-border-radius: .25rem !default;
 
+@mixin haptic-focus-outline {
+  outline-offset: -2px;
+  outline-style: solid;
+  outline-width: 2px;
+}
+
 /**********************************************************************
  * Badges
  **********************************************************************/
@@ -204,24 +210,51 @@ haptic-list-item {
 }
 
 /**********************************************************************
+ * Navigation
+ **********************************************************************/
+
+.haptic-nav {
+  .nav-section:not(:first-of-type) {
+    border-top-style: solid;
+    border-top-width: 1px;
+  }
+
+  .nav-item {
+    border-radius: .25rem;
+
+    &:focus-visible {
+      @include haptic-focus-outline;
+    }
+
+    &::after {
+      border-radius: 50%;
+    }
+  }
+}
+
+haptic-nav {
+  outline-style: none;
+
+  &:focus-visible .nav-item.focused {
+    @include haptic-focus-outline;
+  }
+}
+
+/**********************************************************************
  * Tabs
  **********************************************************************/
 
 .haptic-tab-bar {
   border-bottom-style: solid;
   border-bottom-width: 1px;
+}
+
+haptic-tab-bar {
   outline-style: none;
 }
 
 .haptic-tab {
-  border: none;
-  outline-style: none;
-}
-
-haptic-tab-bar:focus-visible {
-  .haptic-tab.highlighted {
-    outline-offset: -1px;
-    outline-style: solid;
-    outline-width: 1px;
+  &:focus-visible, haptic-tab-bar:focus-visible &.focused {
+    @include haptic-focus-outline;
   }
 }

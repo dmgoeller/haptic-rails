@@ -452,6 +452,29 @@ haptic-list-item {
 }
 
 /**********************************************************************
+ * Navigation
+ **********************************************************************/
+
+.haptic-nav {
+  &, & .nav-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-section-label {
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  .nav-item {
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    white-space: nowrap;
+  }
+}
+
+/**********************************************************************
  * Tabs
  **********************************************************************/
 
