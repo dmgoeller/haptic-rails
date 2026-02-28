@@ -85,14 +85,6 @@ $haptic-dark-mode: true !default;
   );
 }
 
-@mixin haptic-focus-outline-color {
-  @include haptic-light-dark(
-    'outline-color',
-    #{$haptic-primary-color}60,
-    #{$haptic-light-primary-color}60
-  );
-}
-
 /**********************************************************************
  * Badges
  **********************************************************************/
@@ -692,9 +684,18 @@ haptic-list-item {
  * Navigation
  **********************************************************************/
 
+.haptic-nav {
+  .nav-section:not(:first-of-type) {
+    @include haptic-light-dark(
+      'border-top-color',
+      #00000030,
+      #FFFFFF30
+    );
+  }
+}
+
 .haptic-nav-item {
   color: inherit;
-  outline-color: #00000000;
 
   &:hover {
     @include haptic-light-dark(
@@ -704,11 +705,11 @@ haptic-list-item {
     );
   }
 
-  &:focus-visible, haptic-nav:focus-visible &.focused {
+  &:focus-visible, haptic-nav:focus-visible &.focused  {
     @include haptic-light-dark(
       'outline-color',
-      #{$haptic-primary-color}80,
-      #{$haptic-light-primary-color}80
+      #{$haptic-primary-color}60,
+      #{$haptic-light-primary-color}60
     );
   }
 
@@ -719,48 +720,6 @@ haptic-list-item {
       #{$haptic-light-primary-color}20
     );
   }
-}
-
-/**********************************************************************
- * Navigation
- **********************************************************************/
-
-.haptic-nav {
-  .nav-section:not(:first-of-type) {
-    @include haptic-light-dark(
-      'border-top-color',
-      #00000030,
-      #FFFFFF30
-    );
-  }
-
-  .nav-item {
-    color: inherit;
-
-    &:hover {
-      @include haptic-light-dark(
-        'background-color',
-        #00000010,
-        #FFFFFF10
-      );
-    }
-
-    &:focus-visible {
-      @include haptic-focus-outline-color;
-    }
-
-    &.active {
-      @include haptic-light-dark(
-        'background-color',
-        #{$haptic-primary-color}20,
-        #{$haptic-light-primary-color}20
-      );
-    }
-  }
-}
-
-haptic-nav:focus-visible .nav-item.focused {
-  @include haptic-focus-outline-color;
 }
 
 /**********************************************************************
@@ -787,7 +746,11 @@ haptic-nav:focus-visible .nav-item.focused {
   }
 
   &:focus-visible, haptic-tab-bar:focus-visible &.focused {
-    @include haptic-focus-outline-color;
+    @include haptic-light-dark(
+      'outline-color',
+      #{$haptic-primary-color}60,
+      #{$haptic-light-primary-color}60
+    );
   }
 
   &.active::after {

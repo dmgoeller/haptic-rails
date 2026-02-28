@@ -880,18 +880,20 @@ haptic-list-item {
       margin-bottom: .5rem;
     }
 
-    .nav-item {
+    .haptic-nav-item {
       margin-left: $indicator-oversize * -1;
       margin-right: $indicator-oversize * -1;
+      padding-left: $indicator-oversize;
+      padding-right: $indicator-oversize;
     }
   }
+}
 
-  .nav-item {
-    line-height: 1.125rem;
-    padding:
-      #{haptic-measure(.25rem, .5rem)}
-      $indicator-oversize;
-  }
+.haptic-nav-item {
+  line-height: 1.125rem;
+  padding:
+    haptic-measure(.25rem, .5rem)
+    haptic-measure(.5rem, .75rem)
 }
 
 /**********************************************************************

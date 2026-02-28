@@ -465,13 +465,13 @@ haptic-list-item {
     user-select: none;
     white-space: nowrap;
   }
+}
 
-  .nav-item {
-    cursor: pointer;
-    position: relative;
-    user-select: none;
-    white-space: nowrap;
-  }
+.haptic-nav-item {
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  white-space: nowrap;
 }
 
 /**********************************************************************
@@ -493,8 +493,8 @@ haptic-list-item {
 
 .haptic-tab {
   align-content: center;
-  display: flex;
   cursor: pointer;
+  display: flex;
   flex-wrap: nowrap;
   justify-content: center;
   position: relative;

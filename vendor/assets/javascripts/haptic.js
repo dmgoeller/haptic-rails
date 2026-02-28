@@ -170,6 +170,42 @@ class HapticLock {
   }
 }
 
+class HapticFocusable {
+  #target;
+
+  get target() {
+    return this.#target;
+  }
+
+  constructor(target) {
+    this.#target = target;
+  }
+
+  get active() {
+    return this.#target.classList.contains('active');
+  }
+
+  get focused() {
+    return this.#target.classList.contains('focused');
+  }
+
+  set focused(value) {
+    const classList = this.#target.classList;
+
+    if (value && !classList.contains('focused')) {
+      classList.add('focused');
+
+      if (typeof this.#target.scrollIntoViewIfNeeded === 'function') {
+        this.#target.scrollIntoViewIfNeeded();
+      }
+    } else
+    if (!value && classList.contains('focused')) {
+      classList.remove('focused');
+    }
+    return value;
+  }
+}
+
 class HapticKeyboardNavigationController {
   vertical = false;
 
@@ -186,8 +222,8 @@ class HapticKeyboardNavigationController {
       for (let i = this.#elements.length - 1; i >= 0; i--) {
         const element = this.#elements[i];
 
-        if (element.classList.contains('active') || i === 0) {
-          this.#setFocused(element, true);
+        if (element.active || i === 0) {
+          element.focused = true;
           break;
         }
       }
@@ -197,7 +233,7 @@ class HapticKeyboardNavigationController {
       this.#focused = false;
 
       for (let element of this.#elements) {
-        this.#setFocused(element, false);
+        element.focused = false;
       }
     });
     this.#eventListeners.add(target, 'keydown', event => {
@@ -208,8 +244,8 @@ class HapticKeyboardNavigationController {
 
         if (key === 'Enter' || key === ' ') {
           for (let element of elements) {
-              if (this.#isFocused(element)) {
-                element.click();
+              if (element.focused) {
+                element.target.click();
                 break;
               }
             }
@@ -218,9 +254,9 @@ class HapticKeyboardNavigationController {
         if ((this.vertical && key === 'ArrowUp') ||
            (!this.vertical && key === 'ArrowLeft')) {
           for (let i = elements.length - 1; i > 0; i--) {
-            if (this.#isFocused(elements[i])) {
-              this.#setFocused(elements[i], false);
-              this.#setFocused(elements[i - 1], true);
+            if (elements[i].focused) {
+              elements[i].focused = false;
+              elements[i - 1].focused = true;
               break;
             }
           }
@@ -229,9 +265,9 @@ class HapticKeyboardNavigationController {
         if ((this.vertical && key === 'ArrowDown') ||
            (!this.vertical && key === 'ArrowRight')) {
           for (let i = 0; i < elements.length - 1; i++) {
-            if (this.#isFocused(elements[i])) {
-              this.#setFocused(elements[i], false);
-              this.#setFocused(elements[i + 1], true);
+            if (elements[i].focused) {
+              elements[i].focused = false;
+              elements[i + 1].focused = true;
               break;
             }
           }
@@ -248,23 +284,23 @@ class HapticKeyboardNavigationController {
     }
     this.#eventListeners.add(element, 'click', event => {
       for (let element of this.#elements) {
-        this.#setFocused(element, element === event.target);
+        element.focused = element.target === event.target;
       }
     });
-    this.#elements.push(element);
+    this.#elements.push(new HapticFocusable(element));
     return this;
   }
 
   remove(element) {
-    const index = this.#elements.indexOf(element);
-
-    if (index >= 0 && index < this.#elements.length) {
-      if (this.#initialTabIndices.has(element)) {
-        element.tabIndex = this.#initialTabIndices.get(element);
+    for (let i = 0; i < this.#elements.length; i++) {
+      if (this.#elements[i].target === element) {
+        if (this.#initialTabIndices.has(element)) {
+          element.tabIndex = this.#initialTabIndices.get(element);
+        }
+        this.#eventListeners.remove(element);
+        this.#elements.splice(i, 1);
+        return true;
       }
-      this.#eventListeners.remove(element);
-      this.#elements.splice(index, 1);
-      return true;
     }
     return false;
   }
@@ -272,21 +308,6 @@ class HapticKeyboardNavigationController {
   disconnect() {
     this.#eventListeners.removeAll();
     this.#elements = [];
-  }
-
-  #isFocused(element) {
-    return element.classList.contains('focused');
-  }
-
-  #setFocused(element, value) {
-    const classList = element.classList;
-
-    if (value && !classList.contains('focused')) {
-      classList.add('focused');
-    } else
-    if (!value && classList.contains('focused')) {
-      classList.remove('focused');
-    }
   }
 }
 
@@ -2036,30 +2057,21 @@ class HapticListItemElement extends HTMLElement {
 customElements.define('haptic-list-item', HapticListItemElement);
 
 class HapticNavElement extends HTMLElement {
+  #eventListeners = new HapticEventListeners();
   #keyboardNavigationController = null;
+  #navItemElements = new Set();
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
-      if (node instanceof HTMLElement && node.classList.contains('nav-item')) {
+      if (node instanceof HapticNavItemElement) {
         this.#keyboardNavigationController.add(node);
-
-        if (node instanceof HTMLAnchorElement && node.hasAttribute('data-active-on')) {
-          let activeOn = node.getAttribute('data-active-on');
-
-          if (activeOn === '_pathname') {
-            activeOn = node.pathname;
-          }
-          if (window.location.pathname.startsWith(activeOn)) {
-            node.classList.add('active');
-          } else {
-            node.classList.remove('active');
-          }
-        }
+        this.#navItemElements.add(node);
       }
     },
     nodeRemoved: node => {
-      if (node instanceof HTMLElement) {
-        this.#keyboardNavigationController.remove(node)
+      if (node instanceof HapticNavItemElement) {
+        this.#navItemElements.delete(node);
+        this.#keyboardNavigationController.remove(node);
       }
     }
   });
@@ -2072,17 +2084,88 @@ class HapticNavElement extends HTMLElement {
     this.classList.add('haptic-nav');
 
     this.#keyboardNavigationController =
-      new HapticKeyboardNavigationController(this, { vertical: true });
-
+      new HapticKeyboardNavigationController(
+        this,
+        { vertical: true }
+      );
     this.#childNodesObserver.observe(this);
+
+    this.#eventListeners.add(document, 'popstate', () => {
+      this.#refresh();
+    });
+    this.#eventListeners.add(document, 'turbo:visit', event => {
+      this.#refresh((new URL(event.detail.url)).pathname);
+    });
   }
 
   disconnectedCallback() {
-    this.#keyboardNavigationController.disconnect();
+    this.#eventListeners.removeAll();
     this.#childNodesObserver.disconnect();
+    this.#keyboardNavigationController.disconnect();
+  }
+
+  #refresh(pathname = null) {
+    for (let navItemElement of this.#navItemElements) {
+      navItemElement.refresh(pathname);
+    }
   }
 }
 customElements.define('haptic-nav', HapticNavElement);
+
+class HapticNavItemElement extends HTMLAnchorElement {
+  static observedAttributes = ['active-on', 'href'];
+
+  #regexp = null
+
+  get active() {
+    return this.classList.contains('active');
+  }
+
+  set active(value) {
+    const classList = this.classList;
+
+    if (value && !classList.contains('active')) {
+      classList.add('active');
+    } else
+    if (!value && classList.contains('active')) {
+      classList.remove('active');
+    }
+    return value;
+  }
+
+  get activeOn() {
+    return this.getAttribute('active-on');
+  }
+
+  constructor() {
+    super();
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue !== null) {
+      this.#regexp = null;
+      this.refresh();
+    }
+  }
+
+  connectedCallback() {
+    this.classList.add('haptic-nav-item');
+    this.refresh();
+  }
+
+  refresh(pathname = null) {
+    if (this.#regexp === null) {
+      let regexp = this.activeOn;
+
+      if (regexp === '_pathname') {
+        regexp = `^${this.pathname}`;
+      }
+      this.#regexp = new RegExp(regexp);
+    }
+    this.active = this.#regexp.test(pathname || window.location.pathname);
+  }
+}
+customElements.define('haptic-nav-item', HapticNavItemElement, { extends: 'a' });
 
 class HapticSelectElement extends HTMLSelectElement {
   static observedAttributes = ['disabled'];
