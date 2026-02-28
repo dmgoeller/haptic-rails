@@ -208,20 +208,19 @@ haptic-list-item {
  **********************************************************************/
 
 .haptic-nav {
+  outline-style: none;
+
   .nav-section:not(:first-of-type) {
     border-top-style: solid;
     border-top-width: 1px;
   }
 }
 
-haptic-nav {
-  outline-style: none;
-}
 
 .haptic-nav-item {
   border-radius: .25rem;
 
-  &:focus-visible, haptic-nav:focus-visible &.focused {
+  &:focus-visible, .haptic-nav:focus-visible &.focused {
     outline-offset: -2px;
     outline-style: solid;
     outline-width: 2px;
@@ -235,9 +234,6 @@ haptic-nav {
 .haptic-tab-bar {
   border-bottom-style: solid;
   border-bottom-width: 1px;
-}
-
-haptic-tab-bar {
   outline-style: none;
 }
 

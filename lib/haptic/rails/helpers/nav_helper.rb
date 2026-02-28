@@ -5,7 +5,7 @@ module Haptic
     module Helpers
       module NavHelper
         def haptic_nav(options = {})
-          content_tag('haptic-nav') do
+          content_tag('nav', is: 'haptic-nav') do
             yield NavBuilder.new(self, options) if block_given?
           end
         end

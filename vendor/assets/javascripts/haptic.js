@@ -2110,7 +2110,7 @@ class HapticNavElement extends HTMLElement {
     }
   }
 }
-customElements.define('haptic-nav', HapticNavElement);
+customElements.define('haptic-nav', HapticNavElement, { extends: 'nav' });
 
 class HapticNavItemElement extends HTMLAnchorElement {
   static observedAttributes = ['active-on', 'href'];

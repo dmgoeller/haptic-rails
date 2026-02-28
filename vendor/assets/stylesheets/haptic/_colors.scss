@@ -705,7 +705,7 @@ haptic-list-item {
     );
   }
 
-  &:focus-visible, haptic-nav:focus-visible &.focused  {
+  &:focus-visible, .haptic-nav:focus-visible &.focused  {
     @include haptic-light-dark(
       'outline-color',
       #{$haptic-primary-color}60,
