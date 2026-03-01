@@ -238,7 +238,7 @@ haptic-list-item {
 }
 
 .haptic-tab {
-  &:focus-visible, haptic-tab-bar:focus-visible &.focused {
+  &:focus-visible, .haptic-tab-bar:focus-visible &.focused {
     outline-offset: -2px;
     outline-style: solid;
     outline-width: 2px;

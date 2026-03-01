@@ -170,6 +170,34 @@ class HapticLock {
   }
 }
 
+class HapticActivatable {
+  #target;
+
+  get target() {
+    return this.#target;
+  }
+
+  constructor(target) {
+    this.#target = target;
+  }
+
+  get active() {
+    return this.#target.classList.contains('active');
+  }
+
+  set active(value) {
+    const classList = this.#target.classList;
+
+    if (value && !classList.contains('active')) {
+      classList.add('active');
+    } else
+    if (!value && classList.contains('active')) {
+      classList.remove('active');
+    }
+    return value ? true : false;
+  }
+}
+
 class HapticFocusable {
   #target;
 
@@ -202,7 +230,7 @@ class HapticFocusable {
     if (!value && classList.contains('focused')) {
       classList.remove('focused');
     }
-    return value;
+    return value ? true : false;
   }
 }
 
@@ -308,28 +336,6 @@ class HapticKeyboardNavigationController {
   disconnect() {
     this.#eventListeners.removeAll();
     this.#elements = [];
-  }
-}
-
-class HapticActivatableHTMLElement extends HTMLElement {
-  constructor() {
-    super();
-  }
-
-  get active() {
-    return this.classList.contains('active');
-  }
-
-  set active(value) {
-    const classList = this.classList;
-
-    if (value && !classList.contains('active')) {
-      classList.add('active');
-    } else
-    if (!value && classList.contains('active')) {
-      classList.remove('active');
-    }
-    return value;
   }
 }
 
@@ -2243,16 +2249,67 @@ customElements.define('haptic-select', HapticSelectElement, { extends: 'select' 
 
 class HapticTabsElement extends HTMLElement {
   #eventListeners = new HapticEventListeners();
-  #tabElements = [];
-  #tabContentElements = [];
+  #mutationObservers = new Map();
+  #tabs = [];
+  #tabContents = [];
 
-  #mutationObserver = new MutationObserver(mutationList => {
+  #mutationObserverCallback = mutationList => {
+    const minLength = Math.min(this.#tabs.length, this.#tabContents.length);
+
     for (let mutationRecord of mutationList) {
-      if (mutationRecord.target instanceof HapticTabElement) {
-        const index = this.#tabElements.indexOf(mutationRecord.target);
+      for (let i = 0; i < minLength; i++) {
+        if (this.#tabs[i].target === mutationRecord.target) {
+          this.#tabContents[i].active = this.#tabs[i].active;
+          break;
+        }
+      }
+    }
+  }
 
-        if (index >= 0 && index < this.#tabContentElements.length) {
-          this.#tabContentElements[index].active = mutationRecord.target.active;
+  #childNodesObserver = new HapticChildNodesObserver({
+    nodeAdded: node => {
+      if (node instanceof HTMLElement) {
+        if (node.classList.contains('haptic-tab')) {
+          this.#eventListeners.add(node, 'click', event => {
+            event.preventDefault();
+          });
+          const mutationObserver = new MutationObserver(this.#mutationObserverCallback);
+          mutationObserver.observe(node, { attributeFilter: ['class'] });
+          this.#mutationObservers.set(node, mutationObserver);
+
+          const tab = new HapticActivatable(node);
+          const index = this.#tabs.push(tab) - 1;
+
+          if (this.#tabContents.length > index) {
+            this.#tabContents[index].active = tab.active;
+          }
+        } else
+        if (node.classList.contains('haptic-tab-content')) {
+          const tabContent = new HapticActivatable(node);
+          const index = this.#tabContents.push(tabContent) - 1;
+
+          if (this.#tabs.length > index) {
+            tabContent.active = this.#tabs[index].active;
+          }
+        }
+      }
+    },
+    nodeRemoved: node => {
+      if (node instanceof HTMLElement) {
+        for (let i = 0; i < this.#tabs.length; i++) {
+          if (this.#tabs[i] === node) {
+            this.#mutationObservers.get(node).disconnect();
+            this.#mutationObservers.delete(node);
+            this.#eventListeners.remove(node);
+            this.#tabs.splice(index, 1);
+            return;
+          }
+        }
+        for (let i = 0; i < this.#tabContents.length; i++) {
+          if (this.#tabContents[i] === node) {
+            this.#tabContents.splice(index, 1);
+            return;
+          }
         }
       }
     }
@@ -2263,66 +2320,55 @@ class HapticTabsElement extends HTMLElement {
   }
 
   connectedCallback() {
-    this.#mutationObserver.observe(this, {
-      subtree: true,
-      attributeFilter: ['class']
-    });
-    new HapticChildNodesObserver({
-      nodeAdded: node => {
-        if (node instanceof HapticTabElement) {
-          this.#eventListeners.add(node, 'click', event => {
-            if (!event.target.active) {
-              for (let tabElement of this.#tabElements) {
-                tabElement.active = (tabElement === event.target);
-              }
-            }
-            event.preventDefault();
-          });
-          const index = this.#tabElements.push(node) - 1;
-
-          if (this.#tabContentElements.length > index) {
-            this.#tabContentElements[index].active = node.active;
-          }
-        } else
-        if (node instanceof HapticTabContentElement) {
-          const index = this.#tabContentElements.push(node) - 1;
-
-          if (this.#tabElements.length > index) {
-            node.active = this.#tabElements[index].active;
-          }
-        }
-      },
-      nodeRemoved: node => {
-        if (node instanceof HapticTabElement) {
-          const index = this.#tabElements.indexOf(node);
-
-          if (index >= 0 && index < this.#tabElements.length) {
-            this.#eventListeners.remove(node);
-            this.#tabElements.splice(index, 1);
-
-          }
-        } else
-        if (node instanceof HapticTabContentElement) {
-          const index = this.#tabContentElements.indexOf(node);
-
-          if (index >= 0 && index < this.#tabElements.length) {
-            this.#tabContentElements.splice(index, 1);
-          }
-        }
-      }
-    }).observe(this);
+    this.#childNodesObserver.observe(this);
   }
 
   disconnectedCallback() {
+    this.#childNodesObserver.disconnect();
+
+    for (let entry of this.#childNodesObserver.entries()) {
+      entry.value.disconnect();
+    }
     this.#eventListeners.removeAll();
-    this.#mutationObserver.disconnect();
   }
 }
 customElements.define('haptic-tabs', HapticTabsElement);
 
 class HapticTabBarElement extends HTMLElement {
+  #eventListeners = new HapticEventListeners();
   #keyboardNavigationController = null;
-  #size = 0;
+  #tabElements = new Set();
+
+  #childNodesObserver = new HapticChildNodesObserver({
+    nodeAdded: node => {
+      if (node instanceof HTMLElement && node.classList.contains('haptic-tab')) {
+        this.#eventListeners.add(node, 'click', event => {
+          for (let tabElement of this.#tabElements) {
+            if (tabElement === event.target) {
+              if (!tabElement.classList.contains('active')) {
+                tabElement.classList.add('active');
+              }
+            } else
+            if (tabElement.classList.contains('active')) {
+              tabElement.classList.remove('active');
+            }
+          }
+        });
+        this.#keyboardNavigationController.add(node);
+        this.#tabElements.add(node);
+        this.#refresh();
+      }
+    },
+    nodeRemoved: node => {
+      if (node instanceof HTMLElement) {
+        if (this.#tabElements.remove(node)) {
+          this.#keyboardNavigationController.remove(node);
+          this.#eventListeners.remove(node);
+          this.#refresh();
+        }
+      }
+    }
+  });
 
   constructor() {
     super();
@@ -2334,58 +2380,20 @@ class HapticTabBarElement extends HTMLElement {
     this.#keyboardNavigationController =
       new HapticKeyboardNavigationController(this);
 
-    new HapticChildNodesObserver({
-      nodeAdded: node => {
-        if ((node instanceof HapticTabElement) ||
-            (node instanceof HTMLElement &&
-             node.classList.contains('haptic-tab'))) {
-          this.#keyboardNavigationController.add(node);
-          this.#size += 1;
-          this.#refresh();
-        }
-      },
-      nodeRemoved: node => {
-        if (node instanceof HTMLElement) {
-          if (this.#keyboardNavigationController.remove(node)) {
-            this.#size -= 1;
-            this.#refresh();
-          }
-        }
-      }
-    }).observe(this);
+    this.#childNodesObserver.observe(this);
   }
 
   disconnectedCallback() {
+    this.#childNodesObserver.disconnect();
     this.#keyboardNavigationController.disconnect();
+    this.#eventListeners.removeAll();
   }
 
   #refresh() {
-    this.style.gridTemplateColumns = `repeat(${this.#size}, 1fr)`;
+    this.style.gridTemplateColumns = `repeat(${this.#tabElements.size}, 1fr)`;
   }
 }
 customElements.define('haptic-tab-bar', HapticTabBarElement);
-
-class HapticTabElement extends HapticActivatableHTMLElement {
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
-    this.classList.add('haptic-tab');
-  }
-}
-customElements.define('haptic-tab', HapticTabElement);
-
-class HapticTabContentElement extends HapticActivatableHTMLElement {
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
-    this.classList.add('haptic-tab-content');
-  }
-}
-customElements.define('haptic-tab-content', HapticTabContentElement);
 
 class HapticTextAreaElement extends HTMLTextAreaElement {
   #eventListeners = new HapticEventListeners();

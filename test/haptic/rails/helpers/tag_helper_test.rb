@@ -176,24 +176,6 @@ module Haptic
           )
         end
 
-        def test_haptic_tab_tag
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-tab></haptic-tab>
-            HTML
-            haptic_tab_tag
-          )
-        end
-
-        def test_haptic_tab_content_tag
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-tab-content></haptic-tab-content>
-            HTML
-            haptic_tab_content_tag
-          )
-        end
-
         def test_haptic_tab_bar_tag
           assert_dom_equal(
             <<~HTML,

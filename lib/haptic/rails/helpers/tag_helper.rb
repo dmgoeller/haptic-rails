@@ -195,19 +195,9 @@ module Haptic
           haptic_dropdown_tag('select', options, &block)
         end
 
-        # Creates a <code><haptic-tab></code> tag.
-        def haptic_tab_tag(content = nil, options = nil, &block)
-          content_tag('haptic-tab', content, options, &block)
-        end
-
         # Creates a <code><haptic-tab-bar></code> tag.
         def haptic_tab_bar_tag(content = nil, options = nil, &block)
           content_tag('haptic-tab-bar', content, options, &block)
-        end
-
-        # Creates a <code><haptic-tab-content></code> tag.
-        def haptic_tab_content_tag(content = nil, options = nil, &block)
-          content_tag('haptic-tab-content', content, options, &block)
         end
 
         # Creates a <code><haptic-tabs></code> tag.
