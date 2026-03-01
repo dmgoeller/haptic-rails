@@ -372,20 +372,26 @@ class HapticButtonElement extends HTMLButtonElement {
 customElements.define('haptic-button', HapticButtonElement, { extends: 'button' });
 
 class HapticSegmentedButtonElement extends HTMLElement {
+  #childNodesObserver = new HapticChildNodesObserver({
+    nodeAdded: node => {
+      if (node instanceof HapticInputElement) {
+        if (node.classList.contains('outlined')) {
+          this.classList.add('outlined');
+        }
+      }
+    }
+  });
+
   constructor() {
     super();
   }
 
   connectedCallback() {
-    new HapticChildNodesObserver({
-      nodeAdded: node => {
-        if (node instanceof HapticInputElement) {
-          if (node.classList.contains('outlined')) {
-            this.classList.add('outlined');
-          }
-        }
-      }
-    }).observe(this);
+    this.#childNodesObserver.observe(this);
+  }
+
+  disconnectedCallback() {
+    this.#childNodesObserver.disconnect();
   }
 }
 customElements.define('haptic-segmented-button', HapticSegmentedButtonElement);
@@ -396,36 +402,42 @@ class HapticButtonSegmentElement extends HTMLElement {
 
   #controlObserver = new HapticAttributesObserver(this, ['disabled']);
 
+  #childNodesObserver = new HapticChildNodesObserver({
+    nodeAdded: node => {
+      if (node instanceof HapticInputElement && !this.#control) {
+        node.classList.remove('haptic-radio-button');
+        node.classList.add('button-segment-radio-button');
+        this.#control = node;
+        this.#controlObserver.observe(node);
+      } else
+      if (node instanceof HapticLabelElement && !this.#label) {
+        node.classList.remove('haptic-label');
+        node.classList.add('button-segment-label');
+        this.#label = node;
+      }
+    },
+    nodeRemoved: node => {
+      switch (node) {
+        case this.#control:
+          this.#controlObserver.disconnect();
+          this.#control = null;
+          break;
+        case this.#label:
+          this.#label = null;
+      }
+    }
+  })
+
   constructor() {
     super();
   }
 
   connectedCallback() {
-    new HapticChildNodesObserver({
-      nodeAdded: node => {
-        if (node instanceof HapticInputElement && !this.#control) {
-          node.classList.remove('haptic-radio-button');
-          node.classList.add('button-segment-radio-button');
-          this.#control = node;
-          this.#controlObserver.observe(node);
-        } else
-        if (node instanceof HapticLabelElement && !this.#label) {
-          node.classList.remove('haptic-label');
-          node.classList.add('button-segment-label');
-          this.#label = node;
-        }
-      },
-      nodeRemoved: node => {
-        switch (node) {
-          case this.#control:
-            this.#controlObserver.disconnect();
-            this.#control = null;
-            break;
-          case this.#label:
-            this.#label = null;
-        }
-      }
-    }).observe(this);
+    this.#childNodesObserver.observe(this);
+  }
+
+  disconnectedCallback() {
+    this.#childNodesObserver.disconnect();
   }
 }
 customElements.define('haptic-button-segment', HapticButtonSegmentElement);
@@ -436,36 +448,42 @@ class HapticChipElement extends HTMLElement {
 
   #controlObserver = new HapticAttributesObserver(this, ['disabled']);
 
+  #childNodesObserver = new HapticChildNodesObserver({
+    nodeAdded: node => {
+      if (node instanceof HapticInputElement && !this.control) {
+        node.classList.remove('haptic-checkbox');
+        node.classList.add('chip-checkbox');
+        this.#control = node;
+        this.#controlObserver.observe(node);
+      } else
+      if (node instanceof HapticLabelElement && !this.label) {
+        node.classList.remove('haptic-label');
+        node.classList.add('chip-label');
+        this.#label = node;
+      }
+    },
+    nodeRemoved: node => {
+      switch (node) {
+        case this.#control:
+          this.#controlObserver.disconnect();
+          this.#control = null;
+          break;
+        case this.#label:
+          this.#label = null;
+      }
+    }
+  });
+
   constructor() {
     super();
   }
 
   connectedCallback() {
-    new HapticChildNodesObserver({
-      nodeAdded: node => {
-        if (node instanceof HapticInputElement && !this.control) {
-          node.classList.remove('haptic-checkbox');
-          node.classList.add('chip-checkbox');
-          this.#control = node;
-          this.#controlObserver.observe(node);
-        } else
-        if (node instanceof HapticLabelElement && !this.label) {
-          node.classList.remove('haptic-label');
-          node.classList.add('chip-label');
-          this.#label = node;
-        }
-      },
-      nodeRemoved: node => {
-        switch (node) {
-          case this.#control:
-            this.#controlObserver.disconnect();
-            this.#control = null;
-            break;
-          case this.#label:
-            this.#label = null;
-        }
-      }
-    }).observe(this);
+    this.#childNodesObserver.observe(this);
+  }
+
+  disconnectedCallback() {
+    this.#childNodesObserver.disconnect();
   }
 }
 customElements.define('haptic-chip', HapticChipElement);
@@ -492,6 +510,15 @@ class HapticDropdownElement extends HTMLElement {
       }
     }
   )
+
+  #childNodesObserver = new HapticChildNodesObserver({
+    nodeAdded: node => {
+      this.nodeAdded(node);
+    },
+    nodeRemoved: node => {
+      this.nodeRemoved(node);
+    }
+  })
 
   constructor() {
     super();
@@ -564,17 +591,11 @@ class HapticDropdownElement extends HTMLElement {
         event.preventDefault();
       }
     });
-    new HapticChildNodesObserver({
-      nodeAdded: node => {
-        this.nodeAdded(node);
-      },
-      nodeRemoved: node => {
-        this.nodeRemoved(node);
-      }
-    }).observe(this);
+    this.#childNodesObserver.observe(this);
   }
 
   disconnectedCallback() {
+    this.#childNodesObserver.disconnect();
     this.#scrollContainerObserver.disconnect();
     this.#eventListeners.removeAll();
   }
@@ -1308,6 +1329,17 @@ class HapticFieldElement extends HTMLElement {
     ['inline']
   );
 
+  #childNodesObserver = new HapticChildNodesObserver({
+    nodeAdded: node => {
+      this.nodeAdded(node);
+      this.#refresh();
+    },
+    nodeRemoved: node => {
+      this.nodeRemoved(node);
+      this.#refresh();
+    }
+  });
+
   constructor() {
     super();
   }
@@ -1358,19 +1390,11 @@ class HapticFieldElement extends HTMLElement {
         this.#setValidOnChange = value.split(/\s+/);
       }
     }
-    new HapticChildNodesObserver({
-      nodeAdded: node => {
-        this.nodeAdded(node);
-        this.#refresh();
-      },
-      nodeRemoved: node => {
-        this.nodeRemoved(node);
-        this.#refresh();
-      }
-    }).observe(this);
+    this.#childNodesObserver.observe(this);
   }
 
   disconnectedCallback() {
+    this.#childNodesObserver.disconnect();
     this.#eventListeners.removeAll();
   }
 
@@ -1972,6 +1996,23 @@ class HapticListElement extends HTMLElement {
   #eventListeners = new HapticEventListeners();
   #listItemElements = new Set();
 
+  #childNodesObserver = new HapticChildNodesObserver({
+    nodeAdded: node => {
+      if (node instanceof HapticListItemElement) {
+        this.#eventListeners.add(node, 'change', () => {
+          this.dispatchEvent(new Event('change'));
+        });
+        this.#listItemElements.add(node);
+      }
+    },
+    nodeRemoved: node => {
+      if (this.#listItemElements.has(node)) {
+        this.#eventListeners.remove(node);
+        this.#listItemElements.remove(node);
+      }
+    }
+  });
+
   constructor() {
     super();
   }
@@ -1994,22 +2035,7 @@ class HapticListElement extends HTMLElement {
   }
 
   connectedCallback() {
-    new HapticChildNodesObserver({
-      nodeAdded: node => {
-        if (node instanceof HapticListItemElement) {
-          this.#eventListeners.add(node, 'change', () => {
-            this.dispatchEvent(new Event('change'));
-          });
-          this.#listItemElements.add(node);
-        }
-      },
-      nodeRemoved: node => {
-        if (this.#listItemElements.has(node)) {
-          this.#eventListeners.remove(node);
-          this.#listItemElements.remove(node);
-        }
-      }
-    }).observe(this);
+    this.#childNodesObserver.observe(this);
 
     if (this.form instanceof HapticFormElement) {
       this.form.controlAdded(this);
@@ -2017,11 +2043,11 @@ class HapticListElement extends HTMLElement {
   }
 
   disconnectedCallback() {
-    this.#eventListeners.removeAll();
-
     if (this.form instanceof HapticFormElement) {
       this.form.controlRemoved(this);
     }
+    this.#childNodesObserver.disconnect();
+    this.#eventListeners.removeAll();
   }
 }
 customElements.define('haptic-list', HapticListElement);
@@ -2031,6 +2057,38 @@ class HapticListItemElement extends HTMLElement {
   #control = null;
 
   #controlObserver = new HapticAttributesObserver(this, ['disabled']);
+
+  #childNodesObserver = new HapticChildNodesObserver({
+    nodeAdded: node => {
+      if (node instanceof HTMLInputElement && !this.#control) {
+        node.classList.add('embedded');
+
+        if (node.classList.contains('haptic-switch')) {
+          this.setAttribute('control-type', 'switch');
+        } else
+        if (node.type === 'checkbox') {
+          this.setAttribute('control-type', 'checkbox');
+        } else
+        if (node.type === 'radio') {
+          this.setAttribute('control-type', 'radio-button');
+        }
+        this.#eventListeners.add(node, 'change', () => {
+          this.dispatchEvent(new Event('change'));
+        });
+        this.#controlObserver.observe(node);
+        this.#control = node;
+      }
+    },
+    nodeRemoved: node => {
+      if (node === this.#control) {
+        node.classList.remove('embedded');
+        this.removeAttribute('control-type');
+        this.#eventListeners.remove(node);
+        this.#controlObserver.disconnect();
+        this.#control = null;
+      }
+    }
+  });
 
   constructor() {
     super();
@@ -2045,40 +2103,11 @@ class HapticListItemElement extends HTMLElement {
   }
 
   connectedCallback() {
-    new HapticChildNodesObserver({
-      nodeAdded: node => {
-        if (node instanceof HTMLInputElement && !this.#control) {
-          node.classList.add('embedded');
-
-          if (node.classList.contains('haptic-switch')) {
-            this.setAttribute('control-type', 'switch');
-          } else
-          if (node.type === 'checkbox') {
-            this.setAttribute('control-type', 'checkbox');
-          } else
-          if (node.type === 'radio') {
-            this.setAttribute('control-type', 'radio-button');
-          }
-          this.#eventListeners.add(node, 'change', () => {
-            this.dispatchEvent(new Event('change'));
-          });
-          this.#controlObserver.observe(node);
-          this.#control = node;
-        }
-      },
-      nodeRemoved: node => {
-        if (node === this.#control) {
-          node.classList.remove('embedded');
-          this.removeAttribute('control-type');
-          this.#eventListeners.remove(node);
-          this.#controlObserver.disconnect();
-          this.#control = null;
-        }
-      }
-    }).observe(this);
+    this.#childNodesObserver.observe(this);
   }
 
   disconnectedCallback() {
+    this.#childNodesObserver.disconnect();
     this.#eventListeners.removeAll();
   }
 }
@@ -2254,10 +2283,10 @@ class HapticTabsElement extends HTMLElement {
   #tabContents = [];
 
   #mutationObserverCallback = mutationList => {
-    const minLength = Math.min(this.#tabs.length, this.#tabContents.length);
+    const length = Math.min(this.#tabs.length, this.#tabContents.length);
 
     for (let mutationRecord of mutationList) {
-      for (let i = 0; i < minLength; i++) {
+      for (let i = 0; i < length; i++) {
         if (this.#tabs[i].target === mutationRecord.target) {
           this.#tabContents[i].active = this.#tabs[i].active;
           break;
