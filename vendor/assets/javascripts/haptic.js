@@ -311,6 +311,28 @@ class HapticKeyboardNavigationController {
   }
 }
 
+class HapticActivatableHTMLElement extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  get active() {
+    return this.classList.contains('active');
+  }
+
+  set active(value) {
+    const classList = this.classList;
+
+    if (value && !classList.contains('active')) {
+      classList.add('active');
+    } else
+    if (!value && classList.contains('active')) {
+      classList.remove('active');
+    }
+    return value;
+  }
+}
+
 class HapticButtonElement extends HTMLButtonElement {
   #lock = new HapticLock(this);
 
@@ -2117,6 +2139,10 @@ class HapticNavItemElement extends HTMLAnchorElement {
 
   #regexp = null
 
+  constructor() {
+    super();
+  }
+
   get active() {
     return this.classList.contains('active');
   }
@@ -2137,8 +2163,8 @@ class HapticNavItemElement extends HTMLAnchorElement {
     return this.getAttribute('active-on');
   }
 
-  constructor() {
-    super();
+  set activeOn(value) {
+    return this.setAttribute('active-on', value);
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -2339,25 +2365,9 @@ class HapticTabBarElement extends HTMLElement {
 }
 customElements.define('haptic-tab-bar', HapticTabBarElement);
 
-class HapticTabElement extends HTMLElement {
+class HapticTabElement extends HapticActivatableHTMLElement {
   constructor() {
     super();
-  }
-
-  get active() {
-    return this.classList.contains('active');
-  }
-
-  set active(value) {
-    const classList = this.classList;
-
-    if (value && !classList.contains('active')) {
-      classList.add('active');
-    } else
-    if (!value && classList.contains('active')) {
-      classList.remove('active');
-    }
-    return value;
   }
 
   connectedCallback() {
@@ -2366,25 +2376,9 @@ class HapticTabElement extends HTMLElement {
 }
 customElements.define('haptic-tab', HapticTabElement);
 
-class HapticTabContentElement extends HTMLElement {
+class HapticTabContentElement extends HapticActivatableHTMLElement {
   constructor() {
     super();
-  }
-
-  get active() {
-    return this.classList.contains('active');
-  }
-
-  set active(value) {
-    const classList = this.classList;
-
-    if (value && !classList.contains('active')) {
-      classList.add('active');
-    } else
-    if (!value && classList.contains('active')) {
-      classList.remove('active');
-    }
-    return value;
   }
 
   connectedCallback() {
