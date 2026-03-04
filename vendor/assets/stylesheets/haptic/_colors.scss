@@ -152,7 +152,10 @@ $haptic-dark-mode: true !default;
     &.red {
       background-color: $haptic-dark-red;
     }
-    &:hover:not(:disabled), &:focus, &:focus-visible {
+    &:hover:not(:disabled),
+    &:focus,
+    &:focus-visible,
+    haptic-dropdown-menu:focus-visible &.toggle {
       filter: brightness(1.1875);
     }
   }
@@ -183,7 +186,10 @@ $haptic-dark-mode: true !default;
     @include haptic-red;
   }
 
-  &:hover:not(:disabled), &:focus, &:focus-visible {
+  &:hover:not(:disabled),
+  &:focus,
+  &:focus-visible,
+  haptic-dropdown-menu:focus-visible &.toggle {
     @include haptic-light-dark(
       'background-color',
       #{$haptic-primary-color}20,
@@ -214,7 +220,10 @@ $haptic-dark-mode: true !default;
 }
 
 .haptic-icon-button:not(.filled) {
-  &:hover:not(:disabled), &:focus, &:focus-visible {
+  &:hover:not(:disabled),
+  &:focus,
+  &:focus-visible,
+  haptic-dropdown-menu:focus-visible.toggle & {
     @include haptic-light-dark(
       'background-color',
       #00000010,
@@ -307,7 +316,10 @@ haptic-button-segment, haptic-chip {
  * Dropdowns
  **********************************************************************/
 
-haptic-dropdown, haptic-dialog-dropdown, haptic-select-dropdown {
+haptic-dropdown,
+haptic-dropdown-menu,
+haptic-dialog-dropdown,
+haptic-select-dropdown {
   &[popover-open] > .toggle, & > .toggle:hover {
     &.haptic-field, & .haptic-field {
       &:not(.filled):not(.outlined) {
@@ -677,6 +689,32 @@ haptic-list-item {
 
   haptic-list.divided &:not(:first-of-type) {
     @include haptic-outline-color;
+  }
+}
+
+/**********************************************************************
+ * Menus
+ **********************************************************************/
+
+.haptic-menu {
+  .divider {
+    @include haptic-light-dark(
+      'border-top-color',
+      #00000030,
+      #FFFFFF30
+    );
+  }
+}
+
+.haptic-menu-item {
+  color: inherit;
+
+  &.focused {
+    @include haptic-light-dark(
+      'background-color',
+      #00000020,
+      #FFFFFF20
+    );
   }
 }
 

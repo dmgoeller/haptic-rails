@@ -123,7 +123,10 @@ haptic-segmented-button:not(.outlined) {
  * Dropdowns
  **********************************************************************/
 
-haptic-dropdown, haptic-dialog-dropdown, haptic-select-dropdown {
+haptic-dropdown,
+haptic-dropdown-menu,
+haptic-dialog-dropdown,
+haptic-select-dropdown {
   & > .toggle {
     height: 100%;
     width: 100%;
@@ -854,6 +857,23 @@ haptic-list-item {
 }
 
 /**********************************************************************
+ * Menus
+ **********************************************************************/
+
+.haptic-menu {
+  padding: .25rem;
+
+  .divider {
+    margin: .25rem .5rem;
+  }
+}
+
+.haptic-menu-item {
+  line-height: 1.125rem;
+  padding: haptic-measure(.25rem, .5rem) .5rem;
+}
+
+/**********************************************************************
  * Navigation
  **********************************************************************/
 
@@ -893,7 +913,7 @@ haptic-list-item {
   line-height: 1.125rem;
   padding:
     haptic-measure(.25rem, .5rem)
-    haptic-measure(.5rem, .75rem)
+    haptic-measure(.5rem, .75rem);
 }
 
 /**********************************************************************

@@ -130,7 +130,10 @@ haptic-button-segment, haptic-chip {
  * Dropdowns
  **********************************************************************/
 
-haptic-dropdown, haptic-dialog-dropdown, haptic-select-dropdown {
+haptic-dropdown,
+haptic-dropdown-menu,
+haptic-dialog-dropdown,
+haptic-select-dropdown {
   position: relative;
 
   & > .toggle {
@@ -452,6 +455,21 @@ haptic-list-item {
 }
 
 /**********************************************************************
+ * Menus
+ **********************************************************************/
+
+.haptic-menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.haptic-menu-item {
+  cursor: default;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/**********************************************************************
  * Navigation
  **********************************************************************/
 
@@ -469,7 +487,6 @@ haptic-list-item {
 
 .haptic-nav-item {
   cursor: pointer;
-  position: relative;
   user-select: none;
   white-space: nowrap;
 }

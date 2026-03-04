@@ -68,7 +68,10 @@ haptic-chip input {
  * Dropdowns
  **********************************************************************/
 
-haptic-dropdown, haptic-dialog-dropdown, haptic-select-dropdown {
+haptic-dropdown,
+haptic-dropdown-menu,
+haptic-dialog-dropdown,
+haptic-select-dropdown {
   outline: none;
 
   & > .popover {
@@ -201,6 +204,24 @@ haptic-list-item {
       border-top-width: 1px;
     }
   }
+}
+
+/**********************************************************************
+ * Menus
+ **********************************************************************/
+
+.haptic-menu {
+  outline-style: none;
+
+  .divider {
+    border-top-style: solid;
+    border-top-width: 1px;
+  }
+}
+
+.haptic-menu-item {
+  border-radius: .25rem;
+  outline-style: none;
 }
 
 /**********************************************************************
