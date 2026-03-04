@@ -261,11 +261,15 @@ class HapticNavigationController {
       }
       this.#focused = true;
     });
-    this.#eventListeners.add(target, 'focusout', () => {
-      this.#focused = false;
+    this.#eventListeners.add(target, 'focusout', event => {
+      const relatedTarget = event.relatedTarget;
 
-      for (let element of this.#elements) {
-        element.focused = false;
+      if (!relatedTarget || !this.#target.contains(relatedTarget)) {
+        this.#focused = false;
+
+        for (let element of this.#elements) {
+          element.focused = false;
+        }
       }
     });
     this.#eventListeners.add(target, 'keydown', event => {
@@ -666,7 +670,7 @@ class HapticDropdownElement extends HTMLElement {
     this.#eventListeners.add(this, 'focusout', event => {
       const relatedTarget = event.relatedTarget;
 
-      if (relatedTarget && !this.contains(relatedTarget)) {
+      if (!relatedTarget || !this.contains(relatedTarget)) {
         this.hidePopover({ cancel: true });
       }
     });
