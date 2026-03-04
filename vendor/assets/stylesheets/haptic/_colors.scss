@@ -155,6 +155,7 @@ $haptic-dark-mode: true !default;
     &:hover:not(:disabled),
     &:focus,
     &:focus-visible,
+    haptic-dialog-dropdown &.toggle,
     haptic-dropdown-menu:focus-visible &.toggle {
       filter: brightness(1.1875);
     }
@@ -189,6 +190,7 @@ $haptic-dark-mode: true !default;
   &:hover:not(:disabled),
   &:focus,
   &:focus-visible,
+  haptic-dialog-dropdown &.toggle,
   haptic-dropdown-menu:focus-visible &.toggle {
     @include haptic-light-dark(
       'background-color',
@@ -223,7 +225,8 @@ $haptic-dark-mode: true !default;
   &:hover:not(:disabled),
   &:focus,
   &:focus-visible,
-  haptic-dropdown-menu:focus-visible.toggle & {
+  haptic-dialog-dropdown &.toggle,
+  haptic-dropdown-menu:focus-visible &.toggle {
     @include haptic-light-dark(
       'background-color',
       #00000010,
