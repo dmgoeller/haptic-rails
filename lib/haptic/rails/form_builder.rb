@@ -513,7 +513,7 @@ module Haptic
         label = nil if label == true
 
         @template.haptic_field_tag('dropdown', label, field_options) do
-          @template.haptic_dialog_dropdown_tag do
+          @template.haptic_dropdown_dialog_tag do
             options = @field_options.merge(class: [@field_options[:class], 'haptic-field'])
             block&.call(DropdownBuilder.new(@template, options))
           end

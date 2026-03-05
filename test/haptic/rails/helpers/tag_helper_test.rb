@@ -26,41 +26,68 @@ module Haptic
           )
         end
 
-        def test_haptic_dialog_dropdown_tag
+        def test_haptic_dropdown_dialog_tag
           assert_dom_equal(
             <<~HTML,
-              <haptic-dialog-dropdown>
+              <haptic-dropdown-dialog>
                 <div class="backdrop"></div>
-              </haptic-dialog-dropdown>
+              </haptic-dropdown-dialog>
             HTML
-            haptic_dialog_dropdown_tag
+            haptic_dropdown_dialog_tag
           )
         end
 
-        def test_haptic_dialog_dropdown_tag_with_block
+        def test_haptic_dropdown_dialog_tag_with_block
           assert_dom_equal(
             <<~HTML,
-              <haptic-dialog-dropdown>
+              <haptic-dropdown-dialog>
                 <div class="toggle"></div>
                 <div class="popover"></div>
                 <div class="backdrop"></div>
-              </haptic-dialog-dropdown>
+              </haptic-dropdown-dialog>
             HTML
-            haptic_dialog_dropdown_tag do
+            haptic_dropdown_dialog_tag do
               content_tag('div', '', class: 'toggle') +
                 content_tag('div', '', class: 'popover')
             end
           )
         end
 
-        def test_haptic_dialog_dropdown_tag_with_options
+        def test_haptic_dropdown_dialog_tag_with_options
           assert_dom_equal(
             <<~HTML,
-              <haptic-dialog-dropdown open-to-top="">
+              <haptic-dropdown-dialog open-to-top="">
                 <div class="backdrop"></div>
-              </haptic-dialog-dropdown>
+              </haptic-dropdown-dialog>
             HTML
-            haptic_dialog_dropdown_tag(open_to_top: true)
+            haptic_dropdown_dialog_tag(open_to_top: true)
+          )
+        end
+
+        def test_haptic_dropdown_menu_tag
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-dropdown-menu>
+                <div class="backdrop"></div>
+              </haptic-dropdown-menu>
+            HTML
+            haptic_dropdown_menu_tag
+          )
+        end
+
+        def test_haptic_dropdown_menu_tag_with_block
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-dropdown-menu>
+                <div class="toggle"></div>
+                <div class="popover"></div>
+                <div class="backdrop"></div>
+              </haptic-dropdown-menu>
+            HTML
+            haptic_dropdown_menu_tag do
+              content_tag('div', '', class: 'toggle') +
+                content_tag('div', '', class: 'popover')
+            end
           )
         end
 
@@ -101,6 +128,15 @@ module Haptic
               </haptic-dropdown-field>
             HTML
             haptic_dropdown_field_tag('', 'Label')
+          )
+        end
+
+        def test_haptic_menu_tag
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-menu></haptic-menu>
+            HTML
+            haptic_menu_tag
           )
         end
 

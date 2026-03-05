@@ -124,8 +124,8 @@ haptic-segmented-button:not(.outlined) {
  **********************************************************************/
 
 haptic-dropdown,
+haptic-dropdown-dialog,
 haptic-dropdown-menu,
-haptic-dialog-dropdown,
 haptic-select-dropdown {
   & > .toggle {
     height: 100%;
@@ -150,14 +150,15 @@ haptic-select-dropdown {
   }
 }
 
-haptic-dialog-dropdown, haptic-select-dropdown {
+haptic-dropdown-dialog,
+haptic-select-dropdown {
   &[open-to-top] > .popover {
     bottom: 100%;
     top: unset;
   }
 }
 
-haptic-dialog-dropdown {
+haptic-dropdown-dialog {
   & > .popover > .segment {
     padding:
       calc(.5rem - 1px)

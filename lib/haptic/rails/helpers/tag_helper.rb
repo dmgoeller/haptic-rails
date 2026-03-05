@@ -18,26 +18,32 @@ module Haptic
           content_tag('haptic-chip', content, options, &block)
         end
 
-        # Creates a <code><haptic-dialog-dropdown></code> tag.
+        # Creates a <code><haptic-dropdown-dialog></code> tag.
         #
         # Same as <code>haptic_dropdown('dialog', options, &block)</code>.
         #
         # # ==== Options
         #
-        # - <code>:open_to_top</code> - If is <code>true</code>, the popover pops up
+        # - <code>:open_to_top</code> - If is <code>true</code>, the dialog pops up
         #   to top instead of to bottom.
-        def haptic_dialog_dropdown_tag(options = {}, &block)
+        def haptic_dropdown_dialog_tag(options = {}, &block)
           options = options.stringify_keys
           options['open-to-top'] = '' if options.delete('open_to_top')
 
           haptic_dropdown_tag('dialog', options, &block)
         end
 
-        # Creates a <code>haptic-dropdown</code>, <code>haptic-dialog-dropdown</code> or
-        # <code>haptic-select-dropdown</code> tag.
+        # Creates a <code><haptic-dropdown-menu></code> tag.
         #
-        # <code>type</code> can be <code>'dialog'</code>, <code>'select'</code> or
-        # <code>nil</code>.
+        # Same as <code>haptic_dropdown('menu', options, &block)</code>.
+        def haptic_dropdown_menu_tag(options = {}, &block)
+          haptic_dropdown_tag('menu', options, &block)
+        end
+
+        # Creates one of the haptic dropdown tags.
+        #
+        # <code>type</code> can be <code>'dialog'</code>, <code>'menu'</code>,
+        # <code>'select'</code> or <code>nil</code>.
         #
         # ==== Example
         #
@@ -57,7 +63,15 @@ module Haptic
         #   # </haptic-dropdown>
         def haptic_dropdown_tag(type = nil, options = {}, &block)
           type, options = nil, type if type.is_a?(Hash)
-          name = type ? "haptic-#{type}-dropdown" : 'haptic-dropdown'
+          name =
+            case type.to_s
+            when 'dialog', 'menu'
+              "haptic-dropdown-#{type}"
+            when 'select'
+              'haptic-select-dropdown'
+            else
+              'haptic-dropdown'
+            end
 
           content_tag(name, options) do
             concat capture(&block) if block
@@ -162,6 +176,11 @@ module Haptic
                 content_tag('div', supporting_text, class: 'supporting-text')
               end
           end
+        end
+
+        # Creates a <code><haptic-menu></code> tag.
+        def haptic_menu_tag(content = nil, options = nil, &block)
+          content_tag('haptic-menu', content, options, &block)
         end
 
         # Creates a <code><haptic-list></code> tag.

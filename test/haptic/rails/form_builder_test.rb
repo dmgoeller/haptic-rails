@@ -1165,9 +1165,9 @@ module Haptic
           <<~HTML,
             <haptic-dropdown-field>
               <div class="field-container">
-                <haptic-dialog-dropdown>
+                <haptic-dropdown-dialog>
                   <div class="backdrop"></div>
-                </haptic-dialog-dropdown>
+                </haptic-dropdown-dialog>
               </div>
             </haptic-dropdown-field>
           HTML
@@ -1180,9 +1180,9 @@ module Haptic
           <<~HTML,
             <haptic-dropdown-field>
               <div class="field-container">
-                <haptic-dialog-dropdown>
+                <haptic-dropdown-dialog>
                   <div class="backdrop"></div>
-                </haptic-dialog-dropdown>
+                </haptic-dropdown-dialog>
                 <label class="field-label">Label</label>
               </div>
             </haptic-dropdown-field>
@@ -1196,9 +1196,9 @@ module Haptic
           <<~HTML,
             <haptic-dropdown-field>
               <div class="field-container">
-                <haptic-dialog-dropdown>
+                <haptic-dropdown-dialog>
                   <div class="backdrop"></div>
-                </haptic-dialog-dropdown>
+                </haptic-dropdown-dialog>
               </div>
             </haptic-dropdown-field>
           HTML
@@ -1211,11 +1211,11 @@ module Haptic
           <<~HTML,
             <haptic-dropdown-field>
               <div class="field-container">
-                <haptic-dialog-dropdown>
+                <haptic-dropdown-dialog>
                   <button class="toggle haptic-field" type="button">Text</button>
                   <div class="popover"></div>
                   <div class="backdrop"></div>
-                </haptic-dialog-dropdown>
+                </haptic-dropdown-dialog>
               </div>
             </haptic-dropdown-field>
           HTML

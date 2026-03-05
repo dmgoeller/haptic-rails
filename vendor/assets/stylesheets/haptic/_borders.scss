@@ -69,8 +69,8 @@ haptic-chip input {
  **********************************************************************/
 
 haptic-dropdown,
+haptic-dropdown-dialog,
 haptic-dropdown-menu,
-haptic-dialog-dropdown,
 haptic-select-dropdown {
   outline: none;
 
@@ -81,7 +81,7 @@ haptic-select-dropdown {
   }
 }
 
-haptic-dialog-dropdown > .popover > .segment:not(:first-child) {
+haptic-dropdown-dialog > .popover > .segment:not(:first-child) {
   border-top-style: solid;
   border-top-width: 1px;
 }

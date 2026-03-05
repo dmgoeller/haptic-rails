@@ -155,7 +155,7 @@ $haptic-dark-mode: true !default;
     &:hover:not(:disabled),
     &:focus,
     &:focus-visible,
-    haptic-dialog-dropdown &.toggle,
+    haptic-dropdown-dialog:focus-visible &.toggle,
     haptic-dropdown-menu:focus-visible &.toggle {
       filter: brightness(1.1875);
     }
@@ -190,7 +190,7 @@ $haptic-dark-mode: true !default;
   &:hover:not(:disabled),
   &:focus,
   &:focus-visible,
-  haptic-dialog-dropdown &.toggle,
+  haptic-dropdown-dialog:focus-visible &.toggle,
   haptic-dropdown-menu:focus-visible &.toggle {
     @include haptic-light-dark(
       'background-color',
@@ -225,7 +225,7 @@ $haptic-dark-mode: true !default;
   &:hover:not(:disabled),
   &:focus,
   &:focus-visible,
-  haptic-dialog-dropdown &.toggle,
+  haptic-dropdown-dialog:focus-visible &.toggle,
   haptic-dropdown-menu:focus-visible &.toggle {
     @include haptic-light-dark(
       'background-color',
@@ -320,8 +320,8 @@ haptic-button-segment, haptic-chip {
  **********************************************************************/
 
 haptic-dropdown,
+haptic-dropdown-dialog,
 haptic-dropdown-menu,
-haptic-dialog-dropdown,
 haptic-select-dropdown {
   &[popover-open] > .toggle, & > .toggle:hover {
     &.haptic-field, & .haptic-field {
@@ -365,7 +365,7 @@ haptic-select-dropdown {
   }
 }
 
-haptic-dialog-dropdown > .popover > .segment {
+haptic-dropdown-dialog > .popover > .segment {
   @include haptic-light-dark(
     'border-color',
   #00000040,
@@ -471,7 +471,7 @@ haptic-dropdown-field, haptic-text-field {
       }
       & > .haptic-field,
       & > .field_with_errors > .haptic-field,
-      & > haptic-dialog-dropdown > .haptic-field,
+      & > haptic-dropdown-dialog > .haptic-field,
       & > haptic-select-dropdown > .haptic-field {
         &.outlined {
           @include haptic-red('border-color');

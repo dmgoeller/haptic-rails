@@ -51,7 +51,7 @@ haptic-button-segment, haptic-chip {
  * Dropdowns
  **********************************************************************/
 
-haptic-dialog-dropdown, haptic-select-dropdown {
+haptic-dropdown-dialog, haptic-select-dropdown {
   & > .toggle {
     &.haptic-field, & .haptic-field {
       &:not(.filled):not(.outlined) {

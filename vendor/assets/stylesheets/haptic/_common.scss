@@ -131,8 +131,8 @@ haptic-button-segment, haptic-chip {
  **********************************************************************/
 
 haptic-dropdown,
+haptic-dropdown-dialog,
 haptic-dropdown-menu,
-haptic-dialog-dropdown,
 haptic-select-dropdown {
   position: relative;
 
@@ -321,8 +321,11 @@ haptic-dropdown-field, haptic-text-field {
 }
 
 haptic-dropdown-field {
-  &, & > .field-container, .haptic-field,
-  haptic-dialog-dropdown, haptic-select-dropdown {
+  &,
+  & > .field-container,
+  .haptic-field,
+  haptic-dropdown-dialog,
+  haptic-select-dropdown {
     flex-grow: 1;
   }
 

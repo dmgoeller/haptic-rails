@@ -790,7 +790,7 @@ class HapticDropdownElement extends HTMLElement {
 }
 customElements.define('haptic-dropdown', HapticDropdownElement);
 
-class HapticDialogDropdownElement extends HapticDropdownElement {
+class HapticDropdownDialogElement extends HapticDropdownElement {
   #eventListeners = new HapticEventListeners();
   #fields = new Set();
   #resetButtons = new Set();
@@ -810,6 +810,26 @@ class HapticDialogDropdownElement extends HapticDropdownElement {
       this.removeAttribute('open-to-top');
     }
     return value;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.#eventListeners.add(this, 'keydown', event => {
+      if (!this.disabled && !this.locked) {
+        if (event.key === ' ') {
+          event.preventDefault();
+        }
+      }
+    });
+    this.#eventListeners.add(this, 'keyup', event => {
+      if (!this.disabled && !this.locked) {
+        if (event.key === ' ' && !this.isOpen()) {
+          this.showPopover();
+          event.preventDefault();
+        }
+      }
+    });
   }
 
   disconnectedCallback() {
@@ -853,7 +873,7 @@ class HapticDialogDropdownElement extends HapticDropdownElement {
     }
   }
 }
-customElements.define('haptic-dialog-dropdown', HapticDialogDropdownElement);
+customElements.define('haptic-dropdown-dialog', HapticDropdownDialogElement);
 
 class HapticDropdownMenuElement extends HapticDropdownElement {
   #eventListeners = new HapticEventListeners();
