@@ -127,11 +127,6 @@ haptic-dropdown,
 haptic-dropdown-dialog,
 haptic-dropdown-menu,
 haptic-select-dropdown {
-  & > .toggle {
-    height: 100%;
-    width: 100%;
-  }
-
   & > .popover {
     box-sizing: border-box;
     min-width: 100%;
@@ -415,6 +410,15 @@ haptic-dropdown-field {
       $spacing-between-icons: haptic-measure(.25rem, .75rem),
       $icon-size: haptic-measure(1.125rem, 1.5rem)
     );
+  }
+
+  haptic-dropdown,
+  haptic-dropdown-dialog,
+  haptic-select-dropdown {
+    & > .toggle {
+      height: 100%;
+      width: 100%;
+    }
   }
 }
 

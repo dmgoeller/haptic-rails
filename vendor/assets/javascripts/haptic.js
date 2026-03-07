@@ -194,7 +194,7 @@ class HapticActivatable {
     if (!value && classList.contains('active')) {
       classList.remove('active');
     }
-    return value ? true : false;
+    return value;
   }
 }
 
@@ -230,7 +230,7 @@ class HapticFocusable {
     if (!value && classList.contains('focused')) {
       classList.remove('focused');
     }
-    return value ? true : false;
+    return value;
   }
 }
 
@@ -401,6 +401,10 @@ class HapticNavigationController {
 
   focusLast() {
     this.#focusedIndex = this.#elements.length - 1;
+    this.#preventNextMouseEvent = true;
+  }
+
+  preventNextMouseEvent() {
     this.#preventNextMouseEvent = true;
   }
 
@@ -947,6 +951,8 @@ class HapticDropdownMenuElement extends HapticDropdownElement {
             } else
             if (key === 'ArrowUp') {
               this.#menuElement.focusLast();
+            } else {
+              this.#menuElement.preventNextMouseEvent();
             }
           }
           event.preventDefault();
@@ -1023,6 +1029,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
               }
               if (newHighlightedIndex === null) {
                 newHighlightedIndex = this.#maxSize ? this.#scrollOffset : 0;
+                this.#preventNextMouseEvent = true;
               }
               event.preventDefault();
               break;
@@ -1030,6 +1037,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
               if (this.isOpen()) {
                 if (this.#highlightedIndex >= 0) {
                   newHighlightedIndex = this.#highlightedIndex - 1;
+                  this.#preventNextMouseEvent = true;
                 }
               } else {
                 this.showPopover();
@@ -1137,6 +1145,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
           } else
           if (this.#optionElements.length > 0) {
             this.showPopover();
+            this.#preventNextMouseEvent = true;
           }
           event.preventDefault();
         } else {
