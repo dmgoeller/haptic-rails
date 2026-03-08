@@ -57,8 +57,8 @@ $haptic-inline-field-with-label-min-height: 3rem !default;
 }
 
 .haptic-icon-button {
-  $size: haptic-measure(1.5rem, 2.5rem);
-  $padding: haptic-measure(.1875rem, .5rem);
+  $size: haptic-measure(1.75rem, 2.5rem);
+  $padding: haptic-measure(.125rem, .5rem);
   height: $size;
   line-height: haptic-measure(1.125rem, 1.5rem);
   padding: $padding;
