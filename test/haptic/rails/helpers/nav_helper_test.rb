@@ -8,7 +8,16 @@ module Haptic
       class NavHelperTest < ActionView::TestCase
         include NavHelper
 
-        def test_haptiv_nav
+        def test_haptic_nav
+          assert_dom_equal(
+            <<~HTML,
+              <nav is="haptic-nav"></nav>
+            HTML
+            haptic_nav
+          )
+        end
+
+        def test_haptiv_nav_with_block
           assert_dom_equal(
             <<~HTML,
               <nav is="haptic-nav">
@@ -16,7 +25,7 @@ module Haptic
               </nav>
             HTML
             haptic_nav do |nav|
-              nav.item 'Home', '/'
+              nav.item 'Home', href: '/'
             end
           )
         end
@@ -29,17 +38,8 @@ module Haptic
               </nav>
             HTML
             haptic_nav(defaults: { rel: 'next' }) do |nav|
-              nav.item 'Home', '/'
+              nav.item 'Home', href: '/'
             end
-          )
-        end
-
-        def test_haptic_nav_without_block
-          assert_dom_equal(
-            <<~HTML,
-              <nav is="haptic-nav"></nav>
-            HTML
-            haptic_nav
           )
         end
       end

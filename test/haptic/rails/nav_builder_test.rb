@@ -5,6 +5,8 @@ require 'test_helper'
 module Haptic
   module Rails
     class NavBuilderTest < ActionView::TestCase
+      # #item
+
       def test_item
         assert_dom_equal(
           <<~HTML,
@@ -12,7 +14,7 @@ module Haptic
               Home
             </a>
           HTML
-          nav_builder.item('Home', '/')
+          nav_builder.item('Home', href: '/')
         )
       end
 
@@ -23,20 +25,58 @@ module Haptic
               Home
             </a>
           HTML
-          nav_builder.item('/') { 'Home' }
+          nav_builder.item(href: '/') { 'Home' }
         )
       end
 
-      def test_item_with_default_options
+      def test_item_with_defaults
         assert_dom_equal(
           <<~HTML,
             <a is="haptic-nav-item" href="/" rel="next" active-on="_pathname">
               Home
             </a>
           HTML
-          nav_builder(defaults: { rel: 'next' }).item('Home', '/')
+          nav_builder(rel: 'next').item('Home', href: '/')
         )
       end
+
+
+      # #item_to
+
+      def test_item_to
+        assert_dom_equal(
+          <<~HTML,
+            <a is="haptic-nav-item" href="/" active-on="_pathname">
+              Home
+            </a>
+          HTML
+          nav_builder.item_to('Home', '/')
+        )
+      end
+
+      def test_item_to_with_block
+        assert_dom_equal(
+          <<~HTML,
+            <a is="haptic-nav-item" href="/" active-on="_pathname">
+              Home
+            </a>
+          HTML
+          nav_builder.item_to('/') { 'Home' }
+        )
+      end
+
+      def test_item_to_with_defaults
+        assert_dom_equal(
+          <<~HTML,
+            <a is="haptic-nav-item" href="/" rel="next" active-on="_pathname">
+              Home
+            </a>
+          HTML
+          nav_builder(rel: 'next').item_to('Home', '/')
+        )
+      end
+
+      # #section
 
       def test_section
         assert_dom_equal(

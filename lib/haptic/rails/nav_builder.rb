@@ -3,19 +3,26 @@
 module Haptic
   module Rails
     class NavBuilder
-      def initialize(builder, options = {}) # :nodoc:
-        defaults = options[:defaults]
-
+      def initialize(builder, defaults = {}) # :nodoc:
         @builder = builder
-        @defaults = { is: 'haptic-nav-item', active_on: '_pathname' }
-        @defaults.merge!(defaults) if defaults
+        @default_options = { is: 'haptic-nav-item', active_on: '_pathname' }
+        @default_options.merge!(defaults) if defaults.present?
       end
 
-      def item(name = nil, options = nil, html_options = nil, &block)
+      def item(name = nil, options = nil, &block)
         if block_given?
-          options = item_options(options)
+          name = nav_item_options(name)
         else
-          html_options = item_options(html_options)
+          options = nav_item_options(options)
+        end
+        @builder.content_tag('a', name, options, &block)
+      end
+
+      def item_to(name = nil, options = nil, html_options = nil, &block)
+        if block_given?
+          options = nav_item_options(options)
+        else
+          html_options = nav_item_options(html_options)
         end
         @builder.link_to(name, options, html_options, &block)
       end
@@ -31,8 +38,8 @@ module Haptic
 
       private
 
-      def item_options(options)
-        options = @defaults.merge(options || {})
+      def nav_item_options(options)
+        options = @default_options.merge(options || {})
         options[:'active-on'] ||= options.delete(:active_on)
         options
       end
