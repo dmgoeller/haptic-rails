@@ -707,17 +707,17 @@ haptic-list-item {
       #FFFFFF30
     );
   }
-}
 
-.haptic-menu-item {
-  color: inherit;
+  .menu-item {
+    color: inherit;
 
-  &.focused {
-    @include haptic-light-dark(
-      'background-color',
-      #00000020,
-      #FFFFFF20
-    );
+    &.focused {
+      @include haptic-light-dark(
+        'background-color',
+        #00000020,
+        #FFFFFF20
+      );
+    }
   }
 }
 
@@ -726,36 +726,37 @@ haptic-list-item {
  **********************************************************************/
 
 .haptic-nav {
-  .nav-section:not(:first-of-type) {
+  // The divider before
+  .nav-section:not(:first-of-type)::before {
     @include haptic-light-dark(
       'border-top-color',
       #00000030,
       #FFFFFF30
     );
   }
-}
 
-.haptic-nav-item {
-  color: inherit;
+  .nav-item {
+    color: inherit;
 
-  &:hover {
-    @include haptic-light-dark(
-      'background-color',
-      #00000010,
-      #FFFFFF10
-    );
+    &:hover {
+      @include haptic-light-dark(
+        'background-color',
+        #00000010,
+        #FFFFFF10
+      );
+    }
+
+    &.active {
+      @include haptic-light-dark(
+        'background-color',
+        #{$haptic-primary-color}20,
+        #{$haptic-light-primary-color}20
+      );
+    }
   }
 
-  &:focus-visible, .haptic-nav:focus-visible &.focused  {
+  &:focus-visible .nav-item.focused {
     @include haptic-primary-color('outline-color');
-  }
-
-  &.active {
-    @include haptic-light-dark(
-      'background-color',
-      #{$haptic-primary-color}20,
-      #{$haptic-light-primary-color}20
-    );
   }
 }
 

@@ -5,6 +5,8 @@ require 'test_helper'
 module Haptic
   module Rails
     class NavBuilderTest < ActionView::TestCase
+      include Helpers::IconHelper
+
       # #item
 
       def test_item
@@ -26,6 +28,30 @@ module Haptic
             </a>
           HTML
           nav_builder.item(href: '/') { 'Home' }
+        )
+      end
+
+      def test_item_with_leading_icon
+        assert_dom_equal(
+          <<~HTML,
+            <a is="haptic-nav-item" href="/" active-on="_pathname">
+              Home
+              <div class="haptic-icon leading-icon">home</div>
+            </a>
+          HTML
+          nav_builder.item('Home', href: '/', leading_icon: 'home')
+        )
+      end
+
+      def test_item_with_leading_icon_and_block
+        assert_dom_equal(
+          <<~HTML,
+            <a is="haptic-nav-item" href="/" active-on="_pathname">
+              Home
+              <div class="haptic-icon leading-icon">home</div>
+            </a>
+          HTML
+          nav_builder.item(href: '/', leading_icon: 'home') { 'Home' }
         )
       end
 
@@ -62,6 +88,30 @@ module Haptic
             </a>
           HTML
           nav_builder.item_to('/') { 'Home' }
+        )
+      end
+
+      def test_item_to_with_leading_icon
+        assert_dom_equal(
+          <<~HTML,
+            <a is="haptic-nav-item" href="/" active-on="_pathname">
+              Home
+              <div class="haptic-icon leading-icon">home</div>
+            </a>
+          HTML
+          nav_builder.item_to('Home', '/', leading_icon: 'home')
+        )
+      end
+
+      def test_item_to_with_leading_icon_and_block
+        assert_dom_equal(
+          <<~HTML,
+            <a is="haptic-nav-item" href="/" active-on="_pathname">
+              Home
+              <div class="haptic-icon leading-icon">home</div>
+            </a>
+          HTML
+          nav_builder.item_to('/', leading_icon: 'home') { 'Home' }
         )
       end
 

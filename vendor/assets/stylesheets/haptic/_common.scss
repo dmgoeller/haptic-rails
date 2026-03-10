@@ -464,12 +464,24 @@ haptic-list-item {
 .haptic-menu {
   display: flex;
   flex-direction: column;
-}
 
-.haptic-menu-item {
-  cursor: default;
-  user-select: none;
-  white-space: nowrap;
+  .menu-item {
+    cursor: default;
+    position: relative;
+    user-select: none;
+    white-space: nowrap;
+
+    .leading-icon, .trailing-icon, .supporting-text {
+      pointer-events: none;
+    }
+
+    .leading-icon, .trailing-icon {
+      align-items: center;
+      display: flex;
+      position: absolute;
+      justify-content: center;
+    }
+  }
 }
 
 /**********************************************************************
@@ -477,21 +489,40 @@ haptic-list-item {
  **********************************************************************/
 
 .haptic-nav {
-  &, & .nav-section {
+  display: flex;
+  flex-direction: column;
+
+  .nav-section {
     display: flex;
     flex-direction: column;
+    position: relative;
+
+    // The divider before
+    &:not(:first-of-type)::before {
+      content: '\200b';
+      position: absolute;
+    }
   }
 
   .nav-section-label {
     user-select: none;
     white-space: nowrap;
   }
-}
 
-.haptic-nav-item {
-  cursor: pointer;
-  user-select: none;
-  white-space: nowrap;
+  .nav-item {
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    white-space: nowrap;
+
+    .leading-icon {
+      align-items: center;
+      display: flex;
+      pointer-events: none;
+      position: absolute;
+      justify-content: center;
+    }
+  }
 }
 
 /**********************************************************************

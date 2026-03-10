@@ -115,8 +115,18 @@ haptic-list-item .supporting-text {
  * Menus
  **********************************************************************/
 
-a.haptic-menu-item {
-  text-decoration: none;
+.haptic-menu {
+  .menu-item {
+    text-decoration: none;
+
+    .leading-icon, .trailing-icon {
+      font-size: haptic-measure(1.125rem, 1.25rem);
+    }
+
+    .supporting-text {
+      font-size: .875rem;
+    }
+  }
 }
 
 /**********************************************************************
@@ -128,10 +138,14 @@ a.haptic-menu-item {
     font-size: .875rem;
     font-weight: bold;
   }
-}
 
-a.haptic-nav-item {
-  text-decoration: none;
+  .nav-item {
+    text-decoration: none;
+
+    .leading-icon {
+      font-size: haptic-measure(1.125rem, 1.5rem);
+    }
+  }
 }
 
 /**********************************************************************

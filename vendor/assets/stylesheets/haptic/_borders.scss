@@ -217,11 +217,11 @@ haptic-list-item {
     border-top-style: solid;
     border-top-width: 1px;
   }
-}
 
-.haptic-menu-item {
-  border-radius: .25rem;
-  outline-style: none;
+  .menu-item {
+    border-radius: .25rem;
+    outline-style: none;
+  }
 }
 
 /**********************************************************************
@@ -231,17 +231,17 @@ haptic-list-item {
 .haptic-nav {
   outline-style: none;
 
-  .nav-section:not(:first-of-type) {
+  // The divider before
+  .nav-section:not(:first-of-type)::before {
     border-top-style: solid;
     border-top-width: 1px;
   }
-}
 
+  .nav-item {
+    border-radius: .25rem;
+  }
 
-.haptic-nav-item {
-  border-radius: .25rem;
-
-  &:focus-visible, .haptic-nav:focus-visible &.focused {
+  &:focus-visible .nav-item.focused {
     outline-offset: -2px;
     outline-style: solid;
     outline-width: 2px;

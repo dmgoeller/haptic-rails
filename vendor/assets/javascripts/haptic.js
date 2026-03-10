@@ -2330,8 +2330,16 @@ class HapticMenuElement extends HTMLElement {
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
-      if (node instanceof HapticMenuItemElement) {
-        this.#navigationController.add(node);
+      if (node instanceof HTMLElement) {
+        if (node instanceof HapticMenuItemElement) {
+          this.#navigationController.add(node);
+        } else
+        if (node.classList.contains('leading-icon')) {
+          this.setAttribute('with-leading-icons', '');
+        } else
+        if (node.classList.contains('trailing-icon')) {
+          this.setAttribute('with-trailing-icons', '');
+        }
       }
     },
     nodeRemoved: node => {
@@ -2383,7 +2391,7 @@ class HapticMenuItemElement extends HTMLAnchorElement {
   }
 
   connectedCallback() {
-    this.classList.add('haptic-menu-item');
+    this.classList.add('menu-item');
   }
 }
 customElements.define('haptic-menu-item', HapticMenuItemElement, { extends: 'a' });
@@ -2395,9 +2403,14 @@ class HapticNavElement extends HTMLElement {
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
-      if (node instanceof HapticNavItemElement) {
-        this.#navigationController.add(node);
-        this.#navItemElements.add(node);
+      if (node instanceof HTMLElement) {
+        if (node instanceof HapticNavItemElement) {
+          this.#navigationController.add(node);
+          this.#navItemElements.add(node);
+        } else
+        if (node.classList.contains('leading-icon')) {
+          this.setAttribute('with-leading-icons', '');
+        }
       }
     },
     nodeRemoved: node => {
@@ -2484,7 +2497,7 @@ class HapticNavItemElement extends HTMLAnchorElement {
   }
 
   connectedCallback() {
-    this.classList.add('haptic-nav-item');
+    this.classList.add('nav-item');
     this.refresh();
   }
 

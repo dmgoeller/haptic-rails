@@ -866,16 +866,46 @@ haptic-list-item {
  **********************************************************************/
 
 .haptic-menu {
+  $menu-item-icon-size: haptic-measure(1.125rem, 1.25rem);
+  $menu-item-padding-left-right: haptic-measure(.5rem, .75rem);
+  $menu-item-spacing-between-icon-and-text: .5rem;
+
   padding: .25rem;
 
   .divider {
     margin: .25rem .5rem;
   }
-}
 
-.haptic-menu-item {
-  line-height: 1.125rem;
-  padding: haptic-measure(.25rem, .5rem) .5rem;
+  .menu-item {
+    line-height: 1.125rem;
+    padding: haptic-measure(.25rem, .5rem) $menu-item-padding-left-right;
+
+    .leading-icon, .trailing-icon {
+      left: $menu-item-padding-left-right;
+      height: $menu-item-icon-size;
+      top: calc(50% - #{$menu-item-icon-size} / 2);
+      width: $menu-item-icon-size;
+    }
+
+    .supporting-text {
+      line-height: 1rem;
+      margin-top: .125rem;
+    }
+  }
+
+  &[with-leading-icons] > .menu-item {
+    padding-left:
+      $menu-item-padding-left-right +
+      $menu-item-icon-size +
+      $menu-item-spacing-between-icon-and-text;
+  }
+
+  &[with-trailing-icons] > .menu-item {
+    padding-right:
+      $menu-item-padding-left-right +
+      $menu-item-icon-size +
+      $menu-item-spacing-between-icon-and-text;
+  }
 }
 
 /**********************************************************************
@@ -883,42 +913,56 @@ haptic-list-item {
  **********************************************************************/
 
 .haptic-nav {
-  $content-padding: haptic-measure(1rem, 1.75rem);
-  $indicator-padding: haptic-measure(.5rem, .75rem);
-  $indicator-oversize: $content-padding - $indicator-padding;
+  $nav-item-leading-icon-size: haptic-measure(1.125rem, 1.5rem);
+  $nav-item-spacing-between-icon-and-text: haptic-measure(.5rem, .75rem);
+  $nav-item-padding-left-right: haptic-measure(.5rem, 1rem);
+  $nav-section-vertical-spacing: haptic-measure(.5rem, 1rem);
 
-  padding: $indicator-padding;
+  padding: haptic-measure(.5rem, .75rem);
 
   .nav-section {
-    margin-left: $indicator-oversize;
-    margin-right: $indicator-oversize;
-
     &:not(:first-of-type) {
-      padding-top: .5rem;
+      padding-top: calc(#{$nav-section-vertical-spacing} + 1px);
+
+      // The divider before
+      &::before {
+        box-sizing: border-box;
+        height: 0;
+        left: $nav-section-vertical-spacing;
+        top: 0;
+        width: calc(100% - 2 * #{$nav-section-vertical-spacing});
+      }
     }
 
     &:not(:last-of-type) {
-      padding-bottom: .5rem;
-    }
-
-    .nav-section-label {
-      margin-bottom: .5rem;
-    }
-
-    .haptic-nav-item {
-      margin-left: $indicator-oversize * -1;
-      margin-right: $indicator-oversize * -1;
-      padding-left: $indicator-oversize;
-      padding-right: $indicator-oversize;
+      padding-bottom: $nav-section-vertical-spacing;
     }
   }
-}
 
-.haptic-nav-item {
-  line-height: 1.125rem;
-  padding:
-    haptic-measure(.25rem, .5rem)
-    haptic-measure(.5rem, .75rem);
+  .nav-section-label {
+    margin-bottom: $nav-section-vertical-spacing;
+    margin-left: $nav-item-padding-left-right;
+    margin-right: $nav-item-padding-left-right;
+  }
+
+  .nav-item {
+    line-height: 1.125rem;
+    padding: haptic-measure(.25rem, .5rem) $nav-item-padding-left-right;
+  }
+
+  &[with-leading-icons] .nav-item {
+    padding-left:
+      $nav-item-padding-left-right +
+      $nav-item-leading-icon-size +
+      $nav-item-spacing-between-icon-and-text;
+
+    .leading-icon {
+      left: $nav-item-padding-left-right;
+      height: $nav-item-leading-icon-size;
+      top: calc(50% - #{$nav-item-leading-icon-size} / 2);
+      width: $nav-item-leading-icon-size;
+    }
+  }
 }
 
 /**********************************************************************
