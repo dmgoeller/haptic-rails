@@ -18,6 +18,7 @@ module Haptic
       #
       # ==== Options
       #
+      # - <code>:disabled</code> - If is <code>true</code>, the menu item is disabled.
       # - <code>:leading_icon</code> - The name of the leading icon.
       #
       # ==== Example
@@ -41,6 +42,7 @@ module Haptic
       #
       # ==== HTML options
       #
+      # - <code>:disabled</code> - If is <code>true</code>, the menu item is disabled.
       # - <code>:leading_icon</code> - The name of the leading icon.
       #
       # ==== Example
@@ -71,6 +73,8 @@ module Haptic
 
       def menu_item_options(options)
         options = @default_options.merge(options || {})
+        options[:'data-disabled'] ||= '' if options.delete(:disabled)
+
         content_options = options.extract!(:leading_icon)
 
         [options, content_options]

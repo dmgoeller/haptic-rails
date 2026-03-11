@@ -471,6 +471,11 @@ haptic-list-item {
     user-select: none;
     white-space: nowrap;
 
+    &[data-disabled] {
+      @include haptic-grayed;
+      pointer-events: none;
+    }
+
     .leading-icon, .trailing-icon, .supporting-text {
       pointer-events: none;
     }

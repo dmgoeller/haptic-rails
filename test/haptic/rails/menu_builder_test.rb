@@ -31,6 +31,17 @@ module Haptic
         )
       end
 
+      def test_disabled_item
+        assert_dom_equal(
+          <<~HTML,
+            <a is="haptic-menu-item" href="/duplicate" data-disabled>
+              Duplicate
+            </a>
+          HTML
+          menu_builder.item('Duplicate', href: '/duplicate', disabled: true)
+        )
+      end
+
       def test_item_with_block
         assert_dom_equal(
           <<~HTML,
@@ -87,6 +98,17 @@ module Haptic
             </a>
           HTML
           menu_builder.item_to('Duplicate', '/duplicate')
+        )
+      end
+
+      def test_disabled_item_to
+        assert_dom_equal(
+          <<~HTML,
+            <a is="haptic-menu-item" href="/duplicate" data-disabled>
+              Duplicate
+            </a>
+          HTML
+          menu_builder.item_to('Duplicate', '/duplicate', disabled: true)
         )
       end
 
