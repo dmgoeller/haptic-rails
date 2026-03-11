@@ -56,7 +56,7 @@ module Haptic
         def test_haptic_dropdown_dialog_tag_with_options
           assert_dom_equal(
             <<~HTML,
-              <haptic-dropdown-dialog open-to-top="">
+              <haptic-dropdown-dialog open-to-top>
                 <div class="backdrop"></div>
               </haptic-dropdown-dialog>
             HTML
@@ -72,6 +72,17 @@ module Haptic
               </haptic-dropdown-menu>
             HTML
             haptic_dropdown_menu_tag
+          )
+        end
+
+        def test_haptic_dropdown_menu_tag_with_options
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-dropdown-menu open-to-top>
+                <div class="backdrop"></div>
+              </haptic-dropdown-menu>
+            HTML
+            haptic_dropdown_menu_tag(open_to_top: true)
           )
         end
 

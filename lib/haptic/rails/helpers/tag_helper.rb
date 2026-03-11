@@ -36,7 +36,15 @@ module Haptic
         # Creates a <code><haptic-dropdown-menu></code> tag.
         #
         # Same as <code>haptic_dropdown('menu', options, &block)</code>.
+        #
+        # # ==== Options
+        #
+        # - <code>:open_to_top</code> - If is <code>true</code>, the menu pops up
+        #   to top instead of to bottom.
         def haptic_dropdown_menu_tag(options = {}, &block)
+          options = options.stringify_keys
+          options['open-to-top'] = '' if options.delete('open_to_top')
+
           haptic_dropdown_tag('menu', options, &block)
         end
 

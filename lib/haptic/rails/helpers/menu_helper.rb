@@ -20,9 +20,6 @@ module Haptic
         #     end
         #   end
         def haptic_dropdown_menu(options = {})
-          options = options.stringify_keys
-          options['open-to-top'] = '' if options.delete('open_to_top')
-
           haptic_dropdown_menu_tag(options) do
             yield DropdownMenuBuilder.new(self) if block_given?
           end
