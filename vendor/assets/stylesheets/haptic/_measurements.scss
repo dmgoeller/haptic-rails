@@ -151,9 +151,17 @@ haptic-segmented-button:not(.outlined) {
       padding-bottom: $padding;
     }
 
+    &.buttons {
+      gap: haptic-measure(.5rem, 1rem);
+    }
+
     .legend {
       margin-bottom: $padding;
     }
+  }
+
+  &.message-box .message {
+    min-height: haptic-measure(1.75rem, 2.5rem);
   }
 }
 
