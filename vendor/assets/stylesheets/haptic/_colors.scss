@@ -316,6 +316,27 @@ haptic-button-segment, haptic-chip {
 }
 
 /**********************************************************************
+ * Dialogs
+ **********************************************************************/
+
+.haptic-dialog {
+  @include haptic-light-dark(
+    'background-color',
+    #FFFFFF,
+    #3C3C3C
+  );
+  color: inherit;
+
+  &, .dialog-segment {
+    @include haptic-light-dark(
+      'border-color',
+    #00000040,
+    #FFFFFF40
+    );
+  }
+}
+
+/**********************************************************************
  * Dropdowns
  **********************************************************************/
 
@@ -365,7 +386,7 @@ haptic-select-dropdown {
   }
 }
 
-haptic-dropdown-dialog > .popover > .segment {
+haptic-dropdown-dialog > .popover > .dialog-segment {
   @include haptic-light-dark(
     'border-color',
   #00000040,

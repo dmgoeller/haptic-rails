@@ -43,11 +43,33 @@ haptic-button-segment, haptic-chip {
 }
 
 /**********************************************************************
+ * Dialogs
+ **********************************************************************/
+
+.haptic-dialog {
+  .dialog-header {
+    .headline {
+      font-size: haptic-measure(1.25rem, 2rem);
+    }
+
+    .supporting-text {
+      font-size: .875rem;
+    }
+  }
+
+  .dialog-segment > .legend {
+    font-weight: bold;
+  }
+}
+
+/**********************************************************************
  * Dropdowns
  **********************************************************************/
 
-haptic-dropdown-dialog > .popover > .segment > .legend {
-  font-weight: bold;
+haptic-dropdown-dialog > .popover {
+  & > .dialog-segment > .legend {
+    font-weight: bold;
+  }
 }
 
 /**********************************************************************

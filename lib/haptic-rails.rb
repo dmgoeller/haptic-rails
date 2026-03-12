@@ -2,6 +2,7 @@
 
 require 'haptic/rails/builder'
 require 'haptic/rails/configuration'
+require 'haptic/rails/dialog_builder'
 require 'haptic/rails/dropdown_builder'
 require 'haptic/rails/dropdown_dialog_builder'
 require 'haptic/rails/dropdown_menu_builder'
@@ -11,5 +12,4 @@ require 'haptic/rails/form_builder'
 require 'haptic/rails/helpers'
 require 'haptic/rails/menu_builder'
 require 'haptic/rails/nav_builder'
-require 'haptic/rails/popover_builder'
 require 'haptic/rails/version'

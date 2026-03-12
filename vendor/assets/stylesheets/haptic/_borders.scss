@@ -65,6 +65,28 @@ haptic-chip input {
 }
 
 /**********************************************************************
+ * Dialogs
+ **********************************************************************/
+
+.haptic-dialog {
+  border-radius: haptic-measure(.75rem, 1.5rem);
+  border-style: solid;
+  border-width: 1px;
+  outline: none;
+
+  &, & > form {
+    & > .dialog-segment {
+      outline: none;
+
+      &:not(:first-child) {
+        border-top-style: solid;
+        border-top-width: 1px;
+      }
+    }
+  }
+}
+
+/**********************************************************************
  * Dropdowns
  **********************************************************************/
 
@@ -81,13 +103,15 @@ haptic-select-dropdown {
   }
 }
 
-haptic-dropdown-dialog > .popover > .segment:not(:first-child) {
-  border-top-style: solid;
-  border-top-width: 1px;
+haptic-dropdown-dialog > .popover {
+  & > .dialog-segment:not(:first-child) {
+    border-top-style: solid;
+    border-top-width: 1px;
+  }
 }
 
-haptic-select-dropdown > .popover > .scroll-container {
-  &::-webkit-scrollbar-thumb {
+haptic-select-dropdown > .popover {
+  & > .scroll-container::-webkit-scrollbar-thumb {
     border-radius: 5px;
     border-style: solid;
     border-width: 2px;

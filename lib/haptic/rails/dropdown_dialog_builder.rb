@@ -8,7 +8,7 @@ module Haptic
         options = options.merge(class: ['popover', options[:class]])
 
         if block
-          @builder.content_tag('div', options) { block.call(PopoverBuilder.new(@builder)) }
+          @builder.content_tag('div', options) { block.call(DialogBuilder.new(@builder)) }
         else
           @builder.content_tag('div', content, options)
         end
