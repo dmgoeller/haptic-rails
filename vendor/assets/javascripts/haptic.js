@@ -2812,7 +2812,7 @@ class HapticTextAreaElement extends HTMLTextAreaElement {
 }
 customElements.define('haptic-textarea', HapticTextAreaElement, { extends: 'textarea' });
 
-function hapticConfirm(message, options = {no: 'No', yes: 'Yes'}) {
+function hapticConfirm(message, options = {cancel: 'Cancel', ok: 'Ok'}) {
   return new Promise(resolve => {
     const dialog = document.createElement('dialog')
     dialog.classList.add('haptic-dialog', 'message-box');
@@ -2828,7 +2828,7 @@ function hapticConfirm(message, options = {no: 'No', yes: 'Yes'}) {
 
     let button = document.createElement('button');
     button.classList.add('haptic-button');
-    button.appendChild(document.createTextNode(options.yes));
+    button.appendChild(document.createTextNode(options.ok));
     button.addEventListener('click', () => {
       dialog.remove();
       resolve(true);
@@ -2837,7 +2837,7 @@ function hapticConfirm(message, options = {no: 'No', yes: 'Yes'}) {
 
     button = document.createElement('button');
     button.classList.add('haptic-button');
-    button.appendChild(document.createTextNode(options.no));
+    button.appendChild(document.createTextNode(options.cancel));
     button.addEventListener('click', () => {
       dialog.remove();
       resolve(false);

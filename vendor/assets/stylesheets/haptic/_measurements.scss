@@ -137,26 +137,26 @@ haptic-segmented-button:not(.outlined) {
         margin-top: haptic-measure(.5rem, 1rem);
       }
     }
-  }
 
-  & > .dialog-segment {
-    padding-left: calc(#{$padding} - 1px);
-    padding-right: calc(#{$padding} - 1px);
+    & > .dialog-segment {
+      padding-left: calc(#{$padding} - 1px);
+      padding-right: calc(#{$padding} - 1px);
 
-    &:not(:first-child) {
-      padding-top: $padding;
-    }
+      &:not(:first-child) {
+        padding-top: $padding;
+      }
 
-    &:not(:last-child) {
-      padding-bottom: $padding;
-    }
+      &:not(:last-child) {
+        padding-bottom: $padding;
+      }
 
-    &.buttons {
-      gap: haptic-measure(.5rem, 1rem);
-    }
+      &.buttons {
+        gap: haptic-measure(.5rem, 1rem);
+      }
 
-    .legend {
-      margin-bottom: $padding;
+      .legend {
+        margin-bottom: $padding;
+      }
     }
   }
 
