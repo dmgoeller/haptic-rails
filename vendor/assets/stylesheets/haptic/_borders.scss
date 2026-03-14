@@ -273,6 +273,33 @@ haptic-list-item {
 }
 
 /**********************************************************************
+ * Tables
+ **********************************************************************/
+
+table.haptic-table {
+  $row-border-radius: .25rem;
+
+  border-collapse: collapse;
+
+  th:before {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+  }
+
+  td {
+    &:first-child:before {
+      border-bottom-left-radius: $row-border-radius;
+      border-top-left-radius: $row-border-radius;
+    }
+
+    &:first-child:before {
+      border-bottom-right-radius: $row-border-radius;
+      border-top-right-radius: $row-border-radius;
+    }
+  }
+}
+
+/**********************************************************************
  * Tabs
  **********************************************************************/
 

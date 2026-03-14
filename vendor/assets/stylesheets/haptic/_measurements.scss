@@ -1018,6 +1018,52 @@ haptic-list-item {
 }
 
 /**********************************************************************
+ * Tables
+ **********************************************************************/
+
+table.haptic-table {
+  td, th {
+    padding: .25rem .5rem;
+
+    &:first-child {
+      padding-left: 1rem;
+    }
+
+    &:last-child {
+      padding-right: 1rem;
+    }
+  }
+
+  th {
+    top: 0;
+
+    &:before {
+      bottom: 0;
+      left: 0;
+      width: 100%;
+    }
+  }
+
+  td {
+    &:before {
+      height: 100%;
+      left: 0;
+      top: 0;
+      width: 100%
+    }
+
+    &:first-child:before {
+      left: .5rem;
+      width: calc(100% - .5rem);
+    }
+
+    &:last-child:before {
+      width: calc(100% - .5rem);
+    }
+  }
+}
+
+/**********************************************************************
  * Tabs
  **********************************************************************/
 
