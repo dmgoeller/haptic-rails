@@ -48,6 +48,34 @@ haptic-button-segment, haptic-chip {
 }
 
 /**********************************************************************
+ * Dialogs
+ **********************************************************************/
+
+.haptic-dialog {
+  opacity: 0;
+  transition: opacity .4s linear;
+
+  &[open] {
+    opacity: 1;
+  }
+
+  &::backdrop {
+    background-color: transparent;
+    transition: background-color .4s linear;
+  }
+}
+
+@starting-style {
+  .haptic-dialog[open] {
+    opacity: 0;
+
+    &::backdrop {
+      background-color: transparent;
+    }
+  }
+}
+
+/**********************************************************************
  * Dropdowns
  **********************************************************************/
 

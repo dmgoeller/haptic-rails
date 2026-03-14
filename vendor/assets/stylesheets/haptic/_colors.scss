@@ -339,6 +339,10 @@ haptic-button-segment, haptic-chip {
     #FFFFFF40
     );
   }
+
+  &[open]::backdrop {
+    background-color: #00000010;
+  }
 }
 
 /**********************************************************************

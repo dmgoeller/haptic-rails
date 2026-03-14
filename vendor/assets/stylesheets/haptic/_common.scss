@@ -135,7 +135,7 @@ haptic-button-segment, haptic-chip {
     0 6px 10px rgba(0, 0, 0, .16),
     0 3px 6px rgba(0, 0, 0, .23);
 
-  &:open, & > form {
+  &[open], & > form {
     display: flex;
     flex-direction: column;
 
@@ -146,23 +146,23 @@ haptic-button-segment, haptic-chip {
     & > .dialog-segment {
       flex: none;
 
-      &.scrollable {
-        flex: auto;
-        overflow: auto;
-      }
-
       &.buttons {
         display: flex;
         flex-direction: row;
         justify-content: end;
       }
-    }
-  }
 
-  &.message-box .message {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+      &.message {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      &.scrollable {
+        flex: auto;
+        overflow: auto;
+      }
+    }
   }
 }
 

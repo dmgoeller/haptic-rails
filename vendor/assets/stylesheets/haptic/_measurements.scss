@@ -127,6 +127,11 @@ haptic-segmented-button:not(.outlined) {
   $padding: haptic-measure(.75rem, 1.5rem);
   padding: calc(#{$padding} - 1px) 0;
 
+  & > form {
+    max-height: 90vh;
+    max-width: 90vw;
+  }
+
   &, & > form {
     & > .dialog-header {
       padding-bottom: $padding;
@@ -154,14 +159,14 @@ haptic-segmented-button:not(.outlined) {
         gap: haptic-measure(.5rem, 1rem);
       }
 
+      &.message {
+        min-height: haptic-measure(1.75rem, 2.5rem);
+      }
+
       .legend {
         margin-bottom: $padding;
       }
     }
-  }
-
-  &.message-box .message {
-    min-height: haptic-measure(1.75rem, 2.5rem);
   }
 }
 

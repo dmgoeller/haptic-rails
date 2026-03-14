@@ -458,7 +458,11 @@ class HapticNavigationController {
 }
 
 class HapticButtonElement extends HTMLButtonElement {
+  static observedAttributes = ['data-confirm'];
+
+  #eventListeners = new HapticEventListeners();
   #lock = new HapticLock(this);
+  #confirmed = null;
 
   constructor() {
     super();
@@ -472,6 +476,31 @@ class HapticButtonElement extends HTMLButtonElement {
     return this.#lock.activated = value;
   }
 
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (newValue) {
+      this.#confirmed = false;
+
+      this.#eventListeners.add(this, 'click', event => {
+        if (!this.#confirmed) {
+          Haptic.confirm(newValue).then(confirmed => {
+            if (confirmed) {
+              this.#confirmed = true;
+              this.dispatchEvent(
+                new event.constructor(event.type, event)
+              );
+            }
+          }).finally(() => {
+            this.#confirmed = false;
+          });
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      });
+    } else {
+      this.#eventListeners.remove(this);
+    }
+  }
+
   connectedCallback() {
     if (!this.classList.contains('haptic-icon-button')) {
       this.classList.add('haptic-button');
@@ -482,6 +511,8 @@ class HapticButtonElement extends HTMLButtonElement {
   }
 
   disconnectedCallback() {
+    this.#eventListeners.removeAll();
+
     if (this.form instanceof HapticFormElement) {
       this.form.controlRemoved(this);
     }
@@ -2812,39 +2843,46 @@ class HapticTextAreaElement extends HTMLTextAreaElement {
 }
 customElements.define('haptic-textarea', HapticTextAreaElement, { extends: 'textarea' });
 
-function hapticConfirm(message, options = {cancel: 'Cancel', ok: 'Ok'}) {
-  return new Promise(resolve => {
-    const dialog = document.createElement('dialog')
-    dialog.classList.add('haptic-dialog', 'message-box');
+Haptic = {
+  confirm: function(message) {
+    return new Promise(resolve => {
+      const dialog = document.createElement('dialog');
+      dialog.classList.add('haptic-dialog');
 
-    let segment = document.createElement('div');
-    segment.classList.add('dialog-segment', 'message');
-    segment.appendChild(document.createTextNode(message));
-    dialog.appendChild(segment);
+      const messageSegment = document.createElement('div');
+      messageSegment.classList.add('dialog-segment', 'message');
+      messageSegment.appendChild(document.createTextNode(message));
+      dialog.appendChild(messageSegment);
 
-    segment = document.createElement('div');
-    segment.classList.add('dialog-segment', 'buttons');
-    dialog.appendChild(segment);
+      const buttonsSegment = document.createElement('div');
+      buttonsSegment.classList.add('dialog-segment', 'buttons');
+      dialog.appendChild(buttonsSegment);
 
-    let button = document.createElement('button');
-    button.classList.add('haptic-button');
-    button.appendChild(document.createTextNode(options.ok));
-    button.addEventListener('click', () => {
-      dialog.remove();
-      resolve(true);
+      for (let value of [false, true]) {
+        const button = document.createElement('button');
+        button.classList.add('haptic-button');
+        button.value = value ? 'ok' : 'cancel';
+
+        button.appendChild(document.createTextNode(
+          value ? this.labels.ok : this.labels.cancel
+        ));
+        button.addEventListener('mouseover', () => {
+          button.focus();
+        });
+        button.addEventListener('click', () => {
+          dialog.close();
+          setTimeout(() => dialog.remove(), 400);
+          resolve(value);
+        });
+        buttonsSegment.appendChild(button);
+      }
+      document.body.appendChild(dialog);
+      dialog.showModal();
+      dialog.querySelector(`button[value=ok]`).focus();
     });
-    segment.appendChild(button);
-
-    button = document.createElement('button');
-    button.classList.add('haptic-button');
-    button.appendChild(document.createTextNode(options.cancel));
-    button.addEventListener('click', () => {
-      dialog.remove();
-      resolve(false);
-    });
-    segment.appendChild(button);
-
-    document.body.appendChild(dialog);
-    dialog.showModal();
-  });
+  },
+  labels: {
+    cancel: 'Cancel',
+    ok: 'Ok'
+  }
 }
