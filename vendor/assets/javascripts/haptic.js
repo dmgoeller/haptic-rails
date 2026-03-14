@@ -458,7 +458,7 @@ class HapticNavigationController {
 }
 
 class HapticButtonElement extends HTMLButtonElement {
-  static observedAttributes = ['data-confirm'];
+  static observedAttributes = ['data-haptic-confirm'];
 
   #eventListeners = new HapticEventListeners();
   #lock = new HapticLock(this);
@@ -482,7 +482,7 @@ class HapticButtonElement extends HTMLButtonElement {
 
       this.#eventListeners.add(this, 'click', event => {
         if (!this.#confirmed) {
-          Haptic.confirm(newValue).then(confirmed => {
+          Haptic.confirm.show(newValue).then(confirmed => {
             if (confirmed) {
               this.#confirmed = true;
               this.dispatchEvent(
@@ -2844,45 +2844,43 @@ class HapticTextAreaElement extends HTMLTextAreaElement {
 customElements.define('haptic-textarea', HapticTextAreaElement, { extends: 'textarea' });
 
 Haptic = {
-  confirm: function(message) {
-    return new Promise(resolve => {
-      const dialog = document.createElement('dialog');
-      dialog.classList.add('haptic-dialog');
-
-      const messageSegment = document.createElement('div');
-      messageSegment.classList.add('dialog-segment', 'message');
-      messageSegment.appendChild(document.createTextNode(message));
-      dialog.appendChild(messageSegment);
-
-      const buttonsSegment = document.createElement('div');
-      buttonsSegment.classList.add('dialog-segment', 'buttons');
-      dialog.appendChild(buttonsSegment);
-
-      for (let value of [false, true]) {
-        const button = document.createElement('button');
-        button.classList.add('haptic-button');
-        button.value = value ? 'ok' : 'cancel';
-
-        button.appendChild(document.createTextNode(
-          value ? this.labels.ok : this.labels.cancel
-        ));
-        button.addEventListener('mouseover', () => {
-          button.focus();
-        });
-        button.addEventListener('click', () => {
-          dialog.close();
-          setTimeout(() => dialog.remove(), 400);
-          resolve(value);
-        });
-        buttonsSegment.appendChild(button);
-      }
-      document.body.appendChild(dialog);
-      dialog.showModal();
-      dialog.querySelector(`button[value=ok]`).focus();
-    });
-  },
-  labels: {
+  confirm: {
     cancel: 'Cancel',
-    ok: 'Ok'
+    ok: 'Ok',
+    show: function(message) {
+      return new Promise(resolve => {
+        const dialog = document.createElement('dialog');
+        dialog.classList.add('haptic-dialog');
+
+        const messageSegment = document.createElement('div');
+        messageSegment.classList.add('dialog-segment', 'message');
+        messageSegment.appendChild(document.createTextNode(message));
+        dialog.appendChild(messageSegment);
+
+        const buttonsSegment = document.createElement('div');
+        buttonsSegment.classList.add('dialog-segment', 'buttons');
+        dialog.appendChild(buttonsSegment);
+
+        for (let value of [false, true]) {
+          const button = document.createElement('button');
+          button.classList.add('haptic-button');
+          button.value = value ? 'ok' : 'cancel';
+
+          button.appendChild(document.createTextNode(value ? this.ok : this.cancel));
+          button.addEventListener('mouseover', () => {
+            button.focus();
+          });
+          button.addEventListener('click', () => {
+            dialog.close();
+            dialog.remove();
+            resolve(value);
+          });
+          buttonsSegment.appendChild(button);
+        }
+        document.body.appendChild(dialog);
+        dialog.showModal();
+        dialog.querySelector(`button[value=ok]`).focus();
+      });
+    }
   }
 }
