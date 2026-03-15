@@ -1022,9 +1022,9 @@ haptic-list-item {
  **********************************************************************/
 
 table.haptic-table {
-  $cell-margin-left-right: .5rem;
-  $cell-padding-left-right: .5rem;
-  $cell-padding-top-bottom: .25rem;
+  $cell-margin-left-right: haptic-measure(.5rem, 1rem);
+  $cell-padding-left-right: haptic-measure(.5rem, 1rem);
+  $cell-padding-top-bottom: haptic-measure(.25rem, .5rem);
 
   th, td {
     padding-left: $cell-padding-left-right;
