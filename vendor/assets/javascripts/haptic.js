@@ -2636,6 +2636,7 @@ class HapticSelectElement extends HTMLSelectElement {
 customElements.define('haptic-select', HapticSelectElement, { extends: 'select' });
 
 class HapticTableElement extends HTMLTableElement {
+  #eventListeners = new HapticEventListeners();
   #navigationController = null;
 
   #childNodesObserver = new HapticChildNodesObserver({
@@ -2650,11 +2651,19 @@ class HapticTableElement extends HTMLTableElement {
           }
           this.#navigationController.add(node);
         }
+      } else
+      if (node instanceof HapticInputElement) {
+        this.#eventListeners.add(node, 'click', event => {
+          event.stopPropagation();
+        });
       }
     },
     nodeRemoved: node => {
       if (node instanceof HTMLTableRowElement) {
         this.#navigationController?.remove(node);
+      } else
+      if (node instanceof HapticInputElement) {
+        this.#eventListeners.remove(node);
       }
     }
   });
@@ -2671,6 +2680,7 @@ class HapticTableElement extends HTMLTableElement {
   disconnectedCallback() {
     this.#childNodesObserver.disconnect();
     this.#navigationController?.disconnect();
+    this.#eventListeners.removeAll();
   }
 }
 customElements.define('haptic-table', HapticTableElement, { extends: 'table' });

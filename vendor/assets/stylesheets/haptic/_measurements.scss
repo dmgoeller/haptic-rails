@@ -1026,12 +1026,22 @@ table.haptic-table {
   $cell-padding-left-right: .5rem;
   $cell-padding-top-bottom: .25rem;
 
+  th, td {
+    padding-left: $cell-padding-left-right;
+    padding-right: $cell-padding-left-right;
+    padding-top: $cell-padding-top-bottom;
+
+    &:first-child {
+      padding-left: $cell-padding-left-right + $cell-margin-left-right;
+    }
+
+    &:last-child {
+      padding-right: $cell-padding-left-right + $cell-margin-left-right;
+    }
+  }
+
   th {
-    padding:
-      $cell-padding-top-bottom
-      $cell-padding-left-right
-      calc(#{$cell-padding-top-bottom} + 1px)
-      $cell-padding-left-right;
+    padding-bottom: calc(#{$cell-padding-top-bottom} + 1px);
     top: 0;
 
     &:before {
@@ -1042,8 +1052,7 @@ table.haptic-table {
   }
 
   td {
-    padding:
-      $cell-padding-top-bottom $cell-padding-left-right;
+    padding-bottom: $cell-padding-top-bottom;
 
     &:before, &:after {
       box-sizing: border-box;
@@ -1054,8 +1063,6 @@ table.haptic-table {
     }
 
     &:first-child {
-      padding-left: $cell-padding-left-right + $cell-margin-left-right;
-
       &:before, &:after {
         left: .5rem;
         width: calc(100% - #{$cell-padding-left-right});
@@ -1063,8 +1070,6 @@ table.haptic-table {
     }
 
     &:last-child {
-      padding-right: $cell-padding-left-right + $cell-margin-left-right;
-
       &:before, &:after {
         width: calc(100% - #{$cell-padding-left-right});
       }
