@@ -810,6 +810,10 @@ table.haptic-table {
       #FFFFFF10
     );
   }
+
+  &:focus-visible tr.focused td:after {
+    @include haptic-primary-color('border-color');
+  }
 }
 
 /**********************************************************************

@@ -2635,6 +2635,46 @@ class HapticSelectElement extends HTMLSelectElement {
 }
 customElements.define('haptic-select', HapticSelectElement, { extends: 'select' });
 
+class HapticTableElement extends HTMLTableElement {
+  #navigationController = null;
+
+  #childNodesObserver = new HapticChildNodesObserver({
+    nodeAdded: node => {
+      if (node instanceof HTMLTableRowElement) {
+        if (node.onclick) {
+          if (!this.#navigationController) {
+            this.#navigationController =
+              new HapticNavigationController(this, {
+              vertical: true
+            });
+          }
+          this.#navigationController.add(node);
+        }
+      }
+    },
+    nodeRemoved: node => {
+      if (node instanceof HTMLTableRowElement) {
+        this.#navigationController?.remove(node);
+      }
+    }
+  });
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.classList.add('haptic-table');
+    this.#childNodesObserver.observe(this);
+  }
+
+  disconnectedCallback() {
+    this.#childNodesObserver.disconnect();
+    this.#navigationController?.disconnect();
+  }
+}
+customElements.define('haptic-table', HapticTableElement, { extends: 'table' });
+
 class HapticTabsElement extends HTMLElement {
   #eventListeners = new HapticEventListeners();
   #mutationObservers = new Map();

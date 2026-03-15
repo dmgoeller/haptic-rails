@@ -575,20 +575,27 @@ haptic-list-item {
  **********************************************************************/
 
 table.haptic-table {
-  th, td {
+  tr[onclick] {
+    cursor: pointer;
+  }
+
+  th {
+    position: sticky;
+    z-index: 1;
+
     &:before {
       content: '\200b';
       position: absolute;
     }
   }
 
-  th {
-    position: sticky;
-    z-index: 1;
-  }
-
   td {
     position: relative;
+
+    &:before, &:after {
+      content: '\200b';
+      position: absolute;
+    }
   }
 }
 

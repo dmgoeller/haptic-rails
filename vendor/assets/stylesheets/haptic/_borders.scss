@@ -280,6 +280,11 @@ table.haptic-table {
   $row-border-radius: .25rem;
 
   border-collapse: collapse;
+  outline: none;
+
+  tr {
+    border-radius: $row-border-radius;
+  }
 
   th:before {
     border-bottom-style: solid;
@@ -287,14 +292,37 @@ table.haptic-table {
   }
 
   td {
-    &:first-child:before {
-      border-bottom-left-radius: $row-border-radius;
-      border-top-left-radius: $row-border-radius;
+    &:first-child {
+      &:before, &:after {
+        border-bottom-left-radius: $row-border-radius;
+        border-top-left-radius: $row-border-radius;
+      }
     }
 
-    &:first-child:before {
-      border-bottom-right-radius: $row-border-radius;
-      border-top-right-radius: $row-border-radius;
+    &:last-child {
+      &:before, &:after {
+        border-bottom-right-radius: $row-border-radius;
+        border-top-right-radius: $row-border-radius;
+      }
+    }
+  }
+
+  &:focus-visible tr.focused td {
+    &:after {
+      border-bottom-style: solid;
+      border-bottom-width: 2px;
+      border-top-style: solid;
+      border-top-width: 2px;
+    }
+
+    &:first-child:after {
+      border-left-style: solid;
+      border-left-width: 2px;
+    }
+
+    &:last-child:after {
+      border-right-style: solid;
+      border-right-width: 2px;
     }
   }
 }
