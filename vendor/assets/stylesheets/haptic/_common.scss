@@ -581,6 +581,7 @@ table.haptic-table {
 
     &:before {
       content: '\200b';
+      pointer-events: none;
       position: absolute;
     }
   }
@@ -590,6 +591,7 @@ table.haptic-table {
 
     &:before, &:after {
       content: '\200b';
+      pointer-events: none;
       position: absolute;
     }
   }

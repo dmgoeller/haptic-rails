@@ -226,10 +226,6 @@ class HapticFocusable {
 
     if (value && !classList.contains('focused')) {
       classList.add('focused');
-
-      if (typeof this.#target.scrollIntoViewIfNeeded === 'function') {
-        this.#target.scrollIntoViewIfNeeded();
-      }
     } else
     if (!value && classList.contains('focused')) {
       classList.remove('focused');
@@ -241,7 +237,9 @@ class HapticFocusable {
 class HapticNavigationController {
   #eventListeners = new HapticEventListeners();
   #initialTabIndices = new Map();
+  #scrollContainer = null;
   #target = null;
+  #vertical = false;
   #elements = [];
   #focused = false;
   #mouse = false;
@@ -264,7 +262,7 @@ class HapticNavigationController {
   }
 
   constructor(target, options = {}) {
-    const vertical = options.vertical === true;
+    this.#vertical = options.vertical === true;
 
     target.tabIndex = Math.max(target.tabIndex, 0);
     this.#target = target;
@@ -287,6 +285,7 @@ class HapticNavigationController {
         }
         if (elementToBeFocused) {
           elementToBeFocused.focused = true;
+          this.#scrollIntoView(elementToBeFocused.target);
         }
       }
       this.#focused = true;
@@ -308,8 +307,8 @@ class HapticNavigationController {
           this.#focusedElement?.target.click();
           event.preventDefault();
         } else
-        if ((vertical && key === 'ArrowUp') ||
-           (!vertical && key === 'ArrowLeft')) {
+        if ((this.#vertical && key === 'ArrowUp') ||
+           (!this.#vertical && key === 'ArrowLeft')) {
           let focusedElement = null;
           let elementToBeFocused = null;
 
@@ -331,13 +330,14 @@ class HapticNavigationController {
             }
             if (elementToBeFocused) {
               elementToBeFocused.focused = true;
+              this.#scrollIntoView(elementToBeFocused.target);
             }
           }
           event.preventDefault();
           event.stopPropagation();
         } else
-        if ((vertical && key === 'ArrowDown') ||
-           (!vertical && key === 'ArrowRight')) {
+        if ((this.#vertical && key === 'ArrowDown') ||
+           (!this.#vertical && key === 'ArrowRight')) {
           let focusedElement = null;
           let elementToBeFocused = null;
 
@@ -359,6 +359,7 @@ class HapticNavigationController {
             }
             if (elementToBeFocused) {
               elementToBeFocused.focused = true;
+              this.#scrollIntoView(elementToBeFocused.target);
             }
           }
           event.preventDefault();
@@ -368,16 +369,26 @@ class HapticNavigationController {
     });
     this.#eventListeners.add(target, 'keyup', event => {
       const key = event.key;
-      if ((vertical &&
+      if ((this.#vertical &&
           (key === 'ArrowUp' ||
            key === 'ArrowDown')) ||
-         (!vertical &&
+         (!this.#vertical &&
           (key === 'ArrowLeft' ||
            key === 'ArrowRight'))) {
         event.preventDefault();
         event.stopPropagation();
       }
     });
+
+    for (let e = target; e; e = e.parentElement) {
+      const style = getComputedStyle(e);
+      const overflow = this.#vertical ? style.overflowY : style.overflowX;
+
+      if (overflow !== 'visible' || e.tagName === 'BODY') {
+        this.#scrollContainer = e;
+        break;
+      }
+    }
   }
 
   add(element) {
@@ -398,6 +409,7 @@ class HapticNavigationController {
           if (!this.#target.focused) {
             this.#target.focus();
           }
+          this.#scrollIntoView(event.target);
         }
       });
       this.#eventListeners.add(element, 'mouseout', () => {
@@ -433,7 +445,10 @@ class HapticNavigationController {
     for (let i = 0; i < this.#elements.length; i++) {
       const element = this.#elements[i];
 
-      focusSet ||= element.focused = (!focusSet && !element.disabled);
+      if (element.focused = (!focusSet && !element.disabled)) {
+        this.#scrollIntoView(element.target);
+        focusSet = true;
+      }
     }
   }
 
@@ -443,7 +458,10 @@ class HapticNavigationController {
     for (let i = this.#elements.length - 1; i >= 0; i--) {
       const element = this.#elements[i];
 
-      focusSet ||= element.focused = (!focusSet && !element.disabled);
+      if (element.focused = (!focusSet && !element.disabled)) {
+        this.#scrollIntoView(element.target);
+        focusSet = true;
+      }
     }
   }
 
@@ -454,6 +472,29 @@ class HapticNavigationController {
   reset() {
     this.#focusedElement = null;
     this.#preventNextMouseEvent = false;
+  }
+
+  #scrollIntoView(element) {
+    if (this.#scrollContainer) {
+      const elementRect = element.getBoundingClientRect();
+      const scrollRect = this.#scrollContainer.getBoundingClientRect();
+
+      if (this.#vertical) {
+        if (elementRect.top < scrollRect.top) {
+          this.#scrollContainer.scrollTop -= scrollRect.top - elementRect.top;
+        } else
+        if (elementRect.bottom > scrollRect.bottom) {
+          this.#scrollContainer.scrollTop += elementRect.bottom - scrollRect.bottom;
+        }
+      } else {
+        if (elementRect.left < scrollRect.left) {
+          this.#scrollContainer.scrollLeft -= scrollRect.left - elementRect.left;
+        } else
+        if (elementRect.right > scrollRect.right) {
+          this.#scrollContainer.scrollLeft += elementRect.right - scrollRect.right;
+        }
+      }
+    }
   }
 }
 
@@ -2679,14 +2720,15 @@ class HapticTableRowElement extends HTMLTableRowElement {
   #eventListeners = new HapticEventListeners();
 
   #clickEventHandler = event => {
-    if (this.href && !event.target.hasAttribute('data-contains-interactive-elements')) {
+    if (this.href) {
       window.location.href = this.href;
     }
   };
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
-      if (node instanceof HTMLTableCellElement) {
+      if (node instanceof HTMLTableCellElement &&
+          !node.hasAttribute('data-contains-interactive-elements')) {
         this.#eventListeners.add(node, 'click', this.#clickEventHandler);
       }
     },
