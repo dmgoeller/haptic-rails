@@ -2683,13 +2683,11 @@ class HapticTableElement extends HTMLTableElement {
     nodeAdded: node => {
       if (node instanceof HapticTableRowElement) {
         if (node.href) {
-          if (!this.#navigationController) {
-            this.#navigationController =
-              new HapticNavigationController(this, {
+          (this.#navigationController ||=
+            new HapticNavigationController(this, {
               vertical: true
-            });
-          }
-          this.#navigationController.add(node);
+            })
+          ).add(node);
         }
       }
     },
@@ -2717,27 +2715,9 @@ class HapticTableElement extends HTMLTableElement {
 customElements.define('haptic-table', HapticTableElement, { extends: 'table' });
 
 class HapticTableRowElement extends HTMLTableRowElement {
-  #eventListeners = new HapticEventListeners();
+  static observedAttributes = ['data-href'];
 
-  #clickEventHandler = event => {
-    if (this.href) {
-      window.location.href = this.href;
-    }
-  };
-
-  #childNodesObserver = new HapticChildNodesObserver({
-    nodeAdded: node => {
-      if (node instanceof HTMLTableCellElement &&
-          !node.hasAttribute('data-contains-interactive-elements')) {
-        this.#eventListeners.add(node, 'click', this.#clickEventHandler);
-      }
-    },
-    nodeRemoved: node => {
-      if (node instanceof HTMLTableCellElement) {
-        this.#eventListeners.remove(node);
-      }
-    }
-  });
+  #eventListeners = null;
 
   constructor() {
     super();
@@ -2747,15 +2727,23 @@ class HapticTableRowElement extends HTMLTableRowElement {
     return this.getAttribute('data-href');
   }
 
-  connectedCallback() {
-    this.#childNodesObserver.observe(this);
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue === null && newValue !== null) {
+      (this.#eventListeners ||= new HapticEventListeners())
+        .add(this, 'click', event => {
+          if (event.target instanceof HTMLTableCellElement) {
+            window.location.href = this.href;
+          }
+        });
+    } else
+    if (newValue === null) {
+      this.#eventListeners?.remove(this);
+    }
   }
 
   disconnectedCallback() {
-    this.#childNodesObserver.disconnect();
-    this.#eventListeners.removeAll();
+    this.#eventListeners?.removeAll();
   }
-
 }
 customElements.define('haptic-table-row', HapticTableRowElement, { extends: 'tr' });
 
