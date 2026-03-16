@@ -574,8 +574,8 @@ haptic-list-item {
  * Tables
  **********************************************************************/
 
-table.haptic-table {
-  th {
+.haptic-table {
+  .table-header {
     position: sticky;
     z-index: 1;
 
@@ -586,7 +586,7 @@ table.haptic-table {
     }
   }
 
-  td {
+  .table-data {
     position: relative;
 
     &:before, &:after {
@@ -596,7 +596,7 @@ table.haptic-table {
     }
   }
 
-  tr[data-href] td:not([data-contains-interactive-elements]) {
+  .table-row[data-href] {
     cursor: pointer;
   }
 }

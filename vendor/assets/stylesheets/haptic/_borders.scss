@@ -276,38 +276,34 @@ haptic-list-item {
  * Tables
  **********************************************************************/
 
-table.haptic-table {
-  $row-border-radius: .25rem;
+.haptic-table {
+  $border-radius: .25rem;
 
   border-collapse: collapse;
   outline: none;
 
-  tr {
-    border-radius: $row-border-radius;
-  }
-
-  th:before {
+  .table-header:before {
     border-bottom-style: solid;
     border-bottom-width: 1px;
   }
 
-  td {
+  .table-data {
     &:first-child {
       &:before, &:after {
-        border-bottom-left-radius: $row-border-radius;
-        border-top-left-radius: $row-border-radius;
+        border-bottom-left-radius: $border-radius;
+        border-top-left-radius: $border-radius;
       }
     }
 
     &:last-child {
       &:before, &:after {
-        border-bottom-right-radius: $row-border-radius;
-        border-top-right-radius: $row-border-radius;
+        border-bottom-right-radius: $border-radius;
+        border-top-right-radius: $border-radius;
       }
     }
   }
 
-  &:focus-visible tr.focused td {
+  &:focus-visible .table-row.focused .table-data {
     &:after {
       border-bottom-style: solid;
       border-bottom-width: 2px;

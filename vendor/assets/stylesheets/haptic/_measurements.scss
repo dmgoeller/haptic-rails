@@ -1021,12 +1021,12 @@ haptic-list-item {
  * Tables
  **********************************************************************/
 
-table.haptic-table {
+.haptic-table {
   $cell-margin-left-right: haptic-measure(.5rem, 1rem);
   $cell-padding-left-right: haptic-measure(.5rem, 1rem);
   $cell-padding-top-bottom: haptic-measure(.25rem, .5rem);
 
-  th, td {
+  .table-header, .table-data {
     padding-left: $cell-padding-left-right;
     padding-right: $cell-padding-left-right;
     padding-top: $cell-padding-top-bottom;
@@ -1040,7 +1040,7 @@ table.haptic-table {
     }
   }
 
-  th {
+  .table-header {
     padding-bottom: calc(#{$cell-padding-top-bottom} + 1px);
     top: 0;
 
@@ -1051,7 +1051,7 @@ table.haptic-table {
     }
   }
 
-  td {
+  .table-data {
     padding-bottom: $cell-padding-top-bottom;
 
     &:before, &:after {

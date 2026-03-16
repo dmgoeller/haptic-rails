@@ -792,18 +792,16 @@ haptic-list-item {
  * Tables
  **********************************************************************/
 
-table.haptic-table {
-  th {
-    &:before {
-      @include haptic-light-dark(
-        'border-color',
-        #00000030,
-        #FFFFFF30
-      );
-    }
+.haptic-table {
+  .table-header:before {
+    @include haptic-light-dark(
+      'border-color',
+      #00000030,
+      #FFFFFF30
+    );
   }
 
-  tbody tr:nth-child(even) td:before {
+  .table-row:nth-child(even) .table-data:before {
     @include haptic-light-dark(
       'background-color',
       #00000010,
@@ -811,7 +809,7 @@ table.haptic-table {
     );
   }
 
-  &:focus-visible tr.focused td:after {
+  &:focus-visible .table-row.focused .table-data:after {
     @include haptic-primary-color('border-color');
   }
 }

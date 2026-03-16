@@ -1,0 +1,60 @@
+# frozen_string_literal: true
+
+require 'test_helper'
+
+module Haptic
+  module Rails
+    class TableBuilderTest < ActionView::TestCase
+
+      def test_row
+        assert_dom_equal(
+          <<~HTML,
+            <tr is="haptic-table-row"></tr>
+          HTML
+          table_builder.row
+        )
+      end
+
+      def test_row_with_href
+        assert_dom_equal(
+          <<~HTML,
+            <tr is="haptic-table-row" data-href="/"></tr>
+          HTML
+          table_builder.row(href: '/')
+        )
+      end
+
+      def test_row_with_block
+        assert_dom_equal(
+          <<~HTML,
+            <tr is="haptic-table-row">
+              <td>Cell</td>
+            </tr>
+          HTML
+          table_builder.row do |row|
+            row.data 'Cell'
+          end
+        )
+      end
+
+      def test_row_with_block_and_href
+        assert_dom_equal(
+          <<~HTML,
+            <tr is="haptic-table-row" data-href="/">
+              <td>Cell</td>
+            </tr>
+          HTML
+          table_builder.row(href: '/') do |row|
+            row.data 'Cell'
+          end
+        )
+      end
+
+      private
+
+      def table_builder
+        TableBuilder.new(self)
+      end
+    end
+  end
+end

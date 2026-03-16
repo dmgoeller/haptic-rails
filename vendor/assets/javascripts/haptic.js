@@ -2717,7 +2717,7 @@ class HapticTableRowElement extends HTMLTableRowElement {
   static observedAttributes = ['data-href'];
 
   #eventListeners = null;
-  #preventNextMouseEvent = false;
+  #skipNextClickEvent = false;
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
@@ -2727,8 +2727,17 @@ class HapticTableRowElement extends HTMLTableRowElement {
           node instanceof HapticSelectDropdownElement) {
         (this.#eventListeners ||= new HapticEventListeners())
           .add(node, 'click', () => {
-            this.#preventNextMouseEvent = true;
+            this.#skipNextClickEvent = true;
           }, { capture: true });
+      } else
+      if (node instanceof HTMLTableCellElement) {
+        switch (node.tagName) {
+          case 'TD':
+            node.classList.add('table-data');
+            break;
+          case 'TH':
+            node.classList.add('table-header');
+        }
       }
     },
     nodeRemoved: node => {
@@ -2753,8 +2762,8 @@ class HapticTableRowElement extends HTMLTableRowElement {
     if (oldValue === null && newValue !== null) {
       (this.#eventListeners ||= new HapticEventListeners())
         .add(this, 'click', () => {
-          if (this.#preventNextMouseEvent) {
-            this.#preventNextMouseEvent = false;
+          if (this.#skipNextClickEvent) {
+            this.#skipNextClickEvent = false;
           } else {
             window.location.href = this.href;
           }
@@ -2766,6 +2775,7 @@ class HapticTableRowElement extends HTMLTableRowElement {
   }
 
   connectedCallback() {
+    this.classList.add('table-row');
     this.#childNodesObserver.observe(this);
   }
 
