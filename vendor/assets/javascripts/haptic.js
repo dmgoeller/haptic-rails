@@ -285,7 +285,6 @@ class HapticNavigationController {
         }
         if (elementToBeFocused) {
           elementToBeFocused.focused = true;
-          this.#scrollIntoView(elementToBeFocused.target);
         }
       }
       this.#focused = true;
@@ -2718,6 +2717,29 @@ class HapticTableRowElement extends HTMLTableRowElement {
   static observedAttributes = ['data-href'];
 
   #eventListeners = null;
+  #preventNextMouseEvent = false;
+
+  #childNodesObserver = new HapticChildNodesObserver({
+    nodeAdded: node => {
+      if (node instanceof HapticButtonElement ||
+          node instanceof HapticInputElement ||
+          node instanceof HapticSelectElement ||
+          node instanceof HapticSelectDropdownElement) {
+        (this.#eventListeners ||= new HapticEventListeners())
+          .add(node, 'click', () => {
+            this.#preventNextMouseEvent = true;
+          }, { capture: true });
+      }
+    },
+    nodeRemoved: node => {
+      if (node instanceof HapticButtonElement ||
+          node instanceof HapticInputElement ||
+          node instanceof HapticSelectElement ||
+          node instanceof HapticSelectDropdownElement) {
+        this.#eventListeners?.remove(node);
+      }
+    }
+  });
 
   constructor() {
     super();
@@ -2730,8 +2752,10 @@ class HapticTableRowElement extends HTMLTableRowElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue === null && newValue !== null) {
       (this.#eventListeners ||= new HapticEventListeners())
-        .add(this, 'click', event => {
-          if (event.target instanceof HTMLTableCellElement) {
+        .add(this, 'click', () => {
+          if (this.#preventNextMouseEvent) {
+            this.#preventNextMouseEvent = false;
+          } else {
             window.location.href = this.href;
           }
         });
@@ -2741,7 +2765,12 @@ class HapticTableRowElement extends HTMLTableRowElement {
     }
   }
 
+  connectedCallback() {
+    this.#childNodesObserver.observe(this);
+  }
+
   disconnectedCallback() {
+    this.#childNodesObserver.disconnect();
     this.#eventListeners?.removeAll();
   }
 }
