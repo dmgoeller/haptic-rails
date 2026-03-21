@@ -162,11 +162,21 @@ haptic-list-item .supporting-text {
   }
 
   .nav-item {
-    text-decoration: none;
+    text-decoration: inherit;
 
     .leading-icon {
       font-size: haptic-measure(1.125rem, 1.5rem);
     }
+  }
+}
+
+/**********************************************************************
+ * Tables
+ **********************************************************************/
+
+haptic-table-like {
+  a.table-row {
+    text-decoration: inherit;
   }
 }
 
@@ -180,5 +190,5 @@ haptic-list-item .supporting-text {
 }
 
 a.haptic-tab {
-  text-decoration: none;
+  text-decoration: inherit;
 }

@@ -113,6 +113,17 @@ module Haptic
           )
         end
 
+        def test_haptic_dropdown_tag_with_options
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-dropdown class="custom">
+                <div class="backdrop"></div>
+              </haptic-dropdown>
+            HTML
+            haptic_dropdown_tag(class: 'custom')
+          )
+        end
+
         def test_haptic_dropdown_tag_with_block
           assert_dom_equal(
             <<~HTML,

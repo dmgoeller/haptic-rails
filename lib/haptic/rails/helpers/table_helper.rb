@@ -8,11 +8,17 @@ module Haptic
         #
         # Creates a <code><table></code> tag.
         def haptic_table(options = {})
-          options = options.stringify_keys
-          options['is'] = 'haptic-table'
-
-          content_tag('table', options) do
+          content_tag('table', options.merge(is: 'haptic-table')) do
             yield TableBuilder.new(self) if block_given?
+          end
+        end
+
+        # :call-seq: haptic-table_like(options = {}, &block)
+        #
+        # Creates a <code><haptic-table-like></code> tag.
+        def haptic_table_like(options = {})
+          content_tag('haptic-table-like', options) do
+            yield TableLikeBuilder.new(self) if block_given?
           end
         end
       end

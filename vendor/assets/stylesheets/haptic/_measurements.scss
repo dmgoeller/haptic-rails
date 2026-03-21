@@ -1021,57 +1021,91 @@ haptic-list-item {
  * Tables
  **********************************************************************/
 
-.haptic-table {
-  $cell-margin-left-right: haptic-measure(.5rem, 1rem);
+@at-root {
+  $padding-left-right: haptic-measure(.5rem, 1rem);
   $cell-padding-left-right: haptic-measure(.5rem, 1rem);
   $cell-padding-top-bottom: haptic-measure(.25rem, .5rem);
 
-  .table-header, .table-data {
-    padding-left: $cell-padding-left-right;
-    padding-right: $cell-padding-left-right;
-    padding-top: $cell-padding-top-bottom;
-
-    &:first-child {
-      padding-left: $cell-padding-left-right + $cell-margin-left-right;
-    }
-
-    &:last-child {
-      padding-right: $cell-padding-left-right + $cell-margin-left-right;
-    }
-  }
-
-  .table-header {
-    padding-bottom: calc(#{$cell-padding-top-bottom} + 1px);
+  table.haptic-table thead,
+  haptic-table-like .table-header {
     top: 0;
-
-    &:before {
-      bottom: 0;
-      left: 0;
-      width: 100%;
-    }
   }
 
-  .table-data {
-    padding-bottom: $cell-padding-top-bottom;
+  table.haptic-table tfoot,
+  haptic-table-like .table-footer {
+    bottom: 0;
+  }
 
+  table.haptic-table tbody tr,
+  haptic-table-like .table-body .table-row {
     &:before, &:after {
       box-sizing: border-box;
       height: 100%;
-      left: 0;
+      left: $padding-left-right;
       top: 0;
-      width: 100%
+      width: calc(100% - 2 * #{$padding-left-right});
     }
+  }
 
-    &:first-child {
-      &:before, &:after {
-        left: .5rem;
-        width: calc(100% - #{$cell-padding-left-right});
+  table.haptic-table {
+    thead, tfoot {
+      tr:before {
+        left: 0;
+        width: 100%;
       }
     }
 
-    &:last-child {
-      &:before, &:after {
-        width: calc(100% - #{$cell-padding-left-right});
+    thead tr:before {
+      bottom: 0;
+    }
+
+    tfoot tr:before {
+      top: 0;
+    }
+
+    td, th {
+      padding-left: $cell-padding-left-right;
+      padding-right: $cell-padding-left-right;
+      padding-top: $cell-padding-top-bottom;
+
+      &:first-of-type {
+        padding-left: $padding-left-right + $cell-padding-left-right;
+      }
+
+      &:last-of-type {
+        padding-right: $padding-left-right + $cell-padding-left-right;
+      }
+    }
+
+    thead tr {
+      td, th {
+        padding-bottom: calc(#{$cell-padding-top-bottom} + 1px);
+      }
+    }
+
+    tfoot tr {
+      td, th {
+        padding-top: calc(#{$cell-padding-top-bottom} + 1px);
+      }
+    }
+
+    tbody tr {
+      td, th {
+        padding-bottom: $cell-padding-top-bottom;
+      }
+    }
+  }
+
+  haptic-table-like {
+    .table-row {
+      padding:
+        $cell-padding-top-bottom
+        $padding-left-right + $cell-padding-left-right;
+
+      &.grid {
+        display: grid;
+        grid-column-gap: $cell-padding-left-right * 2;
+        grid-row-gap: $cell-padding-top-bottom * 2;
       }
     }
   }

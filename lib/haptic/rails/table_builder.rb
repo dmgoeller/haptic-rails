@@ -11,9 +11,9 @@ module Haptic
       #
       # Creates a <code><tr></code> tag.
       def row(options = {})
-        options = options.stringify_keys
-        options['is'] = 'haptic-table-row'
-        options['data-href'] ||= options.delete('href')
+        options = options.dup
+        options[:is] = 'haptic-table-row'
+        options[:'data-href'] ||= options.delete(:href)
 
         if block_given?
           @builder.content_tag('tr', options) do

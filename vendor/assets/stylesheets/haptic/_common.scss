@@ -574,30 +574,37 @@ haptic-list-item {
  * Tables
  **********************************************************************/
 
-.haptic-table {
-  .table-header {
-    position: sticky;
-    z-index: 1;
+table.haptic-table thead,
+table.haptic-table tfoot,
+haptic-table-like .table-header,
+haptic-table-like .table-footer {
+  position: sticky;
+  z-index: 1;
+}
 
-    &:before {
-      content: '\200b';
-      pointer-events: none;
-      position: absolute;
-    }
+table.haptic-table tbody tr,
+haptic-table-like .table-body .table-row {
+  position: relative;
+
+  &:before, &:after {
+    content: '\200b';
+    pointer-events: none;
+    position: absolute;
   }
+}
 
-  .table-data {
-    position: relative;
+table.haptic-table tbody tr[data-href] {
+  cursor: pointer;
+}
 
-    &:before, &:after {
-      content: '\200b';
-      pointer-events: none;
-      position: absolute;
-    }
-  }
+table.haptic-table thead tr,
+table.haptic-table tfoot tr {
+  position: relative;
 
-  .table-row[data-href] {
-    cursor: pointer;
+  &:before {
+    content: '\200b';
+    pointer-events: none;
+    position: absolute;
   }
 }
 
