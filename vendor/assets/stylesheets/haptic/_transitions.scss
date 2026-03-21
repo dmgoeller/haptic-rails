@@ -11,7 +11,7 @@
 
 button, input[type="submit"] {
   &.haptic-button, &.haptic-icon-button {
-    &:focus, &:focus-visible {
+    &:focus-visible {
       transition-delay: 0;
     }
   }

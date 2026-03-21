@@ -327,7 +327,7 @@ haptic-dropdown-field, haptic-text-field {
       }
     }
 
-    &:focus-within {
+    &:has(:focus-visible) {
       &.field-container, & > .field-container {
         &::after {
           opacity: 1;

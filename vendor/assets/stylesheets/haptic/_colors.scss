@@ -158,7 +158,6 @@ $haptic-dark-mode: true !default;
       background-color: $haptic-dark-red;
     }
     &:hover:not(:disabled),
-    &:focus,
     &:focus-visible,
     haptic-dropdown-dialog:focus-visible &.toggle,
     haptic-dropdown-menu:focus-visible &.toggle {
@@ -193,7 +192,6 @@ $haptic-dark-mode: true !default;
   }
 
   &:hover:not(:disabled),
-  &:focus,
   &:focus-visible,
   haptic-dropdown-dialog:focus-visible &.toggle,
   haptic-dropdown-menu:focus-visible &.toggle {
@@ -228,7 +226,6 @@ $haptic-dark-mode: true !default;
 
 .haptic-icon-button:not(.filled) {
   &:hover:not(:disabled),
-  &:focus,
   &:focus-visible,
   haptic-dropdown-dialog:focus-visible &.toggle,
   haptic-dropdown-menu:focus-visible &.toggle {
