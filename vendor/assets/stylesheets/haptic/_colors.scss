@@ -90,6 +90,14 @@ $haptic-dark-mode: true !default;
   );
 }
 
+@mixin haptic-focused-color($property: 'outline-color') {
+  #{$property}: transparent;
+
+  &:focus-visible {
+    @include haptic-primary-color($property);
+  }
+}
+
 /**********************************************************************
  * Badges
  **********************************************************************/
@@ -558,6 +566,8 @@ haptic-text-field {
  **********************************************************************/
 
 .haptic-checkbox, .haptic-radio-button {
+  @include haptic-focused-color();
+
   &, &::after {
     background-color: transparent;
   }
@@ -576,23 +586,6 @@ haptic-text-field {
 
   &:checked::after {
     @include haptic-primary-color('background-color');
-  }
-
-  &:not(.embedded) {
-    outline-color: transparent;
-
-    &:focus-visible {
-      @include haptic-light-dark(
-        'background-color',
-        #00000020,
-        #FFFFFF20
-      );
-      @include haptic-light-dark(
-        'outline-color',
-        #00000020,
-        #FFFFFF20
-      );
-    }
   }
 }
 
@@ -617,6 +610,8 @@ haptic-text-field {
  **********************************************************************/
 
 .haptic-switch {
+  @include haptic-focused-color();
+
   background-color: transparent;
 
   &.filled {
@@ -677,20 +672,6 @@ haptic-text-field {
       }
     }
   }
-
-  &:not(.embedded) {
-    &::after {
-      outline-color: transparent;
-    }
-
-    &:focus-visible::after {
-      @include haptic-light-dark(
-        'outline-color',
-        #00000020,
-        #FFFFFF20
-      );
-    }
-  }
 }
 
 /**********************************************************************
@@ -698,19 +679,18 @@ haptic-text-field {
  **********************************************************************/
 
 haptic-list-item {
+  outline-color: transparent;
+
+  &:has(:focus-visible) {
+    @include haptic-primary-color('outline-color');
+  }
+
   .haptic-checkbox, .haptic-radio-button, .haptic-switch {
     &:hover {
       @include haptic-light-dark(
         'background-color',
         #00000010,
         #FFFFFF10
-      );
-    }
-    &:focus-visible {
-      @include haptic-light-dark(
-        'background-color',
-        #00000020,
-        #FFFFFF20
       );
     }
   }

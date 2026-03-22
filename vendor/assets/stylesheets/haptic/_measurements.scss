@@ -673,11 +673,6 @@ haptic-text-field {
 
 .haptic-checkbox, .haptic-radio-button {
   margin: 0;
-
-  &:not(.embedded) {
-    outline-offset: 0;
-    outline-width: haptic-measure(.375rem, .5rem);
-  }
 }
 
 .haptic-checkbox {
@@ -718,7 +713,6 @@ haptic-text-field {
   box-sizing: border-box;
   height: $track-height;
   margin: 0;
-  outline: none;
   width: $track-width;
 
   &::before {
@@ -741,11 +735,6 @@ haptic-text-field {
 
   &:checked::after {
     left: calc(#{$track-width - $track-height} + #{haptic-measure(2px, 4px)});
-  }
-
-  &:not(.embedded)::after {
-    outline-offset: 0;
-    outline-width: haptic-measure(.375rem, .5rem);
   }
 }
 

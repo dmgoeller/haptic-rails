@@ -7,13 +7,9 @@
     all .4s linear .1s,
     filter .2s linear,
     opacity .2s linear;
-}
 
-button, input[type="submit"] {
-  &.haptic-button, &.haptic-icon-button {
-    &:focus-visible {
-      transition-delay: 0;
-    }
+  &:focus-visible {
+    transition-delay: 0;
   }
 }
 
@@ -148,7 +144,6 @@ haptic-text-field {
 
 .haptic-checkbox, .haptic-radio-button {
   transition:
-    all .4s linear,
     filter .2s linear,
     opacity .2s linear;
 

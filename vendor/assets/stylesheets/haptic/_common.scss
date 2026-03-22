@@ -323,15 +323,6 @@ haptic-dropdown-field, haptic-text-field {
       &::after {
         @include haptic-field-overlay;
         content: '\200b';
-        opacity: 0;
-      }
-    }
-
-    &:has(:focus-visible) {
-      &.field-container, & > .field-container {
-        &::after {
-          opacity: 1;
-        }
       }
     }
   }
@@ -376,9 +367,42 @@ haptic-dropdown-field {
       content: '\200b';
     }
   }
+
+  &[focus-indicator] {
+    &.field-container, & > .field-container {
+      &::after {
+        opacity: 0;
+      }
+    }
+
+    &:has(haptic-dropdown-dialog:focus-visible),
+    &:has(haptic-select-dropdown:focus-visible) {
+      &.field-container, & > .field-container {
+        &::after {
+          opacity: 1;
+        }
+      }
+    }
+  }
 }
 
 haptic-text-field {
+  &[focus-indicator] {
+    &.field-container, & > .field-container {
+      &::after {
+        opacity: 0;
+      }
+    }
+
+    &:has(:focus-visible) {
+      &.field-container, & > .field-container {
+        &::after {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
   &[with-trailing-icon] {
     ::-webkit-calendar-picker-indicator {
       opacity: 0;

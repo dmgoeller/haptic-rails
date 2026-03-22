@@ -96,6 +96,14 @@ haptic-dropdown-menu,
 haptic-select-dropdown {
   outline: none;
 
+  &:has(.toggle.haptic-button) {
+    border-radius: $haptic-button-border-radius;
+  }
+
+  &:has(.toggle.haptic-icon-button) {
+    border-radius: 50%;
+  }
+
   & > .popover {
     border-radius: $haptic-field-border-radius;
     border-style: solid;
@@ -160,13 +168,14 @@ haptic-dropdown-field, haptic-text-field {
  **********************************************************************/
 
 .haptic-checkbox, .haptic-radio-button {
+  outline-offset: 2px;
+  outline-style: solid;
+  outline-width: 2px;
+
   &.embedded {
     outline: none;
   }
-  &:not(.embedded) {
-    border-radius: 50%;
-    outline-style: solid;
-  }
+
   &.outlined::before {
     border-style: solid;
     border-width: 1px;
@@ -174,13 +183,13 @@ haptic-dropdown-field, haptic-text-field {
 }
 
 .haptic-checkbox {
-  &::before, &::after {
+  &, &::before, &::after {
     border-radius: 2px;
   }
 }
 
 .haptic-radio-button {
-  &::before, &::after {
+  &, &::before, &::after {
     border-radius: 50%;
   }
 }
@@ -191,7 +200,14 @@ haptic-dropdown-field, haptic-text-field {
 
 .haptic-switch {
   $track-height: haptic-measure(1rem, 1.5rem);
-  outline: none;
+
+  outline-offset: 2px;
+  outline-style: solid;
+  outline-width: 2px;
+
+  &.embedded {
+    outline: none;
+  }
 
   &, &::before {
     border-radius: calc(#{$track-height} / 2);
@@ -203,10 +219,6 @@ haptic-dropdown-field, haptic-text-field {
   &.outlined::before {
     border-style: solid;
   }
-
-  &:not(.embedded)::after {
-    outline-style: solid;
-  }
 }
 
 /**********************************************************************
@@ -214,6 +226,10 @@ haptic-dropdown-field, haptic-text-field {
  **********************************************************************/
 
 haptic-list-item {
+  outline-offset: -2px;
+  outline-style: solid;
+  outline-width: 2px;
+
   &, .haptic-checkbox, .haptic-radio-button, .haptic-switch {
     border-radius: .25rem;
   }
