@@ -259,6 +259,8 @@ $haptic-dark-mode: true !default;
 
 haptic-button-segment, haptic-chip {
   input {
+    @include haptic-focused-color();
+
     &::after {
       background-color: transparent;
     }
@@ -281,7 +283,7 @@ haptic-button-segment, haptic-chip {
         }
       }
 
-      &:hover:not(:checked) {
+      &:not(:checked):hover {
         @include haptic-light-dark(
           'background-color',
           #0000003C,
@@ -310,19 +312,11 @@ haptic-button-segment, haptic-chip {
         }
       }
 
-      &:hover:not(:checked) {
+      &:not(:checked):hover {
         @include haptic-light-dark(
           'background-color',
           #{$haptic-primary-color}20,
           #{$haptic-light-primary-color}20
-        );
-      }
-
-      &:focus-visible {
-        @include haptic-light-dark(
-          'background-color',
-          #{$haptic-primary-color}60,
-          #{$haptic-light-primary-color}60
         );
       }
     }
