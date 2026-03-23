@@ -6,7 +6,8 @@
   transition:
     all .4s linear .1s,
     filter .2s linear,
-    opacity .2s linear;
+    opacity .2s linear,
+    outline-color 0s;
 
   &:focus-visible {
     transition-delay: 0;
@@ -108,14 +109,6 @@ haptic-dropdown-field, haptic-text-field {
 
   .error-message {
     transition: color .4s linear;
-  }
-
-  &[focus-indicator] {
-    &.field-container, & > .field-container {
-      &::after {
-        transition: .4s linear;
-      }
-    }
   }
 }
 

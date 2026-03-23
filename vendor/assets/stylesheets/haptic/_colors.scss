@@ -151,6 +151,7 @@ $haptic-dark-mode: true !default;
 .haptic-button, .haptic-icon-button {
   background-color: transparent;
   color: inherit;
+  outline-color: transparent;
 
   &.filled {
     background-color: $haptic-primary-color;
@@ -165,16 +166,29 @@ $haptic-dark-mode: true !default;
     &.red {
       background-color: $haptic-dark-red;
     }
-    &:hover:not(:disabled),
-    &:focus-visible,
-    haptic-dropdown-dialog:focus-visible &.toggle,
-    haptic-dropdown-menu:focus-visible &.toggle {
+    &:hover:not(:disabled) {
       filter: brightness(1.1875);
     }
   }
 
   &.outlined {
     @include haptic-outline-color;
+  }
+
+  &:focus-visible,
+  haptic-dropdown-dialog:focus-visible &.toggle,
+  haptic-dropdown-menu:focus-visible &.toggle {
+    @include haptic-primary-color('outline-color');
+
+    &.secondary {
+      @include haptic-secondary-color('outline-color');
+    }
+    &.green {
+      @include haptic-green('outline-color');
+    }
+    &.red {
+      @include haptic-red('outline-color');
+    }
   }
 }
 
@@ -199,10 +213,7 @@ $haptic-dark-mode: true !default;
     @include haptic-red;
   }
 
-  &:hover:not(:disabled),
-  &:focus-visible,
-  haptic-dropdown-dialog:focus-visible &.toggle,
-  haptic-dropdown-menu:focus-visible &.toggle {
+  &:hover:not(:disabled) {
     @include haptic-light-dark(
       'background-color',
       #{$haptic-primary-color}20,
@@ -233,10 +244,7 @@ $haptic-dark-mode: true !default;
 }
 
 .haptic-icon-button:not(.filled) {
-  &:hover:not(:disabled),
-  &:focus-visible,
-  haptic-dropdown-dialog:focus-visible &.toggle,
-  haptic-dropdown-menu:focus-visible &.toggle {
+  &:hover:not(:disabled) {
     @include haptic-light-dark(
       'background-color',
       #00000010,

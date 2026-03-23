@@ -16,7 +16,13 @@ $haptic-field-border-radius: .25rem !default;
 .haptic-button, .haptic-icon-button {
   border-style: solid;
   border-width: 0;
-  outline: none;
+  outline-offset: -2px;
+  outline-style: solid;
+  outline-width: 2px;
+
+  &.filled {
+    outline-offset: 2px;
+  }
 
   &.outlined {
     border-width: 1px;
