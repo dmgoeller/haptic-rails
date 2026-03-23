@@ -2764,13 +2764,12 @@ class HapticTableRowElement extends HTMLTableRowElement {
   static observedAttributes = ['data-href'];
 
   #eventListeners = new HapticEventListeners();
-  #skipNextClickEvent = false;
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
       if (HapticTableElement.isInteractiveElement(node)) {
-        this.#eventListeners.add(node, 'click', () => {
-          this.#skipNextClickEvent = true;
+        this.#eventListeners.add(node, 'click', event => {
+          event.hapticTableRowHandlerPrevented = true;
         }, { capture: true });
       }
     },
@@ -2789,22 +2788,21 @@ class HapticTableRowElement extends HTMLTableRowElement {
     this.#eventListeners.remove(this);
 
     if (newValue !== null) {
-      this.#eventListeners.add(this, 'click', () => {
-        if (this.#skipNextClickEvent) {
-          this.#skipNextClickEvent = false;
-        } else
-        if (typeof Turbo !== 'undefined') {
-          const options = {};
+      this.#eventListeners.add(this, 'click', event => {
+        if (!event.hapticTableRowHandlerPrevented) {
+          if (typeof Turbo !== 'undefined') {
+            const options = {};
 
-          const action = this.getAttribute('data-turbo-action');
-          if (action) options.action = action;
+            const action = this.getAttribute('data-turbo-action');
+            if (action) options.action = action;
 
-          const frame = this.getAttribute('data-turbo-frame');
-          if (frame) options.frame = frame;
+            const frame = this.getAttribute('data-turbo-frame');
+            if (frame) options.frame = frame;
 
-          Turbo.visit(newValue, options);
-        } else {
-          window.location.href = newValue;
+            Turbo.visit(newValue, options);
+          } else {
+            window.location.href = newValue;
+          }
         }
       });
     }
