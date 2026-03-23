@@ -499,7 +499,7 @@ haptic-dropdown-field, haptic-text-field {
   &[focus-indicator] {
     &.field-container, & > .field-container {
       &::after {
-        @include haptic-primary-color('background-color');
+        background-color: transparent;
       }
     }
   }
@@ -538,6 +538,17 @@ haptic-dropdown-field {
       @include haptic-foreground-color('background-color');
     }
   }
+
+  &[focus-indicator] {
+    &:has(haptic-dropdown-dialog:focus-visible),
+    &:has(haptic-select-dropdown:focus-visible) {
+      &.field-container, & > .field-container {
+        &::after {
+          @include haptic-primary-color('background-color');
+        }
+      }
+    }
+  }
 }
 
 haptic-text-field {
@@ -548,6 +559,14 @@ haptic-text-field {
 
     &[empty]:not(:focus-within) .field-label {
       @include haptic-foreground-color;
+    }
+  }
+
+  &[focus-indicator]:has(:focus-visible) {
+    &.field-container, & > .field-container {
+      &::after {
+        @include haptic-primary-color('background-color');
+      }
     }
   }
 
