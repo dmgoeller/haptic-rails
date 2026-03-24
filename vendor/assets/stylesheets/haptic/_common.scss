@@ -318,7 +318,7 @@ haptic-dropdown-field, haptic-text-field {
     content: ' *';
   }
 
-  &[focus-indicator] {
+  &[with-label][focus-indicator] {
     &.field-container, & > .field-container {
       &::after {
         @include haptic-field-overlay;

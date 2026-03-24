@@ -310,20 +310,20 @@ haptic-dropdown-field, haptic-text-field {
     width: 100%;
   }
 
-  &[focus-indicator] {
-    &.field-container, & > .field-container {
-      &::after {
-        bottom: 0;
-        height: 3px;
-        left: 0;
-        width: 100%;
-      }
-    }
-  }
-
   &[with-label] {
     $padding-top-bottom: .5rem;
     min-height: $haptic-field-with-label-min-height;
+
+    &[focus-indicator] {
+      &.field-container, & > .field-container {
+        &::after {
+          bottom: 0;
+          height: 3px;
+          left: 0;
+          width: 100%;
+        }
+      }
+    }
 
     .haptic-field {
       min-height: $haptic-field-with-label-min-height;
