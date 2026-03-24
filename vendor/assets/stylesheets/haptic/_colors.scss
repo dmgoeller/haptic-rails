@@ -178,16 +178,32 @@ $haptic-dark-mode: true !default;
   &:focus-visible,
   haptic-dropdown-dialog:focus-visible &.toggle,
   haptic-dropdown-menu:focus-visible &.toggle {
-    @include haptic-primary-color('outline-color');
+    &.filled {
+      outline-color: $haptic-primary-color;
 
-    &.secondary {
-      @include haptic-secondary-color('outline-color');
+      &.secondary {
+        outline-color: $haptic-secondary-color;
+      }
+      &.green {
+        outline-color: $haptic-dark-green;
+      }
+      &.red {
+        outline-color: $haptic-dark-red;
+      }
     }
-    &.green {
-      @include haptic-green('outline-color');
-    }
-    &.red {
-      @include haptic-red('outline-color');
+
+    &:not(.filled) {
+      @include haptic-primary-color('outline-color');
+
+      &.secondary {
+        @include haptic-secondary-color('outline-color');
+      }
+      &.green {
+        @include haptic-green('outline-color');
+      }
+      &.red {
+        @include haptic-red('outline-color');
+      }
     }
   }
 }
