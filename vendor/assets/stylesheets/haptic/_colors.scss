@@ -590,10 +590,14 @@ haptic-text-field {
       }
     }
     &:not([with-label]) {
-      @include haptic-primary-color('outline-color');
+      &.field-container, & > .field-container {
+        @include haptic-primary-color('outline-color');
+      }
 
       &[invalid] {
-        @include haptic-red('outline-color');
+        &.field-container, & > .field-container {
+          @include haptic-red('outline-color');
+        }
       }
     }
   }
