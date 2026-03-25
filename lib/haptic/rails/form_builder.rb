@@ -664,7 +664,7 @@ module Haptic
 
         field = @template.haptic_select_dropdown_tag(options.except(*HAPTIC_FIELD_OPTIONS)) do
           hidden_field(method, hidden_field_options) +
-            @template.content_tag('div', '', class: toggle_class) +
+            @template.content_tag('button', '', class: toggle_class, type: 'button') +
             @template.content_tag('div', class: 'popover') do
               @template.content_tag('div', haptic_options, class: 'scroll-container')
             end
