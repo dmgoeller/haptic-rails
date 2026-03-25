@@ -714,10 +714,10 @@ class HapticDropdownElement extends HTMLElement {
   #popoverElement = null;
   #backdropElement = null;
   #scrollContainer = null;
-  #tabIndex = null;
+  #mousePressed = false;
 
   #toggleElementObserver = new HapticAttributesObserver(
-    this, [], ['inline']
+    this, ['disabled'], ['inline']
   );
 
   #scrollContainerObserver = new ResizeObserver(
@@ -745,18 +745,6 @@ class HapticDropdownElement extends HTMLElement {
     return this.hasAttribute('disabled');
   }
 
-  set disabled(value) {
-    if (value) {
-      if (this.isOpen()) {
-        this.hidePopover();
-      }
-      this.setAttribute('disabled', 'disabled');
-    } else {
-      this.removeAttribute('disabled');
-    }
-    return value;
-  }
-
   get locked() {
     return this.#lock.activated;
   }
@@ -778,20 +766,13 @@ class HapticDropdownElement extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'disabled') {
-      if (newValue !== null) {
-        this.hidePopover();
-        this.tabIndex = -1;
-      } else {
-        this.tabIndex = this.#tabIndex;
-      }
+    if (name === 'disabled' && newValue !== null) {
+      this.removeAttribute('focused');
+      this.hidePopover();
     }
   }
 
   connectedCallback() {
-    if (!this.disabled) {
-      this.tabIndex = 0;
-    }
     if (this.#scrollContainer = this.#closestScrollContainer()) {
       this.#scrollContainerObserver.observe(this.#scrollContainer);
     }
@@ -822,10 +803,23 @@ class HapticDropdownElement extends HTMLElement {
       const classList = node.classList;
 
       if (classList.contains('toggle')) {
-        if (!this.#toggleElement) {
-          this.#tabIndex = node.tabIndex;
-          node.tabIndex = -1;
+        node.classList.add('embedded');
 
+        if (!this.#toggleElement) {
+          this.#eventListeners.add(node, 'mousedown', () => {
+            this.#mousePressed = true;
+          });
+          this.#eventListeners.add(node, 'mouseup', () => {
+            this.#mousePressed = false;
+          });
+          this.#eventListeners.add(node, 'focusin', () => {
+            if (!this.#mousePressed) {
+              this.setAttribute('focused', 'focused');
+            }
+          });
+          this.#eventListeners.add(node, 'focusout', () => {
+            this.removeAttribute('focused');
+          });
           this.#eventListeners.add(node, 'click', event => {
             if (!this.disabled && !this.locked) {
               if (this.isOpen()) {
@@ -860,7 +854,6 @@ class HapticDropdownElement extends HTMLElement {
   nodeRemoved(node) {
     switch (node) {
       case this.#toggleElement:
-        node.tabIndex = this.#tabIndex;
         this.#eventListeners.remove(node);
         this.#toggleElementObserver.disconnect();
         this.#toggleElement = null;
@@ -1015,15 +1008,6 @@ class HapticDropdownMenuElement extends HapticDropdownElement {
     nodeAdded: node => {
       if (node instanceof HapticMenuElement) {
         if (!this.#menuElement) {
-          this.#eventListeners.add(node, 'focusin', event => {
-            // Temporarily set tab index to -1 to navigate to the previous
-            // element when Shift+Tab is pressed while the menu is open.
-            this.tabIndex = -1;
-          });
-          this.#eventListeners.add(node, 'focusout', event => {
-            // See above
-            this.tabIndex = 0;
-          });
           this.#menuElement = node;
         }
       } else
@@ -1661,7 +1645,7 @@ class HapticFieldElement extends HTMLElement {
 
   #controlObserver = new HapticAttributesObserver(
     this,
-    ['disabled', 'locked', 'required'],
+    ['disabled', 'focused', 'locked', 'required'],
     ['inline']
   );
 
@@ -1736,17 +1720,29 @@ class HapticFieldElement extends HTMLElement {
 
   nodeAdded(node) {
     if (node instanceof HTMLElement && this.#isParentFieldOf(node)) {
-      if (node instanceof HapticSelectDropdownElement ||
+      if (node instanceof HapticDropdownElement ||
           node instanceof HTMLInputElement ||
-          node instanceof HTMLButtonElement ||
           node instanceof HTMLTextAreaElement ||
           node instanceof HTMLSelectElement) {
         if (!this.#control) {
-          node.classList.add('embedded');
-
-          /*if (!node.validity.valid) {
-            this.setAttribute('invalid', '');
-          }*/
+          if (node instanceof HTMLInputElement ||
+              node instanceof HTMLTextAreaElement ||
+              node instanceof HTMLSelectElement) {
+            this.#eventListeners.add(node, 'mousedown', () => {
+              this.#mousePressed = true;
+            });
+            this.#eventListeners.add(node, 'mouseup', () => {
+              this.#mousePressed = false;
+            });
+            this.#eventListeners.add(node, 'focusin', () => {
+              if (!this.#mousePressed) {
+                this.setAttribute('focused', 'focused');
+              }
+            });
+            this.#eventListeners.add(node, 'focusout', () => {
+              this.removeAttribute('focused');
+            });
+          } else
           if (node instanceof HapticTextAreaElement) {
             if (!node.hasAttribute('rows')) {
               node.setAttribute('rows', 1);
@@ -1754,20 +1750,6 @@ class HapticFieldElement extends HTMLElement {
           }
           this.#controlObserver.observe(node);
 
-          this.#eventListeners.add(node, 'mousedown', () => {
-            this.#mousePressed = true;
-          });
-          this.#eventListeners.add(node, 'mouseup', () => {
-            this.#mousePressed = false;
-          });
-          this.#eventListeners.add(node, 'focusin', () => {
-            if (!this.#mousePressed) {
-              this.setAttribute('focused', '');
-            }
-          });
-          this.#eventListeners.add(node, 'focusout', () => {
-            this.removeAttribute('focused');
-          });
           this.#eventListeners.add(node, 'change', () => {
             this.#setValidOnChange?.forEach(fieldId => {
               const field = fieldId == 'itself' ? this :

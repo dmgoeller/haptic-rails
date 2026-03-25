@@ -506,21 +506,6 @@ haptic-dropdown-field, haptic-text-field {
     @include haptic-red;
   }
 
-  &[focus-indicator] {
-    &.inline {
-      &.field-container, & > .field-container {
-        outline-color: transparent;
-      }
-    }
-    &:not(.inline) {
-      &.field-container, & > .field-container {
-        &::after {
-          background-color: transparent;
-        }
-      }
-    }
-  }
-
   &[invalid] {
     &.field-container, & > .field-container {
       & > .field-label,
@@ -540,28 +525,30 @@ haptic-dropdown-field, haptic-text-field {
       @include haptic-red;
     }
   }
-}
-
-haptic-dropdown-field {
-  &.field-container, & > .field-container {
-    &::before {
-      @include haptic-foreground-color('background-color');
-    }
-  }
 
   &[focus-indicator] {
-    &:has(haptic-dropdown-dialog:focus-visible),
-    &:has(haptic-select-dropdown:focus-visible) {
-      &.inline {
+    &.inline {
+      &.field-container, & > .field-container {
+        outline-color: transparent;
+      }
+      &[focused] {
         &.field-container, & > .field-container {
           @include haptic-primary-color('outline-color');
-
-          &[invalid] {
+        }
+        &[invalid] {
+          &.field-container, & > .field-container {
             @include haptic-red('outline-color');
           }
         }
       }
-      &:not(.inline) {
+    }
+    &:not(.inline) {
+      &.field-container, & > .field-container {
+        &::after {
+          background-color: transparent;
+        }
+      }
+      &[focused] {
         &.field-container, & > .field-container {
           &::after {
             @include haptic-primary-color('background-color');
@@ -579,6 +566,14 @@ haptic-dropdown-field {
   }
 }
 
+haptic-dropdown-field {
+  &.field-container, & > .field-container {
+    &::before {
+      @include haptic-foreground-color('background-color');
+    }
+  }
+}
+
 haptic-text-field {
   &[animated-label] {
     ::placeholder {
@@ -587,34 +582,6 @@ haptic-text-field {
 
     &[empty]:not(:focus-within) .field-label {
       @include haptic-foreground-color;
-    }
-  }
-
-  &[focus-indicator][focused] {
-    &.inline {
-      &.field-container, & > .field-container {
-        @include haptic-primary-color('outline-color');
-      }
-
-      &[invalid] {
-        &.field-container, & > .field-container {
-          @include haptic-red('outline-color');
-        }
-      }
-    }
-    &:not(.inline) {
-      &.field-container, & > .field-container {
-        &::after {
-          @include haptic-primary-color('background-color');
-        }
-      }
-      &[invalid] {
-        &.field-container, & > .field-container {
-          &::after {
-            @include haptic-red('background-color');
-          }
-        }
-      }
     }
   }
 
