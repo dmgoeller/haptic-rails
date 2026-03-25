@@ -1657,6 +1657,7 @@ class HapticFieldElement extends HTMLElement {
   #control = null;
   #label = null;
   #setValidOnChange = null;
+  #mousePressed = false;
 
   #controlObserver = new HapticAttributesObserver(
     this,
@@ -1753,6 +1754,20 @@ class HapticFieldElement extends HTMLElement {
           }
           this.#controlObserver.observe(node);
 
+          this.#eventListeners.add(node, 'mousedown', () => {
+            this.#mousePressed = true;
+          });
+          this.#eventListeners.add(node, 'mouseup', () => {
+            this.#mousePressed = false;
+          });
+          this.#eventListeners.add(node, 'focusin', () => {
+            if (!this.#mousePressed) {
+              this.setAttribute('focused', '');
+            }
+          });
+          this.#eventListeners.add(node, 'focusout', () => {
+            this.removeAttribute('focused');
+          });
           this.#eventListeners.add(node, 'change', () => {
             this.#setValidOnChange?.forEach(fieldId => {
               const field = fieldId == 'itself' ? this :

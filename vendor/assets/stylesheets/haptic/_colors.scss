@@ -590,7 +590,7 @@ haptic-text-field {
     }
   }
 
-  &[focus-indicator]:has(:focus-visible) {
+  &[focus-indicator][focused] {
     &[with-label] {
       &.field-container, & > .field-container {
         &::after {
