@@ -263,7 +263,6 @@ class HapticNavigationController {
   }
 
   constructor(target, options = {}) {
-    target.tabIndex = Math.max(target.tabIndex, 0);
     this.#target = target;
 
     this.#vertical = options.vertical === true;
@@ -777,9 +776,11 @@ class HapticDropdownElement extends HTMLElement {
       this.#scrollContainerObserver.observe(this.#scrollContainer);
     }
     this.#eventListeners.add(this, 'focusout', event => {
+      // Cancel popover if the related target isn't contained in this element.
+      // When the focus is leaving the page, the popover keeps open.
       const relatedTarget = event.relatedTarget;
 
-      if (!relatedTarget || !this.contains(relatedTarget)) {
+      if (relatedTarget && !this.contains(relatedTarget)) {
         this.hidePopover({ cancel: true });
       }
     });
@@ -1117,9 +1118,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     this.#eventListeners.add(this, 'keydown', event => {
       if (!this.disabled && !this.locked) {
         if (event.key === 'Enter' || event.key === ' ') {
-          if (this.isOpen()) {
-            event.preventDefault();
-          }
+          event.preventDefault();
         } else
         if (this.#optionElements.length > 0) {
           let newHighlightedIndex = null;
@@ -1246,7 +1245,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
                   this.dispatchEvent(new Event('change'));
                 }
               }
-              this.focus();
+              this.toggleElement?.focus();
               this.hidePopover();
             }
           } else
@@ -1295,7 +1294,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
             this.#optionElements.forEach(optionElement => {
               optionElement.checked = optionElement === event.target;
             });
-            this.focus();
+            this.toggleElement?.focus();
             this.hidePopover();
 
             if (this.#refresh()) {
@@ -1323,6 +1322,9 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       } else
       if (node.classList.contains('scroll-container')) {
         if (!this.#popoverScrollContainer) {
+          // Explicitly set tabIndex to -1 to prevent focussing the scroller
+          // in Chrome.
+          node.tabIndex = -1;
           this.#popoverScrollContainer = node;
         }
       } else
@@ -2474,6 +2476,7 @@ class HapticMenuElement extends HTMLElement {
   }
 
   connectedCallback() {
+    this.tabIndex = Math.max(this.tabIndex, 0);
     this.classList.add('haptic-menu');
 
     this.#navigationController =
@@ -2563,6 +2566,7 @@ class HapticNavElement extends HTMLElement {
   }
 
   connectedCallback() {
+    this.tabIndex = Math.max(this.tabIndex, 0);
     this.classList.add('haptic-nav');
 
     this.#navigationController =
@@ -2715,6 +2719,8 @@ class HapticTableElement extends HTMLTableElement {
     nodeAdded: node => {
       if (node instanceof HapticTableRowElement) {
         if (node.hasAttribute('data-href')) {
+          this.tabIndex = Math.max(this.tabIndex, 0);
+
           (this.#navigationController ||=
             new HapticNavigationController(this, {
               vertical: true
@@ -2823,6 +2829,8 @@ class HapticTableLikeElement extends HTMLElement {
     nodeAdded: node => {
       if (node instanceof HTMLAnchorElement &&
           node.classList.contains('table-row')) {
+        this.tabIndex = Math.max(this.tabIndex, 0);
+
         (this.#navigationController ||=
           new HapticNavigationController(this, {
             vertical: true
@@ -2980,6 +2988,7 @@ class HapticTabBarElement extends HTMLElement {
   }
 
   connectedCallback() {
+    this.tabIndex = Math.max(this.tabIndex, 0);
     this.classList.add('haptic-tab-bar');
 
     this.#navigationController =

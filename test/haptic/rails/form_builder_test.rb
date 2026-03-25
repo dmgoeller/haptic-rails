@@ -920,7 +920,7 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
-                  <div class="toggle haptic-field"></div>
+                  <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
@@ -943,7 +943,7 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
-                  <div class="toggle haptic-field"></div>
+                  <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
@@ -982,7 +982,7 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
-                  <div class="toggle haptic-field"></div>
+                  <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
@@ -1016,7 +1016,7 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
-                  <div class="toggle haptic-field"></div>
+                  <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
@@ -1048,7 +1048,7 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
-                  <div class="toggle haptic-field"></div>
+                  <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="" checked="checked"></haptic-option>
@@ -1078,7 +1078,7 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
-                  <div class="toggle haptic-field"></div>
+                  <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue" disabled="disabled">Blue</haptic-option>
@@ -1107,7 +1107,7 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
-                  <div class="toggle haptic-field"></div>
+                  <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue" disabled="disabled">Blue</haptic-option>
@@ -1137,7 +1137,7 @@ module Haptic
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color"
                     disabled="disabled">
-                  <div class="toggle haptic-field"></div>
+                  <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
@@ -1269,7 +1269,7 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
-                  <div class="toggle haptic-field"></div>
+                  <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
@@ -1292,7 +1292,7 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
-                  <div class="toggle haptic-field"></div>
+                  <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
@@ -1315,7 +1315,7 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
-                  <div class="toggle haptic-field"></div>
+                  <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container"></div>
                   </div>
@@ -1335,7 +1335,7 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
-                  <div class="toggle haptic-field"></div>
+                  <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue" checked="checked">Blue</haptic-option>
@@ -1361,7 +1361,7 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
-                  <div class="toggle haptic-field"></div>
+                  <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue" disabled="disabled">Blue</haptic-option>
@@ -1384,7 +1384,7 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
-                  <div class="toggle haptic-field"></div>
+                  <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue" disabled="disabled">Blue</haptic-option>
@@ -1412,7 +1412,7 @@ module Haptic
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color"
                    disabled="disabled">
-                  <div class="toggle haptic-field"></div>
+                  <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
