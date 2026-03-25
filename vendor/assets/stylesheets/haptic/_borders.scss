@@ -172,7 +172,6 @@ haptic-dropdown-field, haptic-text-field {
   &[focus-indicator] {
     &.inline {
       &.field-container, & > .field-container {
-        outline-offset: -2px;
         outline-style: solid;
         outline-width: 2px;
       }
