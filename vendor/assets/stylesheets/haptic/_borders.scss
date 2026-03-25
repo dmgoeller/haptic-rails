@@ -177,9 +177,14 @@ haptic-dropdown-field, haptic-text-field {
     &:not([with-label]) {
       &.field-container, & > .field-container {
         border-radius: $haptic-field-border-radius;
-        outline-offset: -2px;
         outline-style: solid;
         outline-width: 2px;
+      }
+
+      &:not(.inline) {
+        &.field-container, & > .field-container {
+          outline-offset: -2px;
+        }
       }
     }
   }
