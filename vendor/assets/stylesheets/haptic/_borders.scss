@@ -165,25 +165,25 @@ haptic-text-field .clear-button {
 }
 
 haptic-dropdown-field, haptic-text-field {
+  &.field-container, & > .field-container {
+    border-radius: $haptic-field-border-radius;
+  }
+
   &[focus-indicator] {
-    &[with-label] {
+    &.inline {
       &.field-container, & > .field-container {
-        &::after {
-          border-bottom-left-radius: #{$haptic-field-border-radius} 3px;
-          border-bottom-right-radius: #{$haptic-field-border-radius} 3px;
-        }
-      }
-    }
-    &:not([with-label]) {
-      &.field-container, & > .field-container {
-        border-radius: $haptic-field-border-radius;
+        outline-offset: -2px;
         outline-style: solid;
         outline-width: 2px;
       }
-
-      &:not(.inline) {
-        &.field-container, & > .field-container {
-          outline-offset: -2px;
+    }
+    &:not(.inline) {
+      &.field-container, & > .field-container {
+        &::after {
+          border-bottom-left-radius:
+            #{$haptic-field-border-radius} 3px;
+          border-bottom-right-radius:
+            #{$haptic-field-border-radius} 3px;
         }
       }
     }

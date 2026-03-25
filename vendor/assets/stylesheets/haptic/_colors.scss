@@ -507,16 +507,16 @@ haptic-dropdown-field, haptic-text-field {
   }
 
   &[focus-indicator] {
-    &[with-label] {
+    &.inline {
+      &.field-container, & > .field-container {
+        outline-color: transparent;
+      }
+    }
+    &:not(.inline) {
       &.field-container, & > .field-container {
         &::after {
           background-color: transparent;
         }
-      }
-    }
-    &:not([with-label]) {
-      &.field-container, & > .field-container {
-        outline-color: transparent;
       }
     }
   }
@@ -552,7 +552,16 @@ haptic-dropdown-field {
   &[focus-indicator] {
     &:has(haptic-dropdown-dialog:focus-visible),
     &:has(haptic-select-dropdown:focus-visible) {
-      &[with-label] {
+      &.inline {
+        &.field-container, & > .field-container {
+          @include haptic-primary-color('outline-color');
+
+          &[invalid] {
+            @include haptic-red('outline-color');
+          }
+        }
+      }
+      &:not(.inline) {
         &.field-container, & > .field-container {
           &::after {
             @include haptic-primary-color('background-color');
@@ -563,15 +572,6 @@ haptic-dropdown-field {
             &::after {
               @include haptic-red('background-color');
             }
-          }
-        }
-      }
-      &:not([with-label]) {
-        &.field-container, & > .field-container {
-          @include haptic-primary-color('outline-color');
-
-          &[invalid] {
-            @include haptic-red('outline-color');
           }
         }
       }
@@ -591,7 +591,18 @@ haptic-text-field {
   }
 
   &[focus-indicator][focused] {
-    &[with-label] {
+    &.inline {
+      &.field-container, & > .field-container {
+        @include haptic-primary-color('outline-color');
+      }
+
+      &[invalid] {
+        &.field-container, & > .field-container {
+          @include haptic-red('outline-color');
+        }
+      }
+    }
+    &:not(.inline) {
       &.field-container, & > .field-container {
         &::after {
           @include haptic-primary-color('background-color');
@@ -602,17 +613,6 @@ haptic-text-field {
           &::after {
             @include haptic-red('background-color');
           }
-        }
-      }
-    }
-    &:not([with-label]) {
-      &.field-container, & > .field-container {
-        @include haptic-primary-color('outline-color');
-      }
-
-      &[invalid] {
-        &.field-container, & > .field-container {
-          @include haptic-red('outline-color');
         }
       }
     }
