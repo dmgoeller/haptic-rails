@@ -938,15 +938,15 @@ class HapticDropdownDialogElement extends HapticDropdownElement {
     super.connectedCallback();
 
     this.#eventListeners.add(this, 'keydown', event => {
-      if (!this.disabled && !this.locked) {
-        if (event.key === ' ') {
+      if (!this.disabled && !this.locked && !this.isOpen()) {
+        if (event.key === 'ArrowDown') {
           event.preventDefault();
         }
       }
     });
     this.#eventListeners.add(this, 'keyup', event => {
-      if (!this.disabled && !this.locked) {
-        if (event.key === ' ' && !this.isOpen()) {
+      if (!this.disabled && !this.locked && !this.isOpen()) {
+        if (event.key === 'ArrowDown') {
           this.showPopover();
           event.preventDefault();
         }
@@ -1035,10 +1035,7 @@ class HapticDropdownMenuElement extends HapticDropdownElement {
       if (this.#menuElement && !this.disabled && !this.locked) {
         const key = event.key;
 
-        if (key === 'ArrowDown' ||
-            key === 'ArrowUp' ||
-            key === 'Enter' ||
-            key === ' ') {
+        if (key === 'ArrowDown' || key === 'ArrowUp') {
           event.preventDefault();
         }
       }
@@ -1047,10 +1044,7 @@ class HapticDropdownMenuElement extends HapticDropdownElement {
       if (this.#menuElement && !this.disabled && !this.locked) {
         const key = event.key;
 
-        if (key === 'ArrowDown' ||
-            key === 'ArrowUp' ||
-            key === 'Enter' ||
-            key === ' ') {
+        if (key === 'ArrowDown' || key === 'ArrowUp') {
           if (!this.isOpen()) {
             this.showPopover();
           }
@@ -1868,7 +1862,7 @@ class HapticTextFieldElement extends HapticFieldElement {
         this.setAttribute('with-clear-button', '');
         this.#eventListeners.add(node, 'click', event => {
           this.clear();
-          this.control?.focus();
+          // this.control?.focus();
           event.preventDefault();
         });
         this.#clearButton = node;
@@ -1891,7 +1885,7 @@ class HapticTextFieldElement extends HapticFieldElement {
   clear() {
     if (this.control && this.control.value != '') {
       this.control.value = '';
-      this.control.dispatchEvent(new Event('change'));
+      this.control.dispatchEvent(new Event('input'));
     }
   }
 }
