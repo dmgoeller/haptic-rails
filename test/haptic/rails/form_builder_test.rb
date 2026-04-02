@@ -34,7 +34,7 @@ module Haptic
                 <div class="field-container">
                   <input is="haptic-input" type="#{type}" name="dummy[name]" id="dummy_name">
                   <label is="haptic-label" class="field-label" for="dummy_name">Name</label>
-                  <button type="button" tabindex="-1" class="clear-button">
+                  <button type="button" class="clear-button">
                     <div class="haptic-icon">close</div>
                   </button>
                   <div class="haptic-icon leading-icon">leading_icon</div>
@@ -130,7 +130,7 @@ module Haptic
                 <input is="haptic-input" type="color" name="dummy[color]" value="#000000"
                   id="dummy_color">
                 <label is="haptic-label" class="field-label" for="dummy_color">Color</label>
-                <button type="button" tabindex="-1" class="clear-button">
+                <button type="button" class="clear-button">
                   <div class="haptic-icon">close</div>
                 </button>
                 <div class="haptic-icon leading-icon">leading_icon</div>
@@ -224,7 +224,7 @@ module Haptic
               <div class="field-container">
                 <textarea is="haptic-textarea" name="dummy[name]" id="dummy_name"></textarea>
                 <label is="haptic-label" class="field-label" for="dummy_name">Name</label>
-                <button type="button" tabindex="-1" class="clear-button">
+                <button type="button" class="clear-button">
                   <div class="haptic-icon">close</div>
                 </button>
                 <div class="haptic-icon leading-icon">leading_icon</div>

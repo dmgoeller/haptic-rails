@@ -290,13 +290,26 @@ module Haptic
           )
         end
 
+        def test_haptic_text_field_tag_with_field_and_focus_indicator
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-text-field focus-indicator="focus">
+                <div class="field-container">
+                  #{field = '<input name="name" type="text">'}
+                </div>
+              </haptic-text-field>
+            HTML
+            haptic_text_field_tag(field, focus_indicator: true)
+          )
+        end
+
         def test_haptic_text_field_tag_with_field_and_clear_button
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
                 <div class="field-container">
                   #{field = '<input name="name" type="text">'}
-                  <button type="button" tabindex="-1" class="clear-button">
+                  <button type="button" class="clear-button">
                     <div class="haptic-icon">close</div>
                   </button>
                 </div>
@@ -395,7 +408,7 @@ module Haptic
               <haptic-text-field>
                 <div class="field-container">
                   <input id="name" name="name" type="text">
-                  <button type="button" tabindex="-1" class="clear-button">
+                  <button type="button" class="clear-button">
                     <div class="haptic-icon">close</div>
                   </button>
                 </div>

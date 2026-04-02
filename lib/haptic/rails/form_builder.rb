@@ -12,7 +12,11 @@ module Haptic
     # - <code>:clear_button</code> - If is <code>true</code>, a button to clear the field
     #   is provided.
     # - <code>:field_id</code> - The <code>id</code> of the field tag.
-    # - <code>:focus_indicator</code> If is <code>true</code>, a focus indicator is shown.
+    # - <code>:focus_indicator</code> Specifies whether a focus indicator is shown:
+    #   - <code>"focus"</code> or <code>true</code> - A focus indicator is shown
+    #     when the field has been focused by keyboard or mouse.
+    #   - <code>"focus-visible"</code> - A focus indicator is shown when the field
+    #     has been focused by keyboard.
     # - <code>:label</code> - The label of the field. The value can be a <code>String</code>
     #   or <code>true</code>. If the value is <code>true</code>, the label is created by
     #   calling the <code>label</code> method.

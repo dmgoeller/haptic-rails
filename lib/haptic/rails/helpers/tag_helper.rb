@@ -97,14 +97,18 @@ module Haptic
         # Creates a <code><haptic-text-field></code> or <code>haptic-dropdown-field</code> tag
         # wrapping the given field.
         #
-        # <code>type</code> can be <code>'text'</code> or <code>'dropdown'</code>.
+        # <code>type</code> can be <code>"text"</code> or <code>"dropdown"</code>.
         #
         # ==== Options
         #
         # - <code>:animated_label</code>
         # - <code>:clear_button</code>
         # - <code>:error_message</code>
-        # - <code>:focus_indicator</code>
+        # - <code>:focus_indicator</code> - Specifies whether a focus indicator is shown:
+        #   - <code>"focus"</code> or <code>true</code> - A focus indicator is shown
+        #     when the field has been focused by keyboard or mouse.
+        #   - <code>"focus-visible"</code> - A focus indicator is shown when the field
+        #     has been focused by keyboard.
         # - <code>:leading_icon</code>
         # - <code>:set_valid_on_change</code>
         # - <code>:show_error_icon</code>
@@ -147,13 +151,21 @@ module Haptic
           field = field.html_safe unless field.html_safe?
 
           label, options = nil, label if label.is_a?(Hash)
-          options = (options || {}).stringify_keys
+          options = options&.transform_keys { |key| key.to_s.dasherize } || {}
 
           field_options = options.except(
-            'clear_button', 'error_message', 'leading_icon', 'show_error_icon',
-            'show_error_message', 'supporting_text', 'trailing_icon'
+            'clear-button',
+            'error-message',
+            'leading-icon',
+            'show-error-icon',
+            'show-error-message',
+            'supporting-text',
+            'trailing-icon'
           ).filter_map do |key, value|
-            [key.dasherize, value == true ? '' : value] unless value == false
+            next if value == false
+
+            value = key == 'focus-indicator' ? 'focus' : '' if value == true
+            [key, value]
           end.to_h
 
           content_tag("haptic-#{type}-field", field_options) do
@@ -162,25 +174,25 @@ module Haptic
                 if label
                   label.html_safe? ? label : content_tag('label', label, class: 'field-label')
                 end +
-                if type == 'text' && options['clear_button']
-                  content_tag('button', type: 'button', tabindex: -1, class: 'clear-button') do
+                if type == 'text' && options['clear-button']
+                  content_tag('button', type: 'button', class: 'clear-button') do
                     haptic_icon_tag('close')
                   end
                 end +
-                if options['show_error_icon']
+                if options['show-error-icon']
                   haptic_icon_tag('error', class: 'error-icon')
                 end +
-                if (leading_icon = options['leading_icon'])
+                if (leading_icon = options['leading-icon'])
                   haptic_icon_tag(leading_icon, class: 'leading-icon')
                 end +
-                if type == 'text' && (trailing_icon = options['trailing_icon'])
+                if type == 'text' && (trailing_icon = options['trailing-icon'])
                   haptic_icon_tag(trailing_icon, class: 'trailing-icon')
                 end
             end +
-              if options['show_error_message'] && options['error_message'].present?
-                content_tag('div', options['error_message'], class: 'error-message')
+              if options['show-error-message'] && options['error-message'].present?
+                content_tag('div', options['error-message'], class: 'error-message')
               end +
-              if (supporting_text = options['supporting_text'])
+              if (supporting_text = options['supporting-text'])
                 content_tag('div', supporting_text, class: 'supporting-text')
               end
           end

@@ -1634,8 +1634,11 @@ class HapticFieldElement extends HTMLElement {
   static ICON_NAMES = ['error', 'leading', 'trailing'];
 
   #eventListeners = new HapticEventListeners();
+  #allowedControlClasses = [];
+  #clearButtonAllowed = false;
   #control = null;
   #label = null;
+  #clearButton = null;
   #setValidOnChange = null;
   #mousePressed = false;
 
@@ -1647,17 +1650,135 @@ class HapticFieldElement extends HTMLElement {
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
-      this.nodeAdded(node);
-      this.#refresh();
+      if (node instanceof HTMLElement && this.#isParentFieldOf(node)) {
+        if (this.#isAllowedControlElement(node)) {
+          if (!this.#control) {
+            if (node instanceof HTMLInputElement ||
+                node instanceof HTMLTextAreaElement ||
+                node instanceof HTMLSelectElement) {
+              this.#eventListeners.add(node, 'mousedown', () => {
+                this.#mousePressed = true;
+              });
+              this.#eventListeners.add(node, 'mouseup', () => {
+                this.#mousePressed = false;
+              });
+              this.#eventListeners.add(node, 'focusin', () => {
+                if (this.#focusIndicator === 'focus' ||
+                   (this.#focusIndicator === 'focus-visible' && !this.#mousePressed)) {
+                  this.setAttribute('focused', '');
+                }
+              });
+              this.#eventListeners.add(node, 'focusout', event => {
+                if (event.relatedTarget !== this.#clearButton) {
+                  this.removeAttribute('focused');
+                }
+              });
+            }
+            if (node instanceof HapticTextAreaElement) {
+              if (!node.hasAttribute('rows')) {
+                node.setAttribute('rows', 1);
+              }
+            }
+            this.#controlObserver.observe(node);
+
+            this.#eventListeners.add(node, 'change', () => {
+              this.#setValidOnChange?.forEach(fieldId => {
+                const field = fieldId == 'itself' ? this :
+                  this.#control?.form?.querySelector(`[for="${fieldId}"]`);
+
+                if (field && 'valid' in field) {
+                  field.valid = true;
+                }
+              });
+              this.#refresh();
+            });
+            this.#eventListeners.add(node, 'input', () => {
+              this.#refresh();
+            });
+            this.#control = node;
+            this.#refresh();
+          }
+        } else
+        if (node.classList.contains('field-label')) {
+          if (!this.#label) {
+            node.classList.add('embedded');
+            this.setAttribute('with-label', '');
+            this.#label = node;
+          }
+        } else
+        if (node.classList.contains('clear-button')) {
+          if (this.#clearButtonAllowed && !this.#clearButton) {
+            node.tabIndex = -1;
+            this.setAttribute('with-clear-button', '');
+
+            this.#eventListeners.add(node, 'mousedown', () => {
+              this.#mousePressed = true;
+            });
+            this.#eventListeners.add(node, 'click', event => {
+              const control = this.control;
+              if (control) {
+                if (control.value != '') {
+                  control.value = '';
+                }
+                control.focus();
+                control.dispatchEvent(new Event('input'));
+              }
+              this.#mousePressed = false;
+              event.preventDefault();
+            });
+            this.#clearButton = node;
+          }
+        } else {
+          for (let iconName of HapticTextFieldElement.ICON_NAMES) {
+            if (node.classList.contains(`${iconName}-icon`)) {
+              if (iconName != 'error' || !this.valid) {
+                this.setAttribute(`with-${iconName}-icon`, '');
+              }
+            }
+          }
+        }
+      }
     },
     nodeRemoved: node => {
-      this.nodeRemoved(node);
-      this.#refresh();
+      if (node instanceof HTMLElement) {
+        switch (node) {
+          case this.#control:
+            node.classList.remove('embedded');
+            this.removeAttribute('disabled');
+            this.removeAttribute('invalid');
+            this.removeAttribute('required');
+            this.setAttribute('empty', '');
+            this.#eventListeners.remove(node);
+            this.#controlObserver.disconnect();
+            this.#control = null;
+            break;
+          case this.#label:
+            node.classList.remove('embedded');
+            this.removeAttribute('with-label');
+            this.#label = null;
+            break;
+          case this.#clearButton:
+            this.removeAttribute('with-clear-button');
+            this.#eventListeners.remove(node);
+            this.#clearButton = null;
+            break;
+          default:
+            for (let iconName of HapticFieldElement.ICON_NAMES) {
+              if (node.classList.contains(`${iconName}-icon`)) {
+                if (!this.querySelector(`${iconName}-icon`)) {
+                  this.removeAttribute(`with-${iconName}-icon`);
+                }
+              }
+            }
+        }
+      }
     }
   });
 
-  constructor() {
+  constructor(allowedControlClasses, clearButtonAllowed) {
     super();
+    this.#allowedControlClasses = allowedControlClasses;
+    this.#clearButtonAllowed = clearButtonAllowed;
   }
 
   get control() {
@@ -1696,6 +1817,10 @@ class HapticFieldElement extends HTMLElement {
     }
   }
 
+  get #focusIndicator() {
+    return this.getAttribute('focus-indicator');
+  }
+
   connectedCallback() {
     if (this.hasAttribute('set-valid-on-change')) {
       const value = this.getAttribute('set-valid-on-change');
@@ -1711,119 +1836,17 @@ class HapticFieldElement extends HTMLElement {
 
   disconnectedCallback() {
     this.#childNodesObserver.disconnect();
+    this.#controlObserver.disconnect();
     this.#eventListeners.removeAll();
   }
 
-  nodeAdded(node) {
-    if (node instanceof HTMLElement && this.#isParentFieldOf(node)) {
-      if (node instanceof HapticDropdownElement ||
-          node instanceof HTMLInputElement ||
-          node instanceof HTMLTextAreaElement ||
-          node instanceof HTMLSelectElement) {
-        if (!this.#control) {
-          if (node instanceof HTMLInputElement ||
-              node instanceof HTMLTextAreaElement ||
-              node instanceof HTMLSelectElement) {
-            this.#eventListeners.add(node, 'mousedown', () => {
-              this.#mousePressed = true;
-            });
-            this.#eventListeners.add(node, 'mouseup', () => {
-              this.#mousePressed = false;
-            });
-            this.#eventListeners.add(node, 'focusin', () => {
-              if (!this.#mousePressed) {
-                this.setAttribute('focused', 'focused');
-              }
-            });
-            this.#eventListeners.add(node, 'focusout', () => {
-              this.removeAttribute('focused');
-            });
-          } else
-          if (node instanceof HapticTextAreaElement) {
-            if (!node.hasAttribute('rows')) {
-              node.setAttribute('rows', 1);
-            }
-          }
-          this.#controlObserver.observe(node);
-
-          this.#eventListeners.add(node, 'change', () => {
-            this.#setValidOnChange?.forEach(fieldId => {
-              const field = fieldId == 'itself' ? this :
-                this.#control?.form?.querySelector(`[for="${fieldId}"]`);
-
-              if (field && 'valid' in field) {
-                field.valid = true;
-              }
-            });
-            this.#refresh();
-          });
-          this.#eventListeners.add(node, 'input', () => {
-            this.#refresh();
-          });
-          this.#control = node;
-        }
-      } else
-      if (node.classList.contains('field-label')) {
-        if (!this.#label) {
-          node.classList.add('embedded');
-          this.setAttribute('with-label', '');
-          this.#label = node;
-        }
-      } else {
-        for (let iconName of HapticTextFieldElement.ICON_NAMES) {
-          if (node.classList.contains(`${iconName}-icon`)) {
-            if (iconName != 'error' || !this.valid) {
-              this.setAttribute(`with-${iconName}-icon`, '');
-            }
-          }
-        }
+  #isAllowedControlElement(node) {
+    for (let allowedControlClass of this.#allowedControlClasses) {
+      if (node instanceof allowedControlClass) {
+        return true;
       }
     }
-  }
-
-  nodeRemoved(node) {
-    if (node instanceof HTMLElement) {
-      switch (node) {
-        case this.#control:
-          node.classList.remove('embedded');
-          this.removeAttribute('disabled');
-          this.removeAttribute('invalid');
-          this.removeAttribute('required');
-          this.setAttribute('empty', '');
-          this.#eventListeners.remove(node);
-          this.#controlObserver.disconnect();
-          this.#control = null;
-          break;
-        case this.#label:
-          node.classList.remove('embedded');
-          this.removeAttribute('with-label');
-          this.#label = null;
-          break;
-        default:
-          for (let iconName of HapticFieldElement.ICON_NAMES) {
-            if (node.classList.contains(`${iconName}-icon`)) {
-              if (!this.querySelector(`${iconName}-icon`)) {
-                this.removeAttribute(`with-${iconName}-icon`);
-              }
-            }
-          }
-      }
-    }
-  }
-
-  #refresh() {
-    if (this.#control) {
-      const value = this.#control.value;
-
-      if (value == null || value.length == 0) {
-        this.setAttribute('empty', '');
-      } else {
-        this.removeAttribute('empty');
-      }
-      if (this.#control instanceof HapticTextAreaElement) {
-        this.#control.resize();
-      }
-    }
+    return false;
   }
 
   #isParentFieldOf(node) {
@@ -1834,59 +1857,35 @@ class HapticFieldElement extends HTMLElement {
     }
     return false;
   }
+
+  #refresh() {
+    const control = this.#control;
+
+    if (control) {
+      const value = control.value;
+
+      if (value == null || value.length == 0) {
+        this.setAttribute('empty', '');
+      } else {
+        this.removeAttribute('empty');
+      }
+      if (control instanceof HapticTextAreaElement) {
+        control.resize();
+      }
+    }
+  }
 }
 
 class HapticDropdownFieldElement extends HapticFieldElement {
   constructor() {
-    super();
+    super([HapticDropdownElement, HTMLSelectElement], false);
   }
 }
 customElements.define('haptic-dropdown-field', HapticDropdownFieldElement);
 
 class HapticTextFieldElement extends HapticFieldElement {
-  #eventListeners = new HapticEventListeners();
-  #clearButton = null;
-
   constructor() {
-    super();
-  }
-
-  disconnectedCallback() {
-    this.#eventListeners.removeAll();
-    super.disconnectedCallback();
-  }
-
-  nodeAdded(node) {
-    if (node instanceof HTMLElement && node.classList.contains('clear-button')) {
-      if (!this.#clearButton) {
-        this.setAttribute('with-clear-button', '');
-        this.#eventListeners.add(node, 'click', event => {
-          this.clear();
-          // this.control?.focus();
-          event.preventDefault();
-        });
-        this.#clearButton = node;
-      }
-    } else {
-      super.nodeAdded(node);
-    }
-  }
-
-  nodeRemoved(node) {
-    if (node === this.#clearButton) {
-      this.removeAttribute('with-clear-button');
-      this.#eventListeners.remove(node);
-      this.#clearButton = null;
-    } else {
-      super.nodeRemoved(node);
-    }
-  }
-
-  clear() {
-    if (this.control && this.control.value != '') {
-      this.control.value = '';
-      this.control.dispatchEvent(new Event('input'));
-    }
+    super([HTMLInputElement, HTMLTextAreaElement], true);
   }
 }
 customElements.define('haptic-text-field', HapticTextFieldElement);
