@@ -275,7 +275,7 @@ $haptic-dark-mode: true !default;
 
 haptic-button-segment, haptic-chip {
   input {
-    @include haptic-focused-color();
+    outline-color: transparent;
 
     &::after {
       background-color: transparent;
@@ -340,6 +340,19 @@ haptic-button-segment, haptic-chip {
     &.outlined {
       @include haptic-outline-color;
     }
+  }
+}
+
+haptic-segmented-button:focus-visible input.focused,
+haptic-chip input:focus-visible {
+  @include haptic-primary-color('outline-color');
+
+  &.filled:checked {
+    @include haptic-light-dark(
+      'outline-color',
+      #00000080,
+      $haptic-light-primary-color
+    );
   }
 }
 

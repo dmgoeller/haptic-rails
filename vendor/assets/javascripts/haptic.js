@@ -213,6 +213,10 @@ class HapticFocusable {
     return this.#target.classList.contains('active');
   }
 
+  get checked() {
+    return this.#target.checked ? true : false;
+  }
+
   get disabled() {
     return this.#target.disabled ? true : false;
   }
@@ -282,7 +286,7 @@ class HapticNavigationController {
           if (!element.disabled) {
             elementToBeFocused = element;
 
-            if (element.active) {
+            if (element.active || element.checked) {
               break;
             }
           }
@@ -604,12 +608,20 @@ class HapticButtonElement extends HTMLButtonElement {
 customElements.define('haptic-button', HapticButtonElement, { extends: 'button' });
 
 class HapticSegmentedButtonElement extends HTMLElement {
+  #navigationController = new HapticNavigationController();
+
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
       if (node instanceof HapticInputElement) {
         if (node.classList.contains('outlined')) {
           this.classList.add('outlined');
         }
+        this.#navigationController.add(node);
+      }
+    },
+    nodeRemoved: node => {
+      if (node instanceof HapticInputElement) {
+        this.#navigationController.remove(node);
       }
     }
   });
@@ -619,11 +631,14 @@ class HapticSegmentedButtonElement extends HTMLElement {
   }
 
   connectedCallback() {
+    this.tabIndex = Math.max(this.tabIndex, 0);
+    this.#navigationController.connect(this);
     this.#childNodesObserver.observe(this);
   }
 
   disconnectedCallback() {
     this.#childNodesObserver.disconnect();
+    this.#navigationController.disconnect();
   }
 }
 customElements.define('haptic-segmented-button', HapticSegmentedButtonElement);
@@ -2404,6 +2419,8 @@ class HapticListItemElement extends HTMLElement {
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
       if (node instanceof HTMLInputElement && !this.#control) {
+        node.classList.add('embedded');
+
         if (node.classList.contains('haptic-switch')) {
           this.setAttribute('control-type', 'switch');
         } else
@@ -2422,6 +2439,7 @@ class HapticListItemElement extends HTMLElement {
     },
     nodeRemoved: node => {
       if (node === this.#control) {
+        node.classList.remove('embedded');
         this.removeAttribute('control-type');
         this.#eventListeners.remove(node);
         this.#controlObserver.disconnect();
