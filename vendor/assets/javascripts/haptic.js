@@ -2388,8 +2388,6 @@ class HapticListItemElement extends HTMLElement {
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
       if (node instanceof HTMLInputElement && !this.#control) {
-        node.classList.add('embedded');
-
         if (node.classList.contains('haptic-switch')) {
           this.setAttribute('control-type', 'switch');
         } else
@@ -2408,7 +2406,6 @@ class HapticListItemElement extends HTMLElement {
     },
     nodeRemoved: node => {
       if (node === this.#control) {
-        node.classList.remove('embedded');
         this.removeAttribute('control-type');
         this.#eventListeners.remove(node);
         this.#controlObserver.disconnect();

@@ -721,12 +721,6 @@ haptic-text-field {
  **********************************************************************/
 
 haptic-list-item {
-  outline-color: transparent;
-
-  &:has(:focus-visible) {
-    @include haptic-primary-color('outline-color');
-  }
-
   .haptic-checkbox, .haptic-radio-button, .haptic-switch {
     &:hover {
       @include haptic-light-dark(

@@ -24,11 +24,13 @@ haptic-button-segment, haptic-chip {
       all .4s linear,
       background .1s linear,
       filter .2s linear,
-      opacity .2s linear;
+      opacity .2s linear,
+      outline 0s;
 
     &::after {
       transition: .1s linear;
     }
+
     &:hover:not(:checked) {
       &, &::after {
         transition: .4s linear;
