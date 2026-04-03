@@ -407,7 +407,7 @@ class HapticNavigationController {
   disconnect() {
     this.#eventListeners.removeAll();
 
-    this.#initialTabIndices.forEach((element, tabIndex) => {
+    this.#initialTabIndices.forEach((tabIndex, element) => {
       element.tabIndex = tabIndex;
     });
     this.#initialTabIndices.clear();
