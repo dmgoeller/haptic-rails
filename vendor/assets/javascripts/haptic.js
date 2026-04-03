@@ -236,15 +236,19 @@ class HapticFocusable {
 
 class HapticNavigationController {
   #eventListeners = new HapticEventListeners();
-  #initialTabIndices = new Map();
-  #scrollContainer = null;
-  #target = null;
-  #vertical = false;
   #mouse = false;
+  #vertical = false;
+  #target = null;
+  #scrollContainer = null;
   #elements = [];
+  #initialTabIndices = new Map();
   #focused = false;
   #suspended = false;
   #skipNextMouseEvent = false;
+
+  get connected() {
+    return this.#target !== null;
+  }
 
   get #focusedElement() {
     for (let element of this.#elements) {
@@ -262,12 +266,12 @@ class HapticNavigationController {
     return element;
   }
 
-  constructor(target, options = {}) {
-    this.#target = target;
-
+  constructor(options = {}) {
     this.#vertical = options.vertical === true;
     this.#mouse = options.mouse === true;
+  }
 
+  connect(target) {
     this.#eventListeners.add(target, 'focusin', () => {
       if (!this.#suspended && !this.#focusedElement) {
         let elementToBeFocused = null;
@@ -397,6 +401,23 @@ class HapticNavigationController {
         break;
       }
     }
+    this.#target = target;
+  }
+
+  disconnect() {
+    this.#eventListeners.removeAll();
+
+    this.#initialTabIndices.forEach((element, tabIndex) => {
+      element.tabIndex = tabIndex;
+    });
+    this.#initialTabIndices.clear();
+
+    this.#elements = [];
+    this.#scrollContainer = null;
+    this.#target = null;
+    this.#focused = false;
+    this.#suspended = false;
+    this.#skipNextMouseEvent = false;
   }
 
   add(element) {
@@ -445,11 +466,6 @@ class HapticNavigationController {
       }
     }
     return false;
-  }
-
-  disconnect() {
-    this.#eventListeners.removeAll();
-    this.#elements = [];
   }
 
   focusFirst() {
@@ -527,9 +543,9 @@ class HapticNavigationController {
 class HapticButtonElement extends HTMLButtonElement {
   static observedAttributes = ['data-haptic-confirm'];
 
-  #eventListeners = new HapticEventListeners();
-  #lock = new HapticLock(this);
   #confirmed = null;
+  #lock = new HapticLock(this);
+  #eventListeners = new HapticEventListeners();
 
   constructor() {
     super();
@@ -707,13 +723,13 @@ customElements.define('haptic-chip', HapticChipElement);
 class HapticDropdownElement extends HTMLElement {
   static observedAttributes = ['disabled'];
 
-  #eventListeners = new HapticEventListeners();
-  #lock = new HapticLock(this);
   #toggleElement = null;
   #popoverElement = null;
   #backdropElement = null;
   #scrollContainer = null;
   #mousePressed = false;
+  #lock = new HapticLock(this);
+  #eventListeners = new HapticEventListeners();
 
   #toggleElementObserver = new HapticAttributesObserver(
     this, ['disabled'], ['inline']
@@ -913,9 +929,9 @@ class HapticDropdownElement extends HTMLElement {
 customElements.define('haptic-dropdown', HapticDropdownElement);
 
 class HapticDropdownDialogElement extends HapticDropdownElement {
-  #eventListeners = new HapticEventListeners();
   #fields = new Set();
   #resetButtons = new Set();
+  #eventListeners = new HapticEventListeners();
 
   constructor() {
     super();
@@ -998,8 +1014,8 @@ class HapticDropdownDialogElement extends HapticDropdownElement {
 customElements.define('haptic-dropdown-dialog', HapticDropdownDialogElement);
 
 class HapticDropdownMenuElement extends HapticDropdownElement {
-  #eventListeners = new HapticEventListeners();
   #menuElement = null;
+  #eventListeners = new HapticEventListeners();
 
   constructor() {
     super()
@@ -1078,7 +1094,6 @@ class HapticDropdownMenuElement extends HapticDropdownElement {
 customElements.define('haptic-dropdown-menu', HapticDropdownMenuElement);
 
 class HapticSelectDropdownElement extends HapticDropdownElement {
-  #eventListeners = new HapticEventListeners();
   #inputElement = null;
   #popoverScrollContainer = null;
   #optionElements = [];
@@ -1087,6 +1102,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   #keyboardInputTimeoutId = null;
   #maxSize = null;
   #optionHeight = null;
+  #eventListeners = new HapticEventListeners();
 
   #inputElementObserver = new HapticAttributesObserver(
     this, ['disabled', 'locked', 'required']
@@ -1633,7 +1649,6 @@ customElements.define('haptic-option', HapticOptionElement);
 class HapticFieldElement extends HTMLElement {
   static ICON_NAMES = ['error', 'leading', 'trailing'];
 
-  #eventListeners = new HapticEventListeners();
   #allowedControlClasses = [];
   #clearButtonAllowed = false;
   #control = null;
@@ -1641,6 +1656,7 @@ class HapticFieldElement extends HTMLElement {
   #clearButton = null;
   #setValidOnChange = null;
   #mousePressed = false;
+  #eventListeners = new HapticEventListeners();
 
   #controlObserver = new HapticAttributesObserver(
     this,
@@ -1891,11 +1907,11 @@ class HapticTextFieldElement extends HapticFieldElement {
 customElements.define('haptic-text-field', HapticTextFieldElement);
 
 class HapticFormElement extends HTMLFormElement {
-  #eventListeners = new HapticEventListeners();
   #controls = new Set();
   #requiredFields = new Set();
   #submitButtons = new Set();
   #isSubmitting = false;
+  #eventListeners = new HapticEventListeners();
 
   constructor() {
     super();   
@@ -2190,8 +2206,8 @@ customElements.define('haptic-async-form', HapticAsyncFormElement, { extends: 'f
 class HapticInputElement extends HTMLInputElement {
   static observedAttributes = ['disabled'];
 
-  #lock = new HapticLock(this);
   #initialValue = null;
+  #lock = new HapticLock(this);
 
   constructor() {
     super();
@@ -2320,8 +2336,8 @@ class HapticLabelElement extends HTMLLabelElement {
 customElements.define('haptic-label', HapticLabelElement, { extends: 'label' });
 
 class HapticListElement extends HTMLElement {
-  #eventListeners = new HapticEventListeners();
   #listItemElements = new Set();
+  #eventListeners = new HapticEventListeners();
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
@@ -2380,8 +2396,8 @@ class HapticListElement extends HTMLElement {
 customElements.define('haptic-list', HapticListElement);
 
 class HapticListItemElement extends HTMLElement {
-  #eventListeners = new HapticEventListeners();
   #control = null;
+  #eventListeners = new HapticEventListeners();
 
   #controlObserver = new HapticAttributesObserver(this, ['disabled']);
 
@@ -2438,7 +2454,10 @@ class HapticListItemElement extends HTMLElement {
 customElements.define('haptic-list-item', HapticListItemElement);
 
 class HapticMenuElement extends HTMLElement {
-  #navigationController = null;
+  #navigationController = new HapticNavigationController({
+    mouse: true,
+    vertical: true
+  });
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
@@ -2469,17 +2488,13 @@ class HapticMenuElement extends HTMLElement {
     this.tabIndex = Math.max(this.tabIndex, 0);
     this.classList.add('haptic-menu');
 
-    this.#navigationController =
-      new HapticNavigationController(this, {
-        mouse: true,
-        vertical: true
-      });
+    this.#navigationController.connect(this);
     this.#childNodesObserver.observe(this);
   }
 
   disconnectedCallback() {
-    this.#childNodesObserver.disconnect();
     this.#navigationController.disconnect();
+    this.#childNodesObserver.disconnect();
   }
 
   focusFirst() {
@@ -2527,9 +2542,9 @@ class HapticMenuItemElement extends HTMLAnchorElement {
 customElements.define('haptic-menu-item', HapticMenuItemElement, { extends: 'a' });
 
 class HapticNavElement extends HTMLElement {
-  #eventListeners = new HapticEventListeners();
-  #navigationController = null;
   #navItemElements = new Set();
+  #eventListeners = new HapticEventListeners();
+  #navigationController = new HapticNavigationController({ vertical: true });
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
@@ -2559,10 +2574,7 @@ class HapticNavElement extends HTMLElement {
     this.tabIndex = Math.max(this.tabIndex, 0);
     this.classList.add('haptic-nav');
 
-    this.#navigationController =
-      new HapticNavigationController(this, {
-        vertical: true
-      });
+    this.#navigationController.connect(this);
     this.#childNodesObserver.observe(this);
 
     this.#eventListeners.add(document, 'popstate', () => {
@@ -2590,7 +2602,7 @@ customElements.define('haptic-nav', HapticNavElement, { extends: 'nav' });
 class HapticNavItemElement extends HTMLAnchorElement {
   static observedAttributes = ['active-on', 'href'];
 
-  #regexp = null
+  #regexp = null;
 
   constructor() {
     super();
@@ -2649,8 +2661,8 @@ customElements.define('haptic-nav-item', HapticNavItemElement, { extends: 'a' })
 class HapticSelectElement extends HTMLSelectElement {
   static observedAttributes = ['disabled'];
 
-  #lock = new HapticLock(this);
   #initialValue = null;
+  #lock = new HapticLock(this);
 
   constructor() {
     super();
@@ -2703,7 +2715,7 @@ class HapticTableElement extends HTMLTableElement {
   }
 
   #eventListeners = new HapticEventListeners();
-  #navigationController = null;
+  #navigationController = new HapticNavigationController({ vertical: true });
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
@@ -2711,25 +2723,26 @@ class HapticTableElement extends HTMLTableElement {
         if (node.hasAttribute('data-href')) {
           this.tabIndex = Math.max(this.tabIndex, 0);
 
-          (this.#navigationController ||=
-            new HapticNavigationController(this, {
-              vertical: true
-            })
-          ).add(node);
+          if (!this.#navigationController.connected) {
+            this.#navigationController.connect(this);
+          }
+          this.#navigationController.add(node);
         }
       } else
       if (HapticTableElement.isInteractiveElement(node)) {
         this.#eventListeners.add(node, 'focusin', () => {
-          this.#navigationController?.suspend();
+          this.#navigationController.suspend();
         });
         this.#eventListeners.add(node, 'focusout', () => {
-          this.#navigationController?.resume();
+          this.#navigationController.resume();
         });
       }
     },
     nodeRemoved: node => {
       if (node instanceof HTMLTableRowElement) {
-        this.#navigationController?.remove(node);
+        if (this.#navigationController.connected) {
+          this.#navigationController.remove(node);
+        }
       } else
       if (HapticTableElement.isInteractiveElement(node)) {
         this.#eventListeners.remove(node);
@@ -2748,7 +2761,10 @@ class HapticTableElement extends HTMLTableElement {
 
   disconnectedCallback() {
     this.#childNodesObserver.disconnect();
-    this.#navigationController?.disconnect();
+
+    if (this.#navigationController.connected) {
+      this.#navigationController.disconnect();
+    }
   }
 }
 customElements.define('haptic-table', HapticTableElement, { extends: 'table' });
@@ -2813,24 +2829,24 @@ class HapticTableRowElement extends HTMLTableRowElement {
 customElements.define('haptic-table-row', HapticTableRowElement, { extends: 'tr' });
 
 class HapticTableLikeElement extends HTMLElement {
-  #navigationController = null;
+  #navigationController = new HapticNavigationController({ vertical: true });
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
-      if (node instanceof HTMLAnchorElement &&
-          node.classList.contains('table-row')) {
+      if (node instanceof HTMLAnchorElement && node.classList.contains('table-row')) {
         this.tabIndex = Math.max(this.tabIndex, 0);
 
-        (this.#navigationController ||=
-          new HapticNavigationController(this, {
-            vertical: true
-          })
-        ).add(node);
+        if (!this.#navigationController.connected) {
+          this.#navigationController.connect(this);
+        }
+        this.#navigationController.add(node);
       }
     },
     nodeRemoved: node => {
       if (node instanceof HTMLAnchorElement) {
-        this.#navigationController?.remove(node);
+        if (this.#navigationController.connected) {
+          this.#navigationController.remove(node);
+        }
       }
     }
   });
@@ -2845,16 +2861,19 @@ class HapticTableLikeElement extends HTMLElement {
 
   disconnectedCallback() {
     this.#childNodesObserver.disconnect();
-    this.#navigationController?.disconnect();
+
+    if (this.#navigationController.connected) {
+      this.#navigationController.disconnect();
+    }
   }
 }
 customElements.define('haptic-table-like', HapticTableLikeElement);
 
 class HapticTabsElement extends HTMLElement {
-  #eventListeners = new HapticEventListeners();
-  #mutationObservers = new Map();
   #tabs = [];
   #tabContents = [];
+  #mutationObservers = new Map();
+  #eventListeners = new HapticEventListeners();
 
   #mutationObserverCallback = mutationList => {
     const length = Math.min(this.#tabs.length, this.#tabContents.length);
@@ -2938,9 +2957,9 @@ class HapticTabsElement extends HTMLElement {
 customElements.define('haptic-tabs', HapticTabsElement);
 
 class HapticTabBarElement extends HTMLElement {
-  #eventListeners = new HapticEventListeners();
-  #navigationController = null;
   #tabElements = new Set();
+  #eventListeners = new HapticEventListeners();
+  #navigationController = new HapticNavigationController(this);
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
@@ -2981,9 +3000,7 @@ class HapticTabBarElement extends HTMLElement {
     this.tabIndex = Math.max(this.tabIndex, 0);
     this.classList.add('haptic-tab-bar');
 
-    this.#navigationController =
-      new HapticNavigationController(this);
-
+    this.#navigationController.connect(this);
     this.#childNodesObserver.observe(this);
   }
 
@@ -3000,9 +3017,9 @@ class HapticTabBarElement extends HTMLElement {
 customElements.define('haptic-tab-bar', HapticTabBarElement);
 
 class HapticTextAreaElement extends HTMLTextAreaElement {
-  #eventListeners = new HapticEventListeners();
-  #lock = new HapticLock(this);
   #initialValue = null;
+  #lock = new HapticLock(this);
+  #eventListeners = new HapticEventListeners();
 
   constructor() {
     super();
