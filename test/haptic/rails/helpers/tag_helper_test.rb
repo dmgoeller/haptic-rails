@@ -8,249 +8,411 @@ module Haptic
       class TagHelperTest < ActionView::TestCase
         include TagHelper
 
-        def test_haptic_button_segment_tag
+        %w[
+          haptic-button-segment
+          haptic-chip
+          haptic-menu
+          haptic-list
+          haptic-list-item
+          haptic-option
+          haptic-segmented-button
+          haptic-tab-bar
+          haptic-tabs
+        ].each do |tag_name|
+          method_name = :"#{tag_name.underscore}_tag"
+
+          define_method(:"test_#{method_name}") do
+            assert_dom_equal(
+              <<~HTML,
+                <#{tag_name}></#{tag_name}>
+              HTML
+              send(method_name)
+            )
+          end
+
+          define_method(:"test_#{method_name}_with_options") do
+            assert_dom_equal(
+              <<~HTML,
+                <#{tag_name} foo="bar"></#{tag_name}>
+              HTML
+              send(method_name, foo: 'bar')
+            )
+          end
+
+          define_method(:"test_#{method_name}_with_content") do
+            assert_dom_equal(
+              <<~HTML,
+                <#{tag_name}>Content</#{tag_name}>
+              HTML
+              send(method_name, 'Content')
+            )
+          end
+
+          define_method(:"test_#{method_name}_with_content_and_options") do
+            assert_dom_equal(
+              <<~HTML,
+                <#{tag_name} foo="bar">Content</#{tag_name}>
+              HTML
+              send(method_name, 'Content', foo: 'bar')
+            )
+          end
+
+          define_method(:"test_#{method_name}_with_block") do
+            assert_dom_equal(
+              <<~HTML,
+                <#{tag_name}>Content</#{tag_name}>
+              HTML
+              send(method_name) { 'Content' }
+            )
+          end
+
+          define_method(:"test_#{method_name}_with_block_and_options") do
+            assert_dom_equal(
+              <<~HTML,
+                <#{tag_name} foo="bar">Content</#{tag_name}>
+              HTML
+              send(method_name, foo: 'bar') { 'Content' }
+            )
+          end
+        end
+
+        def test_haptic_option_tag_with_checked_option
           assert_dom_equal(
             <<~HTML,
-              <haptic-button-segment></haptic-button-segment>
+              <haptic-option checked="checked"></haptic-option>
             HTML
-            haptic_button_segment_tag
+            haptic_option_tag(checked: true)
           )
         end
 
-        def test_haptic_chip_tag
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-chip></haptic-chip>
-            HTML
-            haptic_chip_tag
-          )
+        %w[
+          haptic-dropdown
+          haptic-dropdown-dialog
+          haptic-dropdown-menu
+          haptic-select-dropdown
+        ].each do |tag_name|
+          method_name = :"#{tag_name.underscore}_tag"
+
+          define_method(:"test_#{method_name}") do
+            assert_dom_equal(
+              <<~HTML,
+                <#{tag_name}>
+                  <div class="backdrop"></div>
+                </#{tag_name}>
+              HTML
+              send(method_name)
+            )
+          end
+
+          define_method(:"test_#{method_name}_with_options") do
+            assert_dom_equal(
+              <<~HTML,
+                <#{tag_name} foo="bar">
+                  <div class="backdrop"></div>
+                </#{tag_name}>
+              HTML
+              send(method_name, foo: 'bar')
+            )
+          end
+
+          define_method(:"test_#{method_name}_with_content") do
+            assert_dom_equal(
+              <<~HTML,
+                <#{tag_name}>
+                  <div class="toggle"></div>
+                  <div class="popover"></div>
+                  <div class="backdrop"></div>
+                </#{tag_name}>
+              HTML
+              send(
+                method_name,
+                tag.div(class: 'toggle') + tag.div(class: 'popover')
+              )
+            )
+          end
+
+          define_method(:"test_#{method_name}_with_content_and_options") do
+            assert_dom_equal(
+              <<~HTML,
+                <#{tag_name} foo="bar">
+                  <div class="toggle"></div>
+                  <div class="popover"></div>
+                  <div class="backdrop"></div>
+                </#{tag_name}>
+              HTML
+              send(
+                method_name,
+                tag.div(class: 'toggle') + tag.div(class: 'popover'),
+                foo: 'bar'
+              )
+            )
+          end
+
+          define_method(:"test_#{method_name}_with_block") do
+            assert_dom_equal(
+              <<~HTML,
+                <#{tag_name}>
+                  <div class="toggle"></div>
+                  <div class="popover"></div>
+                  <div class="backdrop"></div>
+                </#{tag_name}>
+              HTML
+              send(method_name) do
+                tag.div(class: 'toggle') + tag.div(class: 'popover')
+              end
+            )
+          end
+
+          define_method(:"test_#{method_name}_with_block_and_options") do
+            assert_dom_equal(
+              <<~HTML,
+                <#{tag_name} foo="bar">
+                  <div class="toggle"></div>
+                  <div class="popover"></div>
+                  <div class="backdrop"></div>
+                </#{tag_name}>
+              HTML
+              send(method_name, foo: 'bar') do
+                tag.div(class: 'toggle') + tag.div(class: 'popover')
+              end
+            )
+          end
         end
 
-        def test_haptic_dropdown_dialog_tag
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-dropdown-dialog>
-                <div class="backdrop"></div>
-              </haptic-dropdown-dialog>
-            HTML
-            haptic_dropdown_dialog_tag
-          )
+        %w[haptic-dropdown-dialog haptic-dropdown-menu].each do |tag_name|
+          method_name = :"#{tag_name.underscore}_tag"
+
+          define_method(:"test_#{method_name}_with_open_to_top_option") do
+            assert_dom_equal(
+              <<~HTML,
+                <#{tag_name} open-to-top>
+                  <div class="backdrop"></div>
+                </#{tag_name}>
+              HTML
+              send(method_name, open_to_top: true)
+            )
+          end
         end
 
-        def test_haptic_dropdown_dialog_tag_with_block
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-dropdown-dialog>
-                <div class="toggle"></div>
-                <div class="popover"></div>
-                <div class="backdrop"></div>
-              </haptic-dropdown-dialog>
-            HTML
-            haptic_dropdown_dialog_tag do
-              content_tag('div', '', class: 'toggle') +
-                content_tag('div', '', class: 'popover')
-            end
-          )
-        end
-
-        def test_haptic_dropdown_dialog_tag_with_options
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-dropdown-dialog open-to-top>
-                <div class="backdrop"></div>
-              </haptic-dropdown-dialog>
-            HTML
-            haptic_dropdown_dialog_tag(open_to_top: true)
-          )
-        end
-
-        def test_haptic_dropdown_menu_tag
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-dropdown-menu>
-                <div class="backdrop"></div>
-              </haptic-dropdown-menu>
-            HTML
-            haptic_dropdown_menu_tag
-          )
-        end
-
-        def test_haptic_dropdown_menu_tag_with_options
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-dropdown-menu open-to-top>
-                <div class="backdrop"></div>
-              </haptic-dropdown-menu>
-            HTML
-            haptic_dropdown_menu_tag(open_to_top: true)
-          )
-        end
-
-        def test_haptic_dropdown_menu_tag_with_block
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-dropdown-menu>
-                <div class="toggle"></div>
-                <div class="popover"></div>
-                <div class="backdrop"></div>
-              </haptic-dropdown-menu>
-            HTML
-            haptic_dropdown_menu_tag do
-              content_tag('div', '', class: 'toggle') +
-                content_tag('div', '', class: 'popover')
-            end
-          )
-        end
-
-        def test_haptic_dropdown_tag
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-dropdown>
-                <div class="backdrop"></div>
-              </haptic-dropdown>
-            HTML
-            haptic_dropdown_tag
-          )
-        end
-
-        def test_haptic_dropdown_tag_with_options
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-dropdown class="custom">
-                <div class="backdrop"></div>
-              </haptic-dropdown>
-            HTML
-            haptic_dropdown_tag(class: 'custom')
-          )
-        end
-
-        def test_haptic_dropdown_tag_with_block
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-dropdown>
-                <div class="toggle"></div>
-                <div class="popover"></div>
-                <div class="backdrop"></div>
-              </haptic-dropdown>
-            HTML
-            haptic_dropdown_tag do
-              content_tag('div', '', class: 'toggle') +
-                content_tag('div', '', class: 'popover')
-            end
-          )
-        end
+        # #haptic_dropdown_field_tag
 
         def test_haptic_dropdown_field_tag
           assert_dom_equal(
             <<~HTML,
               <haptic-dropdown-field>
+                <div class="field-container"></div>
+              </haptic-dropdown-field>
+            HTML
+            haptic_dropdown_field_tag
+          )
+        end
+
+        def test_haptic_dropdown_field_tag_with_options
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-dropdown-field focus-indicator="focus">
                 <div class="field-container">
+                  <div class="haptic-icon error-icon">error</div>
+                  <div class="haptic-icon leading-icon">leading_icon</div>
+                </div>
+                <div class="error-message">Error message</div>
+                <div class="supporting-text">Helper text</div>
+              </haptic-dropdown-field>
+            HTML
+            haptic_dropdown_field_tag(
+              focus_indicator: true,
+              error_message: 'Error message',
+              leading_icon: 'leading_icon',
+              show_error_icon: true,
+              show_error_message: true,
+              supporting_text: 'Helper text'
+            )
+          )
+        end
+
+        def test_haptic_dropdown_field_tag_with_field
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-dropdown-field>
+                <div class="field-container">
+                  <haptic-select-dropdown>
+                    <div class="backdrop"></div>
+                  </haptic-select-dropdown>
+                </div>
+              </haptic-dropdown-field>
+            HTML
+            haptic_dropdown_field_tag(haptic_select_dropdown_tag)
+          )
+        end
+
+        def test_haptic_dropdown_field_tag_with_field_and_options
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-dropdown-field focus-indicator="focus">
+                <div class="field-container">
+                  <haptic-select-dropdown>
+                    <div class="backdrop"></div>
+                  </haptic-select-dropdown>
+                  <div class="haptic-icon error-icon">error</div>
+                  <div class="haptic-icon leading-icon">leading_icon</div>
+                </div>
+                <div class="error-message">Error message</div>
+                <div class="supporting-text">Helper text</div>
+              </haptic-dropdown-field>
+            HTML
+            haptic_dropdown_field_tag(
+              haptic_select_dropdown_tag,
+              focus_indicator: true,
+              error_message: 'Error message',
+              leading_icon: 'leading_icon',
+              show_error_icon: true,
+              show_error_message: true,
+              supporting_text: 'Helper text'
+            )
+          )
+        end
+
+        def test_haptic_dropdown_field_tag_with_field_and_label
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-dropdown-field>
+                <div class="field-container">
+                  <haptic-select-dropdown>
+                    <div class="backdrop"></div>
+                  </haptic-select-dropdown>
                   <label class="field-label">Label</label>
                 </div>
               </haptic-dropdown-field>
             HTML
-            haptic_dropdown_field_tag('', 'Label')
+            haptic_dropdown_field_tag(haptic_select_dropdown_tag, 'Label')
           )
         end
 
-        def test_haptic_menu_tag
+        def test_haptic_dropdown_field_tag_with_field_label_and_options
           assert_dom_equal(
             <<~HTML,
-              <haptic-menu></haptic-menu>
+              <haptic-dropdown-field animated-label focus-indicator="focus">
+                <div class="field-container">
+                  <haptic-select-dropdown>
+                    <div class="backdrop"></div>
+                  </haptic-select-dropdown>
+                  <label class="field-label">Label</label>
+                  <div class="haptic-icon error-icon">error</div>
+                  <div class="haptic-icon leading-icon">leading_icon</div>
+                </div>
+                <div class="error-message">Error message</div>
+                <div class="supporting-text">Helper text</div>
+              </haptic-dropdown-field>
             HTML
-            haptic_menu_tag
+            haptic_dropdown_field_tag(
+              haptic_select_dropdown_tag,
+              'Label',
+              animated_label: true,
+              focus_indicator: true,
+              error_message: 'Error message',
+              leading_icon: 'leading_icon',
+              show_error_icon: true,
+              show_error_message: true,
+              supporting_text: 'Helper text'
+            )
           )
         end
 
-        def test_haptic_list_tag
+        def test_haptic_dropdown_field_tag_with_block
           assert_dom_equal(
             <<~HTML,
-              <haptic-list></haptic-list>
+              <haptic-dropdown-field>
+                <div class="field-container">
+                  <haptic-select-dropdown>
+                    <div class="backdrop"></div>
+                  </haptic-select-dropdown>
+                </div>
+              </haptic-dropdown-field>
             HTML
-            haptic_list_tag
-          )
-        end
-
-        def test_haptic_list_item_tag
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-list-item></haptic-list-item>
-            HTML
-            haptic_list_item_tag
-          )
-        end
-
-        def test_haptic_option_tag
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-option></haptic-option>
-            HTML
-            haptic_option_tag
-          )
-        end
-
-        def test_haptic_option_tag_on_checked
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-option checked="checked"></haptic-option>
-            HTML
-            haptic_option_tag('', checked: true)
-          )
-        end
-
-        def test_haptic_segmented_button_tag
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-segmented-button></haptic-segmented-button>
-            HTML
-            haptic_segmented_button_tag
-          )
-        end
-
-        def test_haptic_select_dropdown_tag
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-select-dropdown>
-                <div class="backdrop"></div>
-              </haptic-select-dropdown>
-            HTML
-            haptic_select_dropdown_tag
-          )
-        end
-
-        def test_haptic_select_dropdown_tag_with_block
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-select-dropdown>
-                <div class="toggle"></div>
-                <div class="popover"></div>
-                <div class="backdrop"></div>
-              </haptic-select-dropdown>
-            HTML
-            haptic_select_dropdown_tag do
-              content_tag('div', '', class: 'toggle') +
-                content_tag('div', '', class: 'popover')
+            haptic_dropdown_field_tag do
+              haptic_select_dropdown_tag
             end
           )
         end
 
-        def test_haptic_tab_bar_tag
+        def test_haptic_dropdown_field_tag_with_block_and_options
           assert_dom_equal(
             <<~HTML,
-              <haptic-tab-bar></haptic-tab-bar>
+              <haptic-dropdown-field focus-indicator="focus">
+                <div class="field-container">
+                  <haptic-select-dropdown>
+                    <div class="backdrop"></div>
+                  </haptic-select-dropdown>
+                  <div class="haptic-icon error-icon">error</div>
+                  <div class="haptic-icon leading-icon">leading_icon</div>
+                </div>
+                <div class="error-message">Error message</div>
+                <div class="supporting-text">Helper text</div>
+              </haptic-dropdown-field>
             HTML
-            haptic_tab_bar_tag
+            haptic_dropdown_field_tag(
+              focus_indicator: true,
+              error_message: 'Error message',
+              leading_icon: 'leading_icon',
+              show_error_icon: true,
+              show_error_message: true,
+              supporting_text: 'Helper text'
+            ) do
+              haptic_select_dropdown_tag
+            end
           )
         end
 
-        def test_haptic_tabs_tag
+        def test_haptic_dropdown_field_tag_with_block_and_label
           assert_dom_equal(
             <<~HTML,
-              <haptic-tabs></haptic-tabs>
+              <haptic-dropdown-field>
+                <div class="field-container">
+                  <haptic-select-dropdown>
+                    <div class="backdrop"></div>
+                  </haptic-select-dropdown>
+                  <label class="field-label">Label</label>
+                </div>
+              </haptic-dropdown-field>
             HTML
-            haptic_tabs_tag
+            haptic_dropdown_field_tag('Label') do
+              haptic_select_dropdown_tag
+            end
           )
         end
+
+        def test_haptic_dropdown_field_tag_with_block_label_and_options
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-dropdown-field animated-label focus-indicator="focus">
+                <div class="field-container">
+                  <haptic-select-dropdown>
+                    <div class="backdrop"></div>
+                  </haptic-select-dropdown>
+                  <label class="field-label">Label</label>
+                  <div class="haptic-icon error-icon">error</div>
+                  <div class="haptic-icon leading-icon">leading_icon</div>
+                </div>
+                <div class="error-message">Error message</div>
+                <div class="supporting-text">Helper text</div>
+              </haptic-dropdown-field>
+            HTML
+            haptic_dropdown_field_tag(
+              'Label',
+              animated_label: true,
+              focus_indicator: true,
+              error_message: 'Error message',
+              leading_icon: 'leading_icon',
+              show_error_icon: true,
+              show_error_message: true,
+              supporting_text: 'Helper text'
+            ) do
+              haptic_select_dropdown_tag
+            end
+          )
+        end
+
+        # #haptic_text_field_tag
 
         def test_haptic_text_field_tag
           assert_dom_equal(
@@ -263,16 +425,76 @@ module Haptic
           )
         end
 
+        def test_haptic_text_field_tag_with_options
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-text-field focus-indicator="focus">
+                <div class="field-container">
+                  <button type="button" class="clear-button">
+                    <div class="haptic-icon">close</div>
+                  </button>
+                  <div class="haptic-icon error-icon">error</div>
+                  <div class="haptic-icon leading-icon">leading_icon</div>
+                  <div class="haptic-icon trailing-icon">trailing_icon</div>
+                </div>
+                <div class="error-message">Error message</div>
+                <div class="supporting-text">Helper text</div>
+              </haptic-text-field>
+            HTML
+            haptic_text_field_tag(
+              clear_button: true,
+              focus_indicator: true,
+              error_message: 'Error message',
+              leading_icon: 'leading_icon',
+              show_error_icon: true,
+              show_error_message: true,
+              supporting_text: 'Helper text',
+              trailing_icon: 'trailing_icon'
+            )
+          )
+        end
+
         def test_haptic_text_field_tag_with_field
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field>
                 <div class="field-container">
-                  #{field = '<input name="name" type="text">'}
+                  <input type="text" name="name">
                 </div>
               </haptic-text-field>
             HTML
-            haptic_text_field_tag(field)
+            haptic_text_field_tag(tag.input(type: 'text', name: 'name'))
+          )
+        end
+
+        def test_haptic_text_field_tag_with_field_and_options
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-text-field focus-indicator="focus">
+                <div class="field-container">
+                  <input type="text" name="name">
+                  <button type="button" class="clear-button">
+                    <div class="haptic-icon">close</div>
+                  </button>
+                  <div class="haptic-icon error-icon">error</div>
+                  <div class="haptic-icon leading-icon">leading_icon</div>
+                  <div class="haptic-icon trailing-icon">trailing_icon</div>
+                </div>
+                <div class="error-message">Error message</div>
+                <div class="supporting-text">Helper text</div>
+              </haptic-text-field>
+            HTML
+            haptic_text_field_tag(
+              tag.input(type: 'text', name: 'name'),
+              clear_button: true,
+              focus_indicator: true,
+              error_message: 'Error message',
+              leading_icon: 'leading_icon',
+              show_error_icon: true,
+              show_error_message: true,
+              supporting_text: 'Helper text',
+              trailing_icon: 'trailing_icon'
+            )
           )
         end
 
@@ -281,97 +503,49 @@ module Haptic
             <<~HTML,
               <haptic-text-field>
                 <div class="field-container">
-                  #{field = '<input name="name" type="text">'}
+                  <input type="text" name="name">
                   <label class="field-label">Label</label>
                 </div>
               </haptic-text-field>
             HTML
-            haptic_text_field_tag(field, 'Label')
+            haptic_text_field_tag(
+              tag.input(type: 'text', name: 'name'),
+              'Label'
+            )
           )
         end
 
-        def test_haptic_text_field_tag_with_field_and_focus_indicator
+        def test_haptic_text_field_tag_with_field_label_and_options
           assert_dom_equal(
             <<~HTML,
-              <haptic-text-field focus-indicator="focus">
+              <haptic-text-field animated-label focus-indicator="focus">
                 <div class="field-container">
-                  #{field = '<input name="name" type="text">'}
-                </div>
-              </haptic-text-field>
-            HTML
-            haptic_text_field_tag(field, focus_indicator: true)
-          )
-        end
-
-        def test_haptic_text_field_tag_with_field_and_clear_button
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field>
-                <div class="field-container">
-                  #{field = '<input name="name" type="text">'}
+                  <input name="name" type="text">
+                  <label class="field-label">Label</label>
                   <button type="button" class="clear-button">
                     <div class="haptic-icon">close</div>
                   </button>
-                </div>
-              </haptic-text-field>
-            HTML
-            haptic_text_field_tag(field, clear_button: true)
-          )
-        end
-
-        def test_haptic_text_field_tag_with_field_and_leading_icon
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field>
-                <div class="field-container">
-                  #{field = '<input name="name" type="text">'}
+                  <div class="haptic-icon error-icon">error</div>
                   <div class="haptic-icon leading-icon">leading_icon</div>
-                </div>
-              </haptic-text-field>
-            HTML
-            haptic_text_field_tag(field, leading_icon: 'leading_icon')
-          )
-        end
-
-        def test_haptic_text_field_tag_with_field_and_trailing_icon
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field>
-                <div class="field-container">
-                  #{field = '<input name="name" type="text">'}
                   <div class="haptic-icon trailing-icon">trailing_icon</div>
                 </div>
+                <div class="error-message">Error message</div>
+                <div class="supporting-text">Helper text</div>
               </haptic-text-field>
             HTML
-            haptic_text_field_tag(field, trailing_icon: 'trailing_icon')
-          )
-        end
-
-        def test_haptic_text_field_tag_with_field_and_error_message
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field>
-                <div class="field-container">
-                  #{field = '<input name="name" type="text">'}
-                </div>
-                <div class="error-message">Message</div>
-              </haptic-text-field>
-            HTML
-            haptic_text_field_tag(field, error_message: 'Message', show_error_message: true)
-          )
-        end
-
-        def test_haptic_text_field_tag_with_field_and_supporting
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field>
-                <div class="field-container">
-                #{field = '<input name="name" type="text">'}
-                </div>
-                <div class="supporting-text">Text</div>
-              </haptic-text-field>
-            HTML
-            haptic_text_field_tag(field, supporting_text: 'Text')
+            haptic_text_field_tag(
+              tag.input(type: 'text', name: 'name'),
+              'Label',
+              animated_label: true,
+              clear_button: true,
+              focus_indicator: true,
+              error_message: 'Error message',
+              leading_icon: 'leading_icon',
+              show_error_icon: true,
+              show_error_message: true,
+              supporting_text: 'Helper text',
+              trailing_icon: 'trailing_icon'
+            )
           )
         end
 
@@ -380,11 +554,45 @@ module Haptic
             <<~HTML,
               <haptic-text-field>
                 <div class="field-container">
-                  <input id="name" name="name" type="text">
+                  <input type="text" name="name">
                 </div>
               </haptic-text-field>
             HTML
-            haptic_text_field_tag { text_field_tag('name') }
+            haptic_text_field_tag do
+              tag.input(type: 'text', name: 'name')
+            end
+          )
+        end
+
+        def test_haptic_text_field_tag_with_block_and_options
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-text-field focus-indicator="focus">
+                <div class="field-container">
+                  <input type="text" name="name">
+                  <button type="button" class="clear-button">
+                    <div class="haptic-icon">close</div>
+                  </button>
+                  <div class="haptic-icon error-icon">error</div>
+                  <div class="haptic-icon leading-icon">leading_icon</div>
+                  <div class="haptic-icon trailing-icon">trailing_icon</div>
+                </div>
+                <div class="error-message">Error message</div>
+                <div class="supporting-text">Helper text</div>
+              </haptic-text-field>
+            HTML
+            haptic_text_field_tag(
+              clear_button: true,
+              focus_indicator: true,
+              error_message: 'Error message',
+              leading_icon: 'leading_icon',
+              show_error_icon: true,
+              show_error_message: true,
+              supporting_text: 'Helper text',
+              trailing_icon: 'trailing_icon'
+            ) do
+              tag.input(type: 'text', name: 'name')
+            end
           )
         end
 
@@ -393,100 +601,49 @@ module Haptic
             <<~HTML,
               <haptic-text-field>
                 <div class="field-container">
-                  <input id="name" name="name" type="text">
+                  <input type="text" name="name">
                   <label class="field-label">Label</label>
                 </div>
               </haptic-text-field>
             HTML
-            haptic_text_field_tag('Label') { text_field_tag('name') }
-          )
-        end
-
-        def test_haptic_text_field_tag_with_block_and_clear_button
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field>
-                <div class="field-container">
-                  <input id="name" name="name" type="text">
-                  <button type="button" class="clear-button">
-                    <div class="haptic-icon">close</div>
-                  </button>
-                </div>
-              </haptic-text-field>
-            HTML
-            haptic_text_field_tag(clear_button: true) { text_field_tag('name') }
-          )
-        end
-
-        def test_haptic_text_field_tag_with_block_and_error_icon
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field>
-                <div class="field-container">
-                  <input id="name" name="name" type="text">
-                  <div class="haptic-icon error-icon">error</div>
-                </div>
-              </haptic-text-field>
-            HTML
-            haptic_text_field_tag(show_error_icon: true) { text_field_tag('name') }
-          )
-        end
-
-        def test_haptic_text_field_tag_with_block_and_leading_icon
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field>
-                <div class="field-container">
-                  <input id="name" name="name" type="text">
-                  <div class="haptic-icon leading-icon">leading_icon</div>
-                </div>
-              </haptic-text-field>
-            HTML
-            haptic_text_field_tag(leading_icon: 'leading_icon') { text_field_tag('name') }
-          )
-        end
-
-        def test_haptic_text_field_tag_with_block_and_trailing_icon
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field>
-                <div class="field-container">
-                  <input id="name" name="name" type="text">
-                  <div class="haptic-icon trailing-icon">trailing_icon</div>
-                </div>
-              </haptic-text-field>
-            HTML
-            haptic_text_field_tag(trailing_icon: 'trailing_icon') { text_field_tag('name') }
-          )
-        end
-
-        def test_haptic_text_field_tag_with_block_and_error_message
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field>
-                <div class="field-container">
-                  <input id="name" name="name" type="text">
-                </div>
-                <div class="error-message">Message</div>
-              </haptic-text-field>
-            HTML
-            haptic_text_field_tag(error_message: 'Message', show_error_message: true) do
-              text_field_tag('name')
+            haptic_text_field_tag('Label') do
+              tag.input(type: 'text', name: 'name')
             end
           )
         end
 
-        def test_haptic_text_field_tag_with_block_and_supporting_text
+        def test_haptic_text_field_tag_with_block_label_and_options
           assert_dom_equal(
             <<~HTML,
-              <haptic-text-field>
+              <haptic-text-field animated-label focus-indicator="focus">
                 <div class="field-container">
-                  <input id="name" name="name" type="text">
+                  <input type="text" name="name">
+                  <label class="field-label">Label</label>
+                  <button type="button" class="clear-button">
+                    <div class="haptic-icon">close</div>
+                  </button>
+                  <div class="haptic-icon error-icon">error</div>
+                  <div class="haptic-icon leading-icon">leading_icon</div>
+                  <div class="haptic-icon trailing-icon">trailing_icon</div>
                 </div>
-                <div class="supporting-text">Text</div>
+                <div class="error-message">Error message</div>
+                <div class="supporting-text">Helper text</div>
               </haptic-text-field>
             HTML
-            haptic_text_field_tag(supporting_text: 'Text') { text_field_tag('name') }
+            haptic_text_field_tag(
+              'Label',
+              animated_label: true,
+              clear_button: true,
+              focus_indicator: true,
+              error_message: 'Error message',
+              leading_icon: 'leading_icon',
+              show_error_icon: true,
+              show_error_message: true,
+              supporting_text: 'Helper text',
+              trailing_icon: 'trailing_icon'
+            ) do
+              tag.input(type: 'text', name: 'name')
+            end
           )
         end
       end

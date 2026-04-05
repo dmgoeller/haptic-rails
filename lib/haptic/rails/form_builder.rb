@@ -8,25 +8,26 @@ module Haptic
     #
     # The <code>*_field</code> and <code>text_area</code> methods take the following options:
     #
-    # - <code>:animated_label</code>
-    # - <code>:clear_button</code> - If is <code>true</code>, a button to clear the field
-    #   is provided.
+    # - <code>:animated_label</code> - If is set to <code>true</code>, the label is
+    #   displayed as a placeholder if the value is empty and is moved to the top when
+    #   the field is entered.
+    # - <code>:clear_button</code> - If is set to <code>true</code>, a clear button is provided.
     # - <code>:field_id</code> - The <code>id</code> of the field tag.
     # - <code>:focus_indicator</code> Specifies whether a focus indicator is shown:
     #   - <code>"focus"</code> or <code>true</code> - A focus indicator is shown
-    #     when the field has been focused by keyboard or mouse.
+    #     when the field has been entered by keyboard or mouse.
     #   - <code>"focus-visible"</code> - A focus indicator is shown when the field
-    #     has been focused by keyboard.
+    #     has been entered by keyboard.
     # - <code>:label</code> - The label of the field. The value can be a <code>String</code>
     #   or <code>true</code>. If the value is <code>true</code>, the label is created by
     #   calling the <code>label</code> method.
     # - <code>:leading_icon</code> - The name of the icon to be shown on the left side.
     # - <code>:set_valid_on_change</code> - The fields assumed not to be invalid when the
-    #   value of the field has been changed.
-    # - <code>:show_error_icon</code> - If is <code>true</code>, an error icon is shown when
-    #   the value of the field is invalid.
-    # - <code>:show_error_message</code> - If is <code>true</code>, the error message is shown
-    #   below the field when the value of the field is invalid.
+    #   value has been changed.
+    # - <code>:show_error_icon</code> - If is set to <code>true</code>, an error icon is shown
+    #   if the value is invalid.
+    # - <code>:show_error_message</code> - If is set to <code>true</code>, the error message is
+    #   shown below the field if the value is invalid.
     # - <code>:supporting_text</code> - The helper text to be shown below the field.
     # - <code>:trailing_icon</code> - The name of the icon to be shown on the right side.
     class FormBuilder < ActionView::Helpers::FormBuilder
@@ -157,7 +158,7 @@ module Haptic
           field = super(method, options.except(*HAPTIC_FIELD_OPTIONS))
           return field unless HAPTIC_FIELD_OPTIONS.any? { |key| options.key? key }
 
-          haptic_field('text', method, field, options)
+          build_text_field(method, field, options)
         end
       end
 
@@ -197,7 +198,7 @@ module Haptic
           options[:trailing_icon] ||= 'calendar'
           field = super(method, options.except(*HAPTIC_FIELD_OPTIONS))
 
-          haptic_field('text', method, field, options.except(:animated_label))
+          build_text_field(method, field, options.except(:animated_label))
         end
       end
 
@@ -450,7 +451,7 @@ module Haptic
         field_html_options[:is] = 'haptic-select' unless field_html_options.key?(:is)
 
         field = super(method, collection, value_method, text_method, options, field_html_options)
-        haptic_field('dropdown', method, field, html_options)
+        build_dropdown_field(method, field, html_options)
       end
 
       # Creates a <code><haptic-select-dropdown</code> tag wrapped by a
@@ -494,7 +495,7 @@ module Haptic
       #   #   </div>
       #   #  </haptic-dropdown-field>
       def collection_select_dropdown(method, collection, value_method, text_method, options = {}, html_options = {})
-        haptic_select_dropdown_field(
+        build_select_dropdown_field(
           method,
           @template.haptic_options_from_collection(
             collection,
@@ -516,7 +517,7 @@ module Haptic
         label = field_options.delete(:label)
         label = nil if label == true
 
-        @template.haptic_field_tag('dropdown', label, field_options) do
+        @template.haptic_dropdown_field_tag(label, field_options) do
           @template.haptic_dropdown_dialog_tag do
             options = @field_options.merge(class: [@field_options[:class], 'haptic-field'])
             block&.call(DropdownDialogBuilder.new(@template, options))
@@ -559,7 +560,7 @@ module Haptic
       #   #   </div>
       #   # </haptic-dropdown-field>
       def select(method, choices = nil, options = {}, html_options = {}, &block)
-        haptic_field('dropdown', method, super, @field_options.merge(options))
+        build_dropdown_field(method, super, @field_options.merge(options))
       end
 
       # Creates a <code><haptic-select-dropdown</code> tag wrapped by a
@@ -600,7 +601,7 @@ module Haptic
         disabled = nil if [true, false].include?(disabled)
         options = options.except(:disabled) if disabled.present?
 
-        haptic_select_dropdown_field(
+        build_select_dropdown_field(
           method,
           if block
             @template.capture(&block)
@@ -627,53 +628,61 @@ module Haptic
 
       private
 
+      %w[dropdown text].each do |name|
+        define_method(:"build_#{name}_field") do |method, field, options = {}|
+          options = options.slice(*HAPTIC_FIELD_OPTIONS)
+          options[:id] = options.delete(:field_id)
+          options[:for] = _field_id(method)
+          options[:invalid] = object&.errors&.key?(method) || false
+          options[:error_message] = error_message_for(method)
+
+          set_valid_on_change = options[:set_valid_on_change]
+          if [nil, '', true, false].exclude?(set_valid_on_change)
+            options[:set_valid_on_change] =
+              Array(set_valid_on_change)
+                .map { |name| _field_id(name) }
+                .join(' ')
+                .presence
+          end
+
+          label =
+            if (label_option = options.delete(:label))
+              args = [:label, method]
+              args << label_option unless label_option == true
+              send(*args, class: 'field-label')
+            end
+
+          @template.send(:"haptic_#{name}_field_tag", field, label, options)
+        end
+      end
+
+      def build_select_dropdown_field(method, haptic_options, options = {})
+        options = options.dup
+        hidden_field_options = options.extract!(:disabled, :required)
+        toggle_class = ['toggle', 'haptic-field', options.delete(:class)]
+
+        build_dropdown_field(
+          method,
+          @template.haptic_select_dropdown_tag(
+            hidden_field(method, hidden_field_options) +
+              @template.content_tag('button', '', type: 'button', class: toggle_class) +
+              @template.content_tag(
+                'div',
+                @template.content_tag('div', haptic_options, class: 'scroll-container'),
+                class: 'popover'
+              ),
+            options.except(*HAPTIC_FIELD_OPTIONS)
+          ),
+          options
+        )
+      end
+
       def error_message_for(method)
         # Don't call :valid? or :invalid? here to prevent errors on new records
         full_messages = object&.errors&.full_messages_for(method)
         return if full_messages.blank?
 
         "#{full_messages.map { |m| m.delete_suffix('.') }.join('. ')}."
-      end
-
-      def haptic_field(type, method, field, options = {})
-        options = options.slice(*HAPTIC_FIELD_OPTIONS)
-        options[:id] = options.delete(:field_id)
-        options[:for] = _field_id(method)
-        options[:invalid] = object&.errors&.key?(method) || false
-        options[:error_message] = error_message_for(method)
-
-        set_valid_on_change = options[:set_valid_on_change]
-        if [nil, '', true, false].exclude?(set_valid_on_change)
-          options[:set_valid_on_change] =
-            Array(set_valid_on_change)
-              .map { |name| _field_id(name) }
-              .join(' ')
-              .presence
-        end
-
-        label =
-          if (label_option = options.delete(:label))
-            args = [:label, method]
-            args << label_option unless label_option == true
-            send(*args, class: 'field-label')
-          end
-
-        @template.haptic_field_tag(type, field, label, options)
-      end
-
-      def haptic_select_dropdown_field(method, haptic_options, options = {})
-        options = options.dup
-        hidden_field_options = options.extract!(:disabled, :required)
-        toggle_class = ['toggle', 'haptic-field', options.delete(:class)]
-
-        field = @template.haptic_select_dropdown_tag(options.except(*HAPTIC_FIELD_OPTIONS)) do
-          hidden_field(method, hidden_field_options) +
-            @template.content_tag('button', '', class: toggle_class, type: 'button') +
-            @template.content_tag('div', class: 'popover') do
-              @template.content_tag('div', haptic_options, class: 'scroll-container')
-            end
-        end
-        haptic_field('dropdown', method, field, options)
       end
 
       def _field_id(method_name, namespace: @options[:namespace], index: @index)
