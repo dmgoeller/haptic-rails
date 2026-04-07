@@ -4,20 +4,21 @@ module Haptic
   module Rails
     module Helpers
       module TableHelper
-        # :call-seq: haptic-table(options = {}, &block)
+        # :call-seq: haptic-table(**options, &block)
         #
-        # Creates a <code><table></code> tag.
-        def haptic_table(options = {})
-          content_tag('table', options.merge(is: 'haptic-table')) do
+        # Creates a haptic table. Passes an instance of TableBuilder to the block.
+        def haptic_table(**options)
+          tag.table(**options.merge(is: 'haptic-table')) do
             yield TableBuilder.new(self) if block_given?
           end
         end
 
-        # :call-seq: haptic-table_like(options = {}, &block)
+        # :call-seq: haptic-table_like(**options, &block)
         #
-        # Creates a <code><haptic-table-like></code> tag.
-        def haptic_table_like(options = {})
-          content_tag('haptic-table-like', options) do
+        # Creates a haptic table-like element. Passes an instance of TableLikeBuilder
+        # to the block.
+        def haptic_table_like(**options)
+          tag.haptic_table_like(**options) do
             yield TableLikeBuilder.new(self) if block_given?
           end
         end

@@ -15,12 +15,12 @@ module Haptic
         )
       end
 
-      def test_row_with_href
+      def test_row_with_options
         assert_dom_equal(
           <<~HTML,
-            <tr is="haptic-table-row" data-href="/"></tr>
+            <tr is="haptic-table-row" data-href="/" data-foo="bar"></tr>
           HTML
-          table_builder.row(href: '/')
+          table_builder.row(href: '/', data: { foo: 'bar' })
         )
       end
 
@@ -28,24 +28,24 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <tr is="haptic-table-row">
-              <td>Cell</td>
+              <td>Data</td>
             </tr>
           HTML
           table_builder.row do |row|
-            row.data 'Cell'
+            row.data('Data')
           end
         )
       end
 
-      def test_row_with_block_and_href
+      def test_row_with_block_and_options
         assert_dom_equal(
           <<~HTML,
-            <tr is="haptic-table-row" data-href="/">
-              <td>Cell</td>
+            <tr is="haptic-table-row" data-href="/" data-foo="bar">
+              <td>Data</td>
             </tr>
           HTML
-          table_builder.row(href: '/') do |row|
-            row.data 'Cell'
+          table_builder.row(href: '/', data: { foo: 'bar' }) do |row|
+            row.data('Data')
           end
         )
       end

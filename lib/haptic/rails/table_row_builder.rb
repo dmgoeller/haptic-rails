@@ -9,21 +9,31 @@ module Haptic
 
       ##
       # :method: data
-      # :call-seq: data(content, options = nil, &block)
+      # :call-seq: data(content, **options, &block)
       #
-      # Creates a <code><td></code> tag.
+      # Adds a table cell.
+      #
+      # ==== Example
+      #
+      #   data('Data')
+      #   # =>
+      #   # <td>Data</td>
 
       ##
       # :method: head
-      # :call-seq: head(content, options = {}, &block)
+      # :call-seq: head(content, **options, &block)
       #
-      # Creates a <code><th></code> tag.
+      # Adds a table header.
+      #
+      # ==== Example
+      #
+      #   header('Header')
+      #   # =>
+      #   # <th>Header</th>
 
-      [[:data, 'td'], [:header, 'th']].each do |name, tag_name|
-        define_method(name) do |content = nil, options = nil, &block|
-          content, options = nil, content if content.is_a?(Hash)
-
-          @builder.content_tag(tag_name, content, options, &block)
+      { data: 'td', header: 'th' }.each do |name, tag_name|
+        define_method(name) do |content = nil, **options, &block|
+          @builder.tag.send(tag_name, content, **options, &block)
         end
       end
     end

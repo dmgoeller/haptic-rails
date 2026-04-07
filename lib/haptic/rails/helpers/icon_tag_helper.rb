@@ -3,7 +3,7 @@
 module Haptic
   module Rails
     module Helpers
-      module IconHelper
+      module IconTagHelper
         def haptic_icon_tag(name, options = {})
           options = options.merge(
             builder: self,

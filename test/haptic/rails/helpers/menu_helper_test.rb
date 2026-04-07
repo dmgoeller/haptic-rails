@@ -6,8 +6,8 @@ module Haptic
   module Rails
     module Helpers
       class MenuHelperTest < ActionView::TestCase
+        include DropdownTagHelper
         include MenuHelper
-        include TagHelper
 
         def test_haptic_dropdown_menu
           assert_dom_equal(
@@ -42,6 +42,24 @@ module Haptic
               </haptic-dropdown-menu>
             HTML
             haptic_dropdown_menu do |dropdown|
+              dropdown.menu do |menu|
+                menu.item 'Duplicate', href: '/duplicate'
+              end
+            end
+          )
+        end
+
+        def test_haptic_dropdown_menu_with_block_and_options
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-dropdown-menu open-to-top>
+                <haptic-menu class="popover">
+                  <a is="haptic-menu-item" href="/duplicate">Duplicate</a>
+                </haptic-menu>
+                <div class="backdrop"></div>
+              </haptic-dropdown-menu>
+            HTML
+            haptic_dropdown_menu(open_to_top: true) do |dropdown|
               dropdown.menu do |menu|
                 menu.item 'Duplicate', href: '/duplicate'
               end

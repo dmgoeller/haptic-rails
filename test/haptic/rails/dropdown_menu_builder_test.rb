@@ -5,7 +5,7 @@ require 'test_helper'
 module Haptic
   module Rails
     class DropdownMenuBuilderTest < ActionView::TestCase
-      include Helpers::TagHelper
+      include Helpers::DropdownTagHelper
 
       # #toggle
 
@@ -23,11 +23,9 @@ module Haptic
       def test_toggle_with_block
         assert_dom_equal(
           <<~HTML,
-            <button is="haptic-button" type="button" class="toggle">
-              <div>Text</div>
-            </button>
+            <button is="haptic-button" type="button" class="toggle">Text</button>
           HTML
-          dropdown_menu_builder.toggle { content_tag('div', 'Text') }
+          dropdown_menu_builder.toggle { 'Text' }
         )
       end
 
@@ -77,10 +75,10 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-menu class="popover">
-              <a is="haptic-menu-item" href="/">Home</a>
+              <a is="haptic-menu-item" href="/duplicate">Duplicate</a>
             </haptic-menu>
           HTML
-          dropdown_menu_builder.menu { |menu| menu.item 'Home', href: '/' }
+          dropdown_menu_builder.menu { |menu| menu.item('Duplicate', href: '/duplicate') }
         )
       end
 
@@ -88,11 +86,11 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-menu class="popover">
-              <a is="haptic-menu-item" href="/" rel="next">Home</a>
+              <a is="haptic-menu-item" href="/duplicate" rel="next">Duplicate</a>
             </haptic-menu>
           HTML
           dropdown_menu_builder.menu(defaults: { rel: 'next' }) do |menu|
-            menu.item 'Home', href: '/'
+            menu.item('Duplicate', href: '/duplicate')
           end
         )
       end

@@ -4,23 +4,32 @@ module Haptic
   module Rails
     module Helpers
       module MenuHelper
-        # Creates a <code><haptic-dropdown-menu></code> tag.
+        # :call-seq: haptic_dropdown_menu(**options, &block)
         #
-        # # ==== Options
+        # Creates a haptic dropdown menu. Passes an instance of DropdownMenuBuilder
+        # to the block.
         #
-        # - <code>:open_to_top</code> - If is <code>true</code>, the menu
+        # ==== Options
+        #
+        # - <code>:open_to_top</code> - If is set to <code>true</code>, the menu
         #   pops up to top instead of to bottom.
         #
-        # # ==== Example
+        # ==== Example
         #
         #   haptic_dropdown_menu do |dropdown|
         #     dropdown.menu do |menu|
-        #       menu.item 'Duplicate', href: '/duplicate'
-        #       menu.item 'Delete', href: '/delete'
+        #       menu.item('Duplicate', href: '/duplicate')
         #     end
         #   end
-        def haptic_dropdown_menu(options = {})
-          haptic_dropdown_menu_tag(options) do
+        #   # =>
+        #   # <haptic-dropdown-menu>
+        #   #   <haptic-menu class="popover">
+        #   #     <a is="haptic-menu-item" href="/duplicate">Duplicate</a>
+        #   #   </haptic-menu>
+        #   #.  <div class="backdrop"></div>
+        #   # </haptic-dropdown-menu>
+        def haptic_dropdown_menu(**options)
+          haptic_dropdown_menu_tag(**options) do
             yield DropdownMenuBuilder.new(self) if block_given?
           end
         end

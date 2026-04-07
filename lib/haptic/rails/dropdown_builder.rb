@@ -5,17 +5,27 @@ module Haptic
     class DropdownBuilder
       def initialize(builder, toggle_options = {}) # :nodoc:
         @builder = builder
-        @toggle_options = toggle_options
+        @toggle_options = toggle_options.symbolize_keys
+        @toggle_class = @toggle_options.delete(:class)
       end
 
-      def toggle(content = nil, options = {}, &block)
-        content, options = nil, content if content.is_a?(Hash)
-
-        options = options.merge(@toggle_options.except(:class))
-        options[:class] = ['toggle', @toggle_options[:class], options[:class]]
-        options[:type] = 'button'
-
-        @builder.content_tag('button', content, options, &block)
+      # Creates the toggle button.
+      #
+      # ==== Example
+      #
+      #   toggle('Text')
+      #   # =>
+      #   # <button type="button" class="toggle">Text</button>
+      def toggle(content = nil, **options, &block)
+        @builder.tag.button(
+          content,
+          **@toggle_options.merge(
+            type: 'button',
+            class: ['toggle', @toggle_class, options[:class]],
+            **options.except(:class)
+          ),
+          &block
+        )
       end
     end
   end

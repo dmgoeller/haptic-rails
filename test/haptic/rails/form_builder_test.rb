@@ -5,8 +5,10 @@ require 'test_helper'
 module Haptic
   module Rails
     class FormBuilderTest < ActionView::TestCase
+      include Haptic::Rails::Helpers::DropdownTagHelper
+      include Haptic::Rails::Helpers::FieldTagHelper
       include Haptic::Rails::Helpers::FormOptionsHelper
-      include Haptic::Rails::Helpers::TagHelper
+      include Haptic::Rails::Helpers::IconTagHelper
 
       {
         email_field: 'email',
@@ -1348,8 +1350,8 @@ module Haptic
             </haptic-dropdown-field>
           HTML
           form.select_dropdown(:color) do
-            haptic_option_tag('Blue', value: 'blue', checked: true) +
-              haptic_option_tag('Green', value: 'green')
+            tag.haptic_option('Blue', value: 'blue', checked: true) +
+              tag.haptic_option('Green', value: 'green')
           end
         )
       end

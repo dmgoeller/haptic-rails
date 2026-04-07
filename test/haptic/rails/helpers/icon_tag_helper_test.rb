@@ -5,7 +5,7 @@ require 'test_helper'
 module Haptic
   module Rails
     module Helpers
-      class IconHelperTest < ActionView::TestCase
+      class IconTagHelperTest < ActionView::TestCase
         def test_haptic_icon_tag
           assert_dom_equal(
             <<~HTML,

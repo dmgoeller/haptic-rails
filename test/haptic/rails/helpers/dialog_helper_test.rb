@@ -17,12 +17,12 @@ module Haptic
           )
         end
 
-        def test_haptic_dialog_with_custom_class
+        def test_haptic_dialog_with_options
           assert_dom_equal(
             <<~HTML,
-              <dialog class="haptic-dialog foo"></dialog>
+              <dialog class="haptic-dialog foo-class" data-foo="bar"></dialog>
             HTML
-            haptic_dialog(class: 'foo')
+            haptic_dialog(class: 'foo-class', data: { foo: 'bar' })
           )
         end
 
@@ -39,14 +39,14 @@ module Haptic
           )
         end
 
-        def test_haptic_dialog_with_custom_class_and_block
+        def test_haptic_dialog_with_block_and_options
           assert_dom_equal(
             <<~HTML,
-              <dialog class="haptic-dialog foo">
+              <dialog class="haptic-dialog foo-class" data-foo="bar">
                 <div class="dialog-header">Headline</div>
               </dialog>
             HTML
-            haptic_dialog(class: 'foo') do |dialog|
+            haptic_dialog(class: 'foo-class', data: { foo: 'bar' }) do |dialog|
               dialog.header 'Headline'
             end
           )

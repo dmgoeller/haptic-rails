@@ -19,6 +19,15 @@ module Haptic
           )
         end
 
+        def test_haptic_table_with_options
+          assert_dom_equal(
+            <<~HTML,
+              <table is="haptic-table" data-foo="bar"></table>
+            HTML
+            haptic_table(data: { foo: 'bar' })
+          )
+        end
+
         def test_haptic_table_with_block
           assert_dom_equal(
             <<~HTML,
@@ -29,6 +38,23 @@ module Haptic
               </table>
             HTML
             haptic_table do |table|
+              table.row do |row|
+                row.data 'Data'
+              end
+            end
+          )
+        end
+
+        def test_haptic_table_with_block_and_options
+          assert_dom_equal(
+            <<~HTML,
+              <table is="haptic-table" data-foo="bar">
+                <tr is="haptic-table-row">
+                  <td>Data</td>
+                </tr>
+              </table>
+            HTML
+            haptic_table(data: { foo: 'bar' }) do |table|
               table.row do |row|
                 row.data 'Data'
               end
@@ -50,9 +76,9 @@ module Haptic
         def test_haptic_table_like_with_options
           assert_dom_equal(
             <<~HTML,
-              <haptic-table-like foo="bar"></haptic-table-like>
+              <haptic-table-like data-foo="bar"></haptic-table-like>
             HTML
-            haptic_table_like(foo: 'bar')
+            haptic_table_like(data: { foo: 'bar' })
           )
         end
 
@@ -60,15 +86,11 @@ module Haptic
           assert_dom_equal(
             <<~HTML,
               <haptic-table-like>
-                <a class="table-row">
-                  <div>Data</div>
-                </a>
+                <a class="table-row">Data</a>
               </haptic-table-like>
             HTML
             haptic_table_like do |table|
-              table.row do
-                content_tag('div', 'Data')
-              end
+              table.row { 'Data' }
             end
           )
         end
@@ -76,16 +98,12 @@ module Haptic
         def test_haptic_table_like_with_block_and_options
           assert_dom_equal(
             <<~HTML,
-              <haptic-table-like foo="bar">
-                <a class="table-row">
-                  <div>Data</div>
-                </a>
+              <haptic-table-like data-foo="bar">
+                <a class="table-row">Data</a>
               </haptic-table-like>
             HTML
-            haptic_table_like(foo: 'bar') do |table|
-              table.row do
-                content_tag('div', 'Data')
-              end
+            haptic_table_like(data: { foo: 'bar' }) do |table|
+              table.row { 'Data' }
             end
           )
         end

@@ -27,11 +27,16 @@ module Haptic
         def haptic_options(choices, selected = nil, options = {})
           return if choices.nil?
 
-          selected, options = selected[:selected], selected if selected.is_a?(Hash)
+          if selected.is_a?(Hash)
+            options = selected.symbolize_keys
+            selected = options[:selected]
+          else
+            options = options.symbolize_keys
+          end
           disabled = Array.wrap(options[:disabled])
 
           choices.map do |element|
-            haptic_option_tag(
+            tag.haptic_option(
               element.first,
               value: value = element.last,
               checked: value == selected,
@@ -73,7 +78,12 @@ module Haptic
             ->(element) { element.public_send(method_name) }
           end
 
-          selected, options = selected[:selected], selected if selected.is_a?(Hash)
+          if selected.is_a?(Hash)
+            options = selected.symbolize_keys
+            selected = options[:selected]
+          else
+            options = options.symbolize_keys
+          end
 
           disabled_proc = options[:disabled]&.then do |disabled|
             if disabled.respond_to?(:call)
@@ -86,7 +96,7 @@ module Haptic
 
           [].tap do |haptic_option_tags|
             if options[:include_blank] == true
-              haptic_option_tags << haptic_option_tag(
+              haptic_option_tags << tag.haptic_option(
                 options[:prompt] || '',
                 value: '',
                 checked: selected == '',
@@ -94,7 +104,7 @@ module Haptic
               )
             end
             collection.each do |element|
-              haptic_option_tags << haptic_option_tag(
+              haptic_option_tags << tag.haptic_option(
                 text_proc.call(element),
                 value: value = value_proc.call(element),
                 checked: value == selected,

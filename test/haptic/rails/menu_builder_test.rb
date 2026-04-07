@@ -5,7 +5,7 @@ require 'test_helper'
 module Haptic
   module Rails
     class MenuBuilderTest < ActionView::TestCase
-      include Helpers::IconHelper
+      include Helpers::IconTagHelper
 
       # #divider
 
@@ -23,37 +23,22 @@ module Haptic
       def test_item
         assert_dom_equal(
           <<~HTML,
-            <a is="haptic-menu-item" href="/duplicate">
-              Duplicate
-            </a>
+            <a is="haptic-menu-item" href="/duplicate"></a>
+          HTML
+          menu_builder.item(href: '/duplicate')
+        )
+      end
+
+      def test_item_with_name
+        assert_dom_equal(
+          <<~HTML,
+            <a is="haptic-menu-item" href="/duplicate">Duplicate</a>
           HTML
           menu_builder.item('Duplicate', href: '/duplicate')
         )
       end
 
-      def test_disabled_item
-        assert_dom_equal(
-          <<~HTML,
-            <a is="haptic-menu-item" href="/duplicate" data-disabled>
-              Duplicate
-            </a>
-          HTML
-          menu_builder.item('Duplicate', href: '/duplicate', disabled: true)
-        )
-      end
-
-      def test_item_with_block
-        assert_dom_equal(
-          <<~HTML,
-            <a is="haptic-menu-item" href="/duplicate">
-              Duplicate
-            </a>
-          HTML
-          menu_builder.item(href: '/duplicate') { 'Duplicate' }
-        )
-      end
-
-      def test_item_with_leading_icon
+      def test_item_with_name_and_leading_icon
         assert_dom_equal(
           <<~HTML,
             <a is="haptic-menu-item" href="/duplicate">
@@ -65,7 +50,16 @@ module Haptic
         )
       end
 
-      def test_item_with_leading_icon_and_block
+      def test_item_with_block
+        assert_dom_equal(
+          <<~HTML,
+            <a is="haptic-menu-item" href="/duplicate">Duplicate</a>
+          HTML
+          menu_builder.item(href: '/duplicate') { 'Duplicate' }
+        )
+      end
+
+      def test_item_with_block_and_leading_icon
         assert_dom_equal(
           <<~HTML,
             <a is="haptic-menu-item" href="/duplicate">
@@ -80,17 +74,24 @@ module Haptic
       def test_item_with_defaults
         assert_dom_equal(
           <<~HTML,
-            <a is="haptic-menu-item" href="/duplicate" rel="next">
-              Duplicate
-            </a>
+            <a is="haptic-menu-item" href="/duplicate" rel="next">Duplicate</a>
           HTML
           menu_builder(rel: 'next').item(href: '/duplicate') { 'Duplicate' }
         )
       end
 
+      def test_disabled_item
+        assert_dom_equal(
+          <<~HTML,
+            <a is="haptic-menu-item" href="/duplicate" data-disabled></a>
+          HTML
+          menu_builder.item(href: '/duplicate', disabled: true)
+        )
+      end
+
       # #item_to
 
-      def test_item_to
+      def test_item_to_with_name
         assert_dom_equal(
           <<~HTML,
             <a is="haptic-menu-item" href="/duplicate">
@@ -101,14 +102,15 @@ module Haptic
         )
       end
 
-      def test_disabled_item_to
+      def test_item_to_with_name_and_leading_icon
         assert_dom_equal(
           <<~HTML,
-            <a is="haptic-menu-item" href="/duplicate" data-disabled>
+            <a is="haptic-menu-item" href="/duplicate">
               Duplicate
+              <div class="haptic-icon leading-icon">copy</div>
             </a>
           HTML
-          menu_builder.item_to('Duplicate', '/duplicate', disabled: true)
+          menu_builder.item_to('Duplicate', '/duplicate', leading_icon: 'copy')
         )
       end
 
@@ -123,19 +125,7 @@ module Haptic
         )
       end
 
-      def test_item_to_with_leading_icon
-        assert_dom_equal(
-          <<~HTML,
-            <a is="haptic-menu-item" href="/duplicate">
-              Duplicate
-              <div class="haptic-icon leading-icon">copy</div>
-            </a>
-          HTML
-          menu_builder.item_to('Duplicate', '/duplicate', leading_icon: 'copy')
-        )
-      end
-
-      def test_item_to_with_leading_icon_and_block
+      def test_item_to_with_block_and_leading_icon
         assert_dom_equal(
           <<~HTML,
             <a is="haptic-menu-item" href="/duplicate">
@@ -158,10 +148,21 @@ module Haptic
         )
       end
 
+      def test_disabled_item_to
+        assert_dom_equal(
+          <<~HTML,
+            <a is="haptic-menu-item" href="/duplicate" data-disabled>
+              Duplicate
+            </a>
+          HTML
+          menu_builder.item_to('Duplicate', '/duplicate', disabled: true)
+        )
+      end
+
       private
 
-      def menu_builder(options = {})
-        MenuBuilder.new(self, options)
+      def menu_builder(**options)
+        MenuBuilder.new(self, **options)
       end
     end
   end

@@ -5,7 +5,7 @@ module Haptic
     class Configuration
       DEFAULT_ICON_BUILDER = lambda do |name, options = {}|
         name = 'calendar_today' if name == 'calendar'
-        options[:builder].content_tag(:div, name, options.except(:builder))
+        options[:builder].tag.div(name, **options.except(:builder))
       end
 
       attr_writer :icon_builder

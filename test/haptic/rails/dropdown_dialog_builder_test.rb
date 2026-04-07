@@ -8,51 +8,73 @@ module Haptic
       def test_popover
         assert_dom_equal(
           <<~HTML,
-            <div class="popover">
-              Content
-            </button>
+            <div class="popover"></div>
+          HTML
+          dropdown_dialog_builder.popover
+        )
+      end
+
+      def test_popover_with_options
+        assert_dom_equal(
+          <<~HTML,
+            <div class="popover foo-class" data-foo="bar"></div>
+          HTML
+          dropdown_dialog_builder.popover(
+            class: 'foo-class',
+            data: { foo: 'bar' }
+          )
+        )
+      end
+
+      def test_popover_with_content
+        assert_dom_equal(
+          <<~HTML,
+            <div class="popover">Content</div>
           HTML
           dropdown_dialog_builder.popover('Content')
         )
       end
 
-      def test_popover_with_class
+      def test_popover_with_content_and_options
         assert_dom_equal(
           <<~HTML,
-            <div class="popover foo">
-              Content
-            </button>
+            <div class="popover foo-class" data-foo="bar">Content</div>
           HTML
-          dropdown_dialog_builder.popover('Content', class: 'foo')
+          dropdown_dialog_builder.popover(
+            'Content',
+            class: 'foo-class',
+            data: { foo: 'bar' }
+          )
         )
       end
 
       def test_popover_with_block
         assert_dom_equal(
           <<~HTML,
-            <div class="popover">
-              <div>Text</div>
-            </button>
+            <div class="popover">Content</div>
           HTML
-          dropdown_dialog_builder.popover { content_tag('div', 'Text') }
+          dropdown_dialog_builder.popover { 'Content' }
         )
       end
 
-      def test_popover_with_class_and_block
+      def test_popover_with_block_and_options
         assert_dom_equal(
           <<~HTML,
-            <div class="popover foo">
-              <div>Text</div>
-            </button>
+            <div class="popover foo-class" data-foo="bar">Content</div>
           HTML
-          dropdown_dialog_builder.popover(class: 'foo') { content_tag('div', 'Text') }
+          dropdown_dialog_builder.popover(
+            class: 'foo-class',
+            data: { foo: 'bar' }
+          ) do
+            'Content'
+          end
         )
       end
 
       private
 
-      def dropdown_dialog_builder(options = {})
-        DropdownDialogBuilder.new(self, FieldOptions.new(options))
+      def dropdown_dialog_builder(**options)
+        DropdownDialogBuilder.new(self, options)
       end
     end
   end

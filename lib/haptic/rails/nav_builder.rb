@@ -3,13 +3,13 @@
 module Haptic
   module Rails
     class NavBuilder
-      def initialize(builder, defaults = {}) # :nodoc:
+      def initialize(builder, **defaults) # :nodoc:
         @builder = builder
-        @default_options = { is: 'haptic-nav-item', active_on: '_pathname' }
-        @default_options.merge!(defaults) if defaults.present?
+        @defaults = { is: 'haptic-nav-item', active_on: '_pathname' }
+        @defaults.merge!(defaults) if defaults.present?
       end
 
-      # Creates a nav item.
+      # Adds a nav item.
       #
       # ==== Options
       #
@@ -17,22 +17,18 @@ module Haptic
       #
       # ==== Example
       #
-      #   nav.item 'Home', href: '/', leading_icon: 'home'
+      #   nav.item('Home', href: '/', leading_icon: 'home')
       #   # =>
       #   # <a is="haptic-menu-item" href="/">
       #   #   Home
       #   #   <div class="haptic-icon leading-icon">home</div>
       #   # </a>
-      def item(name = nil, options = nil, &block)
-        name, options = nil, name if block
+      def item(name = nil, **options, &block)
         options, content_options = nav_item_options(options)
-
-        @builder.content_tag('a', options) do
-          nav_item_content(name, content_options, &block)
-        end
+        @builder.tag.a(nav_item_content(name, content_options, &block), **options)
       end
 
-      # Creates a nav item pointing to the URL specified by +options+.
+      # Adds a nav item pointing to the URL specified by +options+.
       #
       # ==== Options
       #
@@ -40,7 +36,7 @@ module Haptic
       #
       # ==== Example
       #
-      #   nav.item_to 'Home', '/', leading_icon: 'home'
+      #   nav.item_to('Home', '/', leading_icon: 'home')
       #   # =>
       #   # <a is="haptic-menu-item" href="/">
       #   #   Home
@@ -55,13 +51,27 @@ module Haptic
         end
       end
 
-      def section(label = nil, &block)
-        @builder.content_tag('div', class: 'nav-section') do
-          @builder.concat(
-            @builder.content_tag('div', label, class: 'nav-section-label')
-          ) if label.present?
-          @builder.concat(@builder.capture(&block))
-        end
+      # Adds a section.
+      #
+      # ==== Example
+      #
+      #   nav_builder.section('Label') do
+      #     nav_builder.item('Home', href: '/')
+      #   end
+      #   # =>
+      #   # <div class="nav-section">
+      #   #   <div class="nav-section-label">Label</div>
+      #   #   <a is="haptic-nav-item" href="/" active-on="_pathname">Home</a>
+      #   # </div>
+      def section(label = nil, **options, &block)
+        @builder.tag.div(
+          if label.present?
+            @builder.tag.div(label, class: 'nav-section-label')
+          else
+            ''.html_safe
+          end + (@builder.capture(&block) if block),
+          **options.merge(class: ['nav-section', options[:class]])
+        )
       end
 
       private
@@ -74,7 +84,7 @@ module Haptic
       end
 
       def nav_item_options(options)
-        options = @default_options.merge(options || {})
+        options = @defaults.merge(options || {})
         options[:'active-on'] ||= options.delete(:active_on)
 
         content_options = options.extract!(:leading_icon)

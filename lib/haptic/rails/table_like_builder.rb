@@ -7,17 +7,13 @@ module Haptic
         @builder = builder
       end
 
-      def row(options = {}, &block)
-        options = options.merge(class: ['table-row', options[:class]])
-
-        if block
-          @builder.content_tag('a', options, &block)
-        else
-          @builder.content_tag('a', '', options)
-        end
+      # Adds a row.
+      def row(**options, &block)
+        @builder.tag.a(**options.merge(class: ['table-row', options[:class]]), &block)
       end
 
-      def row_to(href, options = {}, &block)
+      # Adds a row pointing to +href+.
+      def row_to(href, **options, &block)
         options = options.merge(class: ['table-row', options[:class]])
 
         if block

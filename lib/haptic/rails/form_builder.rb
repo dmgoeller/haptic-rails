@@ -158,7 +158,7 @@ module Haptic
           field = super(method, options.except(*HAPTIC_FIELD_OPTIONS))
           return field unless HAPTIC_FIELD_OPTIONS.any? { |key| options.key? key }
 
-          build_text_field(method, field, options)
+          haptic_text_field_tag(method, field, options)
         end
       end
 
@@ -198,7 +198,7 @@ module Haptic
           options[:trailing_icon] ||= 'calendar'
           field = super(method, options.except(*HAPTIC_FIELD_OPTIONS))
 
-          build_text_field(method, field, options.except(:animated_label))
+          haptic_text_field_tag(method, field, options.except(:animated_label))
         end
       end
 
@@ -344,7 +344,7 @@ module Haptic
       #   # </haptic-chip>
       def collection_chips(method, collection, value_method, text_method, options = {}, &block)
         collection_check_boxes(method, collection, value_method, text_method, options) do |b|
-          @template.haptic_chip_tag do
+          @template.tag.haptic_chip do
             block ? block.call(b) : b.check_box + b.label
           end
         end
@@ -383,16 +383,16 @@ module Haptic
         options = options.symbolize_keys
         list_item_class = 'inverted' if options.delete(:inverted)
 
-        @template.haptic_list_tag(required: options.delete(:required) == true) do
+        @template.tag.haptic_list(required: options.delete(:required) == true) do
           if options.delete(:multiple) == true
             collection_check_boxes(method, collection, value_method, text_method, options) do |b|
-              @template.haptic_list_item_tag(class: list_item_class) do
+              @template.tag.haptic_list_item(class: list_item_class) do
                 block ? block.call(b) : b.check_box(options) + b.label
               end
             end
           else
             collection_radio_buttons(method, collection, value_method, text_method, options) do |b|
-              @template.haptic_list_item_tag(class: list_item_class) do
+              @template.tag.haptic_list_item(class: list_item_class) do
                 block ? block.call(b) : b.radio_button(options) + b.label
               end
             end
@@ -419,9 +419,9 @@ module Haptic
       #   #   </haptic-button-segment>
       #   # </haptic-segmented-button>
       def collection_segmented_button(method, collection, value_method, text_method, options = {}, &block)
-        @template.haptic_segmented_button_tag do
+        @template.tag.haptic_segmented_button do
           collection_radio_buttons(method, collection, value_method, text_method, options) do |b|
-            @template.haptic_button_segment_tag do
+            @template.tag.haptic_button_segment do
               block ? block.call(b) : b.radio_button + b.label
             end
           end
@@ -451,7 +451,7 @@ module Haptic
         field_html_options[:is] = 'haptic-select' unless field_html_options.key?(:is)
 
         field = super(method, collection, value_method, text_method, options, field_html_options)
-        build_dropdown_field(method, field, html_options)
+        haptic_dropdown_field_tag(method, field, html_options)
       end
 
       # Creates a <code><haptic-select-dropdown</code> tag wrapped by a
@@ -495,7 +495,7 @@ module Haptic
       #   #   </div>
       #   #  </haptic-dropdown-field>
       def collection_select_dropdown(method, collection, value_method, text_method, options = {}, html_options = {})
-        build_select_dropdown_field(
+        select_dropdown_field(
           method,
           @template.haptic_options_from_collection(
             collection,
@@ -531,7 +531,7 @@ module Haptic
         return if error_message.blank?
 
         options = options.merge(class: [options[:class], 'error'])
-        @template.content_tag('div', error_message, options)
+        @template.tag.div(error_message, **options)
       end
 
       def fields(scope = nil, model: nil, **options, &block) # :nodoc:
@@ -560,7 +560,7 @@ module Haptic
       #   #   </div>
       #   # </haptic-dropdown-field>
       def select(method, choices = nil, options = {}, html_options = {}, &block)
-        build_dropdown_field(method, super, @field_options.merge(options))
+        haptic_dropdown_field_tag(method, super, @field_options.merge(options))
       end
 
       # Creates a <code><haptic-select-dropdown</code> tag wrapped by a
@@ -601,7 +601,7 @@ module Haptic
         disabled = nil if [true, false].include?(disabled)
         options = options.except(:disabled) if disabled.present?
 
-        build_select_dropdown_field(
+        select_dropdown_field(
           method,
           if block
             @template.capture(&block)
@@ -628,8 +628,16 @@ module Haptic
 
       private
 
-      %w[dropdown text].each do |name|
-        define_method(:"build_#{name}_field") do |method, field, options = {}|
+      def error_message_for(method)
+        # Don't call :valid? or :invalid? here to prevent errors on new records
+        full_messages = object&.errors&.full_messages_for(method)
+        return if full_messages.blank?
+
+        "#{full_messages.map { |m| m.delete_suffix('.') }.join('. ')}."
+      end
+
+      %i[haptic_dropdown_field_tag haptic_text_field_tag].each do |name|
+        define_method(name) do |method, field, options = {}|
           options = options.slice(*HAPTIC_FIELD_OPTIONS)
           options[:id] = options.delete(:field_id)
           options[:for] = _field_id(method)
@@ -652,37 +660,28 @@ module Haptic
               send(*args, class: 'field-label')
             end
 
-          @template.send(:"haptic_#{name}_field_tag", field, label, options)
+          @template.send(name, field, label, **options)
         end
       end
 
-      def build_select_dropdown_field(method, haptic_options, options = {})
+      def select_dropdown_field(method, haptic_options, options = {})
         options = options.dup
         hidden_field_options = options.extract!(:disabled, :required)
         toggle_class = ['toggle', 'haptic-field', options.delete(:class)]
 
-        build_dropdown_field(
+        haptic_dropdown_field_tag(
           method,
           @template.haptic_select_dropdown_tag(
             hidden_field(method, hidden_field_options) +
-              @template.content_tag('button', '', type: 'button', class: toggle_class) +
-              @template.content_tag(
-                'div',
-                @template.content_tag('div', haptic_options, class: 'scroll-container'),
+              @template.tag.button(type: 'button', class: toggle_class) +
+              @template.tag.div(
+                @template.tag.div(haptic_options, class: 'scroll-container'),
                 class: 'popover'
               ),
-            options.except(*HAPTIC_FIELD_OPTIONS)
+            **options.except(*HAPTIC_FIELD_OPTIONS)
           ),
           options
         )
-      end
-
-      def error_message_for(method)
-        # Don't call :valid? or :invalid? here to prevent errors on new records
-        full_messages = object&.errors&.full_messages_for(method)
-        return if full_messages.blank?
-
-        "#{full_messages.map { |m| m.delete_suffix('.') }.join('. ')}."
       end
 
       def _field_id(method_name, namespace: @options[:namespace], index: @index)

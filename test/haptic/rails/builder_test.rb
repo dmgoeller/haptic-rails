@@ -37,9 +37,9 @@ module Haptic
       def test_button_tag
         assert_dom_equal(
           <<~HTML,
-            <button type="submit" is="haptic-button" name="button">Content</button>
+            <button type="submit" is="haptic-button" name="button">Text</button>
           HTML
-          builder.button_tag('Content')
+          builder.button_tag('Text')
         )
       end
 
@@ -55,22 +55,18 @@ module Haptic
       def test_button_tag_with_block
         assert_dom_equal(
           <<~HTML,
-            <button type="submit" is="haptic-button" name="button">
-              <div>Content</div>
-            </label>
+            <button type="submit" is="haptic-button" name="button">Text</button>
           HTML
-          builder.button_tag { content_tag('div', 'Content') }
+          builder.button_tag { 'Text' }
         )
       end
 
       def test_button_tag_with_default_element_class_and_block
         assert_dom_equal(
           <<~HTML,
-            <button type="submit" name="button">
-              <div>Content</div>
-            </label>
+            <button type="submit" name="button">Text</button>
           HTML
-          builder.button_tag(is: nil) { content_tag('div', 'Content') }
+          builder.button_tag(is: nil) { 'Text' }
         )
       end
 
@@ -123,40 +119,36 @@ module Haptic
       def test_label
         assert_dom_equal(
           <<~HTML,
-            <label is="haptic-label" for="foo_bar">Content</label>
+            <label is="haptic-label" for="foo_bar">Text</label>
           HTML
-          builder.label(:foo, :bar, 'Content')
+          builder.label(:foo, :bar, 'Text')
         )
       end
 
       def test_label_with_default_element_class
         assert_dom_equal(
           <<~HTML,
-            <label for="foo_bar">Content</label>
+            <label for="foo_bar">Text</label>
           HTML
-          builder.label(:foo, :bar, 'Content', is: nil)
+          builder.label(:foo, :bar, 'Text', is: nil)
         )
       end
 
       def test_label_with_block
         assert_dom_equal(
           <<~HTML,
-            <label is="haptic-label" for="foo_bar">
-              <div>Content</div>
-            </label>
+            <label is="haptic-label" for="foo_bar">Text</label>
           HTML
-          builder.label(:foo, :bar) { content_tag('div', 'Content') }
+          builder.label(:foo, :bar) { 'Text' }
         )
       end
 
       def test_label_with_default_element_class_and_block
         assert_dom_equal(
           <<~HTML,
-            <label for="foo_bar">
-              <div>Content</div>
-            </label>
+            <label for="foo_bar">Text</label>
           HTML
-          builder.label(:foo, :bar, is: nil) { content_tag('div', 'Content') }
+          builder.label(:foo, :bar, is: nil) { 'Text' }
         )
       end
 

@@ -3,51 +3,47 @@
 module Haptic
   module Rails
     class MenuBuilder
-      def initialize(builder, defaults = {}) # :nodoc:
+      def initialize(builder, **defaults) # :nodoc:
         @builder = builder
-        @default_options = { is: 'haptic-menu-item' }
-        @default_options.merge!(defaults) if defaults.present?
+        @defaults = { is: 'haptic-menu-item' }
+        @defaults.merge!(defaults) if defaults.present?
       end
 
-      # Creates a divider.
+      # Adds a divider.
       def divider
-        @builder.content_tag('div', '', class: 'divider')
+        @builder.tag.div(class: 'divider')
       end
 
-      # Creates a menu item.
+      # Adds a menu item.
       #
       # ==== Options
       #
-      # - <code>:disabled</code> - If is <code>true</code>, the menu item is disabled.
+      # - <code>:disabled</code> - If is set to <code>true</code>, the menu item is disabled.
       # - <code>:leading_icon</code> - The name of the leading icon.
       #
       # ==== Example
       #
-      #   menu.item 'Duplicate', href: '/copy', leading_icon: 'copy'
+      #   menu.item('Duplicate', href: '/copy', leading_icon: 'copy')
       #   # =>
       #   # <a is="haptic-menu-item" href="/duplicate">
       #   #   Duplicate
       #   #   <div class="haptic-icon leading-icon">copy</div>
       #   # </a>
-      def item(name = nil, options = nil, &block)
-        name, options = nil, name if block
+      def item(name = nil, **options, &block)
         options, content_options = menu_item_options(options)
-
-        @builder.content_tag('a', options) do
-          menu_item_content(name, content_options, &block)
-        end
+        @builder.tag.a(menu_item_content(name, content_options, &block), **options)
       end
 
-      # Creates a menu item pointing to the URL specified by +options+.
+      # Adds a menu item pointing to the URL specified by +options+.
       #
       # ==== HTML options
       #
-      # - <code>:disabled</code> - If is <code>true</code>, the menu item is disabled.
+      # - <code>:disabled</code> - If is set to <code>true</code>, the menu item is disabled.
       # - <code>:leading_icon</code> - The name of the leading icon.
       #
       # ==== Example
       #
-      #   menu.item_to 'Duplicate', '/copy', leading_icon: 'copy'
+      #   menu.item_to('Duplicate', '/copy', leading_icon: 'copy')
       #   # =>
       #   # <a is="haptic-menu-item" href="/duplicate">
       #   #   Duplicate
@@ -72,7 +68,7 @@ module Haptic
       end
 
       def menu_item_options(options)
-        options = @default_options.merge(options || {})
+        options = @defaults.merge(options || {})
         options[:'data-disabled'] ||= '' if options.delete(:disabled)
 
         content_options = options.extract!(:leading_icon)

@@ -19,9 +19,9 @@ module Haptic
       def test_row_with_options
         assert_dom_equal(
           <<~HTML,
-            <a class="table-row" href="/"></a>
+            <a class="table-row" href="/" data-foo="bar"></a>
           HTML
-          table_like_builder.row(href: '/')
+          table_like_builder.row(href: '/', data: { foo: 'bar' })
         )
       end
 
@@ -32,18 +32,20 @@ module Haptic
               <div>Data</div>
             </a>
           HTML
-          table_like_builder.row { content_tag 'div', 'Data' }
+          table_like_builder.row { tag.div('Data') }
         )
       end
 
       def test_row_with_block_and_options
         assert_dom_equal(
           <<~HTML,
-            <a class="table-row" href="/">
+            <a class="table-row" href="/" data-foo="bar">
               <div>Data</div>
             </a>
           HTML
-          table_like_builder.row(href: '/') { content_tag 'div', 'Data' }
+          table_like_builder.row(href: '/', data: { foo: 'bar' }) do
+            tag.div('Data')
+          end
         )
       end
 
@@ -61,9 +63,9 @@ module Haptic
       def test_row_to_with_options
         assert_dom_equal(
           <<~HTML,
-            <a class="table-row" href="/foo" foo="bar"></a>
+            <a class="table-row" href="/foo" data-foo="bar"></a>
           HTML
-          table_like_builder.row_to('/foo', foo: 'bar')
+          table_like_builder.row_to('/foo', data: { foo: 'bar' })
         )
       end
 
@@ -74,18 +76,22 @@ module Haptic
               <div>Data</div>
             </a>
           HTML
-          table_like_builder.row_to('/foo') { content_tag 'div', 'Data' }
+          table_like_builder.row_to('/foo') do
+            tag.div('Data')
+          end
         )
       end
 
       def test_row_to_with_block_and_options
         assert_dom_equal(
           <<~HTML,
-            <a class="table-row" href="/foo" foo="bar">
+            <a class="table-row" href="/foo" data-foo="bar">
               <div>Data</div>
             </a>
           HTML
-          table_like_builder.row_to('/foo', foo: 'bar') { content_tag 'div', 'Data' }
+          table_like_builder.row_to('/foo', data: { foo: 'bar' }) do
+            tag.div('Data')
+          end
         )
       end
 

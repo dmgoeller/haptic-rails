@@ -15,9 +15,7 @@ module Haptic
             self,
             {}
           )
-          content_tag('form', options[:html]) do
-            yield form_builder
-          end
+          tag.form(**options[:html]) { yield form_builder }
         end
 
         def test_haptic_async_form_for

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'icon_helper'
-
 module Haptic
   module Rails
     module Helpers
@@ -17,37 +15,29 @@ module Haptic
         #   mode is <code>'follow'</code>.
         # - <code>:submit_on_change</code> - If <code>true</code>, the form is submitted when
         #   a field value has been changed.
-        #
-        # ==== Example
-        #
-        #   haptic_async_form_for :dummy do |f|
-        #     # ...
-        #   end
         def haptic_async_form_for(record, options = {}, &block)
+          options = options.symbolize_keys
+          options[:builder] = Haptic::Rails::FormBuilder
+
           html_options = options[:html] || {}
           html_options[:is] ||= 'haptic-async-form'
           html_options[:'data-accept'] ||= options.delete(:accept)
           html_options[:'data-redirect'] ||= options.delete(:redirect)
           html_options[:'data-submit-on-change'] ||= '' if options.delete(:submit_on_change)
+          options[:html] = html_options
 
-          haptic_form_for(record, options.merge(html: html_options), &block)
+          form_for(record, options, &block)
         end
 
         # Creates a form.
-        #
-        # ==== Example
-        #
-        #   haptic_form_for :dummy do |f|
-        #     # ...
-        #   end
         def haptic_form_for(record, options = {}, &block)
+          options = options.symbolize_keys
+          options[:builder] = Haptic::Rails::FormBuilder
+
           html_options = options[:html] || {}
           html_options[:is] ||= 'haptic-form'
+          options[:html] = html_options
 
-          options = options.merge(
-            builder: Haptic::Rails::FormBuilder,
-            html: html_options
-          )
           form_for(record, options, &block)
         end
       end

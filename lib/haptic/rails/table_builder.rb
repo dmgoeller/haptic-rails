@@ -7,20 +7,19 @@ module Haptic
         @builder = builder
       end
 
-      # :call-seq: row(options = {}, &block)
+      # :call-seq: row(**options, &block)
       #
-      # Creates a <code><tr></code> tag.
-      def row(options = {})
-        options = options.dup
-        options[:is] = 'haptic-table-row'
+      # Adds a row. Passes an instance of TableRowBuilder to the block.
+      #
+      # ==== Options
+      #
+      # - <code>:href</code>
+      def row(**options)
+        options = options.merge(is: 'haptic-table-row')
         options[:'data-href'] ||= options.delete(:href)
 
-        if block_given?
-          @builder.content_tag('tr', options) do
-            yield TableRowBuilder.new(@builder)
-          end
-        else
-          @builder.content_tag('tr', '', options)
+        @builder.tag.tr('tr', **options) do
+          yield TableRowBuilder.new(@builder) if block_given?
         end
       end
     end
