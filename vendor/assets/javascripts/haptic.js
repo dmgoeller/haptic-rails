@@ -742,7 +742,7 @@ class HapticDropdownElement extends HTMLElement {
   #popoverElement = null;
   #backdropElement = null;
   #scrollContainer = null;
-  #mousePressed = false;
+  #preventFocusVisible = false;
   #lock = new HapticLock(this);
   #eventListeners = new HapticEventListeners();
 
@@ -839,13 +839,13 @@ class HapticDropdownElement extends HTMLElement {
 
         if (!this.#toggleElement) {
           this.#eventListeners.add(node, 'mousedown', () => {
-            this.#mousePressed = true;
+            this.#preventFocusVisible = true;
           });
           this.#eventListeners.add(node, 'mouseup', () => {
-            this.#mousePressed = false;
+            this.#preventFocusVisible = false;
           });
           this.#eventListeners.add(node, 'focusin', () => {
-            if (!this.#mousePressed) {
+            if (!this.#preventFocusVisible) {
               this.setAttribute('focused', 'focused');
             }
           });
@@ -920,6 +920,19 @@ class HapticDropdownElement extends HTMLElement {
 
       if (options.cancel) {
         this.cancel();
+      }
+    }
+  }
+
+  focus(options = {}) {
+    if (this.toggleElement) {
+      if (options.focusVisible === false) {
+        this.#preventFocusVisible = true;
+        this.toggleElement.focus();
+        this.#preventFocusVisible = false;
+      } else {
+        this.toggleElement.focus();
+        this.setAttribute('focused', 'focused');
       }
     }
   }
@@ -1270,7 +1283,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
                   this.dispatchEvent(new Event('change'));
                 }
               }
-              this.toggleElement?.focus();
+              this.focus();
               this.hidePopover();
             }
           } else
@@ -1319,7 +1332,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
             this.#optionElements.forEach(optionElement => {
               optionElement.checked = optionElement === event.target;
             });
-            this.toggleElement?.focus();
+            this.focus({ focusVisible: false });
             this.hidePopover();
 
             if (this.#refresh()) {
@@ -1670,7 +1683,7 @@ class HapticFieldElement extends HTMLElement {
   #label = null;
   #clearButton = null;
   #setValidOnChange = null;
-  #mousePressed = false;
+  #preventFocusVisible = false;
   #eventListeners = new HapticEventListeners();
 
   #controlObserver = new HapticAttributesObserver(
@@ -1688,14 +1701,15 @@ class HapticFieldElement extends HTMLElement {
                 node instanceof HTMLTextAreaElement ||
                 node instanceof HTMLSelectElement) {
               this.#eventListeners.add(node, 'mousedown', () => {
-                this.#mousePressed = true;
+                this.#preventFocusVisible = true;
               });
               this.#eventListeners.add(node, 'mouseup', () => {
-                this.#mousePressed = false;
+                this.#preventFocusVisible = false;
               });
               this.#eventListeners.add(node, 'focusin', () => {
                 if (this.#focusIndicator === 'focus' ||
-                   (this.#focusIndicator === 'focus-visible' && !this.#mousePressed)) {
+                   (this.#focusIndicator === 'focus-visible' &&
+                    !this.#preventFocusVisible)) {
                   this.setAttribute('focused', '');
                 }
               });
@@ -1742,19 +1756,17 @@ class HapticFieldElement extends HTMLElement {
             node.tabIndex = -1;
             this.setAttribute('with-clear-button', '');
 
-            this.#eventListeners.add(node, 'mousedown', () => {
-              this.#mousePressed = true;
-            });
             this.#eventListeners.add(node, 'click', event => {
               const control = this.control;
               if (control) {
                 if (control.value != '') {
                   control.value = '';
                 }
+                this.#preventFocusVisible = true;
                 control.focus();
+                this.#preventFocusVisible = false;
                 control.dispatchEvent(new Event('input'));
               }
-              this.#mousePressed = false;
               event.preventDefault();
             });
             this.#clearButton = node;
@@ -1872,6 +1884,9 @@ class HapticFieldElement extends HTMLElement {
   }
 
   #isAllowedControlElement(node) {
+    if (node.classList.contains('haptic-field')) {
+      return true;
+    }
     for (let allowedControlClass of this.#allowedControlClasses) {
       if (node instanceof allowedControlClass) {
         return true;
