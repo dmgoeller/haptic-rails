@@ -1697,7 +1697,8 @@ class HapticFieldElement extends HTMLElement {
       if (node instanceof HTMLElement && this.#isParentFieldOf(node)) {
         if (this.#isAllowedControlElement(node)) {
           if (!this.#control) {
-            if (node instanceof HTMLInputElement ||
+            if (node instanceof HTMLButtonElement ||
+                node instanceof HTMLInputElement ||
                 node instanceof HTMLTextAreaElement ||
                 node instanceof HTMLSelectElement) {
               this.#eventListeners.add(node, 'mousedown', () => {
@@ -1931,7 +1932,7 @@ customElements.define('haptic-dropdown-field', HapticDropdownFieldElement);
 
 class HapticTextFieldElement extends HapticFieldElement {
   constructor() {
-    super([HTMLInputElement, HTMLTextAreaElement], true);
+    super([HTMLButtonElement, HTMLInputElement, HTMLTextAreaElement], true);
   }
 }
 customElements.define('haptic-text-field', HapticTextFieldElement);
