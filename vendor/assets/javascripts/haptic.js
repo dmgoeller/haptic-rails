@@ -1932,7 +1932,7 @@ customElements.define('haptic-dropdown-field', HapticDropdownFieldElement);
 
 class HapticTextFieldElement extends HapticFieldElement {
   constructor() {
-    super([HTMLButtonElement, HTMLInputElement, HTMLTextAreaElement], true);
+    super([HTMLInputElement, HTMLTextAreaElement], true);
   }
 }
 customElements.define('haptic-text-field', HapticTextFieldElement);
