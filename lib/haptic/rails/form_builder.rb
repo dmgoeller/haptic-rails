@@ -511,16 +511,22 @@ module Haptic
       # Creates a <code>haptic-dialog-dropdown</code> tag wrapped by a
       # <code>haptic-dropdown-field</code>.
       def dropdown_field(options = {}, &block)
-        field_options = @field_options.slice(*HAPTIC_FIELD_OPTIONS)
-        field_options.merge!(options)
+        options = @field_options.merge(options)
 
-        label = field_options.delete(:label)
+        label = options.delete(:label)
         label = nil if label == true
 
-        @template.haptic_dropdown_field_tag(label, **field_options) do
-          @template.haptic_dropdown_dialog_tag do
-            options = @field_options.merge(class: [@field_options[:class], 'haptic-field'])
-            block&.call(DropdownDialogBuilder.new(@template, **options))
+        dropdown_field_options = options.extract!(*HAPTIC_FIELD_OPTIONS)
+        dropdown_dialog_options = options.extract!(:open_to_top)
+
+        @template.haptic_dropdown_field_tag(label, **dropdown_field_options) do
+          @template.haptic_dropdown_dialog_tag(**dropdown_dialog_options) do
+            block&.call(
+              DropdownDialogBuilder.new(
+                @template,
+                **options.merge(class: [options[:class], 'haptic-field'])
+              )
+            )
           end
         end
       end

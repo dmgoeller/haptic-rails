@@ -1177,23 +1177,28 @@ module Haptic
         )
       end
 
-      def test_dropdown_field_with_label
+      def test_dropdown_field_with_options
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field>
+            <haptic-dropdown-field focus-indicator="focus">
               <div class="field-container">
-                <haptic-dropdown-dialog>
+                <haptic-dropdown-dialog open-to-top>
                   <div class="backdrop"></div>
                 </haptic-dropdown-dialog>
                 <label class="field-label">Label</label>
+
               </div>
             </haptic-dropdown-field>
           HTML
-          form.dropdown_field(label: 'Label')
+          form.dropdown_field(
+            focus_indicator: 'focus',
+            label: 'Label',
+            open_to_top: true
+          )
         )
       end
 
-      def test_dropdown_field_on_label_true
+      def test_dropdown_field_with_label_true
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field>
@@ -1222,6 +1227,31 @@ module Haptic
             </haptic-dropdown-field>
           HTML
           form.dropdown_field do |dropdown|
+            dropdown.toggle('Text') + dropdown.popover
+          end
+        )
+      end
+
+      def test_dropdown_field_with_block_and_options
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-dropdown-field focus-indicator="focus">
+              <div class="field-container">
+                <haptic-dropdown-dialog open-to-top>
+                  <button class="toggle haptic-field" type="button" data-foo="bar">Text</button>
+                  <div class="popover"></div>
+                  <div class="backdrop"></div>
+                </haptic-dropdown-dialog>
+                <label class="field-label">Label</label>
+              </div>
+            </haptic-dropdown-field>
+          HTML
+          form.dropdown_field(
+            data: { foo: 'bar' },
+            focus_indicator: 'focus',
+            label: 'Label',
+            open_to_top: true
+          ) do |dropdown|
             dropdown.toggle('Text') + dropdown.popover
           end
         )
