@@ -1548,51 +1548,6 @@ module Haptic
         )
       end
 
-      def test_haptic_text_field_for_on_rails6
-        with_rails6_form_builder do
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field for="dummy_name" id="field-id">
-                <div class="field-container">
-                  <input is="haptic-input" type="text" name="dummy[name]" id="dummy_name">
-                </div>
-              </haptic-text-field>
-            HTML
-            form.text_field(:name, field_id: 'field-id')
-          )
-        end
-      end
-
-      def test_haptic_text_field_for_on_rails6_and_namespace
-        with_rails6_form_builder do
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field for="foo_dummy_name" id="field-id">
-                <div class="field-container">
-                  <input is="haptic-input" type="text" name="dummy[name]" id="foo_dummy_name">
-                </div>
-              </haptic-text-field>
-            HTML
-            form(namespace: :foo).text_field(:name, field_id: 'field-id')
-          )
-        end
-      end
-
-      def test_haptic_text_field_for_on_rails6_and_index
-        with_rails6_form_builder do
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field for="dummy_0_name" id="field-id">
-                <div class="field-container">
-                  <input is="haptic-input" type="text" name="dummy[0][name]" id="dummy_0_name">
-                </div>
-              </haptic-text-field>
-            HTML
-            form(index: 0).text_field(:name, field_id: 'field-id')
-          )
-        end
-      end
-
       private
 
       def form(object = nil, options = {})
@@ -1600,18 +1555,6 @@ module Haptic
         object ||= Dummy.new
 
         FormBuilder.new(object.class.model_name.param_key, object, self, options)
-      end
-
-      def with_rails6_form_builder(&block)
-        FormBuilder.stub_any_instance(
-          :respond_to?,
-          lambda do |arg1, arg2 = nil|
-            return false if arg1 == :field_id
-
-            FormBuilder.respond_to?(arg1, arg2)
-          end,
-          &block
-        )
       end
     end
   end

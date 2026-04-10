@@ -241,11 +241,12 @@ module Haptic
       #
       # ==== Options
       #
-      # - <code>:inverted</code> - If is <code>true</code>, checkboxes, switches or radio
-      #   buttons are shown on the right side instead of the left side.
-      # - <code>:multiple</code> - If is <code>true</code>, multiple items can be selected
-      #   at once.
-      # - <code>:required</code> - If is <code>true</code>, at least one item must be selected.
+      # - <code>:inverted</code> - If is set to <code>true</code>, checkboxes, switches or
+      #   radio buttons are shown on the right side instead of the left side.
+      # - <code>:multiple</code> - If is set <code>true</code>, multiple items can be
+      #   selected at once.
+      # - <code>:required</code> - If is set to <code>true</code>, at least one item must
+      #   be selected.
       #
       # ==== Examples
       #
@@ -356,11 +357,12 @@ module Haptic
       #
       # ==== Options
       #
-      # - <code>:inverted</code> - If is <code>true</code>, checkboxes, switches or radio
-      #   buttons are shown on the right side instead of the left side.
-      # - <code>:multiple</code> - If is <code>true</code>, multiple items can be selected
-      #   at once.
-      # - <code>:required</code> - If is <code>true</code>, at least one item must be selected.
+      # - <code>:inverted</code> - If is set to <code>true</code>, checkboxes, switches or
+      #   radio buttons are shown on the right side instead of the left side.
+      # - <code>:multiple</code> - If is set to <code>true</code>, multiple items can be
+      #   selected at once.
+      # - <code>:required</code> - If is set to <code>true</code>, at least one item must
+      #   be selected.
       #
       # ==== Example
       #
@@ -463,17 +465,18 @@ module Haptic
       # ==== Options
       #
       # - <code>:disabled</code> - The options to be disabled.
-      # - <code>:include_blank</code> - If is <code>true</code>, an option with an empty value
-      #   is prepended.
+      # - <code>:include_blank</code> - If is set to <code>true</code>, an option with an empty
+      #   value is prepended.
       # - <code>:prompt</code> - The text of the blank option prepended.
       #
       # ==== HTML options
       #
-      # - <code>:disabled</code> - If is <code>true</code>, the field is disabled as a whole.
+      # - <code>:disabled</code> - If is set to <code>true</code>, the field is disabled
+      #   as a whole.
       # - <code>:onchange</code> - The Javascript to be executed when the selected option
       #   has been changed.
-      # - <code>:required</code> - If is <code>true</code>, an option with a non-empty value
-      #   must be selected.
+      # - <code>:required</code> - If is set to <code>true</code>, an option with a non-empty
+      #   value must be selected.
       #
       # ==== Example
       #
@@ -574,12 +577,12 @@ module Haptic
       #
       # ==== Options
       #
-      # - <code>:disabled</code> - The options to be disabled. If is <code>true</code>, the
-      #   field is disabled as a whole.
+      # - <code>:disabled</code> - The options to be disabled. If is set to <code>true</code>,
+      #   the field is disabled as a whole.
       # - <code>:onchange</code> - The Javascript to be executed when the selected option
       #   has been changed.
-      # - <code>:required</code> - If is <code>true</code>, an option with a non-empty value
-      #   must be selected.
+      # - <code>:required</code> - If is set to <code>true</code>, an option with a non-empty
+      #   value must be selected.
       #
       # ==== Example
       #
@@ -646,7 +649,7 @@ module Haptic
         define_method(name) do |method, field, options = {}|
           options = options.slice(*HAPTIC_FIELD_OPTIONS)
           options[:id] = options.delete(:field_id)
-          options[:for] = _field_id(method)
+          options[:for] = field_id(method)
           options[:invalid] = object&.errors&.key?(method) || false
           options[:error_message] = error_message_for(method)
 
@@ -654,7 +657,7 @@ module Haptic
           if [nil, '', true, false].exclude?(set_valid_on_change)
             options[:set_valid_on_change] =
               Array(set_valid_on_change)
-                .map { |name| _field_id(name) }
+                .map { |name| field_id(name) }
                 .join(' ')
                 .presence
           end
@@ -688,23 +691,6 @@ module Haptic
           ),
           options
         )
-      end
-
-      def _field_id(method_name, namespace: @options[:namespace], index: @index)
-        if respond_to?(:field_id)
-          # Rails 7
-          field_id(method_name, namespace: namespace, index: index)
-        else
-          # Rails 6
-          [
-            namespace,
-            # ActionView::Helpers::Tags::Base#sanitized_object_name:
-            @object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, '_').delete_suffix('_'),
-            index,
-            # ActionView::Helpers::Tags::Base#sanitized_method_name:
-            method_name.to_s.delete_suffix('?')
-          ].map(&:presence).compact.join('_')
-        end
       end
     end
   end
