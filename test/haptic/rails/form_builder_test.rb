@@ -59,7 +59,7 @@ module Haptic
           )
         end
 
-        define_method("test_#{method}_with_custom_label") do
+        define_method("test_#{method}_with_label_as_string") do
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field for="dummy_name">
@@ -154,7 +154,7 @@ module Haptic
         )
       end
 
-      def test_color_field_with_custom_label
+      def test_color_field_with_label_string
         assert_dom_equal(
           <<~HTML,
             <haptic-text-field for="dummy_color">
@@ -248,7 +248,7 @@ module Haptic
         )
       end
 
-      def test_text_area_with_custom_label
+      def test_text_area_with_label_as_string
         assert_dom_equal(
           <<~HTML,
             <haptic-text-field for="dummy_name">
@@ -299,7 +299,7 @@ module Haptic
         month_field: 'month',
         week_field: 'week'
       }.each do |method, type|
-        define_method("test_#{method}") do
+        define_method(:"test_#{method}") do
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field for="dummy_date">
@@ -313,7 +313,7 @@ module Haptic
           )
         end
 
-        define_method("test_#{method}_with_field_options") do
+        define_method(:"test_#{method}_with_field_options") do
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field for="dummy_date" id="field-id" set-valid-on-change="dummy_bar">
@@ -338,7 +338,7 @@ module Haptic
           )
         end
 
-        define_method("test_#{method}_with_custom_label") do
+        define_method(:"test_#{method}_with_label_as_string") do
           assert_dom_equal(
             <<~HTML,
               <haptic-text-field for="dummy_date">
@@ -353,7 +353,7 @@ module Haptic
           )
         end
 
-        define_method("test_#{method}_with_errors") do
+        define_method(:"test_#{method}_with_errors") do
           dummy = Dummy.new
           dummy.errors.add(:date, :invalid)
 
@@ -374,7 +374,7 @@ module Haptic
           )
         end
 
-        define_method("test_#{method}_on_nil_object") do
+        define_method(:"test_#{method}_on_nil_object") do
           form = FormBuilder.new(:dummy, nil, self, {})
           assert_dom_equal(
             <<~HTML,
@@ -861,7 +861,7 @@ module Haptic
         )
       end
 
-      def test_collection_select_with_custom_label
+      def test_collection_select_with_label_as_string
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
@@ -977,7 +977,7 @@ module Haptic
         )
       end
 
-      def test_collection_select_dropdown_with_custom_label
+      def test_collection_select_dropdown_with_label_as_string
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
@@ -1303,6 +1303,26 @@ module Haptic
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
+                    <div class="scroll-container"></div>
+                  </div>
+                  <div class="backdrop"></div>
+                </haptic-select-dropdown>
+              </div>
+            </haptic-dropdown-field>
+          HTML
+          form.select_dropdown(:color, nil)
+        )
+      end
+
+      def test_select_dropdown_with_choices
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-dropdown-field for="dummy_color">
+              <div class="field-container">
+                <haptic-select-dropdown>
+                  <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
+                  <button class="toggle haptic-field" type="button"></button>
+                  <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
                       <haptic-option value="green">Green</haptic-option>
@@ -1340,23 +1360,33 @@ module Haptic
         )
       end
 
-      def test_select_dropdown_without_choices
+      def test_select_dropdown_with_choices_and_options
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
               <div class="field-container">
-                <haptic-select-dropdown>
-                  <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color">
+                <haptic-select-dropdown data-foo="bar">
+                  <input autocomplete="off" type="hidden" name="dummy[color]"
+                    required="required">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
-                    <div class="scroll-container"></div>
+                    <div class="scroll-container">
+                      <haptic-option value="blue">Blue</haptic-option>
+                      <haptic-option value="green">Green</haptic-option>
+                    </div>
                   </div>
                   <div class="backdrop"></div>
                 </haptic-select-dropdown>
               </div>
             </haptic-dropdown-field>
           HTML
-          form.select_dropdown(:color, nil)
+          form.select_dropdown(
+            :color,
+            [%w[Blue blue], %w[Green green]],
+            data: { foo: 'bar' },
+            id: nil,
+            required: true
+          )
         )
       end
 
@@ -1443,7 +1473,7 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input autocomplete="off" type="hidden" name="dummy[color]" id="dummy_color"
-                   disabled="disabled">
+                    disabled="disabled">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
@@ -1507,45 +1537,6 @@ module Haptic
             )
           end
         end
-      end
-
-      def test_haptic_text_field_for
-        assert_dom_equal(
-          <<~HTML,
-            <haptic-text-field for="dummy_name" id="field-id">
-              <div class="field-container">
-                <input is="haptic-input" type="text" name="dummy[name]" id="dummy_name">
-              </div>
-            </haptic-text-field>
-          HTML
-          form.text_field(:name, field_id: 'field-id')
-        )
-      end
-
-      def test_haptic_text_field_for_on_namespace
-        assert_dom_equal(
-          <<~HTML,
-            <haptic-text-field for="foo_dummy_name" id="field-id">
-              <div class="field-container">
-                <input is="haptic-input" type="text" name="dummy[name]" id="foo_dummy_name">
-              </div>
-            </haptic-text-field>
-          HTML
-          form(namespace: :foo).text_field(:name, field_id: 'field-id')
-        )
-      end
-
-      def test_haptic_text_field_for_on_index
-        assert_dom_equal(
-          <<~HTML,
-            <haptic-text-field for="dummy_0_name" id="field-id">
-              <div class="field-container">
-                <input is="haptic-input" type="text" name="dummy[0][name]" id="dummy_0_name">
-              </div>
-            </haptic-text-field>
-          HTML
-          form(index: 0).text_field(:name, field_id: 'field-id')
-        )
       end
 
       private

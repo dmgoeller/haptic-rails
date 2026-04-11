@@ -675,7 +675,7 @@ module Haptic
 
       def select_dropdown_field(method, haptic_options, options = {})
         options = options.dup
-        hidden_field_options = options.extract!(:disabled, :required)
+        hidden_field_options = options.extract!(:disabled, :id, :required)
         toggle_class = ['toggle', 'haptic-field', options.delete(:class)]
 
         haptic_dropdown_field_tag(
