@@ -5,6 +5,7 @@ require 'test_helper'
 module Haptic
   module Rails
     class TableBuilderTest < ActionView::TestCase
+      # #row
 
       def test_row
         assert_dom_equal(
@@ -47,6 +48,20 @@ module Haptic
           table_builder.row(href: '/', data: { foo: 'bar' }) do |row|
             row.data('Data')
           end
+        )
+      end
+
+      # #row_for
+
+      def test_row_for
+        model = Struct.new(:foo).new('bar')
+        assert_dom_equal(
+          <<~HTML,
+            <tr is="haptic-table-row">
+              <td>bar</td>
+            </tr>
+          HTML
+          table_builder.row_for(model) { |row| row.data(:foo) }
         )
       end
 

@@ -3,13 +3,13 @@
 module Haptic
   module Rails
     class TableRowBuilder
-      def initialize(builder) # :nodoc:
+      def initialize(builder, model = nil) # :nodoc:
         @builder = builder
+        @model = model
+        @model_class = model.is_a?(Class) ? model : model.class
       end
 
-      ##
-      # :method: data
-      # :call-seq: data(content, **options, &block)
+      # :call-seq: data(content = nil, **options, &block)
       #
       # Adds a table cell.
       #
@@ -18,11 +18,14 @@ module Haptic
       #   data('Data')
       #   # =>
       #   # <td>Data</td>
+      def data(content = nil, blank: nil, **options, &block)
+        if @model && content.is_a?(Symbol)
+          content = @model.public_send(content)
+          content = blank if content.blank? && blank.present?
+        end
+        @builder.tag.send('td', content, **options, &block)
+      end
 
-      ##
-      # :method: head
-      # :call-seq: head(content, **options, &block)
-      #
       # Adds a table header.
       #
       # ==== Example
@@ -30,11 +33,11 @@ module Haptic
       #   header('Header')
       #   # =>
       #   # <th>Header</th>
-
-      { data: 'td', header: 'th' }.each do |name, tag_name|
-        define_method(name) do |content = nil, **options, &block|
-          @builder.tag.send(tag_name, content, **options, &block)
+      def header(content = nil, **options, &block)
+        if @model_class && content.is_a?(Symbol)
+          content = @model_class.human_attribute_name(content)
         end
+        @builder.tag.send('th', content, **options, &block)
       end
     end
   end
