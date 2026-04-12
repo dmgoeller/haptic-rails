@@ -1683,6 +1683,7 @@ class HapticFieldElement extends HTMLElement {
   #label = null;
   #clearButton = null;
   #setValidOnChange = null;
+  #clearButtonPressed = false;
   #preventFocusVisible = false;
   #eventListeners = new HapticEventListeners();
 
@@ -1701,12 +1702,12 @@ class HapticFieldElement extends HTMLElement {
                 node instanceof HTMLInputElement ||
                 node instanceof HTMLTextAreaElement ||
                 node instanceof HTMLSelectElement) {
-              this.#eventListeners.add(node, 'mousedown', () => {
-                this.#preventFocusVisible = true;
-              });
-              this.#eventListeners.add(node, 'mouseup', () => {
-                this.#preventFocusVisible = false;
-              });
+              this.#eventListeners.add(node, 'change', event => {
+                if (this.#clearButtonPressed) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+              }, { capture: true });
               this.#eventListeners.add(node, 'focusin', () => {
                 if (this.#focusIndicator === 'focus' ||
                    (this.#focusIndicator === 'focus-visible' &&
@@ -1718,6 +1719,12 @@ class HapticFieldElement extends HTMLElement {
                 if (event.relatedTarget !== this.#clearButton) {
                   this.removeAttribute('focused');
                 }
+              });
+              this.#eventListeners.add(node, 'mousedown', () => {
+                this.#preventFocusVisible = true;
+              });
+              this.#eventListeners.add(node, 'mouseup', () => {
+                this.#preventFocusVisible = false;
               });
             }
             if (node instanceof HapticTextAreaElement) {
@@ -1762,13 +1769,19 @@ class HapticFieldElement extends HTMLElement {
               if (control) {
                 if (control.value != '') {
                   control.value = '';
+                  control.dispatchEvent(new Event('input'));
                 }
                 this.#preventFocusVisible = true;
                 control.focus();
                 this.#preventFocusVisible = false;
-                control.dispatchEvent(new Event('input'));
               }
               event.preventDefault();
+            });
+            this.#eventListeners.add(node, 'mousedown', () => {
+              this.#clearButtonPressed = true;
+            });
+            this.#eventListeners.add(node, 'mouseup', () => {
+              this.#clearButtonPressed = false;
             });
             this.#clearButton = node;
           }
