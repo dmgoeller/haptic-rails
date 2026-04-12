@@ -3,7 +3,8 @@
 module Haptic
   module Rails
     class DropdownDialogBuilder < DropdownBuilder
-      # Creates the popover element. Passes an instance of DialogBuilder to the block.
+      # Creates the popover element. If a block is given, it is called with an instance of
+      # DialogBuilder as argument.
       def popover(content = nil, **options, &block)
         options = options.merge(class: ['popover', options[:class]])
 

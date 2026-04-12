@@ -9,12 +9,13 @@ module Haptic
 
       # :call-seq: row(model: nil, **options, &block)
       #
-      # Adds a row. Passes an instance of TableRowBuilder to the block.
+      # Adds a row. If a block is given, it is called with an instance of TableRowBuilder
+      # as argument.
       #
       # ==== Options
       #
-      # - <code>:href</code>
-      # - <code>:model</code>
+      # - <code>:href</code> - The URL the row points to.
+      # - <code>:model</code> - The model.
       def row(href: nil, model: nil, **options)
         options = options.reverse_merge('data-href': href) if href
 
@@ -23,11 +24,12 @@ module Haptic
         end
       end
 
-      # Adds a row for +model+. Passes an instance of TableRowBuilder to the block.
+      # Adds a row for +model+. If a block is given, it is called with an instance of
+      # TableRowBuilder as argument.
       #
       # ==== Options
       #
-      # - <code>:href</code>
+      # - <code>:href</code> - The URL the row points to.
       def row_for(model, **options, &block)
         row(model: model, **options, &block)
       end

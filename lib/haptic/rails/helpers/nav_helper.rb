@@ -6,7 +6,8 @@ module Haptic
       module NavHelper
         # :call-seq: haptic_nav(**options, &block)
         #
-        # Creates a haptic nav. Passes an instance of NavBuilder to the block.
+        # Creates a haptic nav. If a block is given, it is called with an instance of
+        # NavBuilder as argument.
         #
         # ==== Options
         #

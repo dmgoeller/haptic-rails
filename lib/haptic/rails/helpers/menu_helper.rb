@@ -6,8 +6,8 @@ module Haptic
       module MenuHelper
         # :call-seq: haptic_dropdown_menu(**options, &block)
         #
-        # Creates a haptic dropdown menu. Passes an instance of DropdownMenuBuilder
-        # to the block.
+        # Creates a haptic dropdown menu. If a block is given, it is called with an instance
+        # of DropdownMenuBuilder as argument.
         #
         # ==== Options
         #

@@ -9,7 +9,8 @@ module Haptic
 
       # :call-seq: menu(**options, &block)
       #
-      # Creates the menu to be poped up. Passes an instance of MenuBuilder to the block.
+      # Creates the menu to be poped up. If a block is given, it is called with an instance
+      # of MenuBuilder as argument.
       #
       # ==== Options
       #
