@@ -253,6 +253,10 @@ haptic-dropdown-field, haptic-text-field {
  * Lists
  **********************************************************************/
 
+haptic-list {
+  outline: none;
+}
+
 haptic-list-item {
   &, .haptic-checkbox, .haptic-radio-button, .haptic-switch {
     border-radius: .25rem;

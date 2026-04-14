@@ -9,7 +9,7 @@ module Haptic
         # Creates a haptic dialog. If a block is given, it is called with an instance of
         # DialogBuilder as argument.
         def haptic_dialog(**options)
-          tag.dialog(**options.merge(class: ['haptic-dialog', options[:class]])) do
+          tag.dialog(is: 'haptic-dialog', **options) do
             yield DialogBuilder.new(self) if block_given?
           end
         end

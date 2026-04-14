@@ -749,6 +749,14 @@ haptic-list-item {
   }
 }
 
+haptic-list:focus-visible {
+  .haptic-checkbox, .haptic-radio-button, .haptic-switch {
+    &.focused {
+      @include haptic-primary-color('outline-color');
+    }
+  }
+}
+
 /**********************************************************************
  * Menus
  **********************************************************************/
