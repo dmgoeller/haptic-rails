@@ -200,12 +200,16 @@ class HapticActivatable {
 
 class HapticFocusable {
   #target;
+  #originalTabIndex = null;
 
   get target() {
     return this.#target;
   }
 
   constructor(target) {
+    this.#originalTabIndex = target.tabIndex;
+    target.tabIndex = -1;
+
     this.#target = target;
   }
 
@@ -238,6 +242,10 @@ class HapticFocusable {
     }
     return value;
   }
+
+  restoreTabIndex() {
+    this.#target.tabIndex = this.#originalTabIndex;
+  }
 }
 
 class HapticNavigationController {
@@ -246,7 +254,6 @@ class HapticNavigationController {
   #target = null;
   #scrollContainer = null;
   #elements = [];
-  #initialTabIndices = new Map();
   #focused = false;
   #suspended = false;
   #skipNextMouseEvent = false;
@@ -314,70 +321,82 @@ class HapticNavigationController {
 
         if (size > 0 && this.#focused) {
           const key = event.key;
+          let focusedElement = null, form = null;
 
-          if (key === 'Enter' || key === ' ') {
-            if (this.#focusedElement) {
-              this.#focusedElement.target.click();
-              event.preventDefault();
-            }
-          } else
-          if ((this.#vertical && key === 'ArrowUp') ||
-            (!this.#vertical && key === 'ArrowLeft')) {
-            let focusedElement = null;
-            let elementToBeFocused = null;
+          switch (key) {
+            case 'Enter':
+              if (form = this.#target.form) {
+                form.requestSubmit();
+                event.preventDefault();
+                break;
+              }
+            case ' ':
+              if (focusedElement = this.#focusedElement) {
+                focusedElement.target.click();
+                event.preventDefault();
+              }
+              break;
+            case 'ArrowDown':
+            case 'ArrowLeft':
+            case 'ArrowRight':
+            case 'ArrowUp':
+              if ((this.#vertical && key === 'ArrowUp') ||
+                (!this.#vertical && key === 'ArrowLeft')) {
+                let elementToBeFocused = null;
 
-            for (let i = 0; i < size; i++) {
-              const element = this.#elements[i];
+                for (let i = 0; i < size; i++) {
+                  const element = this.#elements[i];
 
-              if (!element.disabled) {
-                if (element.focused) {
-                  focusedElement = element;
-                  elementToBeFocused ||= element;
-                  break;
+                  if (!element.disabled) {
+                    if (element.focused) {
+                      focusedElement = element;
+                      elementToBeFocused ||= element;
+                      break;
+                    }
+                    elementToBeFocused = element;
+                  }
                 }
-                elementToBeFocused = element;
-              }
-            }
-            if (focusedElement !== elementToBeFocused) {
-              if (focusedElement !== null) {
-                focusedElement.focused = false;
-              }
-              if (elementToBeFocused) {
-                elementToBeFocused.focused = true;
-                this.#scrollIntoView(elementToBeFocused.target);
-              }
-            }
-            event.preventDefault();
-            event.stopPropagation();
-          } else
-          if ((this.#vertical && key === 'ArrowDown') ||
-            (!this.#vertical && key === 'ArrowRight')) {
-            let focusedElement = null;
-            let elementToBeFocused = null;
-
-            for (let i = size - 1; i >= 0; i--) {
-              const element = this.#elements[i];
-
-              if (!element.disabled) {
-                if (element.focused) {
-                  focusedElement = element;
-                  elementToBeFocused ||= element;
-                  break;
+                if (focusedElement !== elementToBeFocused) {
+                  if (focusedElement !== null) {
+                    focusedElement.focused = false;
+                  }
+                  if (elementToBeFocused) {
+                    elementToBeFocused.focused = true;
+                    this.#scrollIntoView(elementToBeFocused.target);
+                  }
                 }
-                elementToBeFocused = element;
+                event.preventDefault();
+                event.stopPropagation();
+              } else
+              if ((this.#vertical && key === 'ArrowDown') ||
+                (!this.#vertical && key === 'ArrowRight')) {
+                let focusedElement = null;
+                let elementToBeFocused = null;
+
+                for (let i = size - 1; i >= 0; i--) {
+                  const element = this.#elements[i];
+
+                  if (!element.disabled) {
+                    if (element.focused) {
+                      focusedElement = element;
+                      elementToBeFocused ||= element;
+                      break;
+                    }
+                    elementToBeFocused = element;
+                  }
+                }
+                if (focusedElement !== elementToBeFocused) {
+                  if (focusedElement !== null) {
+                    focusedElement.focused = false;
+                  }
+                  if (elementToBeFocused) {
+                    elementToBeFocused.focused = true;
+                    this.#scrollIntoView(elementToBeFocused.target);
+                  }
+                }
+                event.preventDefault();
+                event.stopPropagation();
               }
-            }
-            if (focusedElement !== elementToBeFocused) {
-              if (focusedElement !== null) {
-                focusedElement.focused = false;
-              }
-              if (elementToBeFocused) {
-                elementToBeFocused.focused = true;
-                this.#scrollIntoView(elementToBeFocused.target);
-              }
-            }
-            event.preventDefault();
-            event.stopPropagation();
           }
         }
       }
@@ -412,12 +431,6 @@ class HapticNavigationController {
 
   disconnect() {
     this.#eventListeners.removeAll();
-
-    this.#initialTabIndices.forEach((tabIndex, element) => {
-      element.tabIndex = tabIndex;
-    });
-    this.#initialTabIndices.clear();
-
     this.#elements = [];
     this.#scrollContainer = null;
     this.#target = null;
@@ -427,10 +440,6 @@ class HapticNavigationController {
   }
 
   add(element) {
-    if (element.tabIndex != -1) {
-      this.#initialTabIndices.set(element, element.tabIndex);
-      element.tabIndex = -1;
-    }
     this.#eventListeners.add(element, 'click', event => {
       if (!this.#suspended) {
         this.#focusedElement = event.target;
@@ -463,11 +472,8 @@ class HapticNavigationController {
   remove(element) {
     for (let i = 0; i < this.#elements.length; i++) {
       if (this.#elements[i].target === element) {
-        if (this.#initialTabIndices.has(element)) {
-          element.tabIndex = this.#initialTabIndices.get(element);
-          this.#initialTabIndices.delete(element);
-        }
         this.#eventListeners.remove(element);
+        this.#elements[i].restoreTabIndex;
         this.#elements.splice(i, 1);
         return true;
       }
@@ -2306,26 +2312,18 @@ customElements.define('haptic-async-form', HapticAsyncFormElement, { extends: 'f
 
 class HapticGridElement extends HTMLElement {
   #elements = [];
-  #initialTabIndices = new Map();
   #eventListeners = new HapticEventListeners();
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
       if (node instanceof HTMLInputElement) {
-        if (node.tabIndex != -1) {
-          this.#initialTabIndices.set(node, node.tabIndex);
-          node.tabIndex = -1;
-        }
         this.#elements.push(new HapticFocusable(node));
       }
     },
     nodeRemoved: node => {
       for (let i = 0; i < this.#elements.length; i++) {
         if (this.#elements[i].target === element) {
-          if (this.#initialTabIndices.has(element)) {
-            element.tabIndex = this.#initialTabIndices.get(element);
-            this.#initialTabIndices.delete(element);
-          }
+          this.#elements[i].restoreTabIndex;
           this.#elements.splice(i, 1);
           break;
         }
@@ -2357,41 +2355,51 @@ class HapticGridElement extends HTMLElement {
     this.tabIndex = Math.max(this.tabIndex, 0);
 
     this.#eventListeners.add(this, 'keydown', event => {
-      const key = event.key;
+      let focusedIndex = null, form = null, size = null;
 
-      if (key === 'Enter' || key === ' ') {
-        const focusedIndex = this.#focusedIndex;
+      switch(event.key) {
+        case 'Enter':
+          if (form = this.closest('form')) {
+            form.requestSubmit();
+            event.preventDefault();
+            break;
+          }
+        case ' ':
+          focusedIndex = this.#focusedIndex;
 
-        if (focusedIndex >= 0 && focusedIndex < this.#elements.length) {
-          this.#elements[focusedIndex].target.click();
+          if (focusedIndex >= 0 && focusedIndex < this.#elements.length) {
+            this.#elements[focusedIndex].target.click();
+            event.preventDefault();
+          }
+          break;
+        case 'ArrowDown':
+        case 'ArrowLeft':
+        case 'ArrowRight':
+        case 'ArrowUp':
+          focusedIndex = this.#focusedIndex;
+          size = this.#size();
+
+          switch(event.key) {
+            case 'ArrowLeft':
+              if (focusedIndex % size.columns > 0) {
+                focusedIndex--;
+              }
+              break;
+            case 'ArrowRight':
+              if (focusedIndex % size.columns < size.columns - 1) {
+                focusedIndex++;
+              }
+              break;
+            case 'ArrowUp':
+              focusedIndex -= size.rows - 1;
+              break;
+            case 'ArrowDown':
+              focusedIndex += size.rows - 1;
+          }
+          if (focusedIndex >= 0 && focusedIndex < this.#elements.length) {
+            this.#focusedIndex = focusedIndex;
+          }
           event.preventDefault();
-        }
-      } else
-      if (/Arrow(Down|Left|Right|Up|)/.test(key)) {
-        const size = this.#size();
-        let focusedIndex = this.#focusedIndex;
-
-        switch(key) {
-          case 'ArrowLeft':
-            if (focusedIndex % size.columns > 0) {
-              focusedIndex--;
-            }
-            break;
-          case 'ArrowRight':
-            if (focusedIndex % size.columns < size.columns - 1) {
-              focusedIndex++;
-            }
-            break;
-          case 'ArrowUp':
-            focusedIndex -= size.rows - 1;
-            break;
-          case 'ArrowDown':
-            focusedIndex += size.rows - 1;
-        }
-        if (focusedIndex >= 0 && focusedIndex < this.#elements.length) {
-          this.#focusedIndex = focusedIndex;
-        }
-        event.preventDefault();
       }
     });
     this.#eventListeners.add(this, 'focusin', () => {
