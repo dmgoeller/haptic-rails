@@ -427,7 +427,7 @@ class HapticNavigationController {
   }
 
   add(element) {
-    if (element.tabIndex !== -1) {
+    if (element.tabIndex != -1) {
       this.#initialTabIndices.set(element, element.tabIndex);
       element.tabIndex = -1;
     }
@@ -465,6 +465,7 @@ class HapticNavigationController {
       if (this.#elements[i].target === element) {
         if (this.#initialTabIndices.has(element)) {
           element.tabIndex = this.#initialTabIndices.get(element);
+          this.#initialTabIndices.delete(element);
         }
         this.#eventListeners.remove(element);
         this.#elements.splice(i, 1);
@@ -2302,6 +2303,128 @@ class HapticAsyncFormElement extends HapticFormElement {
   }
 }
 customElements.define('haptic-async-form', HapticAsyncFormElement, { extends: 'form' });
+
+class HapticGridElement extends HTMLElement {
+  #elements = [];
+  #initialTabIndices = new Map();
+  #eventListeners = new HapticEventListeners();
+
+  #childNodesObserver = new HapticChildNodesObserver({
+    nodeAdded: node => {
+      if (node instanceof HTMLInputElement) {
+        if (node.tabIndex != -1) {
+          this.#initialTabIndices.set(node, node.tabIndex);
+          node.tabIndex = -1;
+        }
+        this.#elements.push(new HapticFocusable(node));
+      }
+    },
+    nodeRemoved: node => {
+      for (let i = 0; i < this.#elements.length; i++) {
+        if (this.#elements[i].target === element) {
+          if (this.#initialTabIndices.has(element)) {
+            element.tabIndex = this.#initialTabIndices.get(element);
+            this.#initialTabIndices.delete(element);
+          }
+          this.#elements.splice(i, 1);
+          break;
+        }
+      }
+    }
+  });
+
+  get #focusedIndex() {
+    for (let i = 0; i < this.#elements.length; i++) {
+      if (this.#elements[i].focused) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  set #focusedIndex(index) {
+    for (let i = 0; i < this.#elements.length; i++) {
+      this.#elements[i].focused = i == index;
+    }
+    return index;
+  }
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.tabIndex = Math.max(this.tabIndex, 0);
+
+    this.#eventListeners.add(this, 'keydown', event => {
+      const key = event.key;
+
+      if (key === 'Enter' || key === ' ') {
+        const focusedIndex = this.#focusedIndex;
+
+        if (focusedIndex >= 0 && focusedIndex < this.#elements.length) {
+          this.#elements[focusedIndex].target.click();
+          event.preventDefault();
+        }
+      } else
+      if (/Arrow(Down|Left|Right|Up|)/.test(key)) {
+        const size = this.#size();
+        let focusedIndex = this.#focusedIndex;
+
+        switch(key) {
+          case 'ArrowLeft':
+            if (focusedIndex % size.columns > 0) {
+              focusedIndex--;
+            }
+            break;
+          case 'ArrowRight':
+            if (focusedIndex % size.columns < size.columns - 1) {
+              focusedIndex++;
+            }
+            break;
+          case 'ArrowUp':
+            focusedIndex -= size.rows - 1;
+            break;
+          case 'ArrowDown':
+            focusedIndex += size.rows - 1;
+        }
+        if (focusedIndex >= 0 && focusedIndex < this.#elements.length) {
+          this.#focusedIndex = focusedIndex;
+        }
+        event.preventDefault();
+      }
+    });
+    this.#eventListeners.add(this, 'focusin', () => {
+      if (this.#focusedIndex == -1) {
+        for (let i = 0; i < this.#elements.length; i++) {
+          const element = this.#elements[i];
+
+          if (!element.disabled) {
+            element.focused = true;
+            break;
+          }
+        }
+      }
+    });
+    this.#childNodesObserver.observe(this);
+  }
+
+  disconnectedCallback() {
+    this.#childNodesObserver.disconnect();
+    this.#eventListeners.removeAll();
+  }
+
+  #size() {
+    const columns = window.getComputedStyle(this)
+      .gridTemplateColumns.split(' ').length;
+
+    return {
+      columns: columns,
+      rows: Math.ceil(this.#elements.length / columns)
+    };
+  }
+}
+customElements.define('haptic-grid', HapticGridElement);
 
 class HapticInputElement extends HTMLInputElement {
   static observedAttributes = ['disabled'];

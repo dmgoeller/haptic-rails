@@ -730,7 +730,7 @@ haptic-text-field {
 }
 
 /**********************************************************************
- * Lists
+ * Lists and grids
  **********************************************************************/
 
 haptic-list-item {
@@ -749,11 +749,9 @@ haptic-list-item {
   }
 }
 
-haptic-list:focus-visible {
-  .haptic-checkbox, .haptic-radio-button, .haptic-switch {
-    &.focused {
-      @include haptic-primary-color('outline-color');
-    }
+haptic-list, haptic-grid {
+  &:focus-visible .focused {
+    @include haptic-primary-color('outline-color');
   }
 }
 

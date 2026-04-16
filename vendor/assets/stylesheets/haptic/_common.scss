@@ -451,7 +451,7 @@ input[type="radio"].haptic-radio-button {
 }
 
 /**********************************************************************
- * Lists
+ * Lists and grids
  **********************************************************************/
 
 haptic-list {
@@ -474,6 +474,10 @@ haptic-list-item {
     @include haptic-grayed;
     pointer-events: none;
   }
+}
+
+haptic-grid {
+  display: grid;
 }
 
 /**********************************************************************
