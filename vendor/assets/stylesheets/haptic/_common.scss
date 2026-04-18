@@ -570,33 +570,33 @@ haptic-grid {
  **********************************************************************/
 
 table.haptic-table thead,
-table.haptic-table tfoot,
-haptic-table-like .table-header,
-haptic-table-like .table-footer {
+haptic-table-like .table-header {
   position: sticky;
   z-index: 1;
 }
 
-table.haptic-table tbody tr,
-haptic-table-like .table-body .table-row {
-  position: relative;
+table.haptic-table {
+  th, td {
+    position: relative;
+  }
 
-  &:before, &:after {
+  th::before,
+  td::before,
+  td::after {
     content: '\200b';
     pointer-events: none;
     position: absolute;
   }
+
+  tbody tr[data-href] {
+    cursor: pointer;
+  }
 }
 
-table.haptic-table tbody tr[data-href] {
-  cursor: pointer;
-}
-
-table.haptic-table thead tr,
-table.haptic-table tfoot tr {
+haptic-table-like .table-body .table-row {
   position: relative;
 
-  &:before {
+  &::before, &::after {
     content: '\200b';
     pointer-events: none;
     position: absolute;

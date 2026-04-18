@@ -324,36 +324,66 @@ haptic-list-item {
  * Tables
  **********************************************************************/
 
-table.haptic-table, haptic-table-like {
-  outline: none;
-}
-
 table.haptic-table {
   border-collapse: collapse;
-}
+  outline: none;
 
-table.haptic-table thead tr:before,
-haptic-table-like .table-header .table-row {
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-}
+  th::before {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+  }
 
-table.haptic-table tfoot tr:before,
-haptic-table-like .table-footer .table-row {
-  border-top-style: solid;
-  border-top-width: 1px;
-}
+  tbody td {
+    &:first-of-type {
+      &::before, &::after {
+        border-bottom-left-radius: .25rem;
+        border-top-left-radius: .25rem;
+      }
+    }
 
-table.haptic-table tbody tr,
-haptic-table-like .table-body .table-row {
-  &:before, &:after {
-    border-radius: .25rem;
+    &:last-of-type {
+      &::before, &::after {
+        border-bottom-right-radius: .25rem;
+        border-top-right-radius: .25rem;
+      }
+    }
+  }
+
+  &:focus-visible tr.focused td {
+    &::after {
+      border-bottom-style: solid;
+      border-bottom-width: 2px;
+      border-top-style: solid;
+      border-top-width: 2px;
+    }
+
+    &:first-of-type::after {
+      border-left-style: solid;
+      border-left-width: 2px;
+    }
+
+    &:last-of-type::after {
+      border-right-style: solid;
+      border-right-width: 2px;
+    }
   }
 }
 
-table.haptic-table:focus-visible tbody tr.focused,
-haptic-table-like:focus-visible .table-body .table-row.focused {
-  &:after {
+haptic-table-like {
+  outline: none;
+
+  .table-header .table-row {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+  }
+
+  .table-body .table-row {
+    &::before, &::after {
+      border-radius: .25rem;
+    }
+  }
+
+  &:focus-visible .table-row.focused::after {
     border-style: solid;
     border-width: 2px;
   }

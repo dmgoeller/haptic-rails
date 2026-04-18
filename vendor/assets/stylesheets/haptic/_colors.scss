@@ -824,33 +824,50 @@ haptic-list, haptic-grid {
  * Tables
  **********************************************************************/
 
-table.haptic-table thead tr:before,
-table.haptic-table tfoot tr:before,
-haptic-table-like .table-header .table-row,
-haptic-table-like .table-footer .table-row {
-  @include haptic-light-dark(
-    'border-color',
-    #00000030,
-    #FFFFFF30
-  );
-}
+table.haptic-table {
+  th::before {
+    @include haptic-light-dark(
+      'border-color',
+      #00000030,
+      #FFFFFF30
+    );
+  }
 
-table.haptic-table tbody tr,
-haptic-table-like .table-body .table-row {
-  color: inherit;
-
-  &:nth-of-type(even):before {
+  tbody tr:nth-of-type(even) td::before {
     @include haptic-light-dark(
       'background-color',
       #00000010,
       #FFFFFF10
     );
   }
+
+  &:focus-visible tr.focused td::after {
+    @include haptic-primary-color('border-color');
+  }
 }
 
-table.haptic-table:focus-visible tbody tr.focused,
-haptic-table-like:focus-visible .table-body .table-row.focused {
-  &:after {
+haptic-table-like {
+  .table-header .table-row {
+    @include haptic-light-dark(
+      'border-color',
+      #00000030,
+      #FFFFFF30
+    );
+  }
+
+  .table-body .table-row {
+    color: inherit;
+
+    &:nth-of-type(even):before {
+      @include haptic-light-dark(
+        'background-color',
+        #00000010,
+        #FFFFFF10
+      );
+    }
+  }
+
+  &:focus-visible .table-row.focused::after {
     @include haptic-primary-color('border-color');
   }
 }
