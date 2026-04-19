@@ -202,14 +202,24 @@ class HapticFocusable {
   #target;
   #originalTabIndex = null;
 
+  #mutationObserver = new MutationObserver(mutationList => {
+    for (let mutationRecord of mutationList) {
+      if (mutationRecord.attributeName == 'disabled') {
+        if (this.disabled) {
+          this.focused = false;
+        }
+      }
+    }
+  });
+
   get target() {
     return this.#target;
   }
 
   constructor(target) {
+    this.#mutationObserver.observe(target, { attributes: true });
     this.#originalTabIndex = target.tabIndex;
     target.tabIndex = -1;
-
     this.#target = target;
   }
 
@@ -243,8 +253,10 @@ class HapticFocusable {
     return value;
   }
 
-  restoreTabIndex() {
+  disconnect() {
+    this.#mutationObserver?.disconnect();
     this.#target.tabIndex = this.#originalTabIndex;
+    this.#target = null;
   }
 }
 
@@ -252,7 +264,6 @@ class HapticNavigationController {
   #mouse = false;
   #vertical = false;
   #target = null;
-  #scrollContainer = null;
   #elements = [];
   #focused = false;
   #suspended = false;
@@ -277,6 +288,18 @@ class HapticNavigationController {
       e.focused = (e.target === element && !e.disabled);
     }
     return element;
+  }
+
+  get #scrollContainer() {
+    for (let element = this.#target; element; element = element.parentElement) {
+      const style = getComputedStyle(element);
+      const overflow = this.#vertical ? style.overflowY : style.overflowX;
+
+      if (overflow !== 'visible' || element.tagName === 'BODY') {
+        return element;
+      }
+    }
+    return null;
   }
 
   constructor(options = {}) {
@@ -416,23 +439,16 @@ class HapticNavigationController {
         }
       }
     });
-
-    for (let e = target; e; e = e.parentElement) {
-      const style = getComputedStyle(e);
-      const overflow = this.#vertical ? style.overflowY : style.overflowX;
-
-      if (overflow !== 'visible' || e.tagName === 'BODY') {
-        this.#scrollContainer = e;
-        break;
-      }
-    }
     this.#target = target;
   }
 
   disconnect() {
     this.#eventListeners.removeAll();
+
+    for (let element of this.#elements) {
+      element.disconnect();
+    }
     this.#elements = [];
-    this.#scrollContainer = null;
     this.#target = null;
     this.#focused = false;
     this.#suspended = false;
@@ -473,7 +489,7 @@ class HapticNavigationController {
     for (let i = 0; i < this.#elements.length; i++) {
       if (this.#elements[i].target === element) {
         this.#eventListeners.remove(element);
-        this.#elements[i].restoreTabIndex;
+        this.#elements[i].disconnect();
         this.#elements.splice(i, 1);
         return true;
       }
@@ -530,23 +546,25 @@ class HapticNavigationController {
   }
 
   #scrollIntoView(element) {
-    if (element && this.#scrollContainer) {
+    const container = this.#scrollContainer;
+
+    if (element && container) {
       const elementRect = element.getBoundingClientRect();
-      const scrollRect = this.#scrollContainer.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
 
       if (this.#vertical) {
-        if (elementRect.top < scrollRect.top) {
-          this.#scrollContainer.scrollTop -= scrollRect.top - elementRect.top;
+        if (elementRect.top < containerRect.top) {
+          container.scrollTop -= containerRect.top - elementRect.top;
         } else
-        if (elementRect.bottom > scrollRect.bottom) {
-          this.#scrollContainer.scrollTop += elementRect.bottom - scrollRect.bottom;
+        if (elementRect.bottom > containerRect.bottom) {
+          container.scrollTop += elementRect.bottom - containerRect.bottom;
         }
       } else {
-        if (elementRect.left < scrollRect.left) {
-          this.#scrollContainer.scrollLeft -= scrollRect.left - elementRect.left;
+        if (elementRect.left < containerRect.left) {
+          container.scrollLeft -= containerRect.left - elementRect.left;
         } else
         if (elementRect.right > scrollRect.right) {
-          this.#scrollContainer.scrollLeft += elementRect.right - scrollRect.right;
+          container.scrollLeft += elementRect.right - containerRect.right;
         }
       }
     }
@@ -2355,6 +2373,7 @@ customElements.define('haptic-async-form', HapticAsyncFormElement, { extends: 'f
 
 class HapticGridElement extends HTMLElement {
   #elements = [];
+  #scrollContainer = null;
   #eventListeners = new HapticEventListeners();
 
   #childNodesObserver = new HapticChildNodesObserver({
@@ -2367,7 +2386,7 @@ class HapticGridElement extends HTMLElement {
     nodeRemoved: node => {
       for (let i = 0; i < this.#elements.length; i++) {
         if (this.#elements[i].target === element) {
-          this.#elements[i].restoreTabIndex;
+          this.#elements[i].disconnect();
           this.#elements.splice(i, 1);
           break;
         }
@@ -2386,9 +2405,46 @@ class HapticGridElement extends HTMLElement {
 
   set #focusedIndex(index) {
     for (let i = 0; i < this.#elements.length; i++) {
-      this.#elements[i].focused = i == index;
+      const element = this.#elements[i];
+
+      if (i != index) {
+        element.focused = false;
+      } else
+      if (!element.focused) {
+        element.focused = true;
+        this.#scrollIntoView(element.target);
+      }
     }
     return index;
+  }
+
+  get #scrollContainers() {
+    let scrollContainerX = null, scrollContainerY = null;
+
+    for (let element = this; element; element = element.parentElement) {
+      const style = getComputedStyle(element);
+
+      if (style.overflowX !== 'visible' || element.tagName === 'BODY') {
+        scrollContainerX ||= element;
+      }
+      if (style.overflowY !== 'visible' || element.tagName === 'BODY') {
+        scrollContainerY ||= element;
+      }
+      if (scrollContainerX !== null && scrollContainerY !== null) {
+        break;
+      }
+    }
+    return { x: scrollContainerX, y: scrollContainerY }
+  }
+
+  get #size() {
+    const columns = window.getComputedStyle(this)
+      .gridTemplateColumns.split(' ').length;
+
+    return {
+      columns: columns,
+      rows: Math.ceil(this.#elements.length / columns)
+    };
   }
 
   constructor() {
@@ -2399,7 +2455,7 @@ class HapticGridElement extends HTMLElement {
     this.tabIndex = Math.max(this.tabIndex, 0);
 
     this.#eventListeners.add(this, 'keydown', event => {
-      let focusedIndex = null, form = null, size = null;
+      let focusedIndex = null, form = null;
 
       switch(event.key) {
         case 'Enter':
@@ -2419,31 +2475,62 @@ class HapticGridElement extends HTMLElement {
         case 'ArrowDown':
         case 'ArrowLeft':
         case 'ArrowRight':
-        case 'ArrowUp':
+        case 'ArrowUp': {
           focusedIndex = this.#focusedIndex;
-          size = this.#size();
+          const size = this.#size;
 
           switch(event.key) {
-            case 'ArrowLeft':
-              if (focusedIndex % size.columns > 0) {
-                focusedIndex--;
+            case 'ArrowLeft': {
+              const firstElementInRowIndex = Math.floor(
+                focusedIndex / size.columns
+              ) * size.columns;
+
+              for (let i = focusedIndex - 1; i >= firstElementInRowIndex; i--) {
+                if (!this.#elements[i].disabled) {
+                  focusedIndex = i;
+                  break;
+                }
               }
               break;
-            case 'ArrowRight':
-              if (focusedIndex % size.columns < size.columns - 1) {
-                focusedIndex++;
+            }
+            case 'ArrowRight': {
+              const lastElementInRowIndex = Math.min(
+                (Math.floor(focusedIndex / size.columns) + 1) * size.columns - 1,
+                this.#elements.length - 1
+              );
+              for (let i = focusedIndex + 1; i <= lastElementInRowIndex; i++) {
+                if (!this.#elements[i].disabled) {
+                  focusedIndex = i;
+                  break;
+                }
               }
               break;
-            case 'ArrowUp':
-              focusedIndex -= size.rows;
+            }
+            case 'ArrowUp': {
+              for (let i = focusedIndex - size.columns; i >= 0; i -= size.columns) {
+                if (!this.#elements[i].disabled) {
+                  focusedIndex = i;
+                  break;
+                }
+              }
               break;
-            case 'ArrowDown':
-              focusedIndex += size.rows;
+            }
+            case 'ArrowDown': {
+              for (let i = focusedIndex + size.columns;
+                   i < this.#elements.length;
+                   i += size.columns) {
+                if (!this.#elements[i].disabled) {
+                  focusedIndex = i;
+                  break;
+                }
+              }
+            }
           }
           if (focusedIndex >= 0 && focusedIndex < this.#elements.length) {
             this.#focusedIndex = focusedIndex;
           }
           event.preventDefault();
+        }
       }
     });
     this.#eventListeners.add(this, 'focusin', () => {
@@ -2464,16 +2551,40 @@ class HapticGridElement extends HTMLElement {
   disconnectedCallback() {
     this.#childNodesObserver.disconnect();
     this.#eventListeners.removeAll();
+
+    for (let element of this.#elements) {
+      element.disconnect();
+    }
   }
 
-  #size() {
-    const columns = window.getComputedStyle(this)
-      .gridTemplateColumns.split(' ').length;
+  #scrollIntoView(element) {
+    const scrollContainers = this.#scrollContainers;
 
-    return {
-      columns: columns,
-      rows: Math.ceil(this.#elements.length / columns)
-    };
+    if (element && (scrollContainers.x || scrollContainers.y)) {
+      const elementRect = element.getBoundingClientRect();
+      let container = null, containerRect = null;
+
+      if (container = scrollContainers.x) {
+        containerRect = container.getBoundingClientRect();
+
+        if (elementRect.left < containerRect.left) {
+          container.scrollLeft -= containerRect.left - elementRect.left;
+        } else
+        if (elementRect.right > containerRect.right) {
+          container.scrollLeft += containerRect.right - scrollRect.right;
+        }
+      }
+      if (container = scrollContainers.y) {
+        containerRect = container.getBoundingClientRect();
+
+        if (elementRect.top < containerRect.top) {
+          container.scrollTop -= containerRect.top - elementRect.top;
+        } else
+        if (elementRect.bottom > containerRect.bottom) {
+          container.scrollTop += elementRect.bottom - containerRect.bottom;
+        }
+      }
+    }
   }
 }
 customElements.define('haptic-grid', HapticGridElement);
