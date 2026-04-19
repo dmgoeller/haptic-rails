@@ -2373,13 +2373,12 @@ customElements.define('haptic-async-form', HapticAsyncFormElement, { extends: 'f
 
 class HapticGridElement extends HTMLElement {
   #elements = [];
-  #scrollContainer = null;
   #eventListeners = new HapticEventListeners();
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
-      if (node instanceof HTMLButtonElement ||
-          node instanceof HTMLInputElement) {
+      if (node instanceof HapticButtonElement ||
+          node instanceof HapticInputElement) {
         this.#elements.push(new HapticFocusable(node));
       }
     },
