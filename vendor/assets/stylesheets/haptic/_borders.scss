@@ -20,7 +20,7 @@ $haptic-field-border-radius: .25rem !default;
   outline-style: solid;
   outline-width: 2px;
 
-  &.filled {
+  &.filled, &.outlined {
     outline-offset: 2px;
   }
 

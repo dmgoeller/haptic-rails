@@ -771,6 +771,7 @@ class HapticDialogElement extends HTMLDialogElement {
   connectedCallback() {
     this.classList.add('haptic-dialog');
 
+    // command="request-close"
     this.#eventListeners.add(this, 'cancel', () => {
       this.#form?.reset();
     })
@@ -1728,12 +1729,9 @@ class HapticFieldElement extends HTMLElement {
   static ICON_NAMES = ['error', 'leading', 'trailing'];
 
   #allowedControlClasses = [];
-  #clearButtonAllowed = false;
   #control = null;
   #label = null;
-  #clearButton = null;
   #setValidOnChange = null;
-  #clearButtonPressed = false;
   #preventFocusVisible = false;
   #eventListeners = new HapticEventListeners();
 
@@ -1752,23 +1750,15 @@ class HapticFieldElement extends HTMLElement {
                 node instanceof HTMLInputElement ||
                 node instanceof HTMLTextAreaElement ||
                 node instanceof HTMLSelectElement) {
-              this.#eventListeners.add(node, 'change', event => {
-                if (this.#clearButtonPressed) {
-                  event.preventDefault();
-                  event.stopPropagation();
-                }
-              }, { capture: true });
-              this.#eventListeners.add(node, 'focusin', () => {
+              this.#eventListeners.add(node, 'focusin', event => {
                 if (this.#focusIndicator === 'focus' ||
                    (this.#focusIndicator === 'focus-visible' &&
                     !this.#preventFocusVisible)) {
-                  this.setAttribute('focused', '');
+                  this.focusinCallback(event);
                 }
               });
               this.#eventListeners.add(node, 'focusout', event => {
-                if (event.relatedTarget !== this.#clearButton) {
-                  this.removeAttribute('focused');
-                }
+                this.focusoutCallback(event);
               });
               this.#eventListeners.add(node, 'mousedown', () => {
                 this.#preventFocusVisible = true;
@@ -1808,33 +1798,6 @@ class HapticFieldElement extends HTMLElement {
             this.setAttribute('with-label', '');
             this.#label = node;
           }
-        } else
-        if (node.classList.contains('clear-button')) {
-          if (this.#clearButtonAllowed && !this.#clearButton) {
-            node.tabIndex = -1;
-            this.setAttribute('with-clear-button', '');
-
-            this.#eventListeners.add(node, 'click', event => {
-              const control = this.control;
-              if (control) {
-                if (control.value != '') {
-                  control.value = '';
-                  control.dispatchEvent(new Event('input'));
-                }
-                this.#preventFocusVisible = true;
-                control.focus();
-                this.#preventFocusVisible = false;
-              }
-              event.preventDefault();
-            });
-            this.#eventListeners.add(node, 'mousedown', () => {
-              this.#clearButtonPressed = true;
-            });
-            this.#eventListeners.add(node, 'mouseup', () => {
-              this.#clearButtonPressed = false;
-            });
-            this.#clearButton = node;
-          }
         } else {
           for (let iconName of HapticTextFieldElement.ICON_NAMES) {
             if (node.classList.contains(`${iconName}-icon`)) {
@@ -1844,10 +1807,13 @@ class HapticFieldElement extends HTMLElement {
             }
           }
         }
+        this.elementAddedCallback(node);
       }
     },
     nodeRemoved: node => {
       if (node instanceof HTMLElement) {
+        this.elementRemovedCallback(node);
+
         switch (node) {
           case this.#control:
             node.classList.remove('embedded');
@@ -1864,11 +1830,6 @@ class HapticFieldElement extends HTMLElement {
             this.removeAttribute('with-label');
             this.#label = null;
             break;
-          case this.#clearButton:
-            this.removeAttribute('with-clear-button');
-            this.#eventListeners.remove(node);
-            this.#clearButton = null;
-            break;
           default:
             for (let iconName of HapticFieldElement.ICON_NAMES) {
               if (node.classList.contains(`${iconName}-icon`)) {
@@ -1882,10 +1843,9 @@ class HapticFieldElement extends HTMLElement {
     }
   });
 
-  constructor(allowedControlClasses, clearButtonAllowed) {
+  constructor(allowedControlClasses) {
     super();
     this.#allowedControlClasses = allowedControlClasses;
-    this.#clearButtonAllowed = clearButtonAllowed;
   }
 
   get control() {
@@ -1947,6 +1907,35 @@ class HapticFieldElement extends HTMLElement {
     this.#eventListeners.removeAll();
   }
 
+  elementAddedCallback(element) {
+  }
+
+  elementRemovedCallback(element) {
+  }
+
+  focusinCallback(event) {
+    this.setAttribute('focused', '');
+  }
+
+  focusoutCallback(event) {
+    this.removeAttribute('focused');
+  }
+
+  focus(options = {}) {
+    if (this.#control) {
+      if (options.focusVisible === false ) {
+        this.#preventFocusVisible = true;
+        try {
+          this.#control.focus();
+        } finally {
+          this.#preventFocusVisible = false;
+        }
+      } else {
+        this.#control.focus(options);
+      }
+    }
+  }
+
   #isAllowedControlElement(node) {
     if (node.classList.contains('haptic-field')) {
       return true;
@@ -1988,14 +1977,68 @@ class HapticFieldElement extends HTMLElement {
 
 class HapticDropdownFieldElement extends HapticFieldElement {
   constructor() {
-    super([HapticDropdownElement, HTMLSelectElement], false);
+    super([HapticDropdownElement, HTMLSelectElement]);
   }
 }
 customElements.define('haptic-dropdown-field', HapticDropdownFieldElement);
 
 class HapticTextFieldElement extends HapticFieldElement {
+  #clearButton = null;
+  #clearButtonPressed = false;
+  #eventListeners = new HapticEventListeners();
+
   constructor() {
-    super([HTMLInputElement, HTMLTextAreaElement], true);
+    super([HTMLInputElement, HTMLTextAreaElement]);
+  }
+
+  elementAddedCallback(element) {
+    if (element === this.control) {
+      this.#eventListeners.add(element, 'change', event => {
+        if (this.#clearButtonPressed) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      }, { capture: true });
+    } else
+    if (element.classList.contains('clear-button')) {
+      if (!this.#clearButton) {
+        element.tabIndex = -1;
+        this.setAttribute('with-clear-button', '');
+
+        this.#eventListeners.add(element, 'click', event => {
+          const control = this.control;
+          if (control) {
+            if (control.value != '') {
+              control.value = '';
+              control.dispatchEvent(new Event('input'));
+            }
+            this.focus({ focusVisible: false });
+          }
+          event.preventDefault();
+        });
+        this.#eventListeners.add(element, 'mousedown', () => {
+          this.#clearButtonPressed = true;
+        });
+        this.#eventListeners.add(element, 'mouseup', () => {
+          this.#clearButtonPressed = false;
+        });
+        this.#clearButton = element;
+      }
+    }
+  }
+
+  elementRemovedCallback(element) {
+    if (element === this.#clearButton) {
+      this.removeAttribute('with-clear-button');
+      this.#eventListeners.remove(element);
+      this.#clearButton = null;
+    }
+  }
+
+  focusoutCallback(event) {
+    if (event.relatedTarget !== this.#clearButton) {
+      this.removeAttribute('focused');
+    }
   }
 }
 customElements.define('haptic-text-field', HapticTextFieldElement);
@@ -2316,7 +2359,8 @@ class HapticGridElement extends HTMLElement {
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
-      if (node instanceof HTMLInputElement) {
+      if (node instanceof HTMLButtonElement ||
+          node instanceof HTMLInputElement) {
         this.#elements.push(new HapticFocusable(node));
       }
     },
@@ -2391,10 +2435,10 @@ class HapticGridElement extends HTMLElement {
               }
               break;
             case 'ArrowUp':
-              focusedIndex -= size.rows - 1;
+              focusedIndex -= size.rows;
               break;
             case 'ArrowDown':
-              focusedIndex += size.rows - 1;
+              focusedIndex += size.rows;
           }
           if (focusedIndex >= 0 && focusedIndex < this.#elements.length) {
             this.#focusedIndex = focusedIndex;
