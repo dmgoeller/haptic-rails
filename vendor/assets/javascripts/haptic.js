@@ -563,7 +563,7 @@ class HapticNavigationController {
         if (elementRect.left < containerRect.left) {
           container.scrollLeft -= containerRect.left - elementRect.left;
         } else
-        if (elementRect.right > scrollRect.right) {
+        if (elementRect.right > containerRect.right) {
           container.scrollLeft += elementRect.right - containerRect.right;
         }
       }
