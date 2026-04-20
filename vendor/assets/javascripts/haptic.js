@@ -2130,7 +2130,7 @@ class HapticFormElement extends HTMLFormElement {
          control instanceof HapticInputElement)) {
       switch (control.type) {
         case 'reset':
-          this.#eventListeners.add(node, 'click', () => {
+          this.#eventListeners.add(control, 'click', () => {
             this.reset();
           });
           this.#resetButtons.add(control);
