@@ -2009,6 +2009,11 @@ class HapticTextFieldElement extends HapticFieldElement {
     super([HTMLInputElement, HTMLTextAreaElement]);
   }
 
+  disconnectedCallback() {
+    this.#eventListeners.removeAll();
+    super.disconnectedCallback();
+  }
+
   elementAddedCallback(element) {
     if (element === this.control) {
       this.#eventListeners.add(element, 'change', event => {
@@ -2046,6 +2051,9 @@ class HapticTextFieldElement extends HapticFieldElement {
   }
 
   elementRemovedCallback(element) {
+    if (element === this.control) {
+      this.#eventListeners.remove(element);
+    } else
     if (element === this.#clearButton) {
       this.removeAttribute('with-clear-button');
       this.#eventListeners.remove(element);
