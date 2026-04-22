@@ -828,10 +828,10 @@ class HapticDropdownElement extends HTMLElement {
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
-      this.nodeAdded(node);
+      this.nodeAddedCallback(node);
     },
     nodeRemoved: node => {
-      this.nodeRemoved(node);
+      this.nodeRemovedCallback(node);
     }
   })
 
@@ -898,7 +898,7 @@ class HapticDropdownElement extends HTMLElement {
     this.#eventListeners.removeAll();
   }
 
-  nodeAdded(node) {
+  nodeAddedCallback(node) {
     if (node instanceof HTMLElement) {
       const classList = node.classList;
 
@@ -951,7 +951,7 @@ class HapticDropdownElement extends HTMLElement {
     }
   }
 
-  nodeRemoved(node) {
+  nodeRemovedCallback(node) {
     switch (node) {
       case this.#toggleElement:
         this.#eventListeners.remove(node);
@@ -1071,8 +1071,8 @@ class HapticDropdownDialogElement extends HapticDropdownElement {
     super.disconnectedCallback();
   }
 
-  nodeAdded(node) {
-    super.nodeAdded(node);  
+  nodeAddedCallback(node) {
+    super.nodeAddedCallback(node);  
 
     if (node instanceof HTMLElement) {
       if ('reset' in node) {
@@ -1091,7 +1091,7 @@ class HapticDropdownDialogElement extends HapticDropdownElement {
     } 
   }
 
-  nodeRemoved(node) {
+  nodeRemovedCallback(node) {
     if (this.#fields.has(node)) {
       this.#fields.remove(node);
     } else
@@ -1099,7 +1099,7 @@ class HapticDropdownDialogElement extends HapticDropdownElement {
       this.#eventListeners.remove(node);
       this.#resetButtons.remove(node);
     }
-    super.nodeRemoved(node);
+    super.nodeRemovedCallback(node);
   }
 
   cancel() {
@@ -1384,8 +1384,8 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     }
   }
 
-  nodeAdded(node) {
-    super.nodeAdded(node);
+  nodeAddedCallback(node) {
+    super.nodeAddedCallback(node);
 
     if (node instanceof HTMLElement) {
       if (node instanceof HTMLInputElement) {
@@ -1452,7 +1452,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     }
   }
 
-  nodeRemoved(node) {
+  nodeRemovedCallback(node) {
     if (node === this.#inputElement) {
       this.#inputElementObserver.disconnect();
       this.#inputElement = null;
@@ -1468,7 +1468,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
         this.#optionElements.splice(index, 1);
       }
     }
-    super.nodeRemoved(node);
+    super.nodeRemovedCallback(node);
   }
 
   showPopover() {
