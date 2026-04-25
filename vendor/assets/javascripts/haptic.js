@@ -550,21 +550,34 @@ class HapticNavigationController {
 
     if (element && container) {
       const elementRect = element.getBoundingClientRect();
+      const targetRect = this.#target.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
 
       if (this.#vertical) {
         if (elementRect.top < containerRect.top) {
-          container.scrollTop -= containerRect.top - elementRect.top;
+          container.scrollTop -= containerRect.top - (
+            element === this.#elements[0].target ?
+              targetRect: elementRect
+          ).top;
         } else
         if (elementRect.bottom > containerRect.bottom) {
-          container.scrollTop += elementRect.bottom - containerRect.bottom;
+          container.scrollTop += (
+            element === this.#elements[this.#elements.length - 1].target ?
+              targetRect : elementRect
+          ).bottom - containerRect.bottom
         }
       } else {
         if (elementRect.left < containerRect.left) {
-          container.scrollLeft -= containerRect.left - elementRect.left;
+          container.scrollLeft -= containerRect.left - (
+            element === this.#elements[0].target ?
+              targetRect: elementRect
+          ).left;
         } else
         if (elementRect.right > containerRect.right) {
-          container.scrollLeft += elementRect.right - containerRect.right;
+          container.scrollLeft += (
+            element === this.#elements[this.#elements.length - 1].target ?
+              targetRect : elementRect
+          ).right - containerRect.right;
         }
       }
     }
@@ -824,16 +837,20 @@ class HapticDropdownElement extends HTMLElement {
         this.hidePopover({ cancel: true });
       }
     }
-  )
+  );
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
-      this.nodeAddedCallback(node);
+      if (node instanceof HTMLElement) {
+        this.elementAddedCallback(node);
+      }
     },
     nodeRemoved: node => {
-      this.nodeRemovedCallback(node);
+      if (node instanceof HTMLElement) {
+        this.elementRemovedCallback(node);
+      }
     }
-  })
+  });
 
   constructor() {
     super();
@@ -898,63 +915,61 @@ class HapticDropdownElement extends HTMLElement {
     this.#eventListeners.removeAll();
   }
 
-  nodeAddedCallback(node) {
-    if (node instanceof HTMLElement) {
-      const classList = node.classList;
+  elementAddedCallback(element) {
+    const classList = element.classList;
 
-      if (classList.contains('toggle')) {
-        node.classList.add('embedded');
+    if (classList.contains('toggle')) {
+      if (!this.#toggleElement) {
+        element.classList.add('embedded');
 
-        if (!this.#toggleElement) {
-          this.#eventListeners.add(node, 'mousedown', () => {
-            this.#preventFocusVisible = true;
-          });
-          this.#eventListeners.add(node, 'mouseup', () => {
-            this.#preventFocusVisible = false;
-          });
-          this.#eventListeners.add(node, 'focusin', () => {
-            if (!this.#preventFocusVisible) {
-              this.setAttribute('focused', 'focused');
+        this.#eventListeners.add(element, 'mousedown', () => {
+          this.#preventFocusVisible = true;
+        });
+        this.#eventListeners.add(element, 'mouseup', () => {
+          this.#preventFocusVisible = false;
+        });
+        this.#eventListeners.add(element, 'focusin', () => {
+          if (!this.#preventFocusVisible) {
+            this.setAttribute('focused', 'focused');
+          }
+        });
+        this.#eventListeners.add(element, 'focusout', () => {
+          this.removeAttribute('focused');
+        });
+        this.#eventListeners.add(element, 'click', event => {
+          if (!this.disabled && !this.locked) {
+            if (this.isOpen()) {
+              this.hidePopover({ cancel: true });
+            } else {
+              this.showPopover();
             }
-          });
-          this.#eventListeners.add(node, 'focusout', () => {
-            this.removeAttribute('focused');
-          });
-          this.#eventListeners.add(node, 'click', event => {
-            if (!this.disabled && !this.locked) {
-              if (this.isOpen()) {
-                this.hidePopover({ cancel: true });
-              } else {
-                this.showPopover();
-              }
-            }
-            event.preventDefault();
-          });
-          this.#toggleElementObserver.observe(node);
-          this.#toggleElement = node;
-        }
-      } else
-      if (classList.contains('popover')) {
-        if (!this.#popoverElement) {
-          this.#popoverElement = node;
-        }
-      } else
-      if (classList.contains('backdrop')) {
-        if (!this.#backdropElement) {
-          this.#eventListeners.add(node, 'click', event => {
-            this.hidePopover({ cancel: true });
-            event.preventDefault();
-          });
-          this.#backdropElement = node;
-        }
+          }
+          event.preventDefault();
+        });
+        this.#toggleElementObserver.observe(element);
+        this.#toggleElement = element;
+      }
+    } else
+    if (classList.contains('popover')) {
+      if (!this.#popoverElement) {
+        this.#popoverElement = element;
+      }
+    } else
+    if (classList.contains('backdrop')) {
+      if (!this.#backdropElement) {
+        this.#eventListeners.add(element, 'click', event => {
+          this.hidePopover({ cancel: true });
+          event.preventDefault();
+        });
+        this.#backdropElement = element;
       }
     }
   }
 
-  nodeRemovedCallback(node) {
-    switch (node) {
+  elementRemovedCallback(element) {
+    switch (element) {
       case this.#toggleElement:
-        this.#eventListeners.remove(node);
+        this.#eventListeners.remove(element);
         this.#toggleElementObserver.disconnect();
         this.#toggleElement = null;
         break;
@@ -962,7 +977,7 @@ class HapticDropdownElement extends HTMLElement {
         this.#popoverElement = null;
         break;
       case this.#backdropElement:
-        this.#eventListeners.remove(node);
+        this.#eventListeners.remove(element);
         this.#backdropElement = null;
     }
   }
@@ -1067,39 +1082,37 @@ class HapticDropdownDialogElement extends HapticDropdownElement {
   }
 
   disconnectedCallback() {
-    this.#eventListeners.removeAll();
     super.disconnectedCallback();
+    this.#eventListeners.removeAll();
   }
 
-  nodeAddedCallback(node) {
-    super.nodeAddedCallback(node);  
+  elementAddedCallback(element) {
+    super.elementAddedCallback(element);
 
-    if (node instanceof HTMLElement) {
-      if ('reset' in node) {
-        this.#fields.add(node);
-      } else
-      if (node.type === 'reset') {
-        this.#eventListeners.add(node, 'click', event => {
-          if (!this.disabled && !this.locked) {
-            this.hidePopover({ reset: true });
-            event.preventDefault();
-            event.stopPropagation();
-          }
-        });
-        this.#resetButtons.add(node);
-      }
-    } 
-  }
-
-  nodeRemovedCallback(node) {
-    if (this.#fields.has(node)) {
-      this.#fields.remove(node);
+    if ('reset' in element) {
+      this.#fields.add(element);
     } else
-    if (this.#resetButtons.has(node)) {
-      this.#eventListeners.remove(node);
-      this.#resetButtons.remove(node);
+    if (element.type === 'reset') {
+      this.#eventListeners.add(element, 'click', event => {
+        if (!this.disabled && !this.locked) {
+          this.hidePopover({ reset: true });
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      });
+      this.#resetButtons.add(element);
     }
-    super.nodeRemovedCallback(node);
+  }
+
+  elementRemovedCallback(element) {
+    if (this.#fields.has(element)) {
+      this.#fields.remove(element);
+    } else
+    if (this.#resetButtons.has(element)) {
+      this.#eventListeners.remove(element);
+      this.#resetButtons.remove(element);
+    }
+    super.elementRemovedCallback(element);
   }
 
   cancel() {
@@ -1117,29 +1130,6 @@ class HapticDropdownMenuElement extends HapticDropdownElement {
   constructor() {
     super()
   }
-
-  #childNodesObserver = new HapticChildNodesObserver({
-    nodeAdded: node => {
-      if (node instanceof HapticMenuElement) {
-        if (!this.#menuElement) {
-          this.#menuElement = node;
-        }
-      } else
-      if (node instanceof HapticMenuItemElement) {
-        this.#eventListeners.add(node, 'click', () => {
-          this.hidePopover();
-        });
-      }
-    },
-    nodeRemoved: node => {
-      if (node === this.#menuElement) {
-        this.#menuElement = null;
-      } else
-      if (node instanceof HapticMenuItemElement) {
-        this.#eventListeners.remove(node);
-      }
-    }
-  });
 
   connectedCallback() {
     super.connectedCallback();
@@ -1174,18 +1164,41 @@ class HapticDropdownMenuElement extends HapticDropdownElement {
         }
       }
     });
-    this.#childNodesObserver.observe(this);
   }
 
   disconnectedCallback() {
-    this.#childNodesObserver.disconnect();
-    this.#eventListeners.removeAll();
     super.disconnectedCallback();
+    this.#eventListeners.removeAll();
   }
 
   showPopover() {
     this.#menuElement.reset();
     super.showPopover();
+  }
+
+  elementAddedCallback(element) {
+    super.elementAddedCallback(element);
+
+    if (element instanceof HapticMenuElement) {
+      if (!this.#menuElement) {
+        this.#menuElement = element;
+      }
+    } else
+    if (element instanceof HapticMenuItemElement) {
+      this.#eventListeners.add(element, 'click', () => {
+        this.hidePopover();
+      });
+    }
+  }
+
+  elementRemovedCallback(element) {
+    if (element === this.#menuElement) {
+      this.#menuElement = null;
+    } else
+    if (element instanceof HapticMenuItemElement) {
+      this.#eventListeners.remove(element);
+    }
+    super.elementRemovedCallback(element);
   }
 }
 customElements.define('haptic-dropdown-menu', HapticDropdownMenuElement);
@@ -1376,99 +1389,96 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   disconnectedCallback() {
-    this.#eventListeners.removeAll();
-    super.disconnectedCallback();
-
     if (this.form instanceof HapticFormElement) {
       this.form.controlRemoved(this);
     }
+    super.disconnectedCallback();
+    this.#eventListeners.removeAll();
   }
 
-  nodeAddedCallback(node) {
-    super.nodeAddedCallback(node);
+  elementAddedCallback(element) {
+    super.elementAddedCallback(element);
 
-    if (node instanceof HTMLElement) {
-      if (node instanceof HTMLInputElement) {
-        if (!this.#inputElement) {
-          node.classList.add('embedded');
-          this.#inputElementObserver.observe(node);
-          this.#inputElement = node;
+    if (element instanceof HTMLInputElement) {
+      if (!this.#inputElement) {
+        element.classList.add('embedded');
+        this.#inputElementObserver.observe(element);
+        this.#inputElement = element;
+      }
+    } else
+    if (element instanceof HapticOptionElement) {
+      this.#eventListeners.add(element, 'click', event => {
+        if (!event.target.disabled) {
+          this.#optionElements.forEach(optionElement => {
+            optionElement.checked = optionElement === event.target;
+          });
+          this.focus({ focusVisible: false });
+          this.hidePopover();
+
+          if (this.#refresh()) {
+            this.dispatchEvent(new Event('change'));
+          }
         }
-      } else
-      if (node instanceof HapticOptionElement) {
-        this.#eventListeners.add(node, 'click', event => {
-          if (!event.target.disabled) {
+      });
+      this.#eventListeners.add(element, 'mouseover', event => {
+        if (!event.target.disabled) {
+          if (this.#skipNextMouseEvent) {
+            this.#skipNextMouseEvent = false;
+          } else {
             this.#optionElements.forEach(optionElement => {
-              optionElement.checked = optionElement === event.target;
+              optionElement.highlighted = optionElement === event.target;
             });
-            this.focus({ focusVisible: false });
-            this.hidePopover();
-
-            if (this.#refresh()) {
-              this.dispatchEvent(new Event('change'));
-            }
           }
-        });
-        this.#eventListeners.add(node, 'mouseover', event => {
-          if (!event.target.disabled) {
-            if (this.#skipNextMouseEvent) {
-              this.#skipNextMouseEvent = false;
-            } else {
-              this.#optionElements.forEach(optionElement => {
-                optionElement.highlighted = optionElement === event.target;
-              });
-            }
-          }
-        });
-        this.#eventListeners.add(node, 'mouseout', event => {
-          if (!event.target.disabled) {
-            event.target.highlighted = false;
-          }
-        });
-        this.#optionElements.push(node);
-      } else
-      if (node.classList.contains('scroll-container')) {
-        if (!this.#popoverScrollContainer) {
-          // Explicitly set tabIndex to -1 to prevent focussing the scroller
-          // in Chrome.
-          node.tabIndex = -1;
-          this.#popoverScrollContainer = node;
         }
-      } else
-      if (node.classList.contains('backdrop')) {
-        if (this.#optionElements.length > 0) {
-          if (!this.#checkedOptionElement) {
-            for (let optionElement of this.#optionElements) {
-              if (!optionElement.disabled) {
-                optionElement.checked = true;
-                optionElement.initiallyChecked = true;
-                break;
-              }
+      });
+      this.#eventListeners.add(element, 'mouseout', event => {
+        if (!event.target.disabled) {
+          event.target.highlighted = false;
+        }
+      });
+      this.#optionElements.push(element);
+    } else
+    if (element.classList.contains('scroll-container')) {
+      if (!this.#popoverScrollContainer) {
+        // Explicitly set tabIndex to -1 to prevent focussing the scroller
+        // in Chrome.
+        element.tabIndex = -1;
+        this.#popoverScrollContainer = element;
+      }
+    } else
+    if (element.classList.contains('backdrop')) {
+      if (this.#optionElements.length > 0) {
+        if (!this.#checkedOptionElement) {
+          for (let optionElement of this.#optionElements) {
+            if (!optionElement.disabled) {
+              optionElement.checked = true;
+              optionElement.initiallyChecked = true;
+              break;
             }
           }
-          this.#refresh();
         }
+        this.#refresh();
       }
     }
   }
 
-  nodeRemovedCallback(node) {
-    if (node === this.#inputElement) {
+  elementRemovedCallback(element) {
+    if (element === this.#inputElement) {
       this.#inputElementObserver.disconnect();
       this.#inputElement = null;
     } else
-    if (node === this.#popoverScrollContainer) {
+    if (element === this.#popoverScrollContainer) {
       this.#popoverScrollContainer = null;
     } else
-    if (node instanceof HapticOptionElement) {
-      const index = this.#optionElements.indexOf(node);
+    if (element instanceof HapticOptionElement) {
+      const index = this.#optionElements.indexOf(element);
 
       if (index >= 0 && index < this.optionElements.length) {
-        this.#eventListeners.remove(node);
+        this.#eventListeners.remove(element);
         this.#optionElements.splice(index, 1);
       }
     }
-    super.nodeRemovedCallback(node);
+    super.elementRemovedCallback(element);
   }
 
   showPopover() {
