@@ -550,34 +550,27 @@ class HapticNavigationController {
 
     if (element && container) {
       const elementRect = element.getBoundingClientRect();
-      const targetRect = this.#target.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
 
       if (this.#vertical) {
+        if (element === this.#elements[0].target) {
+          container.scrollTop = 0;
+        } else
         if (elementRect.top < containerRect.top) {
-          container.scrollTop -= containerRect.top - (
-            element === this.#elements[0].target ?
-              targetRect: elementRect
-          ).top;
+          container.scrollTop -= containerRect.top - elementRect.top;
         } else
         if (elementRect.bottom > containerRect.bottom) {
-          container.scrollTop += (
-            element === this.#elements[this.#elements.length - 1].target ?
-              targetRect : elementRect
-          ).bottom - containerRect.bottom
+          container.scrollTop += elementRect.bottom - containerRect.bottom
         }
       } else {
+        if (element === this.#elements[0].target) {
+          container.scrollLeft = 0;
+        } else
         if (elementRect.left < containerRect.left) {
-          container.scrollLeft -= containerRect.left - (
-            element === this.#elements[0].target ?
-              targetRect: elementRect
-          ).left;
+          container.scrollLeft -= containerRect.left - elementRect.left;
         } else
         if (elementRect.right > containerRect.right) {
-          container.scrollLeft += (
-            element === this.#elements[this.#elements.length - 1].target ?
-              targetRect : elementRect
-          ).right - containerRect.right;
+          container.scrollLeft += elementRect.right - containerRect.right;
         }
       }
     }
@@ -2446,7 +2439,7 @@ class HapticGridElement extends HTMLElement {
       } else
       if (!element.focused) {
         element.focused = true;
-        this.#scrollIntoView(element.target);
+        this.#scrollIntoView(index);
       }
     }
     return index;
@@ -2468,7 +2461,7 @@ class HapticGridElement extends HTMLElement {
         break;
       }
     }
-    return { x: scrollContainerX, y: scrollContainerY }
+    return { horizontal: scrollContainerX, vertical: scrollContainerY }
   }
 
   get #size() {
@@ -2591,26 +2584,34 @@ class HapticGridElement extends HTMLElement {
     }
   }
 
-  #scrollIntoView(element) {
+  #scrollIntoView(index) {
     const scrollContainers = this.#scrollContainers;
 
-    if (element && (scrollContainers.x || scrollContainers.y)) {
-      const elementRect = element.getBoundingClientRect();
+    if (scrollContainers.horizontal || scrollContainers.vertical) {
+      const elementRect = this.#elements[index].target.getBoundingClientRect();
+      const size = this.#size;
+
       let container = null, containerRect = null;
 
-      if (container = scrollContainers.x) {
+      if (container = scrollContainers.horizontal) {
         containerRect = container.getBoundingClientRect();
 
+        if (index % size.columns == 0) {
+          container.scrollLeft = 0;
+        } else
         if (elementRect.left < containerRect.left) {
           container.scrollLeft -= containerRect.left - elementRect.left;
         } else
         if (elementRect.right > containerRect.right) {
-          container.scrollLeft += containerRect.right - scrollRect.right;
+          container.scrollLeft += elementRect.right - containerRect.right;
         }
       }
-      if (container = scrollContainers.y) {
+      if (container = scrollContainers.vertical) {
         containerRect = container.getBoundingClientRect();
 
+        if (index < size.columns) {
+          container.scrollTop = 0;
+        } else
         if (elementRect.top < containerRect.top) {
           container.scrollTop -= containerRect.top - elementRect.top;
         } else
