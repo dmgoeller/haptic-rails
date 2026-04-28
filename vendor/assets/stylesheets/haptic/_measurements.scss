@@ -60,9 +60,15 @@ $haptic-inline-field-with-label-min-height: 3rem !default;
   $size: haptic-measure(1.75rem, 2.5rem);
   $padding: haptic-measure(.125rem, .5rem);
   height: $size;
-  line-height: haptic-measure(1.125rem, 1.5rem);
+  line-height: haptic-measure(1.25rem, 1.5rem);
   padding: $padding;
   width: $size;
+
+  &.large {
+    $size: 3.5rem;
+    height: $size;
+    width: $size;
+  }
 
   &.outlined {
     padding: calc(#{$padding} - 1px);
