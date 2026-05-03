@@ -3,8 +3,11 @@
 module Haptic
   module Rails
     class Builder < SimpleDelegator # :nodoc:
+      attr_reader :plain
+
       def initialize(template, field_options)
         super(template)
+        @plain = template
         @field_options = field_options
       end
 

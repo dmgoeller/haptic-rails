@@ -2400,6 +2400,8 @@ class HapticAsyncFormElement extends HapticFormElement {
 customElements.define('haptic-async-form', HapticAsyncFormElement, { extends: 'form' });
 
 class HapticGridElement extends HTMLElement {
+  static LENGTH_IN_PX = new RegExp('-?[1-9][0-9]*px');
+
   #elements = [];
   #eventListeners = new HapticEventListeners();
 
@@ -2588,9 +2590,19 @@ class HapticGridElement extends HTMLElement {
     const scrollContainers = this.#scrollContainers;
 
     if (scrollContainers.horizontal || scrollContainers.vertical) {
-      const elementRect = this.#elements[index].target.getBoundingClientRect();
       const size = this.#size;
+      const element = this.#elements[index].target;
+      let elementRect = element.getBoundingClientRect();
 
+      const outlineOffset = this.#getOutlineOffset(element);
+      if (outlineOffset && outlineOffset > 0) {
+        elementRect = new DOMRect(
+          elementRect.x - outlineOffset,
+          elementRect.y - outlineOffset,
+          elementRect.width + 2 * outlineOffset,
+          elementRect.height + 2 * outlineOffset
+        );
+      }
       let container = null, containerRect = null;
 
       if (container = scrollContainers.horizontal) {
@@ -2620,6 +2632,18 @@ class HapticGridElement extends HTMLElement {
         }
       }
     }
+  }
+
+  #getOutlineOffset(element) {
+    const outlineOffset = getComputedStyle(element).outlineWidth;
+    if (!HapticGridElement.LENGTH_IN_PX.test(outlineOffset)) {
+      return null;
+    }
+    const outlineWidth = getComputedStyle(element).outlineWidth;
+    if (!HapticGridElement.LENGTH_IN_PX.test(outlineWidth)) {
+      return null;
+    }
+    return parseInt(outlineOffset) + parseInt(outlineWidth);
   }
 }
 customElements.define('haptic-grid', HapticGridElement);
@@ -2774,7 +2798,7 @@ class HapticListElement extends HTMLElement {
       }
     },
     nodeRemoved: node => {
-      if (this.#listItemElements.has(node)) {
+      if (node instanceof HapticListItemElement) {
         this.#eventListeners.remove(node);
         this.#listItemElements.remove(node);
       } else

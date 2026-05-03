@@ -1107,12 +1107,6 @@ haptic-list-item {
  * Tabs
  **********************************************************************/
 
-.haptic-tab-bar {
-  &.scrollable {
-    padding-left: 3.125rem; /* 52dp */
-  }
-}
-
 .haptic-tab {
   column-gap: .25rem;
   line-height: 1.125rem;

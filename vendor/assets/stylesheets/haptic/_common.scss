@@ -207,6 +207,10 @@ haptic-select-dropdown {
 }
 
 haptic-select-dropdown {
+  & > input {
+    display: none;
+  }
+
   & > .toggle {
     align-items: center;
     display: flex;
@@ -613,6 +617,7 @@ haptic-table-like .table-body .table-row {
 
   &.scrollable {
     overflow-x: auto;
+    scroll-snap-type: x mandatory;
 
     &::-webkit-scrollbar {
       display: none;
@@ -627,6 +632,7 @@ haptic-table-like .table-body .table-row {
   flex-wrap: nowrap;
   justify-content: center;
   position: relative;
+  scroll-snap-align: start;
   user-select: none;
   white-space: nowrap;
 
