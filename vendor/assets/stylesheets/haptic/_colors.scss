@@ -99,6 +99,16 @@ $haptic-dark-mode: true !default;
 }
 
 /**********************************************************************
+ * Grids
+ **********************************************************************/
+
+haptic-grid {
+  &:focus-visible .focused {
+    @include haptic-primary-color('outline-color');
+  }
+}
+
+/**********************************************************************
  * Badges
  **********************************************************************/
 
@@ -740,7 +750,7 @@ a.haptic-link {
 }
 
 /**********************************************************************
- * Lists and grids
+ * Lists
  **********************************************************************/
 
 haptic-list-item {
@@ -759,7 +769,7 @@ haptic-list-item {
   }
 }
 
-haptic-list, haptic-grid {
+haptic-list {
   &:focus-visible .focused {
     @include haptic-primary-color('outline-color');
   }
