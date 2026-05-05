@@ -7,6 +7,7 @@ module Haptic
     class FormBuilderTest < ActionView::TestCase
       include Haptic::Rails::Helpers::DropdownTagHelper
       include Haptic::Rails::Helpers::FieldTagHelper
+      include Haptic::Rails::Helpers::FormHelper
       include Haptic::Rails::Helpers::FormOptionsHelper
       include Haptic::Rails::Helpers::IconTagHelper
 

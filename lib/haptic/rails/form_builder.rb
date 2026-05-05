@@ -498,16 +498,23 @@ module Haptic
       #   #   </div>
       #   #  </haptic-dropdown-field>
       def collection_select_dropdown(method, collection, value_method, text_method, options = {}, html_options = {})
-        select_dropdown_field(
+        html_options = @field_options.merge(html_options)
+
+        haptic_dropdown_field_tag(
           method,
-          @template.haptic_options_from_collection(
-            collection,
-            value_method,
-            text_method,
-            object.send(method) || '',
-            options
+          @template.haptic_select_dropdown(
+            @object_name,
+            method,
+            @template.haptic_options_from_collection(
+              collection,
+              value_method,
+              text_method,
+              object&.send(method) || '',
+              options
+            ),
+            html_options.except(*HAPTIC_FIELD_OPTIONS)
           ),
-          @field_options.merge(html_options)
+          html_options
         )
       end
 
@@ -605,19 +612,28 @@ module Haptic
       #   # </haptic-dropdown-field>
       def select_dropdown(method, choices = nil, options = {}, &block)
         choices, options = nil, choices || {} if block
+        options = @field_options.merge(options)
+
+        selected = options.delete(:selected)
+        selected = object&.send(method) if selected.nil?
 
         disabled = options.fetch(:disabled, false)
         disabled = nil if [true, false].include?(disabled)
-        options = options.except(:disabled) if disabled.present?
+        options.delete(:disabled) if disabled.present?
 
-        select_dropdown_field(
+        haptic_dropdown_field_tag(
           method,
-          if block
-            @template.capture(&block)
-          else
-            @template.haptic_options(choices, object.send(method), disabled: disabled)
-          end,
-          @field_options.merge(options)
+          @template.haptic_select_dropdown(
+            @object_name,
+            method,
+            if block
+              @template.capture(&block)
+            else
+              @template.haptic_options(choices, selected, disabled: disabled)
+            end,
+            options.except(*HAPTIC_FIELD_OPTIONS)
+          ),
+          options
         )
       end
 
@@ -671,26 +687,6 @@ module Haptic
 
           @template.send(name, field, label, **options)
         end
-      end
-
-      def select_dropdown_field(method, haptic_options, options = {})
-        options = options.dup
-        text_field_options = options.extract!(:disabled, :id, :required)
-        toggle_class = ['toggle', 'haptic-field', options.delete(:class)]
-
-        haptic_dropdown_field_tag(
-          method,
-          @template.haptic_select_dropdown_tag(
-            @template.plain.text_field(@object_name, method, text_field_options) +
-              @template.tag.button(type: 'button', class: toggle_class) +
-              @template.tag.div(
-                @template.tag.div(haptic_options, class: 'scroll-container'),
-                class: 'popover'
-              ),
-            **options.except(*HAPTIC_FIELD_OPTIONS)
-          ),
-          options
-        )
       end
     end
   end

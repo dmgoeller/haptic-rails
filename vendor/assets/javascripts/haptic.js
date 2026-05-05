@@ -1414,7 +1414,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     for (let i = 0; i < this.#optionElements.length; i++) {
       if (!this.#optionElements[i].disabled) {
         if (this.#optionElements[i].highlighted = (i === index)) {
-          this.#scrollTo(i);
+          this.#scrollIntoView(i);
         }
       }
     }
@@ -1738,7 +1738,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       }
       for (let i = 0; i < this.#optionElements.length; i++) {
         if (this.#optionElements[i].checked) {
-          this.#scrollTo(i);
+          this.#scrollIntoView(i);
           break;
         }
       }
@@ -1807,7 +1807,7 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     return oldValue !== newValue;
   }
 
-  #scrollTo(index) {
+  #scrollIntoView(index) {
     if (this.#popoverScrollContainer) {
       const scrollOffset = this.#scrollOffset;
       let newScrollOffset = null;
