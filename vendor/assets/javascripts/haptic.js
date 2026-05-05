@@ -1392,6 +1392,77 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     return this.#inputElement?.value;
   }
 
+  get #checkedOptionElement() {
+    for (let optionElement of this.#optionElements) {
+      if (optionElement.checked) {
+        return optionElement;
+      }
+    }
+    return null;
+  }
+
+  get #highlightedIndex() {
+    for (let i = 0; i < this.#optionElements.length; i++) {
+      if (this.#optionElements[i].highlighted) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  set #highlightedIndex(index) {
+    for (let i = 0; i < this.#optionElements.length; i++) {
+      if (!this.#optionElements[i].disabled) {
+        if (this.#optionElements[i].highlighted = (i === index)) {
+          this.#scrollTo(i);
+        }
+      }
+    }
+    return index;
+  }
+
+  get #highlightedOptionElement() {
+    for (let optionElement of this.#optionElements) {
+      if (optionElement.highlighted) {
+        return optionElement;
+      }
+    }
+    return null;
+  }
+
+  get #openToTop() {
+    return this.hasAttribute('open-to-top');
+  }
+
+  set #openToTop(value) {
+    if (value) {
+      this.setAttribute('open-to-top', 'open-to-top');
+    } else {
+      this.removeAttribute('open-to-top');
+    }
+    return value;
+  }
+
+  get #scrollOffset() {
+    if (this.#popoverScrollContainer) {
+      return Math.floor(this.#popoverScrollContainer.scrollTop / this.#optionHeight);
+    } else {
+      return 0;
+    }
+  }
+
+  set #scrollOffset(value) {
+    if (this.#popoverScrollContainer) {
+      value = Math.min(value, this.#optionElements.length - this.#maxSize);
+      value = Math.max(value, 0);
+
+      this.#popoverScrollContainer.scrollTop = value * this.#optionHeight;
+      return value;
+    } else {
+      return 0;
+    }
+  }
+
   connectedCallback() {
     this.#eventListeners.add(this, 'keydown', event => {
       if (!this.disabled && !this.locked) {
@@ -1500,7 +1571,6 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
                 newHighlightedIndex = newHighlightedIndex + (backward ? -1 : 1);
               } else {
                 this.#highlightedIndex = newHighlightedIndex;
-                this.#scrollTo(newHighlightedIndex);
                 break;
               }
             }
@@ -1692,75 +1762,6 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     this.#optionElements?.forEach(optionElement => {
       optionElement.initiallyChecked = optionElement.checked;
     });
-  }
-
-  get #checkedOptionElement() {
-    for (let optionElement of this.#optionElements) {
-      if (optionElement.checked) {
-        return optionElement;
-      }
-    }
-    return null;
-  }
-
-  get #highlightedIndex() {
-    for (let i = 0; i < this.#optionElements.length; i++) {
-      if (this.#optionElements[i].highlighted) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  set #highlightedIndex(index) {
-    for (let i = 0; i < this.#optionElements.length; i++) {
-      if (!this.#optionElements[i].disabled) {
-        this.#optionElements[i].highlighted = (i === index);
-      }
-    }
-    return index;
-  }
-
-  get #highlightedOptionElement() {
-    for (let optionElement of this.#optionElements) {
-      if (optionElement.highlighted) {
-        return optionElement;
-      }
-    }
-    return null;
-  }
-
-  get #openToTop() {
-    return this.hasAttribute('open-to-top');
-  }
-
-  set #openToTop(value) {
-    if (value) {
-      this.setAttribute('open-to-top', 'open-to-top');
-    } else {
-      this.removeAttribute('open-to-top');
-    }
-    return value;
-  }
-
-  get #scrollOffset() {
-    if (this.#popoverScrollContainer) {
-      return Math.floor(this.#popoverScrollContainer.scrollTop / this.#optionHeight);
-    } else {
-      return 0;
-    }
-  }
-
-  set #scrollOffset(value) {
-    if (this.#popoverScrollContainer) {
-      value = Math.min(value, this.#optionElements.length - this.#maxSize);
-      value = Math.max(value, 0);
-
-      this.#popoverScrollContainer.scrollTop = value * this.#optionHeight;
-      return value;
-    } else {
-      return 0;
-    }
   }
 
   #appendToKeyboardInput(str) {
