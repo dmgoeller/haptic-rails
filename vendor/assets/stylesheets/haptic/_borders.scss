@@ -188,13 +188,7 @@ haptic-dropdown-field, haptic-text-field {
   }
 
   &[focus-indicator] {
-    &.inline {
-      &.field-container, & > .field-container {
-        outline-style: solid;
-        outline-width: 2px;
-      }
-    }
-    &:not(.inline) {
+    &.filled, &.outlined {
       &.field-container, & > .field-container {
         &::after {
           border-bottom-left-radius:
@@ -202,6 +196,12 @@ haptic-dropdown-field, haptic-text-field {
           border-bottom-right-radius:
             #{$haptic-field-border-radius} 3px;
         }
+      }
+    }
+    &:not(.filled):not(.outlined) {
+      &.field-container, & > .field-container {
+        outline-style: solid;
+        outline-width: 2px;
       }
     }
   }

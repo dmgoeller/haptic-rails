@@ -24,19 +24,28 @@ module Haptic
         define_method("test_#{method}") do
           assert_dom_equal(
             <<~HTML,
-              <input is="haptic-input" type="#{type}" name="dummy[name]" id="dummy_name">
+              <input is="haptic-input" type="#{type}" name="name" id="name">
             HTML
             form.send(method, :name)
+          )
+        end
+
+        define_method("test_#{method}_on_form_with_object") do
+          assert_dom_equal(
+            <<~HTML,
+              <input is="haptic-input" type="#{type}" name="dummy[name]" id="dummy_name">
+            HTML
+            form(Dummy.new).send(method, :name)
           )
         end
 
         define_method("test_#{method}_with_field_options") do
           assert_dom_equal(
             <<~HTML,
-              <haptic-text-field for="dummy_name" id="field-id" set-valid-on-change="dummy_bar">
+              <haptic-text-field for="name" id="field-id" set-valid-on-change="bar">
                 <div class="field-container">
-                  <input is="haptic-input" type="#{type}" name="dummy[name]" id="dummy_name">
-                  <label is="haptic-label" class="field-label" for="dummy_name">Name</label>
+                  <input is="haptic-input" type="#{type}" name="name" id="name">
+                  <label is="haptic-label" class="field-label" for="name">Name</label>
                   <button type="button" class="clear-button">
                     <div class="haptic-icon">close</div>
                   </button>
@@ -63,14 +72,29 @@ module Haptic
         define_method("test_#{method}_with_label_as_string") do
           assert_dom_equal(
             <<~HTML,
-              <haptic-text-field for="dummy_name">
+              <haptic-text-field for="name">
                 <div class="field-container">
-                  <input is="haptic-input" type="#{type}" name="dummy[name]" id="dummy_name">
-                  <label is="haptic-label" class="field-label" for="dummy_name">Label</label>
+                  <input is="haptic-input" type="#{type}" name="name" id="name">
+                  <label is="haptic-label" class="field-label" for="name">Label</label>
                 </div>
               </haptic-text-field>
             HTML
             form.send(method, :name, label: 'Label')
+          )
+        end
+
+        define_method("test_#{method}_with_label_on_form_with_nil_object") do
+          form = FormBuilder.new(:dummy, nil, self, {})
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-text-field for="dummy_name">
+                <div class="field-container">
+                  <input is="haptic-input" type="#{type}" name="dummy[name]" id="dummy_name">
+                  <label is="haptic-label" class="field-label" for="dummy_name">Name</label>
+                </div>
+              </haptic-text-field>
+            HTML
+            form.send(method, :name, label: true)
           )
         end
 
@@ -98,28 +122,12 @@ module Haptic
             )
           )
         end
-
-        define_method("test_#{method}_on_nil_object") do
-          form = FormBuilder.new(:dummy, nil, self, {})
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field for="dummy_name">
-                <div class="field-container">
-                  <input is="haptic-input" type="#{type}" name="dummy[name]" id="dummy_name">
-                  <label is="haptic-label" class="field-label" for="dummy_name">Name</label>
-                </div>
-              </haptic-text-field>
-            HTML
-            form.send(method, :name, label: true)
-          )
-        end
       end
 
       def test_color_field
         assert_dom_equal(
           <<~HTML,
-            <input is="haptic-input" type="color" name="dummy[color]" value="#000000"
-              id="dummy_color">
+            <input is="haptic-input" type="color" name="color" value="#000000" id="color">
           HTML
           form.color_field(:color)
         )
@@ -128,11 +136,10 @@ module Haptic
       def test_color_field_with_field_options
         assert_dom_equal(
           <<~HTML,
-            <haptic-text-field for="dummy_color" id="field-id" set-valid-on-change="dummy_bar">
+            <haptic-text-field for="color" id="field-id" set-valid-on-change="bar">
               <div class="field-container">
-                <input is="haptic-input" type="color" name="dummy[color]" value="#000000"
-                  id="dummy_color">
-                <label is="haptic-label" class="field-label" for="dummy_color">Color</label>
+                <input is="haptic-input" type="color" name="color" value="#000000" id="color">
+                <label is="haptic-label" class="field-label" for="color">Color</label>
                 <button type="button" class="clear-button">
                   <div class="haptic-icon">close</div>
                 </button>
@@ -155,18 +162,33 @@ module Haptic
         )
       end
 
-      def test_color_field_with_label_string
+      def test_color_field_with_label_as_string
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-text-field for="color">
+              <div class="field-container">
+                <input is="haptic-input" type="color" name="color" value="#000000" id="color">
+                <label is="haptic-label" class="field-label" for="color">Label</label>
+              </div>
+            </haptic-text-field>
+          HTML
+          form.color_field(:color, label: 'Label')
+        )
+      end
+
+      def test_color_field_with_label_on_form_with_nil_object
+        form = FormBuilder.new(:dummy, nil, self, {})
         assert_dom_equal(
           <<~HTML,
             <haptic-text-field for="dummy_color">
               <div class="field-container">
                 <input is="haptic-input" type="color" name="dummy[color]" value="#000000"
                   id="dummy_color">
-                <label is="haptic-label" class="field-label" for="dummy_color">Label</label>
+                <label is="haptic-label" class="field-label" for="dummy_color">Color</label>
               </div>
             </haptic-text-field>
           HTML
-          form.color_field(:color, label: 'Label')
+          form.color_field(:color, label: true)
         )
       end
 
@@ -195,38 +217,31 @@ module Haptic
         )
       end
 
-      def test_color_field_on_nil_object
-        form = FormBuilder.new(:dummy, nil, self, {})
+      def test_text_area
         assert_dom_equal(
           <<~HTML,
-            <haptic-text-field for="dummy_color">
-              <div class="field-container">
-                <input is="haptic-input" type="color" name="dummy[color]" value="#000000"
-                  id="dummy_color">
-                <label is="haptic-label" class="field-label" for="dummy_color">Color</label>
-              </div>
-            </haptic-text-field>
+            <textarea is="haptic-textarea" name="name" id="name"></textarea>
           HTML
-          form.color_field(:color, label: true)
+          form.text_area(:name)
         )
       end
 
-      def test_text_area
+      def test_text_area_on_form_with_object
         assert_dom_equal(
           <<~HTML,
             <textarea is="haptic-textarea" name="dummy[name]" id="dummy_name"></textarea>
           HTML
-          form.text_area(:name)
+          form(Dummy.new).text_area(:name)
         )
       end
 
       def test_text_area_with_field_options
         assert_dom_equal(
           <<~HTML,
-            <haptic-text-field for="dummy_name" id="field-id" set-valid-on-change="dummy_bar">
+            <haptic-text-field for="name" id="field-id" set-valid-on-change="bar">
               <div class="field-container">
-                <textarea is="haptic-textarea" name="dummy[name]" id="dummy_name"></textarea>
-                <label is="haptic-label" class="field-label" for="dummy_name">Name</label>
+                <textarea is="haptic-textarea" name="name" id="name"></textarea>
+                <label is="haptic-label" class="field-label" for="name">Name</label>
                 <button type="button" class="clear-button">
                   <div class="haptic-icon">close</div>
                 </button>
@@ -252,14 +267,24 @@ module Haptic
       def test_text_area_with_label_as_string
         assert_dom_equal(
           <<~HTML,
-            <haptic-text-field for="dummy_name">
+            <haptic-text-field for="name">
               <div class="field-container">
-                <textarea is="haptic-textarea" name="dummy[name]" id="dummy_name"></textarea>
-                <label is="haptic-label" class="field-label" for="dummy_name">Label</label>
+                <textarea is="haptic-textarea" name="name" id="name"></textarea>
+                <label is="haptic-label" class="field-label" for="name">Label</label>
               </div>
             </haptic-text-field>
           HTML
           form.text_area(:name, label: 'Label')
+        )
+      end
+
+      def test_text_area_with_label_on_form_with_nil_object
+        form = FormBuilder.new(:dummy, nil, self, {})
+        assert_dom_equal(
+          <<~HTML,
+            <textarea is="haptic-textarea" name="dummy[name]" id="dummy_name"></textarea>
+          HTML
+          form.text_area(:name)
         )
       end
 
@@ -283,16 +308,6 @@ module Haptic
         )
       end
 
-      def test_text_area_on_nil_object
-        form = FormBuilder.new(:dummy, nil, self, {})
-        assert_dom_equal(
-          <<~HTML,
-            <textarea is="haptic-textarea" name="dummy[name]" id="dummy_name"></textarea>
-          HTML
-          form.text_area(:name)
-        )
-      end
-
       {
         date_field: 'date',
         datetime_field: 'datetime-local',
@@ -303,9 +318,9 @@ module Haptic
         define_method(:"test_#{method}") do
           assert_dom_equal(
             <<~HTML,
-              <haptic-text-field for="dummy_date">
+              <haptic-text-field for="date">
                 <div class="field-container">
-                  <input is="haptic-input" type="#{type}" name="dummy[date]" id="dummy_date">
+                  <input is="haptic-input" type="#{type}" name="date" id="date">
                   <div class="haptic-icon trailing-icon">calendar_today</div>
                 </div>
               </haptic-text-field>
@@ -314,13 +329,27 @@ module Haptic
           )
         end
 
+        define_method(:"test_#{method}_on_form_with_object") do
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-text-field for="dummy_date">
+                <div class="field-container">
+                  <input is="haptic-input" type="#{type}" name="dummy[date]" id="dummy_date">
+                  <div class="haptic-icon trailing-icon">calendar_today</div>
+                </div>
+              </haptic-text-field>
+            HTML
+            form(Dummy.new).send(method, :date)
+          )
+        end
+
         define_method(:"test_#{method}_with_field_options") do
           assert_dom_equal(
             <<~HTML,
-              <haptic-text-field for="dummy_date" id="field-id" set-valid-on-change="dummy_bar">
+              <haptic-text-field for="date" id="field-id" set-valid-on-change="bar">
                 <div class="field-container">
-                  <input is="haptic-input" type="#{type}" name="dummy[date]" id="dummy_date">
-                  <label is="haptic-label" class="field-label" for="dummy_date">Date</label>
+                  <input is="haptic-input" type="#{type}" name="date" id="date">
+                  <label is="haptic-label" class="field-label" for="date">Date</label>
                   <div class="haptic-icon leading-icon">leading_icon</div>
                   <div class="haptic-icon trailing-icon">calendar_today</div>
                 </div>
@@ -342,15 +371,30 @@ module Haptic
         define_method(:"test_#{method}_with_label_as_string") do
           assert_dom_equal(
             <<~HTML,
-              <haptic-text-field for="dummy_date">
+              <haptic-text-field for="date">
                 <div class="field-container">
-                  <input is="haptic-input" type="#{type}" name="dummy[date]" id="dummy_date">
-                  <label is="haptic-label" class="field-label" for="dummy_date">Label</label>
+                  <input is="haptic-input" type="#{type}" name="date" id="date">
+                  <label is="haptic-label" class="field-label" for="date">Label</label>
                   <div class="haptic-icon trailing-icon">calendar_today</div>
                 </div>
               </haptic-text-field>
             HTML
             form.send(method, :date, label: 'Label')
+          )
+        end
+
+        define_method(:"test_#{method}_with_label_on_form_with_nil_object") do
+          form = FormBuilder.new(:dummy, nil, self, {})
+          assert_dom_equal(
+            <<~HTML,
+              <haptic-text-field for="dummy_date">
+                <div class="field-container">
+                  <input is="haptic-input" type="#{type}" name="dummy[date]" id="dummy_date">
+                  <div class="haptic-icon trailing-icon">calendar_today</div>
+                </div>
+              </haptic-text-field>
+            HTML
+            form.send(method, :date)
           )
         end
 
@@ -374,24 +418,28 @@ module Haptic
             form(dummy).send(method, :date, show_error_icon: true, show_error_message: true)
           )
         end
-
-        define_method(:"test_#{method}_on_nil_object") do
-          form = FormBuilder.new(:dummy, nil, self, {})
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-text-field for="dummy_date">
-                <div class="field-container">
-                  <input is="haptic-input" type="#{type}" name="dummy[date]" id="dummy_date">
-                  <div class="haptic-icon trailing-icon">calendar_today</div>
-                </div>
-              </haptic-text-field>
-            HTML
-            form.send(method, :date)
-          )
-        end
       end
 
       def test_chips
+        assert_dom_equal(
+          <<~HTML,
+            <input type="hidden" name="color[]" value="" autocomplete="off">
+            <haptic-chip>
+              <input is="haptic-input" type="checkbox" value="blue" name="color[]"
+                id="color_blue">
+              <label is="haptic-label" for="color_blue">Blue</label>
+            </haptic-chip>
+            <haptic-chip>
+              <input is="haptic-input" type="checkbox" value="green" name="color[]"
+                id="color_green">
+              <label is="haptic-label" for="color_green">Green</label>
+            </haptic-chip>
+          HTML
+          form.chips(:color, [%w[Blue blue], %w[Green green]])
+        )
+      end
+
+      def test_chips_on_form_with_object
         assert_dom_equal(
           <<~HTML,
             <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
@@ -406,23 +454,23 @@ module Haptic
               <label is="haptic-label" for="dummy_color_green">Green</label>
             </haptic-chip>
           HTML
-          form.chips(:color, [%w[Blue blue], %w[Green green]])
+          form(Dummy.new).chips(:color, [%w[Blue blue], %w[Green green]])
         )
       end
 
       def test_chips_on_choices_as_hash
         assert_dom_equal(
           <<~HTML,
-            <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
+            <input type="hidden" name="color[]" value="" autocomplete="off">
             <haptic-chip>
-              <input is="haptic-input" type="checkbox" value="blue" name="dummy[color][]"
-                id="dummy_color_blue">
-              <label is="haptic-label" for="dummy_color_blue">Blue</label>
+              <input is="haptic-input" type="checkbox" value="blue" name="color[]"
+                id="color_blue">
+              <label is="haptic-label" for="color_blue">Blue</label>
             </haptic-chip>
             <haptic-chip>
-              <input is="haptic-input" type="checkbox" value="green" name="dummy[color][]"
-                id="dummy_color_green">
-              <label is="haptic-label" for="dummy_color_green">Green</label>
+              <input is="haptic-input" type="checkbox" value="green" name="color[]"
+                id="color_green">
+              <label is="haptic-label" for="color_green">Green</label>
             </haptic-chip>
           HTML
           form.chips(:color, { 'Blue' => 'blue', 'Green' => 'green' })
@@ -432,15 +480,15 @@ module Haptic
       def test_chips_with_block
         assert_dom_equal(
           <<~HTML,
-            <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
+            <input type="hidden" name="color[]" value="" autocomplete="off">
             <haptic-chip>
-              <input type="checkbox" value="blue" name="dummy[color][]" id="dummy_color_blue"
+              <input type="checkbox" value="blue" name="color[]" id="color_blue"
                 checked="checked">
-              <label for="dummy_color_blue">Blue</label>
+              <label for="color_blue">Blue</label>
             </haptic-chip>
             <haptic-chip>
-              <input type="checkbox" value="green" name="dummy[color][]" id="dummy_color_green">
-              <label for="dummy_color_green">Green</label>
+              <input type="checkbox" value="green" name="color[]" id="color_green">
+              <label for="color_green">Green</label>
             </haptic-chip>
           HTML
           form.chips(:color, [%w[Blue blue], %w[Green green]]) do |b|
@@ -453,16 +501,16 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-list>
-              <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+              <input type="hidden" name="color" value="" autocomplete="off">
               <haptic-list-item>
-                <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
-                  id="dummy_color_blue">
-                <label is="haptic-label" for="dummy_color_blue">Blue</label>
+                <input is="haptic-input" type="radio" value="blue" name="color"
+                  id="color_blue">
+                <label is="haptic-label" for="color_blue">Blue</label>
               </haptic-list-item>
               <haptic-list-item>
-                <input is="haptic-input" type="radio" value="green" name="dummy[color]"
-                  id="dummy_color_green">
-                <label is="haptic-label" for="dummy_color_green">Green</label>
+                <input is="haptic-input" type="radio" value="green" name="color"
+                  id="color_green">
+                <label is="haptic-label" for="color_green">Green</label>
               </haptic-list-item>
             </haptic-list>
           HTML
@@ -470,7 +518,7 @@ module Haptic
         )
       end
 
-      def test_list_on_choices_as_hash
+      def test_list_on_form_with_object
         assert_dom_equal(
           <<~HTML,
             <haptic-list>
@@ -484,6 +532,27 @@ module Haptic
                 <input is="haptic-input" type="radio" value="green" name="dummy[color]"
                   id="dummy_color_green">
                 <label is="haptic-label" for="dummy_color_green">Green</label>
+              </haptic-list-item>
+            </haptic-list>
+          HTML
+          form(Dummy.new).list(:color, [%w[Blue blue], %w[Green green]])
+        )
+      end
+
+      def test_list_on_choices_as_hash
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-list>
+              <input type="hidden" name="color" value="" autocomplete="off">
+              <haptic-list-item>
+                <input is="haptic-input" type="radio" value="blue" name="color"
+                  id="color_blue">
+                <label is="haptic-label" for="color_blue">Blue</label>
+              </haptic-list-item>
+              <haptic-list-item>
+                <input is="haptic-input" type="radio" value="green" name="color"
+                  id="color_green">
+                <label is="haptic-label" for="color_green">Green</label>
               </haptic-list-item>
             </haptic-list>
           HTML
@@ -495,16 +564,16 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-list>
-              <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+              <input type="hidden" name="color" value="" autocomplete="off">
               <haptic-list-item class="inverted">
-                <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
-                  id="dummy_color_blue">
-                <label is="haptic-label" for="dummy_color_blue">Blue</label>
+                <input is="haptic-input" type="radio" value="blue" name="color"
+                  id="color_blue">
+                <label is="haptic-label" for="color_blue">Blue</label>
               </haptic-list-item>
               <haptic-list-item class="inverted">
-                <input is="haptic-input" type="radio" value="green" name="dummy[color]"
-                  id="dummy_color_green">
-                <label is="haptic-label" for="dummy_color_green">Green</label>
+                <input is="haptic-input" type="radio" value="green" name="color"
+                  id="color_green">
+                <label is="haptic-label" for="color_green">Green</label>
               </haptic-list-item>
             </haptic-list>
           HTML
@@ -516,16 +585,16 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-list>
-              <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+              <input type="hidden" name="color" value="" autocomplete="off">
               <haptic-list-item>
-                <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
-                  id="dummy_color_blue" checked="checked">
-                <label is="haptic-label" for="dummy_color_blue">Blue</label>
+                <input is="haptic-input" type="radio" value="blue" name="color"
+                  id="color_blue" checked="checked">
+                <label is="haptic-label" for="color_blue">Blue</label>
               </haptic-list-item>
               <haptic-list-item>
-                <input is="haptic-input" type="radio" value="green" name="dummy[color]"
-                  id="dummy_color_green">
-                <label is="haptic-label" for="dummy_color_green">Green</label>
+                <input is="haptic-input" type="radio" value="green" name="color"
+                  id="color_green">
+                <label is="haptic-label" for="color_green">Green</label>
               </haptic-list-item>
             </haptic-list>
           HTML
@@ -539,16 +608,16 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-segmented-button>
-              <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+              <input type="hidden" name="color" value="" autocomplete="off">
               <haptic-button-segment>
-                <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
-                  id="dummy_color_blue">
-                <label is="haptic-label" for="dummy_color_blue">Blue</label>
+                <input is="haptic-input" type="radio" value="blue" name="color"
+                  id="color_blue">
+                <label is="haptic-label" for="color_blue">Blue</label>
               </haptic-button-segment>
               <haptic-button-segment>
-                <input is="haptic-input" type="radio" value="green" name="dummy[color]"
-                  id="dummy_color_green">
-                <label is="haptic-label" for="dummy_color_green">Green</label>
+                <input is="haptic-input" type="radio" value="green" name="color"
+                  id="color_green">
+                <label is="haptic-label" for="color_green">Green</label>
               </haptic-button-segment>
             </haptic-segmented-button>
           HTML
@@ -556,7 +625,7 @@ module Haptic
         )
       end
 
-      def test_segmented_button_on_choices_as_hash
+      def test_segmented_button_on_form_with_object
         assert_dom_equal(
           <<~HTML,
             <haptic-segmented-button>
@@ -570,6 +639,27 @@ module Haptic
                 <input is="haptic-input" type="radio" value="green" name="dummy[color]"
                   id="dummy_color_green">
                 <label is="haptic-label" for="dummy_color_green">Green</label>
+              </haptic-button-segment>
+            </haptic-segmented-button>
+          HTML
+          form(Dummy.new).segmented_button(:color, [%w[Blue blue], %w[Green green]])
+        )
+      end
+
+      def test_segmented_button_on_choices_as_hash
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-segmented-button>
+              <input type="hidden" name="color" value="" autocomplete="off">
+              <haptic-button-segment>
+                <input is="haptic-input" type="radio" value="blue" name="color"
+                  id="color_blue">
+                <label is="haptic-label" for="color_blue">Blue</label>
+              </haptic-button-segment>
+              <haptic-button-segment>
+                <input is="haptic-input" type="radio" value="green" name="color"
+                  id="color_green">
+                <label is="haptic-label" for="color_green">Green</label>
               </haptic-button-segment>
             </haptic-segmented-button>
           HTML
@@ -581,15 +671,15 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-segmented-button>
-              <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+              <input type="hidden" name="color" value="" autocomplete="off">
               <haptic-button-segment>
-                <input type="radio" value="blue" name="dummy[color]" id="dummy_color_blue"
+                <input type="radio" value="blue" name="color" id="color_blue"
                   checked="checked">
-                <label for="dummy_color_blue">Blue</label>
+                <label for="color_blue">Blue</label>
               </haptic-button-segment>
               <haptic-button-segment>
-                <input type="radio" value="green" name="dummy[color]" id="dummy_color_green">
-                <label for="dummy_color_green">Green</label>
+                <input type="radio" value="green" name="color" id="color_green">
+                <label for="color_green">Green</label>
               </haptic-button-segment>
             </haptic-segmented-button>
           HTML
@@ -600,6 +690,25 @@ module Haptic
       end
 
       def test_collection_chips
+        assert_dom_equal(
+          <<~HTML,
+            <input type="hidden" name="color[]" value="" autocomplete="off">
+            <haptic-chip>
+              <input is="haptic-input" type="checkbox" value="blue" name="color[]"
+                id="color_blue">
+              <label is="haptic-label" for="color_blue">Blue</label>
+            </haptic-chip>
+            <haptic-chip>
+              <input is="haptic-input" type="checkbox" value="green" name="color[]"
+                id="color_green">
+              <label is="haptic-label" for="color_green">Green</label>
+            </haptic-chip>
+          HTML
+          form.collection_chips(:color, %w[Blue Green], :downcase, :itself)
+        )
+      end
+
+      def test_collection_chips_on_form_with_object
         assert_dom_equal(
           <<~HTML,
             <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
@@ -614,22 +723,22 @@ module Haptic
               <label is="haptic-label" for="dummy_color_green">Green</label>
             </haptic-chip>
           HTML
-          form.collection_chips(:color, %w[Blue Green], :downcase, :itself)
+          form(Dummy.new).collection_chips(:color, %w[Blue Green], :downcase, :itself)
         )
       end
 
       def test_collection_chips_with_block
         assert_dom_equal(
           <<~HTML,
-            <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
+            <input type="hidden" name="color[]" value="" autocomplete="off">
             <haptic-chip>
-              <input type="checkbox" value="blue" name="dummy[color][]" id="dummy_color_blue"
+              <input type="checkbox" value="blue" name="color[]" id="color_blue"
                 checked="checked">
-              <label for="dummy_color_blue">Blue</label>
+              <label for="color_blue">Blue</label>
             </haptic-chip>
             <haptic-chip>
-              <input type="checkbox" value="green" name="dummy[color][]" id="dummy_color_green">
-              <label for="dummy_color_green">Green</label>
+              <input type="checkbox" value="green" name="color[]" id="color_green">
+              <label for="color_green">Green</label>
             </haptic-chip>
           HTML
           form.collection_chips(:color, %w[Blue Green], :downcase, :itself) do |b|
@@ -642,6 +751,27 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-list>
+              <input type="hidden" name="color" value="" autocomplete="off">
+              <haptic-list-item>
+                <input is="haptic-input" type="radio" value="blue" name="color"
+                  id="color_blue">
+                <label is="haptic-label" for="color_blue">Blue</label>
+              </haptic-list-item>
+              <haptic-list-item>
+                <input is="haptic-input" type="radio" value="green" name="color"
+                  id="color_green">
+                <label is="haptic-label" for="color_green">Green</label>
+              </haptic-list-item>
+            </haptic-list>
+          HTML
+          form.collection_list(:color, %w[Blue Green], :downcase, :itself)
+        )
+      end
+
+      def test_collection_list_on_form_with_object
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-list>
               <input type="hidden" name="dummy[color]" value="" autocomplete="off">
               <haptic-list-item>
                 <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
@@ -655,7 +785,7 @@ module Haptic
               </haptic-list-item>
             </haptic-list>
           HTML
-          form.collection_list(:color, %w[Blue Green], :downcase, :itself)
+          form(Dummy.new).collection_list(:color, %w[Blue Green], :downcase, :itself)
         )
       end
 
@@ -663,16 +793,16 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-list>
-              <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+              <input type="hidden" name="color" value="" autocomplete="off">
               <haptic-list-item class="inverted">
-                <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
-                  id="dummy_color_blue">
-                <label is="haptic-label" for="dummy_color_blue">Blue</label>
+                <input is="haptic-input" type="radio" value="blue" name="color"
+                  id="color_blue">
+                <label is="haptic-label" for="color_blue">Blue</label>
               </haptic-list-item>
               <haptic-list-item class="inverted">
-                <input is="haptic-input" type="radio" value="green" name="dummy[color]"
-                  id="dummy_color_green">
-                <label is="haptic-label" for="dummy_color_green">Green</label>
+                <input is="haptic-input" type="radio" value="green" name="color"
+                  id="color_green">
+                <label is="haptic-label" for="color_green">Green</label>
               </haptic-list-item>
             </haptic-list>
           HTML
@@ -684,16 +814,16 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-list>
-              <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+              <input type="hidden" name="color" value="" autocomplete="off">
               <haptic-list-item>
-                <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
-                  id="dummy_color_blue" checked="checked">
-                <label is="haptic-label" for="dummy_color_blue">Blue</label>
+                <input is="haptic-input" type="radio" value="blue" name="color"
+                  id="color_blue" checked="checked">
+                <label is="haptic-label" for="color_blue">Blue</label>
               </haptic-list-item>
               <haptic-list-item>
-                <input is="haptic-input" type="radio" value="green" name="dummy[color]"
-                  id="dummy_color_green">
-                <label is="haptic-label" for="dummy_color_green">Green</label>
+                <input is="haptic-input" type="radio" value="green" name="color"
+                  id="color_green">
+                <label is="haptic-label" for="color_green">Green</label>
               </haptic-list-item>
             </haptic-list>
           HTML
@@ -707,16 +837,16 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-list>
-              <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
+              <input type="hidden" name="color[]" value="" autocomplete="off">
               <haptic-list-item>
-                <input is="haptic-input" type="checkbox" value="blue" name="dummy[color][]"
-                  id="dummy_color_blue">
-                <label is="haptic-label" for="dummy_color_blue">Blue</label>
+                <input is="haptic-input" type="checkbox" value="blue" name="color[]"
+                  id="color_blue">
+                <label is="haptic-label" for="color_blue">Blue</label>
               </haptic-list-item>
               <haptic-list-item>
-                <input is="haptic-input" type="checkbox" value="green" name="dummy[color][]"
-                  id="dummy_color_green">
-                <label is="haptic-label" for="dummy_color_green">Green</label>
+                <input is="haptic-input" type="checkbox" value="green" name="color[]"
+                  id="color_green">
+                <label is="haptic-label" for="color_green">Green</label>
               </haptic-list-item>
             </haptic-list>
           HTML
@@ -728,16 +858,16 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-list>
-              <input type="hidden" name="dummy[color][]" value="" autocomplete="off">
+              <input type="hidden" name="color[]" value="" autocomplete="off">
               <haptic-list-item>
-                <input is="haptic-input" type="checkbox" value="blue" name="dummy[color][]"
-                  id="dummy_color_blue" checked="checked">
-                <label is="haptic-label" for="dummy_color_blue">Blue</label>
+                <input is="haptic-input" type="checkbox" value="blue" name="color[]"
+                  id="color_blue" checked="checked">
+                <label is="haptic-label" for="color_blue">Blue</label>
               </haptic-list-item>
               <haptic-list-item>
-                <input is="haptic-input" type="checkbox" value="green" name="dummy[color][]"
-                  id="dummy_color_green">
-                <label is="haptic-label" for="dummy_color_green">Green</label>
+                <input is="haptic-input" type="checkbox" value="green" name="color[]"
+                  id="color_green">
+                <label is="haptic-label" for="color_green">Green</label>
               </haptic-list-item>
             </haptic-list>
           HTML
@@ -751,6 +881,27 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-segmented-button>
+              <input type="hidden" name="color" value="" autocomplete="off">
+              <haptic-button-segment>
+                <input is="haptic-input" type="radio" value="blue" name="color"
+                  id="color_blue">
+                <label is="haptic-label" for="color_blue">Blue</label>
+              </haptic-button-segment>
+              <haptic-button-segment>
+                <input is="haptic-input" type="radio" value="green" name="color"
+                  id="color_green">
+                <label is="haptic-label" for="color_green">Green</label>
+              </haptic-button-segment>
+            </haptic-segmented-button>
+          HTML
+          form.collection_segmented_button(:color, %w[Blue Green], :downcase, :itself)
+        )
+      end
+
+      def test_collection_segmented_button_on_form_with_object
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-segmented-button>
               <input type="hidden" name="dummy[color]" value="" autocomplete="off">
               <haptic-button-segment>
                 <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
@@ -764,7 +915,7 @@ module Haptic
               </haptic-button-segment>
             </haptic-segmented-button>
           HTML
-          form.collection_segmented_button(:color, %w[Blue Green], :downcase, :itself)
+          form(Dummy.new).collection_segmented_button(:color, %w[Blue Green], :downcase, :itself)
         )
       end
 
@@ -772,16 +923,16 @@ module Haptic
         assert_dom_equal(
           <<~HTML,
             <haptic-segmented-button>
-              <input type="hidden" name="dummy[color]" value="" autocomplete="off">
+              <input type="hidden" name="color" value="" autocomplete="off">
               <haptic-button-segment>
-                <input is="haptic-input" type="radio" value="blue" name="dummy[color]"
-                  id="dummy_color_blue" checked="checked">
-                <label is="haptic-label" for="dummy_color_blue">Blue</label>
+                <input is="haptic-input" type="radio" value="blue" name="color"
+                  id="color_blue" checked="checked">
+                <label is="haptic-label" for="color_blue">Blue</label>
               </haptic-button-segment>
               <haptic-button-segment>
-                <input is="haptic-input" type="radio" value="green" name="dummy[color]"
-                  id="dummy_color_green">
-                <label is="haptic-label" for="dummy_color_green">Green</label>
+                <input is="haptic-input" type="radio" value="green" name="color"
+                  id="color_green">
+                <label is="haptic-label" for="color_green">Green</label>
               </haptic-button-segment>
             </haptic-segmented-button>
           HTML
@@ -794,9 +945,9 @@ module Haptic
       def test_collection_select
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
-                <select is="haptic-select" name="dummy[color]" id="dummy_color">
+                <select is="haptic-select" name="color" id="color">
                   <option value="blue">Blue</option>
                   <option value="green">Green</option>
                 </select>
@@ -807,12 +958,28 @@ module Haptic
         )
       end
 
-      def test_collection_select_with_custom_class
+      def test_collection_select_on_form_with_object
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
               <div class="field-container">
-                <select is="custom-select" name="dummy[color]" id="dummy_color">
+                <select is="haptic-select" name="dummy[color]" id="dummy_color">
+                  <option value="blue">Blue</option>
+                  <option value="green">Green</option>
+                </select>
+              </div>
+            </haptic-dropdown-field>
+          HTML
+          form(Dummy.new).collection_select(:color, %w[Blue Green], :downcase, :itself)
+        )
+      end
+
+      def test_collection_select_with_custom_class
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-dropdown-field for="color">
+              <div class="field-container">
+                <select is="custom-select" name="color" id="color">
                   <option value="blue">Blue</option>
                   <option value="green">Green</option>
                 </select>
@@ -833,13 +1000,13 @@ module Haptic
       def test_collection_select_with_field_options
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color" id="field-id" set-valid-on-change="dummy_bar">
+            <haptic-dropdown-field for="color" id="field-id" set-valid-on-change="bar">
               <div class="field-container">
-                <select is="haptic-select" name="dummy[color]" id="dummy_color">
+                <select is="haptic-select" name="color" id="color">
                   <option value="blue">Blue</option>
                   <option value="green">Green</option>
                 </select>
-                <label is="haptic-label" class="field-label" for="dummy_color">Color</label>
+                <label is="haptic-label" class="field-label" for="color">Color</label>
                 <div class="haptic-icon leading-icon">leading_icon</div>
               </div>
               <div class="supporting-text">Supporting text</div>
@@ -865,13 +1032,13 @@ module Haptic
       def test_collection_select_with_label_as_string
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
-                <select is="haptic-select" name="dummy[color]" id="dummy_color">
+                <select is="haptic-select" name="color" id="color">
                   <option value="blue">Blue</option>
                   <option value="green">Green</option>
                 </select>
-                <label is="haptic-label" class="field-label" for="dummy_color">Label</label>
+                <label is="haptic-label" class="field-label" for="color">Label</label>
               </div>
             </haptic-dropdown-field>
           HTML
@@ -919,10 +1086,10 @@ module Haptic
       def test_collection_select_dropdown
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
                 <haptic-select-dropdown>
-                  <input type="text" name="dummy[color]" id="dummy_color">
+                  <input type="text" name="color" id="color">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
@@ -939,10 +1106,10 @@ module Haptic
         )
       end
 
-      def test_collection_select_dropdown_with_field_options
+      def test_collection_select_dropdown_on_form_with_object
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color" id="field-id" set-valid-on-change="dummy_bar">
+            <haptic-dropdown-field for="dummy_color">
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="dummy[color]" id="dummy_color">
@@ -955,7 +1122,30 @@ module Haptic
                   </div>
                   <div class="backdrop"></div>
                 </haptic-select-dropdown>
-                <label is="haptic-label" class="field-label" for="dummy_color">Color</label>
+              </div>
+            </haptic-dropdown-field>
+          HTML
+          form(Dummy.new).collection_select_dropdown(:color, %w[Blue Green], :downcase, :itself)
+        )
+      end
+
+      def test_collection_select_dropdown_with_field_options
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-dropdown-field for="color" id="field-id" set-valid-on-change="bar">
+              <div class="field-container">
+                <haptic-select-dropdown>
+                  <input type="text" name="color" id="color">
+                  <button class="toggle haptic-field" type="button"></button>
+                  <div class="popover">
+                    <div class="scroll-container">
+                      <haptic-option value="blue">Blue</haptic-option>
+                      <haptic-option value="green">Green</haptic-option>
+                    </div>
+                  </div>
+                  <div class="backdrop"></div>
+                </haptic-select-dropdown>
+                <label is="haptic-label" class="field-label" for="color">Color</label>
                 <div class="haptic-icon leading-icon">leading_icon</div>
               </div>
               <div class="supporting-text">Supporting text</div>
@@ -981,10 +1171,10 @@ module Haptic
       def test_collection_select_dropdown_with_label_as_string
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
                 <haptic-select-dropdown>
-                  <input type="text" name="dummy[color]" id="dummy_color">
+                  <input type="text" name="color" id="color">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
@@ -994,7 +1184,7 @@ module Haptic
                   </div>
                   <div class="backdrop"></div>
                 </haptic-select-dropdown>
-                <label is="haptic-label" class="field-label" for="dummy_color">Label</label>
+                <label is="haptic-label" class="field-label" for="color">Label</label>
               </div>
             </haptic-dropdown-field>
           HTML
@@ -1047,10 +1237,10 @@ module Haptic
       def test_collection_select_dropdown_with_include_blank
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
                 <haptic-select-dropdown>
-                  <input type="text" name="dummy[color]" id="dummy_color">
+                  <input type="text" name="color" id="color">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
@@ -1077,10 +1267,10 @@ module Haptic
       def test_collection_select_dropdown_with_disabled_option
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
                 <haptic-select-dropdown>
-                  <input type="text" name="dummy[color]" id="dummy_color">
+                  <input type="text" name="color" id="color">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
@@ -1106,10 +1296,10 @@ module Haptic
       def test_collection_select_dropdown_with_multiple_disabled_options
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
                 <haptic-select-dropdown>
-                  <input type="text" name="dummy[color]" id="dummy_color">
+                  <input type="text" name="color" id="color">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
@@ -1135,10 +1325,10 @@ module Haptic
       def test_disabled_collection_select_dropdown
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
                 <haptic-select-dropdown>
-                  <input type="text" name="dummy[color]" id="dummy_color"
+                  <input type="text" name="color" id="color"
                     disabled="disabled">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
@@ -1282,9 +1472,9 @@ module Haptic
       def test_select
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
-                <select is="haptic-select" name="dummy[color]" id="dummy_color">
+                <select is="haptic-select" name="color" id="color">
                   <option value="blue">Blue</option>
                   <option value="green">Green</option>
                 </select>
@@ -1295,7 +1485,43 @@ module Haptic
         )
       end
 
+      def test_select_on_form_on_form_with_object
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-dropdown-field for="dummy_color">
+              <div class="field-container">
+                <select is="haptic-select" name="dummy[color]" id="dummy_color">
+                  <option value="blue">Blue</option>
+                  <option value="green">Green</option>
+                </select>
+              </div>
+            </haptic-dropdown-field>
+          HTML
+          form(Dummy.new).select(:color, [%w[Blue blue], %w[Green green]])
+        )
+      end
+
       def test_select_dropdown
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-dropdown-field for="color">
+              <div class="field-container">
+                <haptic-select-dropdown>
+                  <input type="text" name="color" id="color">
+                  <button class="toggle haptic-field" type="button"></button>
+                  <div class="popover">
+                    <div class="scroll-container"></div>
+                  </div>
+                  <div class="backdrop"></div>
+                </haptic-select-dropdown>
+              </div>
+            </haptic-dropdown-field>
+          HTML
+          form.select_dropdown(:color, nil)
+        )
+      end
+
+      def test_select_dropdown_on_form_with_object
         assert_dom_equal(
           <<~HTML,
             <haptic-dropdown-field for="dummy_color">
@@ -1311,17 +1537,17 @@ module Haptic
               </div>
             </haptic-dropdown-field>
           HTML
-          form.select_dropdown(:color, nil)
+          form(Dummy.new).select_dropdown(:color, nil)
         )
       end
 
       def test_select_dropdown_with_choices
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
                 <haptic-select-dropdown>
-                  <input type="text" name="dummy[color]" id="dummy_color">
+                  <input type="text" name="color" id="color">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
@@ -1341,10 +1567,10 @@ module Haptic
       def test_select_dropdown_with_choices_as_hash
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
                 <haptic-select-dropdown>
-                  <input type="text" name="dummy[color]" id="dummy_color">
+                  <input type="text" name="color" id="color">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
@@ -1364,15 +1590,15 @@ module Haptic
       def test_select_dropdown_with_choices_and_options
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
                 <haptic-select-dropdown data-foo="bar">
-                  <input type="text" name="dummy[color]"
+                  <input type="text" name="color"
                     required="required">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
-                      <haptic-option value="blue">Blue</haptic-option>
+                      <haptic-option value="blue" checked="checked">Blue</haptic-option>
                       <haptic-option value="green">Green</haptic-option>
                     </div>
                   </div>
@@ -1386,7 +1612,8 @@ module Haptic
             [%w[Blue blue], %w[Green green]],
             data: { foo: 'bar' },
             id: nil,
-            required: true
+            required: true,
+            selected: 'blue'
           )
         )
       end
@@ -1394,10 +1621,10 @@ module Haptic
       def test_select_dropdown_with_block
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
                 <haptic-select-dropdown>
-                  <input type="text" name="dummy[color]" id="dummy_color">
+                  <input type="text" name="color" id="color">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
@@ -1420,10 +1647,10 @@ module Haptic
       def test_select_dropdown_with_disabled_value
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
                 <haptic-select-dropdown>
-                  <input type="text" name="dummy[color]" id="dummy_color">
+                  <input type="text" name="color" id="color">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
@@ -1443,10 +1670,10 @@ module Haptic
       def test_select_dropdown_with_multiple_disabled_values
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
                 <haptic-select-dropdown>
-                  <input type="text" name="dummy[color]" id="dummy_color">
+                  <input type="text" name="color" id="color">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
                     <div class="scroll-container">
@@ -1470,10 +1697,10 @@ module Haptic
       def test_disabled_select_dropdown
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field for="dummy_color">
+            <haptic-dropdown-field for="color">
               <div class="field-container">
                 <haptic-select-dropdown>
-                  <input type="text" name="dummy[color]" id="dummy_color"
+                  <input type="text" name="color" id="color"
                     disabled="disabled">
                   <button class="toggle haptic-field" type="button"></button>
                   <div class="popover">
@@ -1492,7 +1719,7 @@ module Haptic
       end
 
       def test_with_field_options
-        form = self.form
+        form = self.form(Dummy.new)
         assert_nil(
           form.with_field_options(data: { foo: 'bar' }) do
             assert_dom_equal(
@@ -1511,7 +1738,7 @@ module Haptic
       end
 
       def test_fields
-        form = self.form
+        form = self.form(Dummy.new)
         form.with_field_options(data: { foo: 'bar' }) do
           form.fields(:nested, builder: FormBuilder) do |nested_fields|
             assert_dom_equal(
@@ -1526,7 +1753,7 @@ module Haptic
       end
 
       def test_fields_for
-        form = self.form
+        form = self.form(Dummy.new)
         form.with_field_options(data: { foo: 'bar' }) do
           form.fields_for(:nested, nil, builder: FormBuilder) do |nested_fields|
             assert_dom_equal(
@@ -1542,11 +1769,8 @@ module Haptic
 
       private
 
-      def form(object = nil, options = {})
-        object, options = nil, object if object.is_a?(Hash)
-        object ||= Dummy.new
-
-        FormBuilder.new(object.class.model_name.param_key, object, self, options)
+      def form(object = nil, **options)
+        FormBuilder.new(object&.class&.model_name&.param_key, object, self, options)
       end
     end
   end

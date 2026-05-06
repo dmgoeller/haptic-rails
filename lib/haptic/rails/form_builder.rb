@@ -590,6 +590,7 @@ module Haptic
       #   has been changed.
       # - <code>:required</code> - If is set to <code>true</code>, an option with a non-empty
       #   value must be selected.
+      # - <code>:selected</code> - The value of the option to be selected initially.
       #
       # ==== Example
       #
