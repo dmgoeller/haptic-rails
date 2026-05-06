@@ -134,6 +134,14 @@ haptic-button-segment, haptic-chip {
   }
 }
 
+haptic-button-segment:not(:first-of-type) {
+  input.outlined::before {
+    content: '\200b';
+    pointer-events: none;
+    position: absolute;
+  }
+}
+
 /**********************************************************************
  * Dialogs
  **********************************************************************/

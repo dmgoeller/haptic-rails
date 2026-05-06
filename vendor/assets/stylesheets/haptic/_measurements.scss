@@ -79,6 +79,10 @@ $haptic-inline-field-with-label-min-height: 3rem !default;
  * Segmented buttons and chips
  **********************************************************************/
 
+haptic-segmented-button {
+  grid-gap: 1px;
+}
+
 haptic-button-segment, haptic-chip {
   $padding-left-right: haptic-measure(.5rem, .75rem);
   $icon-size: haptic-measure(1rem, 1.125rem);
@@ -120,8 +124,13 @@ haptic-button-segment, haptic-chip {
   }
 }
 
-haptic-segmented-button:not(.outlined) {
-  grid-gap: 1px;
+haptic-button-segment:not(:first-of-type) {
+  input.outlined::before {
+    height: calc(100% + 2px);
+    left: -1px;
+    top: -1px;
+    width: 1px;
+  }
 }
 
 /**********************************************************************
