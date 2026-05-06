@@ -392,7 +392,7 @@ class HapticNavigationController {
             case ' ': {
               const focusedIndex = this.#focusedIndex;
 
-              if (focusedIndex > 0) {
+              if (focusedIndex >= 0) {
                 this.#elementAt(focusedIndex).click();
                 event.preventDefault();
               }
