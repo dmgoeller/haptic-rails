@@ -353,8 +353,9 @@ haptic-button-segment, haptic-chip {
   }
 }
 
-haptic-button-segment:not(:first-of-type) {
-  input.outlined::before {
+haptic-button-segment.outlined {
+  &:not([disabled]):not(:last-of-type)::after,
+  &[disabled] + haptic-button-segment.outlined::before {
     @include haptic-outline-color('background-color');
   }
 }

@@ -124,11 +124,18 @@ haptic-button-segment, haptic-chip {
   }
 }
 
-haptic-button-segment:not(:first-of-type) {
-  input.outlined::before {
-    height: calc(100% + 2px);
+haptic-button-segment.outlined {
+  &:not([disabled]):not(:last-of-type)::after {
+    height: 100%;
+    right: -1px;
+    top: 0;
+    width: 1px;
+  }
+
+  &[disabled] + haptic-button-segment.outlined::before {
+    height: 100%;
     left: -1px;
-    top: -1px;
+    top: 0px;
     width: 1px;
   }
 }
