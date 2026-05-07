@@ -845,7 +845,7 @@ class HapticButtonSegmentElement extends HTMLElement {
   #control = null;
   #label = null;
 
-  #controlObserver = new HapticAttributesObserver(this, ['disabled']);
+  #controlObserver = new HapticAttributesObserver(this, ['disabled'], ['outlined']);
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
