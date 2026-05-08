@@ -791,7 +791,7 @@ class HapticButtonElement extends HTMLButtonElement {
       this.classList.add('haptic-button');
     }
     if (this.form instanceof HapticFormElement) {
-      this.form.controlAdded(this);
+      this.form.controlAddedCallback(this);
     }
   }
 
@@ -799,7 +799,7 @@ class HapticButtonElement extends HTMLButtonElement {
     this.#eventListeners.removeAll();
 
     if (this.form instanceof HapticFormElement) {
-      this.form.controlRemoved(this);
+      this.form.controlRemovedCallback(this);
     }
   }
 }
@@ -1622,14 +1622,14 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       }
     });
     if (this.form instanceof HapticFormElement) {
-      this.form.controlAdded(this);
+      this.form.controlAddedCallback(this);
     }
     super.connectedCallback();
   }
 
   disconnectedCallback() {
     if (this.form instanceof HapticFormElement) {
-      this.form.controlRemoved(this);
+      this.form.controlRemovedCallback(this);
     }
     super.disconnectedCallback();
     this.#eventListeners.removeAll();
@@ -2296,6 +2296,19 @@ class HapticFormElement extends HTMLFormElement {
     return this.#controls.values();
   }
 
+  get submitOnChange() {
+    return this.hasAttribute('data-submit-on-change');
+  }
+
+  set submitOnChange(value) {
+    if (value) {
+      this.setAttribute('data-submit-on-change', '');
+    } else {
+      this.removeAttribute('data-submit-on-change');
+    }
+    return value;
+  }
+
   set #locked(value) {
     for (let control of this.#controls) {
       if ('locked' in control) {
@@ -2329,7 +2342,7 @@ class HapticFormElement extends HTMLFormElement {
     this.#eventListeners.removeAll();
   }
 
-  controlAdded(control) {
+  controlAddedCallback(control) {
     this.#controls.add(control);
 
     if ((control instanceof HapticButtonElement ||
@@ -2361,22 +2374,26 @@ class HapticFormElement extends HTMLFormElement {
       this.#requiredFields.add(control);
       this.#refresh();
     }
+
+    this.#eventListeners.add(control, 'change', event => {
+      if (event.intercepted) {
+        delete event.intercepted;
+      } else
+      if (this.submitOnChange) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.intercepted = true;
+        this.startSubmitting({ submit: true, changeEvent: event });
+      }
+    }, { capture: true });
   }
 
-  controlRemoved(control) {
+  controlRemovedCallback(control) {
+    this.#eventListeners.remove(control);
     this.#controls.delete(control);
-
-    if (this.#requiredFields.has(control)) {
-      this.#eventListeners.remove(control)
-      this.#requiredFields.delete(control);
-    } else
-    if (this.#resetButtons.has(control)) {
-      this.#eventListeners.remove(control);
-      this.#resetButtons.delete(control);
-    } else
-    if (this.#submitButtons.has(control)) {
-      this.#submitButtons.delete(control);
-    }
+    this.#requiredFields.delete(control);
+    this.#resetButtons.delete(control);
+    this.#submitButtons.delete(control);
   }
 
   reset() {
@@ -2450,8 +2467,6 @@ class HapticAsyncErrorEvent extends Event {
 }
 
 class HapticAsyncFormElement extends HapticFormElement {
-  #eventListeners = new HapticEventListeners();
-
   constructor() {
     super();   
   }
@@ -2480,45 +2495,6 @@ class HapticAsyncFormElement extends HapticFormElement {
       this.removeAttribute('data-redirect');
     }
     return value;
-  }
-
-  get submitOnChange() {
-    return this.hasAttribute('data-submit-on-change');
-  }
-
-  set submitOnChange(value) {
-    if (value) {
-      this.setAttribute('data-submit-on-change', '');
-    } else {
-      this.removeAttribute('data-submit-on-change');
-    }
-    return value;
-  }
-
-  disconnectedCallback() {
-    this.#eventListeners.removeAll();
-    super.disconnectedCallback();
-  }
-
-  controlAdded(control) {
-    super.controlAdded(control);
-
-    this.#eventListeners.add(control, 'change', event => {
-      if (event.intercepted) {
-        delete event.intercepted;
-      } else
-      if (this.submitOnChange) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.intercepted = true;
-        this.startSubmitting({ submit: true, changeEvent: event });
-      }
-    }, { capture: true });
-  }
-
-  controlRemoved(control) {
-    this.#eventListeners.remove(control);
-    super.controlRemoved(control);
   }
 
   startSubmitting(options = {}) {
@@ -2665,13 +2641,13 @@ class HapticInputElement extends HTMLInputElement {
         this.#initialValue = this.value;
     }
     if (this.form instanceof HapticFormElement) {
-      this.form.controlAdded(this);
+      this.form.controlAddedCallback(this);
     }
   }
 
   disconnectedCallback() {
     if (this.form instanceof HapticFormElement) {
-      this.form.controlRemoved(this);
+      this.form.controlRemovedCallback(this);
     }
   }
 
@@ -2797,13 +2773,13 @@ class HapticListElement extends HTMLElement {
     this.#childNodesObserver.observe(this);
 
     if (this.form instanceof HapticFormElement) {
-      this.form.controlAdded(this);
+      this.form.controlAddedCallback(this);
     }
   }
 
   disconnectedCallback() {
     if (this.form instanceof HapticFormElement) {
-      this.form.controlRemoved(this);
+      this.form.controlRemovedCallback(this);
     }
     this.#childNodesObserver.disconnect();
     this.#navigationController.disconnect();
@@ -3101,13 +3077,13 @@ class HapticSelectElement extends HTMLSelectElement {
     this.refreshInitialValue();
 
     if (this.form instanceof HapticFormElement) {
-      this.form.controlAdded(this);
+      this.form.controlAddedCallback(this);
     }
   }
 
   disconnectedCallback() {
     if (this.form instanceof HapticFormElement) {
-      this.form.controlRemoved(this);
+      this.form.controlRemovedCallback(this);
     }
   }
 
@@ -3464,7 +3440,7 @@ class HapticTextAreaElement extends HTMLTextAreaElement {
       this.resize();
     });
     if (this.form instanceof HapticFormElement) {
-      this.form.controlAdded(this);
+      this.form.controlAddedCallback(this);
     }
   }
 
@@ -3472,7 +3448,7 @@ class HapticTextAreaElement extends HTMLTextAreaElement {
     this.#eventListeners.removeAll();
 
     if (this.form instanceof HapticFormElement) {
-      this.form.controlRemoved(this);
+      this.form.controlRemovedCallback(this);
     }
   }
 

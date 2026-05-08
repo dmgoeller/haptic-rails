@@ -17,7 +17,17 @@ module Haptic
             self,
             {}
           )
-          tag.form(**options[:html]) { yield form_builder }
+          tag.form(**options[:html]) do
+            yield form_builder if block_given?
+          end
+        end
+
+        def form_with(data: {}, html: {}, **options)
+          form_builder = options[:builder].new(nil, nil, self, {})
+
+          tag.form(**html.reverse_merge(data: data)) do
+            yield form_builder if block_given?
+          end
         end
 
         # #haptic_async_form_for
@@ -27,27 +37,84 @@ module Haptic
             <<~HTML,
               <form is="haptic-async-form"></form>
             HTML
-            haptic_async_form_for(Dummy.new) {}
+            haptic_async_form_for(Dummy.new)
           )
         end
 
-        def test_haptic_async_form_for_with_submit_on_change
+        def test_haptic_async_form_for_with_options
           assert_dom_equal(
             <<~HTML,
-              <form is="haptic-async-form" data-submit-on-change=""></form>
+              <form is="haptic-async-form" data-submit-on-change="" data-foo="bar"></form>
             HTML
-            haptic_async_form_for(Dummy.new, submit_on_change: true) {}
+            haptic_async_form_for(
+              Dummy.new,
+              submit_on_change: true,
+              html: { data: { foo: 'bar' } }
+            )
           )
         end
 
-        # #haptic_async_form_for
+        # #haptic_async_form_with
+
+        def test_haptic_async_form_with
+          assert_dom_equal(
+            <<~HTML,
+              <form is="haptic-async-form"></form>
+            HTML
+            haptic_async_form_with
+          )
+        end
+
+        def test_haptic_async_form_with_options
+          assert_dom_equal(
+            <<~HTML,
+              <form is="haptic-async-form" data-submit-on-change="" data-foo="bar"></form>
+            HTML
+            haptic_async_form_with(data: { foo: 'bar' }, submit_on_change: true)
+          )
+        end
+
+        # #haptic_form_for
 
         def test_haptic_form_for
           assert_dom_equal(
             <<~HTML,
               <form is="haptic-form"></form>
             HTML
-            haptic_form_for(Dummy.new) {}
+            haptic_form_for(Dummy.new)
+          )
+        end
+
+        def test_haptic_form_for_with_options
+          assert_dom_equal(
+            <<~HTML,
+              <form is="haptic-form" data-submit-on-change="" data-foo="bar"></form>
+            HTML
+            haptic_form_for(
+              Dummy.new,
+              submit_on_change: true,
+              html: { data: { foo: 'bar' } }
+            )
+          )
+        end
+
+        # #haptic_form_with
+
+        def test_haptic_form_with
+          assert_dom_equal(
+            <<~HTML,
+              <form is="haptic-form"></form>
+            HTML
+            haptic_form_with
+          )
+        end
+
+        def test_haptic_form_with_options
+          assert_dom_equal(
+            <<~HTML,
+              <form is="haptic-form" data-submit-on-change="" data-foo="bar"></form>
+            HTML
+            haptic_form_with(data: { foo: 'bar' }, submit_on_change: true)
           )
         end
 
