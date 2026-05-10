@@ -343,22 +343,23 @@ class HapticNavigationController {
 
   connect(target) {
     this.#eventListeners.add(target, 'focusin', () => {
-      if (!this.#suspended && !this.#focusedIndex >= 0) {
-        let elementToBeFocused = null;
+      if (!this.#suspended && this.#focusedIndex == -1) {
+        const elements = this.#elements;
+        let focusedIndex = -1;
 
-        for (let i = this.#elements.length - 1; i >= 0; i--) {
-          const element = this.#elements[i];
+        for (let i = elements.length - 1; i >= 0; i--) {
+          const element = elements[i];
 
           if (!element.disabled) {
-            elementToBeFocused = element;
+            focusedIndex = i;
 
             if (element.active) {
               break;
             }
           }
         }
-        if (elementToBeFocused) {
-          elementToBeFocused.focused = true;
+        if (focusedIndex != -1) {
+          this.#focusedIndex = focusedIndex;
         }
       }
       this.#focused = true;
