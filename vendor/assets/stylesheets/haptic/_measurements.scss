@@ -394,7 +394,7 @@ haptic-dropdown-field, haptic-text-field {
     }
   }
 
-  .error-message, .supporting-text {
+  & > .error-message, & > .supporting-text {
     margin:
       haptic-measure(
         .25rem .5rem 0 .5rem,
