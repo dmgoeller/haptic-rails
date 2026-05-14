@@ -642,7 +642,7 @@ class HapticNavigationController {
         case 'x': {
           if (container = containers.x) {
             if (index == 0) {
-              container.scrollLeft = 0;
+              container.scrollLeft = this.#getOffsetX(container);;
             } else {
               const containerRect = container.getBoundingClientRect();
               const elementRect = this.#getBoundingRect(this.#elementAt(index));
@@ -660,7 +660,7 @@ class HapticNavigationController {
         case 'y': {
           if (container = containers.y) {
             if (index == 0) {
-              container.scrollTop = 0;
+              container.scrollTop = this.#getOffsetY(container);;
             } else {
               const containerRect = container.getBoundingClientRect();
               const elementRect = this.#getBoundingRect(this.#elementAt(index));
@@ -684,7 +684,7 @@ class HapticNavigationController {
               const containerRect = container.getBoundingClientRect();
 
               if (index % gridSize.columns == 0) {
-                container.scrollLeft = 0;
+                container.scrollLeft = this.#getOffsetX(container);;
               } else
               if (elementRect.left < containerRect.left) {
                 container.scrollLeft -= containerRect.left - elementRect.left;
@@ -697,7 +697,7 @@ class HapticNavigationController {
               const containerRect = container.getBoundingClientRect();
 
               if (index < gridSize.columns) {
-                container.scrollTop = 0;
+                container.scrollTop = this.#getOffsetY(container);
               } else
               if (elementRect.top < containerRect.top) {
                 container.scrollTop -= containerRect.top - elementRect.top;
@@ -726,6 +726,16 @@ class HapticNavigationController {
     } else {
       return elementRect;
     }
+  }
+
+  #getOffsetX(container) {
+    return this.#target.getBoundingClientRect().left -
+      container.firstElementChild.getBoundingClientRect().left
+  }
+
+  #getOffsetY(container) {
+    return this.#target.getBoundingClientRect().top -
+      container.firstElementChild.getBoundingClientRect().top
   }
 
   #getOutlineOffset(element) {
