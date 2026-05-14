@@ -936,34 +936,8 @@ customElements.define('haptic-chip', HapticChipElement);
 
 class HapticDialogElement extends HTMLDialogElement {
   #form = null;
-  #buttons = null;
+  #controls = new Set();
   #eventListeners = new HapticEventListeners();
-
-  #mouseUpEventListener = event => {
-    const target = event.target;
-
-    if (target.getAttribute('type') === 'submit') {
-      this.#dispatchBeforeCloseByMouseEvent();
-    }
-    if (target.hasAttribute('command')) {
-      const command = target.getAttribute('command');
-
-      if (command === 'close' || command === 'request-close') {
-        this.#dispatchBeforeCloseByMouseEvent();
-      }
-    }
-    if (target.hasAttribute('data-command')) {
-      switch (target.getAttribute('data-command')) {
-        case 'close':
-          this.#dispatchBeforeCloseByMouseEvent();
-          this.close();
-          break;
-        case 'request-close':
-          this.#dispatchBeforeCloseByMouseEvent();
-          this.requestClose();
-      }
-    }
-  };
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
@@ -972,19 +946,45 @@ class HapticDialogElement extends HTMLDialogElement {
           this.#form = node;
         }
       } else
-      if (node instanceof HTMLButtonElement ||
-         (node instanceof HTMLInputElement && node.type === 'submit')) {
-        this.#eventListeners.add(node, 'mouseup', this.#mouseUpEventListener);
-        (this.#buttons ||= new Set()).add(node);
+      if (node instanceof HTMLButtonElement) {
+        const commands = ['close', 'request-close'];
+        const customCommands = ['cancel', 'close'];
+
+        this.#eventListeners.add(node, 'click', () => {
+          switch (node.getAttribute('data-command')) {
+            case 'cancel':
+              this.close();
+              this.#reset();
+              break;
+            case 'close':
+              this.close();
+          }
+        });
+        this.#eventListeners.add(node, 'mouseup', () => {
+          if (node.getAttribute('type') === 'submit' ||
+              commands.includes(node.getAttribute('command')) ||
+              customCommands.includes(node.getAttribute('data-command'))) {
+            this.#dispatchBeforeCloseByMouseEvent();
+          }
+        });
+        this.#controls.add(node);
+      } else
+      if (node instanceof HTMLInputElement) {
+        this.#eventListeners.add(node, 'mouseup', () => {
+          if (node.type === 'submit') {
+            this.#dispatchBeforeCloseByMouseEvent();
+          }
+        });
+        this.#controls.add(node);
       }
     },
     nodeRemoved: node => {
       if (node === this.#form) {
         this.#form = null;
       } else
-      if (this.#buttons?.has(node)) {
+      if (this.#controls?.has(node)) {
         this.#eventListeners.remove(node);
-        this.#buttons.delete(node);
+        this.#controls.delete(node);
       }
     }
   });
@@ -998,7 +998,7 @@ class HapticDialogElement extends HTMLDialogElement {
 
     // command="request-close"
     this.#eventListeners.add(this, 'cancel', () => {
-      this.#form?.reset();
+      this.#reset();
     })
     this.#childNodesObserver.observe(this);
   }
@@ -1010,6 +1010,10 @@ class HapticDialogElement extends HTMLDialogElement {
 
   #dispatchBeforeCloseByMouseEvent() {
     this.dispatchEvent(new Event('beforeclosebymouse'));
+  }
+
+  #reset() {
+    this.#form?.reset();
   }
 }
 customElements.define('haptic-dialog', HapticDialogElement, { extends: 'dialog' });
