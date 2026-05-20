@@ -526,7 +526,11 @@ module Haptic
         label = options.delete(:label)
         label = nil if label == true
 
-        dropdown_field_options = options.extract!(:invalid, *HAPTIC_FIELD_OPTIONS)
+        dropdown_field_options = options.extract!(
+          :error_message,
+          :invalid,
+          *HAPTIC_FIELD_OPTIONS
+        )
         dropdown_field_options[:id] = dropdown_field_options.delete(:field_id)
 
         dropdown_dialog_options = options.extract!(:open_to_top)

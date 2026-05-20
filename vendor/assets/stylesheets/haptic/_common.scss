@@ -363,8 +363,12 @@ haptic-dropdown-field, haptic-text-field {
     opacity: 0;
   }
 
-  &[invalid] .error-icon {
-    opacity: 1;
+  &[invalid] {
+    &.field-container, & > .field-container {
+      & > .error-icon {
+        opacity: 1;
+      }
+    }
   }
 
   &[disabled], fieldset:disabled & {

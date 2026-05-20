@@ -1371,17 +1371,17 @@ module Haptic
       def test_dropdown_field_with_options
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field focus-indicator="focus">
+            <haptic-dropdown-field id="field-id" focus-indicator="focus">
               <div class="field-container">
                 <haptic-dropdown-dialog open-to-top>
                   <div class="backdrop"></div>
                 </haptic-dropdown-dialog>
                 <label class="field-label">Label</label>
-
               </div>
             </haptic-dropdown-field>
           HTML
           form.dropdown_field(
+            field_id: 'field-id',
             focus_indicator: 'focus',
             label: 'Label',
             open_to_top: true
@@ -1401,6 +1401,28 @@ module Haptic
             </haptic-dropdown-field>
           HTML
           form.dropdown_field(label: true)
+        )
+      end
+
+      def test_dropdown_field_with_errors
+        assert_dom_equal(
+          <<~HTML,
+            <haptic-dropdown-field invalid>
+              <div class="field-container">
+                <haptic-dropdown-dialog>
+                  <div class="backdrop"></div>
+                </haptic-dropdown-dialog>
+                <div class="haptic-icon error-icon">error</div>
+              </div>
+              <div class="error-message">Message</div>
+            </haptic-dropdown-field>
+          HTML
+          form.dropdown_field(
+            invalid: true,
+            error_message: 'Message',
+            show_error_icon: true,
+            show_error_message: true
+          )
         )
       end
 
@@ -1426,7 +1448,7 @@ module Haptic
       def test_dropdown_field_with_block_and_options
         assert_dom_equal(
           <<~HTML,
-            <haptic-dropdown-field focus-indicator="focus">
+            <haptic-dropdown-field id="field-id" focus-indicator="focus">
               <div class="field-container">
                 <haptic-dropdown-dialog open-to-top>
                   <button class="toggle haptic-field" type="button" data-foo="bar">Text</button>
@@ -1439,6 +1461,7 @@ module Haptic
           HTML
           form.dropdown_field(
             data: { foo: 'bar' },
+            field_id: 'field-id',
             focus_indicator: 'focus',
             label: 'Label',
             open_to_top: true
