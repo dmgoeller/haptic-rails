@@ -267,6 +267,7 @@ class HapticNavigationController {
   #elements = [];
   #focused = false;
   #suspended = false;
+  #preventFocusVisible = false;
   #skipNextMouseEvent = false;
   #eventListeners = new HapticEventListeners();
 
@@ -343,26 +344,28 @@ class HapticNavigationController {
 
   connect(target) {
     this.#eventListeners.add(target, 'focusin', () => {
-      if (!this.#suspended && this.#focusedIndex == -1) {
-        const elements = this.#elements;
-        let focusedIndex = -1;
+      if (!this.#preventFocusVisible) {
+        if (!this.#suspended && this.#focusedIndex == -1) {
+          const elements = this.#elements;
+          let focusedIndex = -1;
 
-        for (let i = elements.length - 1; i >= 0; i--) {
-          const element = elements[i];
+          for (let i = elements.length - 1; i >= 0; i--) {
+            const element = elements[i];
 
-          if (!element.disabled) {
-            focusedIndex = i;
+            if (!element.disabled) {
+              focusedIndex = i;
 
-            if (element.active) {
-              break;
+              if (element.active) {
+                break;
+              }
             }
           }
+          if (focusedIndex != -1) {
+            this.#focusedIndex = focusedIndex;
+          }
         }
-        if (focusedIndex != -1) {
-          this.#focusedIndex = focusedIndex;
-        }
+        this.#focused = true;
       }
-      this.#focused = true;
     });
     this.#eventListeners.add(target, 'focusout', event => {
       if (!this.#target.contains(event.relatedTarget)) {
@@ -523,6 +526,16 @@ class HapticNavigationController {
         }
       }
     });
+    this.#eventListeners.add(target, 'mousedown', () => {
+      if (!this.#suspended) {
+        this.#preventFocusVisible = true;
+      }
+    });
+    this.#eventListeners.add(target, 'mouseup', () => {
+      if (!this.#suspended) {
+        this.#preventFocusVisible = false;
+      }
+    });
     this.#target = target;
   }
 
@@ -540,11 +553,6 @@ class HapticNavigationController {
   }
 
   add(element) {
-    this.#eventListeners.add(element, 'click', event => {
-      if (!this.#suspended) {
-        this.#focusedIndex = this.#indexOf(event.target);
-      }
-    });
     if (this.#mouse) {
       this.#eventListeners.add(element, 'mouseover', event => {
         if (this.#skipNextMouseEvent) {
