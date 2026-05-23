@@ -135,41 +135,6 @@ class HapticChildNodesObserver {
   }
 }
 
-class HapticLock {
-  static EVENT_TYPES_TO_BLOCK = ['keydown', 'keyup'];
-
-  #control;
-  #eventListener;
-
-  constructor(control) {
-    this.#control = control;
-    this.#eventListener = event => event.preventDefault();
-  }
-
-  get activated() {
-    return this.#control.hasAttribute('locked');
-  }
-
-  set activated(value) {
-    if (value) {
-      if (!this.#control.hasAttribute('locked')) {
-        for (let eventType of HapticLock.EVENT_TYPES_TO_BLOCK) {
-          this.#control.addEventListener(eventType, this.#eventListener);
-        }
-        this.#control.setAttribute('locked', 'locked');
-      }
-    } else {
-      if (this.#control.hasAttribute('locked')) {
-        for (let eventType of HapticLock.EVENT_TYPES_TO_BLOCK) {
-          this.#control.removeEventListener(eventType, this.#eventListener);
-        }
-        this.#control.removeAttribute('locked');
-      }
-    }
-    return value;
-  }
-}
-
 class HapticActivatable {
   #target;
 
@@ -267,7 +232,7 @@ class HapticNavigationController {
   #elements = [];
   #focused = false;
   #suspended = false;
-  #preventFocusVisible = false;
+  #preventKeyEvents = false;
   #skipNextMouseEvent = false;
   #eventListeners = new HapticEventListeners();
 
@@ -344,28 +309,26 @@ class HapticNavigationController {
 
   connect(target) {
     this.#eventListeners.add(target, 'focusin', () => {
-      if (!this.#preventFocusVisible) {
-        if (!this.#suspended && this.#focusedIndex == -1) {
-          const elements = this.#elements;
-          let focusedIndex = -1;
+      if (!this.#suspended && !this.#preventKeyEvents && this.#focusedIndex == -1) {
+        const elements = this.#elements;
+        let focusedIndex = -1;
 
-          for (let i = elements.length - 1; i >= 0; i--) {
-            const element = elements[i];
+        for (let i = elements.length - 1; i >= 0; i--) {
+          const element = elements[i];
 
-            if (!element.disabled) {
-              focusedIndex = i;
+          if (!element.disabled) {
+            focusedIndex = i;
 
-              if (element.active) {
-                break;
-              }
+            if (element.active) {
+              break;
             }
           }
-          if (focusedIndex != -1) {
-            this.#focusedIndex = focusedIndex;
-          }
         }
-        this.#focused = true;
+        if (focusedIndex != -1) {
+          this.#focusedIndex = focusedIndex;
+        }
       }
+      this.#focused = true;
     });
     this.#eventListeners.add(target, 'focusout', event => {
       if (!this.#target.contains(event.relatedTarget)) {
@@ -376,7 +339,7 @@ class HapticNavigationController {
       }
     });
     this.#eventListeners.add(target, 'keydown', event => {
-      if (!this.#suspended) {
+      if (!this.#suspended && !this.#preventKeyEvents) {
         const elements = this.#elements;
         const size = elements.length;
 
@@ -514,7 +477,7 @@ class HapticNavigationController {
       }
     });
     this.#eventListeners.add(target, 'keyup', event => {
-      if (!this.#suspended) {
+      if (!this.#suspended && !this.#preventKeyEvents) {
         const key = event.key;
 
         if (((key === 'ArrowLeft' || key === 'ArrowRight') &&
@@ -528,12 +491,12 @@ class HapticNavigationController {
     });
     this.#eventListeners.add(target, 'mousedown', () => {
       if (!this.#suspended) {
-        this.#preventFocusVisible = true;
+        this.#preventKeyEvents = true;
       }
     });
     this.#eventListeners.add(target, 'mouseup', () => {
       if (!this.#suspended) {
-        this.#preventFocusVisible = false;
+        this.#preventKeyEvents = false;
       }
     });
     this.#target = target;
@@ -765,19 +728,10 @@ class HapticButtonElement extends HTMLButtonElement {
   static observedAttributes = ['data-haptic-confirm'];
 
   #confirmed = null;
-  #lock = new HapticLock(this);
   #eventListeners = new HapticEventListeners();
 
   constructor() {
     super();
-  }
-
-  get locked() {
-    return this.#lock.activated;
-  }
-
-  set locked(value) {
-    return this.#lock.activated = value;
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -1044,7 +998,6 @@ class HapticDropdownElement extends HTMLElement {
   #backdropElement = null;
   #scrollContainer = null;
   #preventFocusVisible = false;
-  #lock = new HapticLock(this);
   #eventListeners = new HapticEventListeners();
 
   #toggleElementObserver = new HapticAttributesObserver(
@@ -1078,14 +1031,6 @@ class HapticDropdownElement extends HTMLElement {
 
   get disabled() {
     return this.hasAttribute('disabled');
-  }
-
-  get locked() {
-    return this.#lock.activated;
-  }
-
-  set locked(value) {
-    return this.#lock.activated = value;
   }
 
   get toggleElement() {
@@ -2387,15 +2332,6 @@ class HapticFormElement extends HTMLFormElement {
     return value;
   }
 
-  set #locked(value) {
-    for (let control of this.#controls) {
-      if ('locked' in control) {
-        control.locked = value;
-      }
-    }
-    return value;
-  }
-
   connectedCallback() {
     this.classList.add('haptic-form');
 
@@ -2405,8 +2341,8 @@ class HapticFormElement extends HTMLFormElement {
 
         const listener = () => {
           document.removeEventListener('turbo:submit-end', listener);
-          this.#locked = false;
           this.#isSubmitting = false;
+          this.#unlock();
         }
         document.addEventListener('turbo:submit-end', listener);
       } else {
@@ -2464,6 +2400,20 @@ class HapticFormElement extends HTMLFormElement {
         this.startSubmitting({ submit: true, changeEvent: event });
       }
     }, { capture: true });
+
+    this.#eventListeners.add(control, 'keydown', event => {
+      if (this.#isSubmitting) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }, { capture: true });
+
+    this.#eventListeners.add(control, 'keyup', event => {
+      if (this.#isSubmitting) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }, { capture: true });
   }
 
   controlRemovedCallback(control) {
@@ -2504,12 +2454,24 @@ class HapticFormElement extends HTMLFormElement {
   tryStartSubmitting(func) {
     if (!this.#isSubmitting) {
       this.#isSubmitting = true;
-      this.#locked = true;
+      this.#lock();
 
       func(() => {
-        this.#locked = false;
         this.#isSubmitting = false;
+        this.#unlock();
       });
+    }
+  }
+
+  #lock() {
+    for (let control of this.#controls) {
+      control.setAttribute('locked', 'locked');
+    }
+  }
+
+  #unlock() {
+    for (let control of this.#controls) {
+      control.removeAttribute('locked');
     }
   }
 
@@ -2668,18 +2630,9 @@ class HapticInputElement extends HTMLInputElement {
   static observedAttributes = ['disabled'];
 
   #initialValue = null;
-  #lock = new HapticLock(this);
 
   constructor() {
     super();
-  }
-
-  get locked() {
-    return this.#lock.activated;
-  }
-
-  set locked(value) {
-    return this.#lock.activated = value;
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -3136,18 +3089,9 @@ class HapticSelectElement extends HTMLSelectElement {
   static observedAttributes = ['disabled'];
 
   #initialValue = null;
-  #lock = new HapticLock(this);
 
   constructor() {
     super();
-  }
-
-  get locked() {
-    return this.#lock.activated;
-  }
-
-  set locked(value) {
-    return this.#lock.activated = value;
   }
 
   connectedCallback() {
@@ -3492,19 +3436,10 @@ customElements.define('haptic-tab-bar', HapticTabBarElement);
 
 class HapticTextAreaElement extends HTMLTextAreaElement {
   #initialValue = null;
-  #lock = new HapticLock(this);
   #eventListeners = new HapticEventListeners();
 
   constructor() {
     super();
-  }
-
-  get locked() {
-    return this.#lock.activated;
-  }
-
-  set locked(value) {
-    return this.#lock.activated = value;
   }
 
   connectedCallback() {
