@@ -2292,10 +2292,13 @@ customElements.define('haptic-text-field', HapticTextFieldElement);
 
 class HapticFormElement extends HTMLFormElement {
   #controls = new Set();
-  #requiredFields = new Set();
-  #resetButtons = new Set();
-  #submitButtons = new Set();
   #isSubmitting = false;
+  #changeEventHandler = null;
+  #changeOrInputEventHandler = null;
+  #clickEventHandler = null;
+  #keyEventHandler = null;
+  #mutationObservers = new Map();
+  #mutationObserverCallback = null;
   #eventListeners = new HapticEventListeners();
 
   constructor() {
@@ -2353,75 +2356,88 @@ class HapticFormElement extends HTMLFormElement {
   }
 
   disconnectedCallback() {
+    this.#mutationObservers.forEach(value => {
+      value.disconnect();
+    });
     this.#eventListeners.removeAll();
   }
 
   controlAddedCallback(control) {
     this.#controls.add(control);
 
-    if ((control instanceof HapticButtonElement ||
-         control instanceof HapticInputElement)) {
-      switch (control.type) {
-        case 'reset':
-          this.#eventListeners.add(control, 'click', () => {
-            this.reset();
-          });
-          this.#resetButtons.add(control);
-          break;
-        case 'submit':
-          this.#submitButtons.add(control);
-          this.#refresh();
+    const mutationObserver = new MutationObserver(
+      this.#mutationObserverCallback ||= () => {
+        this.#refresh();
       }
-    } else
-    if ((control instanceof HapticListElement ||
-         control instanceof HapticSelectDropdownElement ||
-         control instanceof HapticInputElement ||
-         control instanceof HapticTextAreaElement ||
-         control instanceof HapticSelectElement) &&
-        control.required) {
-      this.#eventListeners.add(control, 'change', () => {
-        this.#refresh();
-      });
-      this.#eventListeners.add(control, 'input', () => {
-        this.#refresh();
-      });
-      this.#requiredFields.add(control);
-      this.#refresh();
+    );
+    mutationObserver.observe(control, { attributeFilter: ['required', 'type'] });
+    this.#mutationObservers.set(control, mutationObserver);
+
+    if (control instanceof HapticButtonElement ||
+        control instanceof HapticInputElement) {
+      this.#eventListeners.add(control, 'click',
+        this.#clickEventHandler ||= event => {
+          if (event.target.type === 'reset') {
+            this.reset();
+          }
+        }
+      );
+    }
+    if (control instanceof HapticInputElement ||
+        control instanceof HapticTextAreaElement ||
+        control instanceof HapticListElement ||
+        control instanceof HapticSelectElement ||
+        control instanceof HapticSelectDropdownElement) {
+      this.#eventListeners.add(control, 'change',
+        this.#changeOrInputEventHandler ||= event => {
+          if (event.target.required) {
+            this.#refresh();
+          }
+        }
+      );
+      this.#eventListeners.add(control, 'input',
+        this.#changeOrInputEventHandler
+      );
     }
 
-    this.#eventListeners.add(control, 'change', event => {
-      if (event.intercepted) {
-        delete event.intercepted;
-      } else
-      if (this.submitOnChange) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.intercepted = true;
-        this.startSubmitting({ submit: true, changeEvent: event });
-      }
-    }, { capture: true });
+    this.#eventListeners.add(control, 'change',
+      this.#changeEventHandler ||= event => {
+        if (event.intercepted) {
+          delete event.intercepted;
+        } else
+        if (this.submitOnChange) {
+          event.preventDefault();
+          event.stopPropagation();
+          event.intercepted = true;
+          this.startSubmitting({ submit: true, changeEvent: event });
+        }
+      },
+      { capture: true }
+    );
 
-    this.#eventListeners.add(control, 'keydown', event => {
-      if (this.#isSubmitting) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    }, { capture: true });
+    this.#eventListeners.add(control, 'keydown',
+      this.#keyEventHandler ||= event => {
+        if (this.#isSubmitting) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      },
+      { capture: true }
+    );
+    this.#eventListeners.add(control, 'keyup',
+      this.#keyEventHandler,
+      { capture: true }
+    );
 
-    this.#eventListeners.add(control, 'keyup', event => {
-      if (this.#isSubmitting) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    }, { capture: true });
+    if (control.type === 'submit' || control.required) {
+      this.#refresh();
+    }
   }
 
   controlRemovedCallback(control) {
+    this.#mutationObservers.get(control)?.disconnect();
     this.#eventListeners.remove(control);
     this.#controls.delete(control);
-    this.#requiredFields.delete(control);
-    this.#resetButtons.delete(control);
-    this.#submitButtons.delete(control);
   }
 
   reset() {
@@ -2430,6 +2446,7 @@ class HapticFormElement extends HTMLFormElement {
         control.reset({ silent: true });
       }
     }
+    this.#refresh();
   }
 
   submit() {
@@ -2476,16 +2493,23 @@ class HapticFormElement extends HTMLFormElement {
   }
 
   #refresh() {
-    if (this.#submitButtons.size > 0) {
+    const submitButtons = new Set();
+
+    for (let control of this.#controls) {
+      if (control.type === 'submit') {
+        submitButtons.add(control);
+      }
+    }
+    if (submitButtons.size > 0) {
       let submittable = true;
 
-      for (let field of this.#requiredFields) {
-        if (!field.value) {
+      for (let control of this.#controls) {
+        if (control.required && !control.value) {
           submittable = false;
           break;
         }
-      }
-      for (let submitButton of this.#submitButtons) {
+      }     
+      for (let submitButton of submitButtons) {
           submitButton.disabled = !submittable;
       }
     }
@@ -3291,20 +3315,9 @@ class HapticTabsElement extends HTMLElement {
   #tabs = [];
   #tabContents = [];
   #mutationObservers = new Map();
+  #mutationObserverCallback = null;
   #eventListeners = new HapticEventListeners();
 
-  #mutationObserverCallback = mutationList => {
-    const length = Math.min(this.#tabs.length, this.#tabContents.length);
-
-    for (let mutationRecord of mutationList) {
-      for (let i = 0; i < length; i++) {
-        if (this.#tabs[i].target === mutationRecord.target) {
-          this.#tabContents[i].active = this.#tabs[i].active;
-          break;
-        }
-      }
-    }
-  }
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
@@ -3313,7 +3326,20 @@ class HapticTabsElement extends HTMLElement {
           this.#eventListeners.add(node, 'click', event => {
             event.preventDefault();
           });
-          const mutationObserver = new MutationObserver(this.#mutationObserverCallback);
+          const mutationObserver = new MutationObserver(
+            this.#mutationObserverCallback ||= mutationList => {
+              const length = Math.min(this.#tabs.length, this.#tabContents.length);
+
+              for (let mutationRecord of mutationList) {
+                for (let i = 0; i < length; i++) {
+                  if (this.#tabs[i].target === mutationRecord.target) {
+                    this.#tabContents[i].active = this.#tabs[i].active;
+                    break;
+                  }
+                }
+              }
+            }
+          );
           mutationObserver.observe(node, { attributeFilter: ['class'] });
           this.#mutationObservers.set(node, mutationObserver);
 
@@ -3366,9 +3392,9 @@ class HapticTabsElement extends HTMLElement {
   disconnectedCallback() {
     this.#childNodesObserver.disconnect();
 
-    for (let entry of this.#childNodesObserver.entries()) {
-      entry.value.disconnect();
-    }
+    this.#mutationObservers.forEach(value => {
+      value.disconnect();
+    });
     this.#eventListeners.removeAll();
   }
 }
