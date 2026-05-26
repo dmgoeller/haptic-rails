@@ -613,7 +613,7 @@ class HapticNavigationController {
         case 'x': {
           if (container = containers.x) {
             if (index == 0) {
-              container.scrollLeft = this.#getOffsetX(container);;
+              container.scrollLeft = this.#getOffsetX(container);
             } else {
               const containerRect = container.getBoundingClientRect();
               const elementRect = this.#getBoundingRect(this.#elementAt(index));
@@ -631,7 +631,7 @@ class HapticNavigationController {
         case 'y': {
           if (container = containers.y) {
             if (index == 0) {
-              container.scrollTop = this.#getOffsetY(container);;
+              container.scrollTop = this.#getOffsetY(container);
             } else {
               const containerRect = container.getBoundingClientRect();
               const elementRect = this.#getBoundingRect(this.#elementAt(index));
@@ -701,12 +701,21 @@ class HapticNavigationController {
 
   #getOffsetX(container) {
     return this.#target.getBoundingClientRect().left -
-      container.firstElementChild.getBoundingClientRect().left
+      this.#getFirstVisibleChild(container).getBoundingClientRect().left;
   }
 
   #getOffsetY(container) {
     return this.#target.getBoundingClientRect().top -
-      container.firstElementChild.getBoundingClientRect().top
+      this.#getFirstVisibleChild(container).getBoundingClientRect().top;
+  }
+
+  #getFirstVisibleChild(container) {
+    for (let child of container.children) {
+      if (window.getComputedStyle(child).display !== 'none') {
+        return child;
+      }
+    }
+    return null;
   }
 
   #getOutlineOffset(element) {
