@@ -230,6 +230,7 @@ class HapticNavigationController {
   #mouse = false;
   #target = null;
   #elements = [];
+  #stickyHeaders = null;
   #focused = false;
   #suspended = false;
   #preventKeyEvents = false;
@@ -551,6 +552,14 @@ class HapticNavigationController {
     return false;
   }
 
+  addStickyHeader(element) {
+    (this.#stickyHeaders ||= new Set()).add(element);
+  }
+
+  removeStickyHeader(element) {
+    this.#stickyHeaders?.delete(element);
+  }
+
   focusFirst() {
     if (!this.#suspended) {
       for (let i = 0; i < this.#elements.length; i++) {
@@ -615,14 +624,14 @@ class HapticNavigationController {
             if (index == 0) {
               container.scrollLeft = this.#getOffsetX(container);
             } else {
-              const containerRect = container.getBoundingClientRect();
+              const scrollRect = this.#getScrollRect(container);
               const elementRect = this.#getBoundingRect(this.#elementAt(index));
 
-              if (elementRect.left < containerRect.left) {
-                container.scrollLeft -= containerRect.left - elementRect.left;
+              if (elementRect.left < scrollRect.left) {
+                container.scrollLeft -= scrollRect.left - elementRect.left;
               } else
-              if (elementRect.right > containerRect.right) {
-                container.scrollLeft += elementRect.right - containerRect.right;
+              if (elementRect.right > scrollRect.right) {
+                container.scrollLeft += elementRect.right - scrollRect.right;
               }
             }
           }
@@ -633,14 +642,14 @@ class HapticNavigationController {
             if (index == 0) {
               container.scrollTop = this.#getOffsetY(container);
             } else {
-              const containerRect = container.getBoundingClientRect();
+              const scrollRect = this.#getScrollRect(container);
               const elementRect = this.#getBoundingRect(this.#elementAt(index));
 
-              if (elementRect.top < containerRect.top) {
-                container.scrollTop -= containerRect.top - elementRect.top;
+              if (elementRect.top < scrollRect.top) {
+                container.scrollTop -= scrollRect.top - elementRect.top;
               } else
-              if (elementRect.bottom > containerRect.bottom) {
-                container.scrollTop += elementRect.bottom - containerRect.bottom
+              if (elementRect.bottom > scrollRect.bottom) {
+                container.scrollTop += elementRect.bottom - scrollRect.bottom;
               }
             }
           }
@@ -652,29 +661,31 @@ class HapticNavigationController {
             const gridSize = this.#gridSize;
 
             if (container = containers.x) {
-              const containerRect = container.getBoundingClientRect();
-
               if (index % gridSize.columns == 0) {
-                container.scrollLeft = this.#getOffsetX(container);;
-              } else
-              if (elementRect.left < containerRect.left) {
-                container.scrollLeft -= containerRect.left - elementRect.left;
-              } else
-              if (elementRect.right > containerRect.right) {
-                container.scrollLeft += elementRect.right - containerRect.right;
+                container.scrollLeft = this.#getOffsetX(container);
+              } else {
+                const scrollRect = this.#getScrollRect(container);
+
+                if (elementRect.left < scrollRect.left) {
+                  container.scrollLeft -= scrollRect.left - elementRect.left;
+                } else
+                if (elementRect.right > scrollRect.right) {
+                  container.scrollLeft += elementRect.right - scrollRect.right;
+                }
               }
             }
             if (container = containers.y) {
-              const containerRect = container.getBoundingClientRect();
-
               if (index < gridSize.columns) {
                 container.scrollTop = this.#getOffsetY(container);
-              } else
-              if (elementRect.top < containerRect.top) {
-                container.scrollTop -= containerRect.top - elementRect.top;
-              } else
-              if (elementRect.bottom > containerRect.bottom) {
-                container.scrollTop += elementRect.bottom - containerRect.bottom;
+              } else {
+                const scrollRect = this.#getScrollRect(container);
+
+                if (elementRect.top < scrollRect.top) {
+                  container.scrollTop -= scrollRect.top - elementRect.top;
+                } else
+                if (elementRect.bottom > scrollRect.bottom) {
+                  container.scrollTop += elementRect.bottom - scrollRect.bottom;
+                }
               }
             }
           }
@@ -687,35 +698,49 @@ class HapticNavigationController {
     const elementRect = element.getBoundingClientRect();
     const outlineOffset = this.#getOutlineOffset(element);
 
-    if (outlineOffset > 0) {
-      return new DOMRect(
-        elementRect.x - outlineOffset,
-        elementRect.y - outlineOffset,
-        elementRect.width + 2 * outlineOffset,
-        elementRect.height + 2 * outlineOffset
-      );
-    } else {
-      return elementRect;
+    return outlineOffset <= 0 ? elementRect : new DOMRect(
+      elementRect.x - outlineOffset,
+      elementRect.y - outlineOffset,
+      elementRect.width + 2 * outlineOffset,
+      elementRect.height + 2 * outlineOffset
+    )
+  }
+
+  #getScrollRect(container) {
+    const containerRect = container.getBoundingClientRect();
+    let y = null;
+
+    if (this.#stickyHeaders) {
+      for (let stickyHeader of this.#stickyHeaders) {
+        if (window.getComputedStyle(stickyHeader).display !== 'none') {
+          const bottom = stickyHeader.getBoundingClientRect().bottom;
+
+          if (y == null || bottom > y) {
+            y = bottom;
+          }
+        }
+      }
     }
+    return y == null ? containerRect : new DOMRect(
+      containerRect.x,
+      y,
+      containerRect.width,
+      containerRect.height - (y - containerRect.y)
+    );
   }
 
   #getOffsetX(container) {
-    return this.#target.getBoundingClientRect().left -
-      this.#getFirstVisibleChild(container).getBoundingClientRect().left;
+    return this.#target === container ? 0 :
+      this.#target.getBoundingClientRect().left +
+      container.scrollLeft -
+      container.getBoundingClientRect().left;
   }
 
   #getOffsetY(container) {
-    return this.#target.getBoundingClientRect().top -
-      this.#getFirstVisibleChild(container).getBoundingClientRect().top;
-  }
-
-  #getFirstVisibleChild(container) {
-    for (let child of container.children) {
-      if (window.getComputedStyle(child).display !== 'none') {
-        return child;
-      }
-    }
-    return null;
+    return this.#target === container ? 0 :
+      this.#target.getBoundingClientRect().top +
+      container.scrollTop -
+      container.getBoundingClientRect().top;
   }
 
   #getOutlineOffset(element) {
@@ -3170,33 +3195,43 @@ class HapticTableElement extends HTMLTableElement {
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
-      if (node instanceof HapticTableRowElement) {
-        if (node.hasAttribute('data-href')) {
-          this.tabIndex = Math.max(this.tabIndex, 0);
+      if (node instanceof HTMLElement) {
+        if (node instanceof HapticTableRowElement) {
+          if (node.hasAttribute('data-href')) {
+            this.tabIndex = Math.max(this.tabIndex, 0);
 
-          if (!this.#navigationController.connected) {
-            this.#navigationController.connect(this);
+            if (!this.#navigationController.connected) {
+              this.#navigationController.connect(this);
+            }
+            this.#navigationController.add(node);
           }
-          this.#navigationController.add(node);
+        } else
+        if (node.tagName === 'THEAD') {
+          this.#navigationController.addStickyHeader(node);
         }
-      } else
-      if (HapticTableElement.isInteractiveElement(node)) {
-        this.#eventListeners.add(node, 'focusin', () => {
-          this.#navigationController.suspend();
-        });
-        this.#eventListeners.add(node, 'focusout', () => {
-          this.#navigationController.resume();
-        });
+        } else
+        if (HapticTableElement.isInteractiveElement(node)) {
+          this.#eventListeners.add(node, 'focusin', () => {
+            this.#navigationController.suspend();
+          });
+          this.#eventListeners.add(node, 'focusout', () => {
+            this.#navigationController.resume();
+          });
       }
     },
     nodeRemoved: node => {
-      if (node instanceof HTMLTableRowElement) {
-        if (this.#navigationController.connected) {
-          this.#navigationController.remove(node);
+      if (node instanceof HTMLElement) {
+        if (node instanceof HTMLTableRowElement) {
+          if (this.#navigationController.connected) {
+            this.#navigationController.remove(node);
+          }
+        } else
+        if (node.tagName === 'THEAD') {
+          this.#navigationController.removeStickyHeader(node);
+        } else
+        if (HapticTableElement.isInteractiveElement(node)) {
+          this.#eventListeners.remove(node);
         }
-      } else
-      if (HapticTableElement.isInteractiveElement(node)) {
-        this.#eventListeners.remove(node);
       }
     }
   });
@@ -3291,12 +3326,18 @@ class HapticTableLikeElement extends HTMLElement {
           this.#navigationController.connect(this);
         }
         this.#navigationController.add(node);
+      } else
+      if (node instanceof HTMLElement && node.classList.contains('table-header')) {
+        this.#navigationController.addStickyHeader(node);
       }
     },
     nodeRemoved: node => {
-      if (node instanceof HTMLAnchorElement) {
-        if (this.#navigationController.connected) {
+      if (this.#navigationController.connected) {
+        if (node instanceof HTMLAnchorElement && node.classList.contains('table-row')) {
           this.#navigationController.remove(node);
+        } else
+        if (node instanceof HTMLElement && node.classList.contains('table-header')) {
+          this.#navigationController.removeStickyHeader(node);
         }
       }
     }
