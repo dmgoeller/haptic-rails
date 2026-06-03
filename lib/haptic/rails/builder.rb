@@ -69,6 +69,8 @@ module Haptic
         super(object_name, method, field_options(options, is: 'haptic-textarea'))
       end
 
+      alias_method :textarea, :text_area
+
       private
 
       def field_options(options, is: nil)

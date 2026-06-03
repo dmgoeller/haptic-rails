@@ -162,6 +162,8 @@ module Haptic
         end
       end
 
+      alias_method :textarea, :text_area
+
       ##
       # :method: date_field
       # :call-seq: date_field(method, options = {})
