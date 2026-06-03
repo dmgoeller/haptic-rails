@@ -28,11 +28,15 @@ module Haptic
         super(object_name, method, field_options(options, is: 'haptic-input'), checked_value, unchecked_value)
       end
 
+      alias_method :checkbox, :check_box
+
       def collection_check_boxes(object_name, method, collection, value_method, text_method, options = {}, html_options = {}, &block)
         ActionView::Helpers::Tags::CollectionCheckBoxes.new(
           object_name, method, self, collection, value_method, text_method, options, html_options
         ).render(&block)
       end
+
+      alias_method :collection_checkboxes, :collection_check_boxes
 
       def collection_radio_buttons(object_name, method, collection, value_method, text_method, options = {}, html_options = {}, &block)
         ActionView::Helpers::Tags::CollectionRadioButtons.new(
