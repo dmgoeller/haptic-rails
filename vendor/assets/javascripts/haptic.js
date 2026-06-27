@@ -3522,12 +3522,12 @@ class HapticTextAreaElement extends HTMLTextAreaElement {
     this.classList.add('haptic-field');
     this.#initialValue = this.value;
 
-    this.#eventListeners.add(this, 'input', () => {
-      this.resize();
-    });
-    this.#eventListeners.add(window, 'resize', () => {
-      this.resize();
-    });
+    const resize = () => { this.resize(); }
+    this.#eventListeners.add(document, 'DOMContentLoaded', resize);
+    this.#eventListeners.add(document, 'turbo:before-render', resize);
+    this.#eventListeners.add(this, 'input', resize);
+    this.#eventListeners.add(window, 'resize', resize);
+
     if (this.form instanceof HapticFormElement) {
       this.form.controlAddedCallback(this);
     }
