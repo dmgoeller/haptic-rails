@@ -405,6 +405,11 @@ haptic-table-like {
     }
   }
 
+  .table-footer .table-row {
+    border-top-style: solid;
+    border-top-width: 1px;
+  }
+
   &:focus-visible .table-row.focused::after {
     border-style: solid;
     border-width: 2px;

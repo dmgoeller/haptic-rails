@@ -591,7 +591,8 @@ haptic-list-item {
  **********************************************************************/
 
 table.haptic-table thead,
-haptic-table-like .table-header {
+haptic-table-like .table-header,
+haptic-table-like .table-footer {
   position: sticky;
   z-index: 1;
 }

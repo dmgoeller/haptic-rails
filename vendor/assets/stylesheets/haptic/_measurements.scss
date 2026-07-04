@@ -1041,6 +1041,10 @@ haptic-list-item {
     top: 0;
   }
 
+  haptic-table-like .table-footer {
+    bottom: 0;
+  }
+
   table.haptic-table {
     th, td {
       padding-left: $padding-left-right;
