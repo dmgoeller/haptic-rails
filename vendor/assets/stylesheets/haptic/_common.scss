@@ -223,6 +223,17 @@ haptic-select-dropdown {
   }
 }
 
+haptic-dropdown-dialog {
+  & > .popover > .dialog-segment {
+    flex: none;
+
+    &.scrollable {
+      flex: auto;
+      overflow: auto;
+    }
+  }
+}
+
 haptic-select-dropdown {
   & > input {
     display: none;

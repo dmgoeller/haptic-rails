@@ -1314,6 +1314,24 @@ class HapticDropdownDialogElement extends HapticDropdownElement {
     super.elementRemovedCallback(element);
   }
 
+  showPopover() {
+    super.showPopover();
+
+    if (this.popoverElement && this.toggleElement && this.scrollContainer) {
+      const toggleRect = this.toggleElement.getBoundingClientRect();
+      const scrollRect = this.scrollContainer.getBoundingClientRect();
+
+      let space;
+
+      if (this.openToTop) {
+        space = toggleRect.top - scrollRect.top;
+      } else {
+        space = scrollRect.bottom - toggleRect.bottom - 6;
+      }
+      this.popoverElement.style.maxHeight = space > 0 ? `${space}px` : null;
+    }
+  }
+
   cancel() {
     for (let field of this.#fields) {
       field.reset();
