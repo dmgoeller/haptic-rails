@@ -1041,6 +1041,7 @@ haptic-list-item {
     top: 0;
   }
 
+  table.haptic-table tfoot,
   haptic-table-like .table-footer {
     bottom: 0;
   }
@@ -1071,7 +1072,7 @@ haptic-list-item {
       }
     }
 
-    td {
+    tbody td {
       padding-bottom: $cell-padding-top-bottom;
       padding-top: $cell-padding-top-bottom;
 
@@ -1094,6 +1095,18 @@ haptic-list-item {
         &::before, &::after {
           width: calc(100% - #{$padding-left-right});
         }
+      }
+    }
+
+    tfoot td {
+      padding-bottom: $cell-padding-top-bottom;
+      padding-top: calc(#{$cell-padding-top-bottom} + 1px);
+
+      &::before {
+        height: 1px;
+        left: 0;
+        top: 0;
+        width: 100%;
       }
     }
   }

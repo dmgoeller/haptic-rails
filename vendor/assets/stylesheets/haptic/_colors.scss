@@ -844,12 +844,14 @@ haptic-list {
  **********************************************************************/
 
 table.haptic-table {
-  th::before {
-    @include haptic-light-dark(
-      'border-color',
-      #00000030,
-      #FFFFFF30
-    );
+  th, tfoot td {
+    &::before {
+      @include haptic-light-dark(
+        'border-color',
+        #00000030,
+        #FFFFFF30
+      );
+    }
   }
 
   tbody tr:nth-of-type(even) td::before {

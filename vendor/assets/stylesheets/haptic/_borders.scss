@@ -371,6 +371,11 @@ table.haptic-table {
     }
   }
 
+  tfoot td::before {
+    border-top-style: solid;
+    border-top-width: 1px;
+  }
+
   &:focus-visible tr.focused td {
     &::after {
       border-bottom-style: solid;
