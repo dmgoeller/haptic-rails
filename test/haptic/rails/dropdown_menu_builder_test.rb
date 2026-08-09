@@ -7,50 +7,6 @@ module Haptic
     class DropdownMenuBuilderTest < ActionView::TestCase
       include Helpers::DropdownTagHelper
 
-      # #toggle
-
-      def test_toggle
-        assert_dom_equal(
-          <<~HTML,
-            <button is="haptic-button" type="button" class="toggle">
-              Text
-            </button>
-          HTML
-          dropdown_menu_builder.toggle('Text')
-        )
-      end
-
-      def test_toggle_with_block
-        assert_dom_equal(
-          <<~HTML,
-            <button is="haptic-button" type="button" class="toggle">Text</button>
-          HTML
-          dropdown_menu_builder.toggle { 'Text' }
-        )
-      end
-
-      def test_toggle_with_class
-        assert_dom_equal(
-          <<~HTML,
-            <button is="haptic-button" type="button" class="toggle foo">
-              Text
-            </button>
-          HTML
-          dropdown_menu_builder.toggle('Text', class: 'foo')
-        )
-      end
-
-      def test_toggle_with_options
-        assert_dom_equal(
-          <<~HTML,
-            <button is="haptic-button" type="button" class="toggle" disabled="disabled">
-              Text
-            </button>
-          HTML
-          dropdown_menu_builder.toggle('Text', disabled: true)
-        )
-      end
-
       # #menu
 
       def test_menu

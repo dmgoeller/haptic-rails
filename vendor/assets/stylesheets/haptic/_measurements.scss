@@ -1124,13 +1124,30 @@ haptic-list-item {
       }
     }
 
-    .table-body .table-row {
-      &:before, &:after {
+    .table-body {
+      .table-row::before, a.table-row::after {
         box-sizing: border-box;
         height: 100%;
         left: $padding-left-right;
         top: 0;
         width: calc(100% - 2 * #{$padding-left-right});
+      }
+
+      a.primary-action {
+        margin:
+          $cell-padding-top-bottom * -1
+          $cell-padding-left-right * -1;
+        padding:
+          $cell-padding-top-bottom
+          $cell-padding-left-right;
+
+        &::after {
+          box-sizing: border-box;
+          height: 100%;
+          left: 0;
+          top: 0;
+          width: 100%;
+        }
       }
     }
   }

@@ -2,14 +2,6 @@ $haptic-button-border-radius: haptic-measure(.25rem, .5rem) !default;
 $haptic-field-border-radius: .25rem !default;
 
 /**********************************************************************
- * Grids
- **********************************************************************/
-
-haptic-grid {
-  outline: none;
-}
-
-/**********************************************************************
  * Badges
  **********************************************************************/
 
@@ -172,8 +164,6 @@ haptic-option {
 .haptic-field {
   border-radius: $haptic-field-border-radius;
   border-width: 0;
-  outline-style: solid;
-  outline-width: 0;
 
   &.outlined {
     border-style: solid;
@@ -181,15 +171,13 @@ haptic-option {
   }
 }
 
-haptic-text-field .clear-button {
-  border-radius: 50%;
-  border: none;
-  outline: none;
-}
-
 haptic-dropdown-field, haptic-text-field {
   &.field-container, & > .field-container {
     border-radius: $haptic-field-border-radius;
+
+    .haptic-field {
+      outline: none;
+    }
   }
 
   &[focus-indicator] {
@@ -210,6 +198,12 @@ haptic-dropdown-field, haptic-text-field {
       }
     }
   }
+}
+
+haptic-text-field .clear-button {
+  border-radius: 50%;
+  border: none;
+  outline: none;
 }
 
 /**********************************************************************
@@ -268,6 +262,7 @@ haptic-dropdown-field, haptic-text-field {
 
 a.haptic-link {
   border-radius: .25rem;
+  outline-style: solid;
   outline-width: 2px;
 }
 
@@ -298,6 +293,14 @@ haptic-list-item {
       border-top-width: 1px;
     }
   }
+}
+
+/**********************************************************************
+ * Grids
+ **********************************************************************/
+
+haptic-grid {
+  outline: none;
 }
 
 /**********************************************************************
@@ -404,20 +407,23 @@ haptic-table-like {
     border-bottom-width: 1px;
   }
 
-  .table-body .table-row {
-    &::before, &::after {
+  .table-body {
+    .table-row::before {
       border-radius: .25rem;
+    }
+
+    a.table-row, a.primary-action {
+      &::after {
+        border-radius: .25rem;
+        border-style: solid;
+        border-width: 2px;
+      }
     }
   }
 
   .table-footer .table-row {
     border-top-style: solid;
     border-top-width: 1px;
-  }
-
-  &:focus-visible .table-row.focused::after {
-    border-style: solid;
-    border-width: 2px;
   }
 }
 

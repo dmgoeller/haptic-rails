@@ -3,10 +3,6 @@
 module Haptic
   module Rails
     class DropdownMenuBuilder < DropdownBuilder
-      def initialize(builder) # :nodoc:
-        super(builder, is: 'haptic-button')
-      end
-
       # :call-seq: menu(**options, &block)
       #
       # Creates the menu to be poped up. If a block is given, it is called with an instance

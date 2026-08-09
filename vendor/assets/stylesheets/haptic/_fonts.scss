@@ -174,8 +174,8 @@ haptic-list-item .supporting-text {
  * Tables
  **********************************************************************/
 
-haptic-table-like {
-  a.table-row {
+haptic-table-like .table-body {
+  a.table-row, a.primary-action {
     text-decoration: inherit;
   }
 }

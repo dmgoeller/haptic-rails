@@ -20,8 +20,9 @@ module Haptic
         @builder.tag.button(
           content,
           **@toggle_options.merge(
+            is: 'haptic-dropdown-toggle-button',
             type: 'button',
-            class: ['toggle', @toggle_class, options[:class]],
+            class: [@toggle_class, options[:class]].compact.presence,
             **options.except(:class)
           ),
           &block

@@ -93,18 +93,10 @@ $haptic-dark-mode: true !default;
 @mixin haptic-focused-color($property: 'outline-color') {
   #{$property}: transparent;
 
-  &:focus-visible {
+  &:focus-visible,
+  haptic-grid:focus-visible &.focused,
+  haptic-table-like:focus-visible &.focused {
     @include haptic-primary-color($property);
-  }
-}
-
-/**********************************************************************
- * Grids
- **********************************************************************/
-
-haptic-grid {
-  &:focus-visible .focused {
-    @include haptic-primary-color('outline-color');
   }
 }
 
@@ -187,7 +179,9 @@ haptic-grid {
 
   &:focus-visible,
   haptic-dropdown-dialog:focus-visible &.toggle,
-  haptic-dropdown-menu:focus-visible &.toggle {
+  haptic-dropdown-menu:focus-visible &.toggle,
+  haptic-grid:focus-visible &.focused,
+  haptic-table-like:focus-visible &.focused {
     &.filled {
       outline-color: $haptic-primary-color;
 
@@ -489,7 +483,6 @@ haptic-option {
 
 .haptic-field {
   background-color: transparent;
-  outline-color: transparent;
 
   @include haptic-intense-foreground-color('caret-color');
   @include haptic-intense-foreground-color('color');
@@ -555,7 +548,9 @@ haptic-dropdown-field, haptic-text-field {
           background-color: transparent;
         }
       }
-      &[focused] {
+      &[focused],
+      haptic-grid:focus-visible &.focused,
+      haptic-table-like:focus-visible &.focused {
         &.field-container, & > .field-container {
           &::after {
             @include haptic-primary-color('background-color');
@@ -574,7 +569,9 @@ haptic-dropdown-field, haptic-text-field {
       &.field-container, & > .field-container {
         outline-color: transparent;
       }
-      &[focused] {
+      &[focused],
+      haptic-grid:focus-visible &.focused,
+      haptic-table-like:focus-visible &.focused {
         &.field-container, & > .field-container {
           @include haptic-primary-color('outline-color');
         }
@@ -630,7 +627,7 @@ haptic-text-field {
  **********************************************************************/
 
 .haptic-checkbox, .haptic-radio-button {
-  @include haptic-focused-color();
+  @include haptic-focused-color;
 
   &, &::after {
     background-color: transparent;
@@ -674,7 +671,7 @@ haptic-text-field {
  **********************************************************************/
 
 .haptic-switch {
-  @include haptic-focused-color();
+  @include haptic-focused-color;
 
   background-color: transparent;
 
@@ -743,8 +740,11 @@ haptic-text-field {
  **********************************************************************/
 
 a.haptic-link {
+  @include haptic-focused-color;
+
   &, &:visited {
-    @include haptic-focused-color();
+    @include haptic-primary-color;
+    @include haptic-focused-color;
   }
 }
 
@@ -878,20 +878,32 @@ haptic-table-like {
     }
   }
 
-  .table-body .table-row {
-    color: inherit;
+  .table-body {
+    .table-row {
+      &:nth-of-type(even)::before {
+        @include haptic-light-dark(
+          'background-color',
+          #00000010,
+          #FFFFFF10
+        );
+      }
+    }
 
-    &:nth-of-type(even):before {
-      @include haptic-light-dark(
-        'background-color',
-        #00000010,
-        #FFFFFF10
-      );
+    a.table-row, a.primary-action {
+      color: inherit;
+
+      &::after {
+        border-color: transparent;
+      }
     }
   }
 
-  &:focus-visible .table-row.focused::after {
-    @include haptic-primary-color('border-color');
+  &:focus-visible .table-body {
+    a.table-row, a.primary-action {
+      &.focused::after {
+        @include haptic-primary-color('border-color');
+      }
+    }
   }
 }
 

@@ -31,14 +31,6 @@ $haptic-popover-z-index: 10000 !default;
 }
 
 /**********************************************************************
- * Grids
- **********************************************************************/
-
-haptic-grid {
-  display: grid;
-}
-
-/**********************************************************************
  * Badges
  **********************************************************************/
 
@@ -598,7 +590,7 @@ haptic-list-item {
 }
 
 /**********************************************************************
- * Tables
+ * Tables and grids
  **********************************************************************/
 
 table.haptic-table thead,
@@ -627,14 +619,22 @@ table.haptic-table {
   }
 }
 
-haptic-table-like .table-body .table-row {
-  position: relative;
+haptic-table-like .table-body {
+  .table-row, a.primary-action {
+    position: relative;
+  }
 
-  &::before, &::after {
+  .table-row::before,
+  a.table-row::after,
+  a.primary-action::after {
     content: '\200b';
     pointer-events: none;
     position: absolute;
   }
+}
+
+haptic-grid {
+  display: grid;
 }
 
 /**********************************************************************

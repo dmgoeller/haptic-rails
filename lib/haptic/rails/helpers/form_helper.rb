@@ -87,11 +87,15 @@ module Haptic
         def haptic_select_dropdown(object_name, method, haptic_options, options = {})
           options = options.symbolize_keys
           field_options = options.extract!(:disabled, :id, :required)
-          toggle_class = ['toggle', 'haptic-field', options.delete(:class)]
+          toggle_class = ['haptic-field', options.delete(:class)]
 
           haptic_select_dropdown_tag(
             text_field(object_name, method, field_options) +
-              tag.button(type: 'button', class: toggle_class) +
+              tag.button(
+                type: 'button',
+                is: 'haptic-dropdown-toggle-button',
+                class: toggle_class
+              ) +
               tag.div(
                 tag.div(haptic_options, class: 'scroll-container'),
                 class: 'popover'

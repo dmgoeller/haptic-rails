@@ -207,21 +207,44 @@ class HapticFocusable {
   }
 
   set focused(value) {
-    const classList = this.#target.classList;
+    const target = this.#target;
+    const classList = target.classList;
 
     if (value && !classList.contains('focused')) {
       classList.add('focused');
     } else
     if (!value && classList.contains('focused')) {
       classList.remove('focused');
+
+      if (target instanceof HapticDropdownToggleButtonElement) {
+        target.dropdownElement?.hidePopover();
+      }
     }
     return value;
   }
 
   disconnect() {
-    this.#mutationObserver?.disconnect();
     this.#target.tabIndex = this.#originalTabIndex;
+    this.#mutationObserver?.disconnect();
     this.#target = null;
+  }
+
+  handleKeydownEvent(event) {
+    if (typeof this.#target.handleKeydownEvent === 'function') {
+      this.#target.handleKeydownEvent(event);
+      return event.defaultPrevented;
+    } else {
+      return false;
+    }
+  }
+
+  handleKeyupEvent(event) {
+    if (typeof this.#target.handleKeyupEvent === 'function') {
+      this.#target.handleKeyupEvent(event);
+      return event.defaultPrevented;
+    } else {
+      return false;
+    }
   }
 }
 
@@ -230,10 +253,11 @@ class HapticNavigationController {
   #mouse = false;
   #target = null;
   #elements = [];
-  #stickyHeaders = null;
-  #focused = false;
+  #headers = null;
+  #footers = null;
+  #focused = false; // TODO: Can #focused be removed?
   #suspended = false;
-  #preventKeyEvents = false;
+  #keyEventsPrevented = false;
   #skipNextMouseEvent = false;
   #eventListeners = new HapticEventListeners();
 
@@ -273,32 +297,12 @@ class HapticNavigationController {
   }
 
   get #gridSize() {
-    const columns = window.getComputedStyle(this.#target)
-      .gridTemplateColumns.split(' ').length;
+    const columns = this.#target.navGridColumns;
 
     return {
       columns: columns,
       rows: Math.ceil(this.#elements.length / columns)
     };
-  }
-
-  get #scrollContainers() {
-    let scrollContainerX = null, scrollContainerY = null;
-
-    for (let element = this.#target; element; element = element.parentElement) {
-      const style = getComputedStyle(element);
-
-      if (style.overflowX !== 'visible' || element.tagName === 'BODY') {
-        scrollContainerX ||= element;
-      }
-      if (style.overflowY !== 'visible' || element.tagName === 'BODY') {
-        scrollContainerY ||= element;
-      }
-      if (scrollContainerX !== null && scrollContainerY !== null) {
-        break;
-      }
-    }
-    return { x: scrollContainerX, y: scrollContainerY }
   }
 
   constructor(options = {}) {
@@ -310,26 +314,29 @@ class HapticNavigationController {
 
   connect(target) {
     this.#eventListeners.add(target, 'focusin', () => {
-      if (!this.#suspended && !this.#preventKeyEvents && this.#focusedIndex == -1) {
-        const elements = this.#elements;
-        let focusedIndex = -1;
+      if (!this.#suspended && !this.#keyEventsPrevented) {
+        let focusedIndex = this.#focusedIndex;
 
-        for (let i = elements.length - 1; i >= 0; i--) {
-          const element = elements[i];
+        if (focusedIndex == -1) {
+          const elements = this.#elements;
 
-          if (!element.disabled) {
-            focusedIndex = i;
+          for (let i = elements.length - 1; i >= 0; i--) {
+            const element = elements[i];
 
-            if (element.active) {
-              break;
+            if (!element.disabled) {
+              focusedIndex = i;
+
+              if (element.active) {
+                break;
+              }
             }
           }
+          if (focusedIndex != -1) {
+            this.#focusedIndex = focusedIndex;
+          }
         }
-        if (focusedIndex != -1) {
-          this.#focusedIndex = focusedIndex;
-        }
+        this.#focused = true;
       }
-      this.#focused = true;
     });
     this.#eventListeners.add(target, 'focusout', event => {
       if (!this.#target.contains(event.relatedTarget)) {
@@ -340,164 +347,180 @@ class HapticNavigationController {
       }
     });
     this.#eventListeners.add(target, 'keydown', event => {
-      if (!this.#suspended && !this.#preventKeyEvents) {
+      if (!this.#suspended && !this.#keyEventsPrevented) {
         const elements = this.#elements;
         const size = elements.length;
 
         if (size > 0 && this.#focused) {
-          const key = event.key;
+          const focusedIndex = this.#focusedIndex;
+          const focusedElement = elements[focusedIndex];
 
-          switch (key) {
-            case 'Enter': {
-              const form = this.#target.form;
+          if (!(focusedElement?.handleKeydownEvent(event))) {
+            const key = event.key;
 
-              if (form) {
-                form.requestSubmit();
-                event.preventDefault();
-                break;
-              }
-            }
-            case ' ': {
-              const focusedIndex = this.#focusedIndex;
+            switch (key) {
+              case 'Enter': {
+                const form = this.#target.form;
 
-              if (focusedIndex >= 0) {
-                this.#elementAt(focusedIndex).click();
-                event.preventDefault();
-              }
-              break;
-            }
-            case 'ArrowDown':
-            case 'ArrowLeft':
-            case 'ArrowRight':
-            case 'ArrowUp': {
-              let newFocusedIndex = null;
-
-              switch (this.#direction) {
-                case 'x':
-                case 'y': {
-                  if ((this.#direction === 'x' && key === 'ArrowLeft') ||
-                      (this.#direction === 'y' && key === 'ArrowUp')) {
-                    for (let i = 0; i < size; i++) {
-                      const element = elements[i];
-
-                      if (!element.disabled) {
-                        if (element.focused) {
-                          break;
-                        } else {
-                          newFocusedIndex = i;
-                        }
-                      }
-                    }
-                    event.preventDefault();
-                    event.stopPropagation();
-                  } else
-                  if ((this.#direction === 'x' && key === 'ArrowRight') ||
-                      (this.#direction === 'y' && key === 'ArrowDown')) {
-                    for (let i = size - 1; i >= 0; i--) {
-                      const element = elements[i];
-
-                      if (!element.disabled) {
-                        if (element.focused) {
-                          break;
-                        } else {
-                          newFocusedIndex = i;
-                        }
-                      }
-                    }
-                    event.preventDefault();
-                    event.stopPropagation();
-                  }
+                if (form) {
+                  form.requestSubmit();
+                  event.preventDefault();
                   break;
                 }
-                case 'both': {
-                  const focusedIndex = this.#focusedIndex;
-                  const gridSize = this.#gridSize;
+              }
+              case ' ': {
+                if (focusedIndex >= 0) {
+                  this.#elementAt(focusedIndex).click();
+                  event.preventDefault();
+                }
+                break;
+              }
+              case 'ArrowDown':
+              case 'ArrowLeft':
+              case 'ArrowRight':
+              case 'ArrowUp': {
+                let captured = false;
+                let newFocusedIndex = null;
 
-                  switch(key) {
-                    case 'ArrowLeft': {
-                      const rowBegin = Math.floor(
-                        focusedIndex / gridSize.columns
-                      ) * gridSize.columns;
+                switch (this.#direction) {
+                  case 'x':
+                  case 'y': {
+                    if ((this.#direction === 'x' && key === 'ArrowLeft') ||
+                        (this.#direction === 'y' && key === 'ArrowUp')) {
+                      for (let i = 0; i < size; i++) {
+                        const element = elements[i];
 
-                      for (let i = focusedIndex - 1; i >= rowBegin; i--) {
-                        if (!elements[i].disabled) {
-                          newFocusedIndex = i;
-                          break;
+                        if (!element.disabled) {
+                          if (element.focused) {
+                            break;
+                          } else {
+                            newFocusedIndex = i;
+                          }
                         }
                       }
-                      break;
-                    }
-                    case 'ArrowRight': {
-                      const rowEnd = Math.min(
-                        (Math.floor(focusedIndex / gridSize.columns) + 1) *
-                          gridSize.columns - 1,
-                        elements.length - 1
-                      );
-                      for (let i = focusedIndex + 1; i <= rowEnd; i++) {
-                        if (!elements[i].disabled) {
-                          newFocusedIndex = i;
-                          break;
-                        }
-                      }
-                      break;
-                    }
-                    case 'ArrowUp': {
-                      for (let i = focusedIndex - gridSize.columns;
-                          i >= 0;
-                          i -= gridSize.columns) {
-                        if (!elements[i].disabled) {
-                          newFocusedIndex = i;
-                          break;
-                        }
-                      }
-                      break;
-                    }
-                    case 'ArrowDown': {
-                      for (let i = focusedIndex + gridSize.columns;
-                          i < elements.length;
-                          i += gridSize.columns) {
-                        if (!this.#elements[i].disabled) {
-                          newFocusedIndex = i;
-                          break;
-                        }
-                      }
-                    }
-                  } // switch (key)
+                      captured = true;
+                    } else
+                    if ((this.#direction === 'x' && key === 'ArrowRight') ||
+                        (this.#direction === 'y' && key === 'ArrowDown')) {
+                      for (let i = size - 1; i >= 0; i--) {
+                        const element = elements[i];
 
+                        if (!element.disabled) {
+                          if (element.focused) {
+                            break;
+                          } else {
+                            newFocusedIndex = i;
+                          }
+                        }
+                      }
+                      captured = true;
+                    }
+                    break;
+                  }
+                  case 'both': {
+                    const gridSize = this.#gridSize;
+
+                    switch(key) {
+                      case 'ArrowLeft': {
+                        const rowBegin = Math.floor(
+                          focusedIndex / gridSize.columns
+                        ) * gridSize.columns;
+
+                        for (let i = focusedIndex - 1; i >= rowBegin; i--) {
+                          if (!elements[i].disabled) {
+                            newFocusedIndex = i;
+                            break;
+                          }
+                        }
+                        break;
+                      }
+                      case 'ArrowRight': {
+                        const rowEnd = Math.min(
+                          (Math.floor(focusedIndex / gridSize.columns) + 1) *
+                            gridSize.columns - 1,
+                          elements.length - 1
+                        );
+                        for (let i = focusedIndex + 1; i <= rowEnd; i++) {
+                          if (!elements[i].disabled) {
+                            newFocusedIndex = i;
+                            break;
+                          }
+                        }
+                        break;
+                      }
+                      case 'ArrowUp': {
+                        for (let i = focusedIndex - gridSize.columns;
+                            i >= 0;
+                            i -= gridSize.columns) {
+                          if (!elements[i].disabled) {
+                            newFocusedIndex = i;
+                            break;
+                          }
+                        }
+                        break;
+                      }
+                      case 'ArrowDown': {
+                        for (let i = focusedIndex + gridSize.columns;
+                            i < elements.length;
+                            i += gridSize.columns) {
+                          if (!this.#elements[i].disabled) {
+                            newFocusedIndex = i;
+                            break;
+                          }
+                        }
+                      }
+                    } // switch (key)
+                    captured = true;
+                  }
+                } // switch (this.#direction)
+
+                if (newFocusedIndex !== null) {
+                  this.#focusedIndex = newFocusedIndex;
+                }
+                if (captured) {
+                  if (this.#target !== Document.activeElement) {
+                    this.#target.focus();
+                  }
                   event.preventDefault();
                   event.stopPropagation();
                 }
-              } // switch (this.#direction)
-
-              if (newFocusedIndex !== null) {
-                this.#focusedIndex = newFocusedIndex;
               }
-            }
-          } // switch (key)
+            } // switch (key)
+          }
         }
       }
     });
     this.#eventListeners.add(target, 'keyup', event => {
-      if (!this.#suspended && !this.#preventKeyEvents) {
-        const key = event.key;
+      if (!this.#suspended && !this.#keyEventsPrevented) {
+        const elements = this.#elements;
+        const size = elements.length;
 
-        if (((key === 'ArrowLeft' || key === 'ArrowRight') &&
-             (this.#direction === 'x' || this.#direction === 'both')) ||
-           ((key === 'ArrowUp' || key === 'ArrowDown') &&
-             (this.#direction === 'y' || this.#direction === 'both'))) {
-          event.preventDefault();
-          event.stopPropagation();
+        if (size > 0 && this.#focused) {
+          const focusedIndex = this.#focusedIndex;
+          const focusedElement = elements[focusedIndex];
+
+          if (!(focusedElement?.handleKeyupEvent(event))) {
+            const key = event.key;
+
+            if (((key === 'ArrowLeft' || key === 'ArrowRight') &&
+                (this.#direction === 'x' || this.#direction === 'both')) ||
+              ((key === 'ArrowUp' || key === 'ArrowDown') &&
+                (this.#direction === 'y' || this.#direction === 'both'))) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }
         }
       }
     });
     this.#eventListeners.add(target, 'mousedown', () => {
       if (!this.#suspended) {
-        this.#preventKeyEvents = true;
+        this.#keyEventsPrevented = true;
       }
     });
     this.#eventListeners.add(target, 'mouseup', () => {
       if (!this.#suspended) {
-        this.#preventKeyEvents = false;
+        this.#keyEventsPrevented = false;
       }
     });
     this.#target = target;
@@ -517,6 +540,16 @@ class HapticNavigationController {
   }
 
   add(element) {
+    this.#eventListeners.add(element, 'focusin', () => {
+      if (!this.#suspended) {
+        this.#focusedIndex = this.#indexOf(element);
+
+        if (this.#target !== Document.activeElement) {
+          this.#target.focus();
+        }
+        this.#focused = true;
+      }
+    });
     if (this.#mouse) {
       this.#eventListeners.add(element, 'mouseover', event => {
         if (this.#skipNextMouseEvent) {
@@ -524,10 +557,8 @@ class HapticNavigationController {
         } else
         if (!this.#suspended) {
           this.#focusedIndex = this.#indexOf(event.target);
-
-          if (!this.#target.focused) {
-            this.#target.focus();
-          }
+          this.#target.focus();
+          this.#focused = true;
         }
       });
       this.#eventListeners.add(element, 'mouseout', () => {
@@ -552,12 +583,20 @@ class HapticNavigationController {
     return false;
   }
 
-  addStickyHeader(element) {
-    (this.#stickyHeaders ||= new Set()).add(element);
+  addHeader(element) {
+    (this.#headers ||= new Set()).add(element);
   }
 
-  removeStickyHeader(element) {
-    this.#stickyHeaders?.delete(element);
+  addFooter(element) {
+    (this.#footers ||= new Set()).add(element);
+  }
+
+  removeHeader(element) {
+    this.#headers?.delete(element);
+  }
+
+  removeFooter(element) {
+    this.#footers?.delete(element);
   }
 
   focusFirst() {
@@ -615,56 +654,28 @@ class HapticNavigationController {
 
   #scrollIntoView(index) {
     if (index != null && index >= 0 && index < this.#elements.length) {
-      const containers = this.#scrollContainers;
-      let container = null
-
       switch (this.#direction) {
         case 'x': {
-          if (container = containers.x) {
-            if (index == 0) {
-              container.scrollLeft = this.#getOffsetX(container);
-            } else {
-              const scrollRect = this.#getScrollRect(container);
-              const elementRect = this.#getBoundingRect(this.#elementAt(index));
+          let container = null;
 
-              if (elementRect.left < scrollRect.left) {
-                container.scrollLeft -= scrollRect.left - elementRect.left;
-              } else
-              if (elementRect.right > scrollRect.right) {
-                container.scrollLeft += elementRect.right - scrollRect.right;
-              }
+          for (let e = this.#target; e; e = e.parentElement) {
+            if (getComputedStyle(e).overflowX !== 'visible' || e.tagName === 'BODY') {
+              container = e;
+              break;
             }
           }
-          break;
-        }
-        case 'y': {
-          if (container = containers.y) {
-            if (index == 0) {
-              container.scrollTop = this.#getOffsetY(container);
-            } else {
-              const scrollRect = this.#getScrollRect(container);
-              const elementRect = this.#getBoundingRect(this.#elementAt(index));
+          if (container) {
+            const scrollRect = this.#getScrollRect(container);
 
-              if (elementRect.top < scrollRect.top) {
-                container.scrollTop -= scrollRect.top - elementRect.top;
-              } else
-              if (elementRect.bottom > scrollRect.bottom) {
-                container.scrollTop += elementRect.bottom - scrollRect.bottom;
+            switch (index) {
+              case 0: {
+                if (this.#getBoundingRect(this.#target).left <= scrollRect.left) {
+                  container.scrollLeft = this.#getOffsetX(container);
+                  break;
+                }
               }
-            }
-          }
-          break;
-        }
-        case 'both': {
-          if (containers.x || containers.y) {
-            const elementRect = this.#getBoundingRect(this.#elementAt(index));
-            const gridSize = this.#gridSize;
-
-            if (container = containers.x) {
-              if (index % gridSize.columns == 0) {
-                container.scrollLeft = this.#getOffsetX(container);
-              } else {
-                const scrollRect = this.#getScrollRect(container);
+              default: {
+                const elementRect = this.#getBoundingRect(this.#elementAt(index));
 
                 if (elementRect.left < scrollRect.left) {
                   container.scrollLeft -= scrollRect.left - elementRect.left;
@@ -674,17 +685,87 @@ class HapticNavigationController {
                 }
               }
             }
-            if (container = containers.y) {
-              if (index < gridSize.columns) {
-                container.scrollTop = this.#getOffsetY(container);
-              } else {
-                const scrollRect = this.#getScrollRect(container);
+          }
+          break;
+        }
+        case 'y': {
+          let container = null;
+
+          for (let e = this.#target; e; e = e.parentElement) {
+            if (getComputedStyle(e).overflowY !== 'visible' ||  e.tagName === 'BODY') {
+              container = e;
+              break;
+            }
+          }
+          if (container) {
+            const scrollRect = this.#getScrollRect(container);
+
+            switch (index) {
+              case 0: {
+                if (this.#getBoundingRect(this.#target).top <= scrollRect.top) {
+                  container.scrollTop = this.#getOffsetY(container);
+                  break;
+                }
+              }
+              default: {
+                const elementRect = this.#getBoundingRect(this.#elementAt(index));
 
                 if (elementRect.top < scrollRect.top) {
                   container.scrollTop -= scrollRect.top - elementRect.top;
                 } else
                 if (elementRect.bottom > scrollRect.bottom) {
                   container.scrollTop += elementRect.bottom - scrollRect.bottom;
+                }
+              }
+            }
+          }
+          break;
+        }
+        case 'both': {
+          let containerX = null, containerY = null;
+
+          for (let e = this.#target; e; e = e.parentElement) {
+            const style = getComputedStyle(e);
+
+            if (style.overflowX !== 'visible' || e.tagName === 'BODY') {
+              containerX ||= e;
+            }
+            if (style.overflowY !== 'visible' || e.tagName === 'BODY') {
+              containerY ||= e;
+            }
+            if (containerX !== null && containerY !== null) {
+              break;
+            }
+          }
+          if (containerX || containerY) {
+            const elementRect = this.#getBoundingRect(this.#elementAt(index));
+            const gridSize = this.#gridSize;
+
+            if (containerX) {
+              if (index % gridSize.columns == 0) {
+                containerX.scrollLeft = this.#getOffsetX(containerX);
+              } else {
+                const scrollRect = this.#getScrollRect(containerX);
+
+                if (elementRect.left < scrollRect.left) {
+                  containerX.scrollLeft -= scrollRect.left - elementRect.left;
+                } else
+                if (elementRect.right > scrollRect.right) {
+                  containerX.scrollLeft += elementRect.right - scrollRect.right;
+                }
+              }
+            }
+            if (containerY) {
+              if (index < gridSize.columns) {
+                containerY.scrollTop = this.#getOffsetY(containerY);
+              } else {
+                const scrollRect = this.#getScrollRect(containerY);
+
+                if (elementRect.top < scrollRect.top) {
+                  containerY.scrollTop -= scrollRect.top - elementRect.top;
+                } else
+                if (elementRect.bottom > scrollRect.bottom) {
+                  containerY.scrollTop += elementRect.bottom - scrollRect.bottom;
                 }
               }
             }
@@ -707,26 +788,26 @@ class HapticNavigationController {
   }
 
   #getScrollRect(container) {
-    const containerRect = container.getBoundingClientRect();
-    let y = null;
+    const rect = container.getBoundingClientRect();
 
-    if (this.#stickyHeaders) {
-      for (let stickyHeader of this.#stickyHeaders) {
-        if (window.getComputedStyle(stickyHeader).display !== 'none') {
-          const bottom = stickyHeader.getBoundingClientRect().bottom;
+    if (this.#headers || this.#footers) {
+      let y = rect.y, height = rect.height;
 
-          if (y == null || bottom > y) {
-            y = bottom;
-          }
+      for (let header of this.#headers) {
+        const headerRect = header.getBoundingClientRect();
+
+        if (headerRect.bottom > y) {
+          y = headerRect.bottom;
         }
+        height -= headerRect.height;
       }
+      for (let footer of this.#footers) {
+        height -= footer.getBoundingClientRect().height;
+      }
+      return new DOMRect(rect.x, y, rect.width, height);
+    } else {
+      return rect;
     }
-    return y == null ? containerRect : new DOMRect(
-      containerRect.x,
-      y,
-      containerRect.width,
-      containerRect.height - (y - containerRect.y)
-    );
   }
 
   #getOffsetX(container) {
@@ -1027,15 +1108,15 @@ customElements.define('haptic-dialog', HapticDialogElement, { extends: 'dialog' 
 class HapticDropdownElement extends HTMLElement {
   static observedAttributes = ['disabled'];
 
-  #toggleElement = null;
+  #toggleButton = null;
   #popoverElement = null;
   #backdropElement = null;
   #scrollContainer = null;
   #preventFocusVisible = false;
   #eventListeners = new HapticEventListeners();
 
-  #toggleElementObserver = new HapticAttributesObserver(
-    this, ['disabled'], ['filled', 'inline', 'outlined']
+  #toggleButtonObserver = new HapticAttributesObserver(
+    this, ['disabled'], ['filled', 'focused', 'inline', 'outlined']
   );
 
   #scrollContainerObserver = new ResizeObserver(
@@ -1059,16 +1140,12 @@ class HapticDropdownElement extends HTMLElement {
     }
   });
 
-  constructor() {
-    super();
-  }
-
   get disabled() {
     return this.hasAttribute('disabled');
   }
 
-  get toggleElement() {
-    return this.#toggleElement;
+  get toggleButton() {
+    return this.#toggleButton;
   }
 
   get popoverElement() {
@@ -1077,6 +1154,10 @@ class HapticDropdownElement extends HTMLElement {
 
   get scrollContainer() {
     return this.#scrollContainer;
+  }
+
+  constructor() {
+    super();
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -1099,11 +1180,11 @@ class HapticDropdownElement extends HTMLElement {
         this.hidePopover({ cancel: true });
       }
     });
+    this.#eventListeners.add(this, 'keydown', event => {
+      this.handleKeydownEvent(event);
+    });
     this.#eventListeners.add(this, 'keyup', event => {
-      if (event.key === 'Escape') {
-        this.hidePopover({ cancel: true });
-        event.preventDefault();
-      }
+      this.handleKeyupEvent(event);
     });
     this.#childNodesObserver.observe(this);
   }
@@ -1115,10 +1196,9 @@ class HapticDropdownElement extends HTMLElement {
   }
 
   elementAddedCallback(element) {
-    const classList = element.classList;
-
-    if (classList.contains('toggle')) {
-      if (!this.#toggleElement) {
+    if (element instanceof HapticDropdownToggleButtonElement) {
+      if (!this.#toggleButton) {
+        element.dropdownElement = this;
         element.classList.add('embedded');
 
         this.#eventListeners.add(element, 'mousedown', () => {
@@ -1145,16 +1225,16 @@ class HapticDropdownElement extends HTMLElement {
           }
           event.preventDefault();
         });
-        this.#toggleElementObserver.observe(element);
-        this.#toggleElement = element;
+        this.#toggleButtonObserver.observe(element);
+        this.#toggleButton = element;
       }
     } else
-    if (classList.contains('popover')) {
+    if (element.classList.contains('popover')) {
       if (!this.#popoverElement) {
         this.#popoverElement = element;
       }
     } else
-    if (classList.contains('backdrop')) {
+    if (element.classList.contains('backdrop')) {
       if (!this.#backdropElement) {
         this.#eventListeners.add(element, 'click', event => {
           this.hidePopover({ cancel: true });
@@ -1167,10 +1247,10 @@ class HapticDropdownElement extends HTMLElement {
 
   elementRemovedCallback(element) {
     switch (element) {
-      case this.#toggleElement:
+      case this.#toggleButton:
         this.#eventListeners.remove(element);
-        this.#toggleElementObserver.disconnect();
-        this.#toggleElement = null;
+        this.#toggleButtonObserver.disconnect();
+        this.#toggleButton = null;
         break;
       case this.#popoverElement:
         this.#popoverElement = null;
@@ -1178,6 +1258,17 @@ class HapticDropdownElement extends HTMLElement {
       case this.#backdropElement:
         this.#eventListeners.remove(element);
         this.#backdropElement = null;
+    }
+  }
+
+  handleKeydownEvent(event) {
+  }
+
+  handleKeyupEvent(event) {
+    if (event.key === 'Escape') {
+      this.hidePopover({ cancel: true });
+      this.toggleButton.focus();
+      event.preventDefault();
     }
   }
 
@@ -1207,13 +1298,13 @@ class HapticDropdownElement extends HTMLElement {
   }
 
   focus(options = {}) {
-    if (this.toggleElement) {
+    if (this.toggleButton) {
       if (options.focusVisible === false) {
         this.#preventFocusVisible = true;
-        this.toggleElement.focus();
+        this.toggleButton.focus();
         this.#preventFocusVisible = false;
       } else {
-        this.toggleElement.focus();
+        this.toggleButton.focus();
         this.setAttribute('focused', 'focused');
       }
     }
@@ -1238,6 +1329,44 @@ class HapticDropdownElement extends HTMLElement {
 }
 customElements.define('haptic-dropdown', HapticDropdownElement);
 
+class HapticDropdownToggleButtonElement extends HTMLButtonElement {
+  dropdownElement = null;
+  navigatingElement = null;
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    if (!this.classList.contains('haptic-icon-button') &&
+        !this.classList.contains('haptic-field')) {
+      this.classList.add('haptic-button');
+    }
+    this.classList.add('toggle');
+  }
+
+  handleKeydownEvent(event) {
+    this.dropdownElement?.handleKeydownEvent(event);
+  }
+
+  handleKeyupEvent(event) {
+    this.dropdownElement?.handleKeyupEvent(event);
+  }
+
+  focus(options) {
+    if (this.navigatingElement) {
+      this.navigatingElement.focus(options);
+    } else {
+      super.focus(options);
+    }
+  }
+}
+customElements.define(
+  'haptic-dropdown-toggle-button',
+  HapticDropdownToggleButtonElement,
+  { extends: 'button' }
+);
+
 class HapticDropdownDialogElement extends HapticDropdownElement {
   #fields = new Set();
   #resetButtons = new Set();
@@ -1258,26 +1387,6 @@ class HapticDropdownDialogElement extends HapticDropdownElement {
       this.removeAttribute('open-to-top');
     }
     return value;
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-
-    this.#eventListeners.add(this, 'keydown', event => {
-      if (!this.disabled && !this.locked && !this.isOpen()) {
-        if (event.key === 'ArrowDown') {
-          event.preventDefault();
-        }
-      }
-    });
-    this.#eventListeners.add(this, 'keyup', event => {
-      if (!this.disabled && !this.locked && !this.isOpen()) {
-        if (event.key === 'ArrowDown') {
-          this.showPopover();
-          event.preventDefault();
-        }
-      }
-    });
   }
 
   disconnectedCallback() {
@@ -1314,11 +1423,32 @@ class HapticDropdownDialogElement extends HapticDropdownElement {
     super.elementRemovedCallback(element);
   }
 
+  handleKeydownEvent(event) {
+    super.handleKeydownEvent(event);
+
+    if (!this.disabled && !this.locked && !this.isOpen()) {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+      }
+    }
+  }
+
+  handleKeyupEvent(event) {
+    super.handleKeyupEvent(event);
+
+    if (!this.disabled && !this.locked && !this.isOpen()) {
+      if (event.key === 'ArrowDown') {
+        this.showPopover();
+        event.preventDefault();
+      }
+    }
+  }
+
   showPopover() {
     super.showPopover();
 
-    if (this.popoverElement && this.toggleElement && this.scrollContainer) {
-      const toggleRect = this.toggleElement.getBoundingClientRect();
+    if (this.popoverElement && this.toggleButton && this.scrollContainer) {
+      const toggleRect = this.toggleButton.getBoundingClientRect();
       const scrollRect = this.scrollContainer.getBoundingClientRect();
 
       let space;
@@ -1341,46 +1471,11 @@ class HapticDropdownDialogElement extends HapticDropdownElement {
 customElements.define('haptic-dropdown-dialog', HapticDropdownDialogElement);
 
 class HapticDropdownMenuElement extends HapticDropdownElement {
-  #menuElement = null;
   #eventListeners = new HapticEventListeners();
+  #menuElement = null;
 
   constructor() {
     super()
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-
-    this.#eventListeners.add(this, 'keydown', event => {
-      if (this.#menuElement && !this.disabled && !this.locked) {
-        const key = event.key;
-
-        if (key === 'ArrowDown' || key === 'ArrowUp') {
-          event.preventDefault();
-        }
-      }
-    });
-    this.#eventListeners.add(this, 'keyup', event => {
-      if (this.#menuElement && !this.disabled && !this.locked) {
-        const key = event.key;
-
-        if (key === 'ArrowDown' || key === 'ArrowUp') {
-          if (!this.isOpen()) {
-            this.showPopover();
-          }
-          if (!this.#menuElement.focused) {
-            if (key === 'ArrowDown') {
-              this.#menuElement.focusFirst();
-            } else
-            if (key === 'ArrowUp') {
-              this.#menuElement.focusLast();
-            }
-            this.#menuElement.skipNextMouseEvent();
-          }
-          event.preventDefault();
-        }
-      }
-    });
   }
 
   disconnectedCallback() {
@@ -1416,6 +1511,47 @@ class HapticDropdownMenuElement extends HapticDropdownElement {
       this.#eventListeners.remove(element);
     }
     super.elementRemovedCallback(element);
+  }
+
+  handleKeydownEvent(event) {
+    super.handleKeydownEvent(event);
+
+    if (this.#menuElement && !this.disabled && !this.locked) {
+      const key = event.key;
+
+      if (key === 'ArrowDown' || key === 'ArrowUp') {
+        if (this.isOpen() || !this.classList.contains('focused')) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      }
+    }
+  }
+
+  handleKeyupEvent(event) {
+    super.handleKeyupEvent(event);
+
+    if (this.#menuElement && !this.disabled && !this.locked) {
+      const key = event.key;
+
+      if (key === 'ArrowDown' || key === 'ArrowUp') {
+        if (!this.isOpen() && !this.classList.contains('focused')) {
+          this.showPopover();
+        }
+        if (this.isOpen()) {
+          if (this.#menuElement !== document.activeElement) {
+            if (key === 'ArrowDown') {
+              this.#menuElement.focusFirst();
+            } else {
+              this.#menuElement.focusLast();
+            }
+            this.#menuElement.skipNextMouseEvent();
+          }
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      }
+    }
   }
 }
 customElements.define('haptic-dropdown-menu', HapticDropdownMenuElement);
@@ -1534,152 +1670,6 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
   }
 
   connectedCallback() {
-    this.#eventListeners.add(this, 'keydown', event => {
-      if (!this.disabled && !this.locked) {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-        } else
-        if (this.#optionElements.length > 0) {
-          let newHighlightedIndex = null;
-          let backward = false;
-
-          switch (event.key) {
-            case 'ArrowDown':
-              if (this.isOpen()) {
-                if (this.#highlightedIndex >= 0) {
-                  newHighlightedIndex = this.#highlightedIndex + 1;
-                }
-              } else {
-                this.showPopover();
-              }
-              if (newHighlightedIndex === null) {
-                newHighlightedIndex = this.#maxSize ? this.#scrollOffset : 0;
-                this.#skipNextMouseEvent = true;
-              }
-              event.preventDefault();
-              break;
-            case 'ArrowUp':
-              if (this.isOpen()) {
-                if (this.#highlightedIndex >= 0) {
-                  newHighlightedIndex = this.#highlightedIndex - 1;
-                  this.#skipNextMouseEvent = true;
-                }
-              } else {
-                this.showPopover();
-              }
-              if (newHighlightedIndex === null) {
-                newHighlightedIndex = (
-                  this.#maxSize ? Math.min(
-                    this.#scrollOffset + this.#maxSize,
-                    this.#optionElements.length
-                  ) : this.#optionElements.length
-                ) - 1;
-              }
-              backward = true;
-              event.preventDefault();
-              break;
-            case 'End':
-              if (this.isOpen()) {
-                newHighlightedIndex = this.#optionElements.length - 1;
-                backward = true;
-                event.preventDefault();
-              }
-              break;
-            case 'Home':
-              if (this.isOpen()) {
-                newHighlightedIndex = 0;
-                event.preventDefault();
-              }
-              break;
-            case 'PageDown':
-              if (this.#scrollContainer && this.isOpen()) {
-                let scrollOffset = this.#scrollOffset;
-
-                if (scrollOffset + this.#maxSize >= this.#optionElements.length) {
-                  if (this.#highlightedIndex >= 0) {
-                    newHighlightedIndex = this.#optionElements.length - 1;
-                    backward = true;
-                  }
-                } else {
-                  const highlightedOffset = this.#highlightedIndex - scrollOffset;
-
-                  scrollOffset = this.#scrollOffset = scrollOffset + this.#maxSize;
-
-                  if (highlightedOffset >= 0) {
-                    newHighlightedIndex = scrollOffset + highlightedOffset;
-                  }
-                  this.#skipNextMouseEvent = true;
-                }
-                event.preventDefault();
-              }
-              break;
-            case 'PageUp':
-              if (this.#scrollContainer && this.isOpen()) {
-                let scrollOffset = this.#scrollOffset;
-
-                if (scrollOffset === 0) {
-                  if (this.#highlightedIndex >= 0) {
-                    newHighlightedIndex = 0;
-                  }
-                } else {
-                  const highlightedOffset = this.#highlightedIndex - scrollOffset;
-
-                  scrollOffset = this.#scrollOffset = this.#scrollOffset - this.#maxSize;
-
-                  if (highlightedOffset >= 0) {
-                    newHighlightedIndex = scrollOffset + highlightedOffset;
-                  }
-                  this.#skipNextMouseEvent = true;
-                }
-                event.preventDefault();
-              }
-              break;
-          }
-          if (newHighlightedIndex !== null) {
-            while (newHighlightedIndex >= 0 && newHighlightedIndex < this.#optionElements.length) {
-              if (this.#optionElements[newHighlightedIndex]?.disabled) {
-                newHighlightedIndex = newHighlightedIndex + (backward ? -1 : 1);
-              } else {
-                this.#highlightedIndex = newHighlightedIndex;
-                break;
-              }
-            }
-          }
-        }
-      }
-    });
-    this.#eventListeners.add(this, 'keyup', event => {
-      if (!this.disabled && !this.locked) {
-        if (event.key === 'Enter' || event.key === ' ') {
-          if (this.isOpen()) {
-            if (event.key === ' ' && this.#keyboardInput.length >= 1) {
-              this.#appendToKeyboardInput(event.key);
-            } else {
-              if (this.#highlightedOptionElement) {
-                for (let optionElement of this.#optionElements) {
-                  optionElement.checked = optionElement.highlighted;
-                }
-                if (this.#refresh()) {
-                  this.dispatchEvent(new Event('change'));
-                }
-              }
-              this.focus();
-              this.hidePopover();
-            }
-          } else
-          if (this.#optionElements.length > 0) {
-            this.showPopover();
-            this.#skipNextMouseEvent = true;
-          }
-          event.preventDefault();
-        } else {
-          if (this.isOpen() && event.key.length === 1) {
-            this.#appendToKeyboardInput(event.key);
-            event.preventDefault();
-          }
-        }
-      }
-    });
     if (this.form instanceof HapticFormElement) {
       this.form.controlAddedCallback(this);
     }
@@ -1779,6 +1769,164 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     super.elementRemovedCallback(element);
   }
 
+  handleKeydownEvent(event) {
+    super.handleKeydownEvent(event);
+
+    if (!this.disabled && !this.locked) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+      } else
+      if (this.#optionElements.length > 0) {
+        let newHighlightedIndex = null;
+        let backward = false;
+
+        switch (event.key) {
+          case 'ArrowDown':
+            if (this.isOpen()) {
+              if (this.#highlightedIndex >= 0) {
+                newHighlightedIndex = this.#highlightedIndex + 1;
+              }
+            } else {
+              if (this.classList.contains('focused')) {
+                break;
+              }
+              this.showPopover();
+            }
+            if (newHighlightedIndex === null) {
+              newHighlightedIndex = this.#maxSize ? this.#scrollOffset : 0;
+              this.#skipNextMouseEvent = true;
+            }
+            event.preventDefault();
+            break;
+          case 'ArrowUp':
+            if (this.isOpen()) {
+              if (this.#highlightedIndex >= 0) {
+                newHighlightedIndex = this.#highlightedIndex - 1;
+                this.#skipNextMouseEvent = true;
+              }
+            } else {
+              if (this.classList.contains('focused')) {
+                break;
+              }
+              this.showPopover();
+            }
+            if (newHighlightedIndex === null) {
+              newHighlightedIndex = (
+                this.#maxSize ? Math.min(
+                  this.#scrollOffset + this.#maxSize,
+                  this.#optionElements.length
+                ) : this.#optionElements.length
+              ) - 1;
+            }
+            backward = true;
+            event.preventDefault();
+            break;
+          case 'End':
+            if (this.isOpen()) {
+              newHighlightedIndex = this.#optionElements.length - 1;
+              backward = true;
+              event.preventDefault();
+            }
+            break;
+          case 'Home':
+            if (this.isOpen()) {
+              newHighlightedIndex = 0;
+              event.preventDefault();
+            }
+            break;
+          case 'PageDown':
+            if (this.#scrollContainer && this.isOpen()) {
+              let scrollOffset = this.#scrollOffset;
+
+              if (scrollOffset + this.#maxSize >= this.#optionElements.length) {
+                if (this.#highlightedIndex >= 0) {
+                  newHighlightedIndex = this.#optionElements.length - 1;
+                  backward = true;
+                }
+              } else {
+                const highlightedOffset = this.#highlightedIndex - scrollOffset;
+
+                scrollOffset = this.#scrollOffset = scrollOffset + this.#maxSize;
+
+                if (highlightedOffset >= 0) {
+                  newHighlightedIndex = scrollOffset + highlightedOffset;
+                }
+                this.#skipNextMouseEvent = true;
+              }
+              event.preventDefault();
+            }
+            break;
+          case 'PageUp':
+            if (this.#scrollContainer && this.isOpen()) {
+              let scrollOffset = this.#scrollOffset;
+
+              if (scrollOffset === 0) {
+                if (this.#highlightedIndex >= 0) {
+                  newHighlightedIndex = 0;
+                }
+              } else {
+                const highlightedOffset = this.#highlightedIndex - scrollOffset;
+
+                scrollOffset = this.#scrollOffset = this.#scrollOffset - this.#maxSize;
+
+                if (highlightedOffset >= 0) {
+                  newHighlightedIndex = scrollOffset + highlightedOffset;
+                }
+                this.#skipNextMouseEvent = true;
+              }
+              event.preventDefault();
+            }
+            break;
+        }
+        if (newHighlightedIndex !== null) {
+          while (newHighlightedIndex >= 0 && newHighlightedIndex < this.#optionElements.length) {
+            if (this.#optionElements[newHighlightedIndex]?.disabled) {
+              newHighlightedIndex = newHighlightedIndex + (backward ? -1 : 1);
+            } else {
+              this.#highlightedIndex = newHighlightedIndex;
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  handleKeyupEvent(event) {
+    super.handleKeyupEvent(event);
+
+    if (!this.disabled && !this.locked) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        if (this.isOpen()) {
+          if (event.key === ' ' && this.#keyboardInput.length >= 1) {
+            this.#appendToKeyboardInput(event.key);
+          } else {
+            if (this.#highlightedOptionElement) {
+              for (let optionElement of this.#optionElements) {
+                optionElement.checked = optionElement.highlighted;
+              }
+              if (this.#refresh()) {
+                this.dispatchEvent(new Event('change'));
+              }
+            }
+            this.focus();
+            this.hidePopover();
+          }
+        } else
+        if (this.#optionElements.length > 0) {
+          this.showPopover();
+          this.#skipNextMouseEvent = true;
+        }
+        event.preventDefault();
+      } else {
+        if (this.isOpen() && event.key.length === 1) {
+          this.#appendToKeyboardInput(event.key);
+          event.preventDefault();
+        }
+      }
+    }
+  }
+
   showPopover() {
     if (this.#optionElements.length > 0) {
       super.showPopover();
@@ -1786,8 +1934,8 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
       this.#optionHeight = Math.max(
         this.#optionElements[0].getBoundingClientRect().height, 24
       );
-      if (this.toggleElement && this.scrollContainer) {
-        const toggleRect = this.toggleElement.getBoundingClientRect();
+      if (this.toggleButton && this.scrollContainer) {
+        const toggleRect = this.toggleButton.getBoundingClientRect();
         const scrollRect = this.scrollContainer.getBoundingClientRect();
 
         const spaceBefore = toggleRect.top - scrollRect.top;
@@ -1872,8 +2020,8 @@ class HapticSelectDropdownElement extends HapticDropdownElement {
     if (this.#inputElement) {
       this.#inputElement.value = newValue;
     }
-    if (this.toggleElement) {
-      this.toggleElement.innerHTML = checkedOptionElement?.innerHTML || '';
+    if (this.toggleButton) {
+      this.toggleButton.innerHTML = checkedOptionElement?.innerHTML || '';
     }
     return oldValue !== newValue;
   }
@@ -1996,7 +2144,7 @@ class HapticFieldElement extends HTMLElement {
   #controlObserver = new HapticAttributesObserver(
     this,
     ['disabled', 'focused', 'locked', 'required'],
-    ['filled', 'inline', 'outlined']
+    ['filled', 'focused', 'inline', 'outlined']
   );
 
   #childNodesObserver = new HapticChildNodesObserver({
@@ -2674,16 +2822,25 @@ class HapticGridElement extends HTMLElement {
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
+      if (node instanceof HapticDropdownToggleButtonElement) {
+        node.navigatingElement = this;
+        this.#navigationController.add(node);
+      } else
       if (node instanceof HapticInputElement) {
         this.#navigationController.add(node);
       }
     },
     nodeRemoved: node => {
-      if (node instanceof HapticInputElement) {
+      if (node instanceof HapticDropdownToggleButtonElement ||
+          node instanceof HapticInputElement) {
         this.#navigationController.remove(node);
       }
     }
   });
+
+  get navGridColumns() {
+    return window.getComputedStyle(this).gridTemplateColumns.split(' ').length;
+  }
 
   constructor() {
     super();
@@ -3225,8 +3382,10 @@ class HapticTableElement extends HTMLTableElement {
           }
         } else
         if (node.tagName === 'THEAD') {
-          this.#navigationController.addStickyHeader(node);
-        }
+          this.#navigationController.addHeader(node);
+        } else
+        if (node.tagName === 'TFOOT') {
+          this.#navigationController.addFooter(node);
         } else
         if (HapticTableElement.isInteractiveElement(node)) {
           this.#eventListeners.add(node, 'focusin', () => {
@@ -3235,6 +3394,7 @@ class HapticTableElement extends HTMLTableElement {
           this.#eventListeners.add(node, 'focusout', () => {
             this.#navigationController.resume();
           });
+        }
       }
     },
     nodeRemoved: node => {
@@ -3245,7 +3405,10 @@ class HapticTableElement extends HTMLTableElement {
           }
         } else
         if (node.tagName === 'THEAD') {
-          this.#navigationController.removeStickyHeader(node);
+          this.#navigationController.removeHeader(node);
+        } else
+        if (node.tagName === 'TFOOT') {
+          this.#navigationController.removeFooter(node);
         } else
         if (HapticTableElement.isInteractiveElement(node)) {
           this.#eventListeners.remove(node);
@@ -3333,33 +3496,90 @@ class HapticTableRowElement extends HTMLTableRowElement {
 customElements.define('haptic-table-row', HapticTableRowElement, { extends: 'tr' });
 
 class HapticTableLikeElement extends HTMLElement {
-  #navigationController = new HapticNavigationController({ direction: 'y' });
+  #actionElements = new Set();
+  #navGridColumns = 0;
+  #navigationController = new HapticNavigationController({ direction: 'both' });
 
   #childNodesObserver = new HapticChildNodesObserver({
     nodeAdded: node => {
-      if (node instanceof HTMLAnchorElement && node.classList.contains('table-row')) {
-        this.tabIndex = Math.max(this.tabIndex, 0);
+      if (node instanceof HapticButtonElement ||
+          node instanceof HapticDropdownToggleButtonElement ||
+          node instanceof HapticInputElement ||
+          node instanceof HTMLAnchorElement) {
+        let tableBody = null, tableRow = null, dropdown = false;
 
-        if (!this.#navigationController.connected) {
-          this.#navigationController.connect(this);
+        for (let e = node; e !== this; e = e.parentElement) {
+          if (e instanceof HapticDropdownElement) {
+            if (!(node instanceof HapticDropdownToggleButtonElement)) {
+              dropdown = true;
+            }
+          } else
+          if (e.classList.contains('table-row')) {
+            tableRow ||= e;
+          } else
+          if (e.classList.contains('table-body')) {
+            tableBody = e;
+            break;
+          }
         }
-        this.#navigationController.add(node);
+        if (tableBody && tableRow && !dropdown) {
+          this.tabIndex = Math.max(this.tabIndex, 0);
+
+          if (tableRow === tableBody.querySelector('.table-row')) {
+            this.#navGridColumns++;
+          }
+          if (node instanceof HapticDropdownToggleButtonElement) {
+            node.navigatingElement = this;
+          }
+          if (!this.#navigationController.connected) {
+            this.#navigationController.connect(this);
+          }
+          this.#navigationController.add(node);
+          this.#actionElements.add(node);
+        }
       } else
-      if (node instanceof HTMLElement && node.classList.contains('table-header')) {
-        this.#navigationController.addStickyHeader(node);
+      if (node instanceof HTMLElement) {
+        if (node.classList.contains('table-header')) {
+          this.#navigationController.addHeader(node);
+        } else
+        if (node.classList.contains('table-footer')) {
+          this.#navigationController.addFooter(node);
+        }
       }
     },
     nodeRemoved: node => {
-      if (this.#navigationController.connected) {
-        if (node instanceof HTMLAnchorElement && node.classList.contains('table-row')) {
-          this.#navigationController.remove(node);
+      if (this.#actionElements.has(node)) {
+        let tableBody = null, tableRow = null;
+
+        for (let e = node; e !== this; e = e.parentElement) {
+          if (e.classList.contains('table-row')) {
+            tableRow ||= e;
+          } else
+          if (e.classList.contains('table-body')) {
+            tableBody = e;
+            break;
+          }
+        }
+        if (tableRow === tableBody?.querySelector('.table-row')) {
+          this.#navGridColumns--;
+        }
+        this.#navigationController.remove(node);
+        this.#actionElements.delete(node);
+      } else
+      if (node instanceof HTMLElement) {
+        if (node.classList.contains('table-header')) {
+          this.#navigationController.removeHeader(node);
         } else
-        if (node instanceof HTMLElement && node.classList.contains('table-header')) {
-          this.#navigationController.removeStickyHeader(node);
+        if (node.classList.contains('table-footer')) {
+          this.#navigationController.removeFooter(node);
         }
       }
     }
   });
+
+  get navGridColumns() {
+    return this.#navGridColumns;
+  }
 
   constructor() {
     super();

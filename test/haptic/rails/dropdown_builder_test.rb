@@ -8,7 +8,7 @@ module Haptic
       def test_toggle
         assert_dom_equal(
           <<~HTML,
-            <button type="button" class="toggle"></button>
+            <button is="haptic-dropdown-toggle-button" type="button"></button>
           HTML
           dropdown_builder.toggle
         )
@@ -17,7 +17,9 @@ module Haptic
       def test_toggle_with_options
         assert_dom_equal(
           <<~HTML,
-            <button type="button" class="toggle foo-class" data-foo="bar"></button>
+            <button is="haptic-dropdown-toggle-button" type="button"
+              class="foo-class" data-foo="bar">
+            </button>
           HTML
           dropdown_builder.toggle(class: 'foo-class', data: { foo: 'bar' })
         )
@@ -26,7 +28,7 @@ module Haptic
       def test_toggle_with_content
         assert_dom_equal(
           <<~HTML,
-            <button type="button" class="toggle">Text</button>
+            <button is="haptic-dropdown-toggle-button" type="button">Text</button>
           HTML
           dropdown_builder.toggle('Text')
         )
@@ -35,7 +37,10 @@ module Haptic
       def test_toggle_with_content_and_options
         assert_dom_equal(
           <<~HTML,
-            <button type="button" class="toggle foo-class" data-foo="bar">Text</button>
+            <button is="haptic-dropdown-toggle-button" type="button"
+              class="foo-class" data-foo="bar">
+              Text
+            </button>
           HTML
           dropdown_builder.toggle('Text', class: 'foo-class', data: { foo: 'bar' })
         )
@@ -44,7 +49,7 @@ module Haptic
       def test_toggle_with_block
         assert_dom_equal(
           <<~HTML,
-            <button type="button" class="toggle"> Text</button>
+            <button is="haptic-dropdown-toggle-button" type="button">Text</button>
           HTML
           dropdown_builder.toggle { 'Text' }
         )
@@ -53,7 +58,10 @@ module Haptic
       def test_toggle_with_block_and_options
         assert_dom_equal(
           <<~HTML,
-            <button type="button" class="toggle foo-class" data-foo="bar">Text</button>
+            <button is="haptic-dropdown-toggle-button" type="button"
+              class="foo-class" data-foo="bar">
+              Text
+            </button>
           HTML
           dropdown_builder.toggle(class: 'foo-class', data: { foo: 'bar' }) { 'Text' }
         )
@@ -62,7 +70,8 @@ module Haptic
       def test_toggle_with_defaults
         assert_dom_equal(
           <<~HTML,
-            <button type="button" class="toggle foo-class bar-class">
+            <button is="haptic-dropdown-toggle-button" type="button"
+              class="foo-class bar-class">
               Text
             </button>
           HTML

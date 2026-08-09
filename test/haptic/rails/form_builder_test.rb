@@ -1090,7 +1090,8 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="color" id="color">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
@@ -1113,7 +1114,8 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="dummy[color]" id="dummy_color">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
@@ -1136,7 +1138,8 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="color" id="color">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
@@ -1175,7 +1178,8 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="color" id="color">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
@@ -1209,7 +1213,8 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="dummy[color]" id="dummy_color">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
@@ -1241,7 +1246,8 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="color" id="color">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="" checked="checked"></haptic-option>
@@ -1271,7 +1277,8 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="color" id="color">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue" disabled="disabled">Blue</haptic-option>
@@ -1300,7 +1307,8 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="color" id="color">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue" disabled="disabled">Blue</haptic-option>
@@ -1330,7 +1338,9 @@ module Haptic
                 <haptic-select-dropdown>
                   <input type="text" name="color" id="color"
                     disabled="disabled">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button"
+                    class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
@@ -1432,7 +1442,9 @@ module Haptic
             <haptic-dropdown-field>
               <div class="field-container">
                 <haptic-dropdown-dialog>
-                  <button class="toggle haptic-field" type="button">Text</button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                    Text
+                  </button>
                   <div class="popover"></div>
                   <div class="backdrop"></div>
                 </haptic-dropdown-dialog>
@@ -1451,7 +1463,10 @@ module Haptic
             <haptic-dropdown-field id="field-id" focus-indicator="focus">
               <div class="field-container">
                 <haptic-dropdown-dialog open-to-top>
-                  <button class="toggle haptic-field" type="button" data-foo="bar">Text</button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field"
+                    type="button" data-foo="bar">
+                    Text
+                  </button>
                   <div class="popover"></div>
                   <div class="backdrop"></div>
                 </haptic-dropdown-dialog>
@@ -1531,7 +1546,8 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="color" id="color">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container"></div>
                   </div>
@@ -1551,7 +1567,8 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="dummy[color]" id="dummy_color">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container"></div>
                   </div>
@@ -1571,7 +1588,8 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="color" id="color">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
@@ -1594,7 +1612,8 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="color" id="color">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
@@ -1618,7 +1637,8 @@ module Haptic
                 <haptic-select-dropdown data-foo="bar">
                   <input type="text" name="color"
                     required="required">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue" checked="checked">Blue</haptic-option>
@@ -1648,7 +1668,8 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="color" id="color">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue" checked="checked">Blue</haptic-option>
@@ -1674,7 +1695,8 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="color" id="color">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue" disabled="disabled">Blue</haptic-option>
@@ -1697,7 +1719,8 @@ module Haptic
               <div class="field-container">
                 <haptic-select-dropdown>
                   <input type="text" name="color" id="color">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue" disabled="disabled">Blue</haptic-option>
@@ -1725,7 +1748,8 @@ module Haptic
                 <haptic-select-dropdown>
                   <input type="text" name="color" id="color"
                     disabled="disabled">
-                  <button class="toggle haptic-field" type="button"></button>
+                  <button is="haptic-dropdown-toggle-button" class="haptic-field" type="button">
+                  </button>
                   <div class="popover">
                     <div class="scroll-container">
                       <haptic-option value="blue">Blue</haptic-option>
