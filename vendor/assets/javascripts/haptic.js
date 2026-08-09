@@ -793,16 +793,20 @@ class HapticNavigationController {
     if (this.#headers || this.#footers) {
       let y = rect.y, height = rect.height;
 
-      for (let header of this.#headers) {
-        const headerRect = header.getBoundingClientRect();
+      if (this.#headers) {
+        for (let header of this.#headers) {
+          const headerRect = header.getBoundingClientRect();
 
-        if (headerRect.bottom > y) {
-          y = headerRect.bottom;
+          if (headerRect.bottom > y) {
+            y = headerRect.bottom;
+          }
+          height -= headerRect.height;
         }
-        height -= headerRect.height;
       }
-      for (let footer of this.#footers) {
-        height -= footer.getBoundingClientRect().height;
+      if (this.#footers) {
+        for (let footer of this.#footers) {
+          height -= footer.getBoundingClientRect().height;
+        }
       }
       return new DOMRect(rect.x, y, rect.width, height);
     } else {
