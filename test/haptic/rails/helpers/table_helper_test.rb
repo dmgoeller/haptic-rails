@@ -8,8 +8,6 @@ module Haptic
       class TableHelperTest < ActionView::TestCase
         include TableHelper
 
-        # #haptic_table
-
         def test_haptic_table
           assert_dom_equal(
             <<~HTML,
@@ -58,52 +56,6 @@ module Haptic
               table.row do |row|
                 row.data 'Data'
               end
-            end
-          )
-        end
-
-        # #haptic_table_like
-
-        def test_haptic_table_like
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-table-like></haptic-table-like>
-            HTML
-            haptic_table_like
-          )
-        end
-
-        def test_haptic_table_like_with_options
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-table-like data-foo="bar"></haptic-table-like>
-            HTML
-            haptic_table_like(data: { foo: 'bar' })
-          )
-        end
-
-        def test_haptic_table_like_with_block
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-table-like>
-                <a class="table-row">Data</a>
-              </haptic-table-like>
-            HTML
-            haptic_table_like do |table|
-              table.row { 'Data' }
-            end
-          )
-        end
-
-        def test_haptic_table_like_with_block_and_options
-          assert_dom_equal(
-            <<~HTML,
-              <haptic-table-like data-foo="bar">
-                <a class="table-row">Data</a>
-              </haptic-table-like>
-            HTML
-            haptic_table_like(data: { foo: 'bar' }) do |table|
-              table.row { 'Data' }
             end
           )
         end

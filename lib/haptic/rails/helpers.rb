@@ -9,6 +9,7 @@ require_relative 'helpers/icon_tag_helper'
 require_relative 'helpers/menu_helper'
 require_relative 'helpers/nav_helper'
 require_relative 'helpers/table_helper'
+require_relative 'helpers/table_like_helper'
 
 ActiveSupport.on_load(:action_view) do
   include Haptic::Rails::Helpers::DialogHelper
@@ -20,4 +21,5 @@ ActiveSupport.on_load(:action_view) do
   include Haptic::Rails::Helpers::MenuHelper
   include Haptic::Rails::Helpers::NavHelper
   include Haptic::Rails::Helpers::TableHelper
+  include Haptic::Rails::Helpers::TableLikeHelper
 end

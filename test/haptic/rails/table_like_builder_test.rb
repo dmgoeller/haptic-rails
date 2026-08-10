@@ -10,7 +10,7 @@ module Haptic
       def test_row
         assert_dom_equal(
           <<~HTML,
-            <a class="table-row"></a>
+            <div class="table-row"></div>
           HTML
           table_like_builder.row
         )
@@ -19,18 +19,18 @@ module Haptic
       def test_row_with_options
         assert_dom_equal(
           <<~HTML,
-            <a class="table-row" href="/" data-foo="bar"></a>
+            <div class="table-row" data-foo="bar"></div>
           HTML
-          table_like_builder.row(href: '/', data: { foo: 'bar' })
+          table_like_builder.row(data: { foo: 'bar' })
         )
       end
 
       def test_row_with_block
         assert_dom_equal(
           <<~HTML,
-            <a class="table-row">
+            <div class="table-row">
               <div>Data</div>
-            </a>
+            </div>
           HTML
           table_like_builder.row { tag.div('Data') }
         )
@@ -39,11 +39,11 @@ module Haptic
       def test_row_with_block_and_options
         assert_dom_equal(
           <<~HTML,
-            <a class="table-row" href="/" data-foo="bar">
+            <div class="table-row" data-foo="bar">
               <div>Data</div>
-            </a>
+            </div>
           HTML
-          table_like_builder.row(href: '/', data: { foo: 'bar' }) do
+          table_like_builder.row(data: { foo: 'bar' }) do
             tag.div('Data')
           end
         )

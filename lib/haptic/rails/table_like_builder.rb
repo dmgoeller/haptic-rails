@@ -9,7 +9,7 @@ module Haptic
 
       # Adds a row.
       def row(**options, &block)
-        @builder.tag.a(**options.merge(class: ['table-row', options[:class]]), &block)
+        @builder.tag.div(**options.merge(class: ['table-row', options[:class]]), &block)
       end
 
       # Adds a row pointing to +href+.
