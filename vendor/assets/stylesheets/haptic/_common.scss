@@ -342,11 +342,13 @@ haptic-dropdown-field, haptic-text-field {
     content: ' *';
   }
 
-  &[focus-indicator]:not(.inline) {
-    &.field-container, & > .field-container {
-      &::after {
-        @include haptic-field-overlay;
-        content: '\200b';
+  &[focus-indicator] {
+    &.filled, &.outlined {
+      &.field-container, & > .field-container {
+        &::after {
+          @include haptic-field-overlay;
+          content: '\200b';
+        }
       }
     }
   }

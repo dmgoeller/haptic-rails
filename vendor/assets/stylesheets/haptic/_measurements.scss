@@ -383,13 +383,15 @@ haptic-dropdown-field, haptic-text-field {
     }
   }
 
-  &[focus-indicator]:not(.inline) {
-    &.field-container, & > .field-container {
-      &::after {
-        bottom: 0;
-        height: 3px;
-        left: 0;
-        width: 100%;
+  &[focus-indicator] {
+    &.filled, &.outlined {
+      &.field-container, & > .field-container {
+        &::after {
+          bottom: 0;
+          height: 3px;
+          left: 0;
+          width: 100%;
+        }
       }
     }
   }
