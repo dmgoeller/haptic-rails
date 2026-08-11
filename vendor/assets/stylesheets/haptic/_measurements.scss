@@ -1116,16 +1116,19 @@ haptic-list-item {
   }
 
   haptic-table-like {
-    .table-row {
-      padding:
-        $cell-padding-top-bottom
-        $padding-left-right + $cell-padding-left-right;
-
+    @mixin grid {
       &.grid {
-        display: grid;
         grid-column-gap: $cell-padding-left-right * 2;
         grid-row-gap: $cell-padding-top-bottom * 2;
       }
+    }
+
+    .table-row {
+      @include grid;
+
+      padding:
+        $cell-padding-top-bottom
+        $padding-left-right + $cell-padding-left-right;
     }
 
     .table-body {
@@ -1138,6 +1141,8 @@ haptic-list-item {
       }
 
       a.primary-action {
+        @include grid;
+
         margin:
           $cell-padding-top-bottom * -1
           $cell-padding-left-right * -1;

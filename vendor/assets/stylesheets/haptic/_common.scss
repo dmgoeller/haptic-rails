@@ -519,6 +519,14 @@ haptic-list-item {
 }
 
 /**********************************************************************
+ * Grids
+ **********************************************************************/
+
+haptic-grid {
+  display: grid;
+}
+
+/**********************************************************************
  * Menus
  **********************************************************************/
 
@@ -592,7 +600,7 @@ haptic-list-item {
 }
 
 /**********************************************************************
- * Tables and grids
+ * Tables
  **********************************************************************/
 
 table.haptic-table thead,
@@ -621,22 +629,24 @@ table.haptic-table {
   }
 }
 
-haptic-table-like .table-body {
-  .table-row, a.primary-action {
-    position: relative;
-  }
+haptic-table-like {
+  .table-body {
+    .table-row, a.primary-action {
+      position: relative;
 
-  .table-row::before,
-  a.table-row::after,
-  a.primary-action::after {
-    content: '\200b';
-    pointer-events: none;
-    position: absolute;
-  }
-}
+      &.grid {
+        display: grid;
+      }
+    }
 
-haptic-grid {
-  display: grid;
+    .table-row::before,
+    a.table-row::after,
+    a.primary-action::after {
+      content: '\200b';
+      pointer-events: none;
+      position: absolute;
+    }
+  }
 }
 
 /**********************************************************************
