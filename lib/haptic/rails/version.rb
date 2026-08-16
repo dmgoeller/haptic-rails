@@ -3,7 +3,7 @@
 module Haptic
   module Rails
     class Version
-      VERSION = '0.2'
+      VERSION = '0.3.1'
     end
   end
 end
