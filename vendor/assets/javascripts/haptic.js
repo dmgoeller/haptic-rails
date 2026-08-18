@@ -255,6 +255,7 @@ class HapticNavigationController {
   #elements = [];
   #headers = null;
   #footers = null;
+  #getGridColumnCount = null;
   #focused = false; // TODO: Can #focused be removed?
   #suspended = false;
   #keyEventsPrevented = false;
@@ -297,7 +298,7 @@ class HapticNavigationController {
   }
 
   get #gridSize() {
-    const columns = this.#target.navGridColumns;
+    const columns = this.#getGridColumnCount();
 
     return {
       columns: columns,
@@ -312,7 +313,7 @@ class HapticNavigationController {
     this.#mouse = options.mouse === true;
   }
 
-  connect(target) {
+  connect(target, options = {}) {
     this.#eventListeners.add(target, 'focusin', () => {
       if (!this.#suspended && !this.#keyEventsPrevented) {
         let focusedIndex = this.#focusedIndex;
@@ -524,6 +525,7 @@ class HapticNavigationController {
       }
     });
     this.#target = target;
+    this.#getGridColumnCount = options.getGridColumnCount || null;
   }
 
   disconnect() {
@@ -739,34 +741,25 @@ class HapticNavigationController {
           }
           if (containerX || containerY) {
             const elementRect = this.#getBoundingRect(this.#elementAt(index));
-            const gridSize = this.#gridSize;
 
             if (containerX) {
-              if (index % gridSize.columns == 0) {
-                containerX.scrollLeft = this.#getOffsetX(containerX);
-              } else {
-                const scrollRect = this.#getScrollRect(containerX);
+              const scrollRect = this.#getScrollRect(containerX);
 
-                if (elementRect.left < scrollRect.left) {
-                  containerX.scrollLeft -= scrollRect.left - elementRect.left;
-                } else
-                if (elementRect.right > scrollRect.right) {
-                  containerX.scrollLeft += elementRect.right - scrollRect.right;
-                }
+              if (elementRect.left < scrollRect.left) {
+                containerX.scrollLeft -= scrollRect.left - elementRect.left;
+              } else
+              if (elementRect.right > scrollRect.right) {
+                containerX.scrollLeft += elementRect.right - scrollRect.right;
               }
             }
             if (containerY) {
-              if (index < gridSize.columns) {
-                containerY.scrollTop = this.#getOffsetY(containerY);
-              } else {
-                const scrollRect = this.#getScrollRect(containerY);
+              const scrollRect = this.#getScrollRect(containerY);
 
-                if (elementRect.top < scrollRect.top) {
-                  containerY.scrollTop -= scrollRect.top - elementRect.top;
-                } else
-                if (elementRect.bottom > scrollRect.bottom) {
-                  containerY.scrollTop += elementRect.bottom - scrollRect.bottom;
-                }
+              if (elementRect.top < scrollRect.top) {
+                containerY.scrollTop -= scrollRect.top - elementRect.top;
+              } else
+              if (elementRect.bottom > scrollRect.bottom) {
+                containerY.scrollTop += elementRect.bottom - scrollRect.bottom;
               }
             }
           }
@@ -2842,17 +2835,17 @@ class HapticGridElement extends HTMLElement {
     }
   });
 
-  get navGridColumns() {
-    return window.getComputedStyle(this).gridTemplateColumns.split(' ').length;
-  }
-
   constructor() {
     super();
   }
 
   connectedCallback() {
     this.tabIndex = Math.max(this.tabIndex, 0);
-    this.#navigationController.connect(this);
+    this.#navigationController.connect(this, {
+      getGridColumnCount: () => {
+        return window.getComputedStyle(this).gridTemplateColumns.split(' ').length;
+      }
+    });
     this.#childNodesObserver.observe(this);
   }
 
@@ -3501,7 +3494,7 @@ customElements.define('haptic-table-row', HapticTableRowElement, { extends: 'tr'
 
 class HapticTableLikeElement extends HTMLElement {
   #actionElements = new Set();
-  #navGridColumns = 0;
+  #gridColumnCount = 0;
   #navigationController = new HapticNavigationController({ direction: 'both' });
 
   #childNodesObserver = new HapticChildNodesObserver({
@@ -3527,16 +3520,20 @@ class HapticTableLikeElement extends HTMLElement {
           }
         }
         if (tableBody && tableRow && !dropdown) {
-          this.tabIndex = Math.max(this.tabIndex, 0);
-
           if (tableRow === tableBody.querySelector('.table-row')) {
-            this.#navGridColumns++;
+            this.#gridColumnCount++;
           }
           if (node instanceof HapticDropdownToggleButtonElement) {
             node.navigatingElement = this;
           }
           if (!this.#navigationController.connected) {
-            this.#navigationController.connect(this);
+            tableBody.tabIndex = Math.max(tableBody.tabIndex, 0);
+
+            this.#navigationController.connect(tableBody, {
+              getGridColumnCount: () => {
+                return this.#gridColumnCount;
+              }
+            });
           }
           this.#navigationController.add(node);
           this.#actionElements.add(node);
@@ -3565,7 +3562,7 @@ class HapticTableLikeElement extends HTMLElement {
           }
         }
         if (tableRow === tableBody?.querySelector('.table-row')) {
-          this.#navGridColumns--;
+          this.#gridColumnCount--;
         }
         this.#navigationController.remove(node);
         this.#actionElements.delete(node);
@@ -3580,10 +3577,6 @@ class HapticTableLikeElement extends HTMLElement {
       }
     }
   });
-
-  get navGridColumns() {
-    return this.#navGridColumns;
-  }
 
   constructor() {
     super();

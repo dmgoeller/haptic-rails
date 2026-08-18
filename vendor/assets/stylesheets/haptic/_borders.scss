@@ -400,14 +400,14 @@ table.haptic-table {
 }
 
 haptic-table-like {
-  outline: none;
-
   .table-header .table-row {
     border-bottom-style: solid;
     border-bottom-width: 1px;
   }
 
   .table-body {
+    outline: none;
+
     .table-row::before {
       border-radius: .25rem;
     }

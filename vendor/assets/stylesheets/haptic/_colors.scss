@@ -95,7 +95,7 @@ $haptic-dark-mode: true !default;
 
   &:focus-visible,
   haptic-grid:focus-visible &.focused,
-  haptic-table-like:focus-visible &.focused {
+  haptic-table-like .table-body:focus-visible &.focused {
     @include haptic-primary-color($property);
   }
 }
@@ -181,7 +181,7 @@ $haptic-dark-mode: true !default;
   haptic-dropdown-dialog:focus-visible &.toggle,
   haptic-dropdown-menu:focus-visible &.toggle,
   haptic-grid:focus-visible &.focused,
-  haptic-table-like:focus-visible &.focused {
+  haptic-table-like .table-body:focus-visible &.focused {
     &.filled {
       outline-color: $haptic-primary-color;
 
@@ -550,7 +550,7 @@ haptic-dropdown-field, haptic-text-field {
       }
       &[focused],
       haptic-grid:focus-visible &.focused,
-      haptic-table-like:focus-visible &.focused {
+      haptic-table-like .table-body:focus-visible &.focused {
         &.field-container, & > .field-container {
           &::after {
             @include haptic-primary-color('background-color');
@@ -571,7 +571,7 @@ haptic-dropdown-field, haptic-text-field {
       }
       &[focused],
       haptic-grid:focus-visible &.focused,
-      haptic-table-like:focus-visible &.focused {
+      haptic-table-like .table-body:focus-visible &.focused {
         &.field-container, & > .field-container {
           @include haptic-primary-color('outline-color');
         }
@@ -896,12 +896,12 @@ haptic-table-like {
         border-color: transparent;
       }
     }
-  }
 
-  &:focus-visible .table-body {
-    a.table-row, a.primary-action {
-      &.focused::after {
-        @include haptic-primary-color('border-color');
+    &:focus-visible {
+      a.table-row, a.primary-action {
+        &.focused::after {
+          @include haptic-primary-color('border-color');
+        }
       }
     }
   }
