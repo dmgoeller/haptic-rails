@@ -631,7 +631,16 @@ table.haptic-table {
 
 haptic-table-like {
   .table-body {
-    .table-row, a.primary-action {
+    .table-row {
+      position: relative;
+
+      &.grid {
+        display: grid;
+      }
+    }
+
+    a.primary-action {
+      align-self: stretch;
       position: relative;
 
       &.grid {
